@@ -104,8 +104,8 @@ boot_alloc(uint32_t n)
 	// LAB 2: Your code here.
 	// 1.物理内存范围为[nextfree, PGSIZE * npages] 2.分配n字节进行PGSIZE大小对齐。3.当前nextfree使用的是虚拟地址
 	char* p;
-	p = ROUNDUP((char *) (nextfree + n), PGSIZE);	
-	if ((uint32_t)p >= KERNBASE + PGSIZE * npages)
+	p = ROUNDUP((char *) (nextfree + n), PGSIZE);	// (0xf0119000+0x8000000)=0xF8119000
+	if ((uint32_t)p > KERNBASE + PGSIZE * npages) // > KERNBASE+4096*32768=134217728=KERNBASE+0x8000000=0xf8000000
 	{
 		panic("out of memory");
 	}
@@ -131,7 +131,7 @@ mem_init(void)
 	i386_detect_memory();
 
 	// Remove this line when you're ready to test this function.
-	panic("mem_init: This function is not finished\n");
+	//panic("mem_init: This function is not finished\n");
 
 	//////////////////////////////////////////////////////////////////////
 	// create initial page directory.
@@ -153,9 +153,9 @@ mem_init(void)
 	// each physical page, there is a corresponding struct PageInfo in this
 	// array.  'npages' is the number of physical pages in memory.  Use memset
 	// to initialize all fields of each struct PageInfo to 0.
-	// Your code goes here:
-	pages = (struct PageInfo*)boot_alloc(PGSIZE * npages);
-	memset(pages, 0, PGSIZE * npages);
+	// Your code goes here:分配npages个PageInfo
+	pages = (struct PageInfo*)boot_alloc(sizeof(struct PageInfo) * npages);
+	memset(pages, 0, sizeof(struct PageInfo) * npages);
 
 	//////////////////////////////////////////////////////////////////////
 	// Now that we've allocated the initial kernel data structures, we set
