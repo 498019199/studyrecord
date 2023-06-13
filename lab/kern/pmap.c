@@ -449,7 +449,13 @@ boot_map_region(pde_t *pgdir, uintptr_t va, size_t size, physaddr_t pa, int perm
 int
 page_insert(pde_t *pgdir, struct PageInfo *pp, void *va, int perm)
 {
-	// Fill this function in
+	pte_t *pte = pgdir_walk(pgdir, va, 0);
+	if (0 != pte)
+		page_remove(pgdir, va);
+
+	pte = pgdir_walk(pgdir, va, 1);	
+	physaddr_t pa = page2pa(pp);
+	*pte = PGNUM(pa) | perm;
 	return 0;
 }
 
@@ -469,12 +475,11 @@ page_lookup(pde_t *pgdir, void *va, pte_t **pte_store)
 {
 	pte_t *pte = pgdir_walk(pgdir, va, 0);
 	if (0 != pte_store)
-		pte_store = &pte;
+		*pte_store = pte;
 	if (0 == (PTE_P & *pte))
 		return 0;
 
-	struct PageInfo* pp = pa2page(PTE_ADDR(pte));
-	return pp;
+	return pa2page(PTE_ADDR(pte));
 }
 
 //
@@ -495,16 +500,14 @@ page_lookup(pde_t *pgdir, void *va, pte_t **pte_store)
 void
 page_remove(pde_t *pgdir, void *va)
 {
-	pte_t **pte = 0;
-	struct PageInfo *pp = page_lookup(pgdir, va, pte);
+	pte_t *pte = 0;
+	struct PageInfo *pp = page_lookup(pgdir, va, &pte);
+	if( 0 == pp)
+		return ;
 
-	page_free(pp);// 释放内存页
-	if (0 != *pte)
-	{
-		**pte = 0;
-	}
-	
+	page_decref(pp);// 释放内存页
 	tlb_invalidate(pgdir, va);
+	*pte = 0;
 }
 
 //
