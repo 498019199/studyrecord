@@ -259,26 +259,32 @@ page_init(void)
 	// NB: DO NOT actually touch the physical memory corresponding to
 	// free pages!
 
-	// pages 0已经使用，IO 已经使用[IOPHYSMEM, EXTPHYSMEM)
 	page_free_list = NULL;
 	size_t i;
-	for (i = 0; i < npages; i++) 
+
+	// pages 0已经使用
+	pages[0].pp_ref = 1;
+	// [PGSIZE, npages_basemem * PGSIZE)
+	for (i = 1; i < npages_basemem; i++) 
 	{
-		if (0 == i)
-		{
-			pages[i].pp_ref = 1;
-		}
-		else if (i >= IOPHYSMEM/PGSIZE && i < EXTPHYSMEM/PGSIZE)
-		{
-			pages[i].pp_ref = 1;
-		}
-		else
-		{
-			pages[i].pp_ref = 0;
-			pages[i].pp_link = page_free_list;
-			page_free_list = &pages[i];
-		}
+		pages[i].pp_ref = 0;
+		pages[i].pp_link = page_free_list;
+		page_free_list = &pages[i];
 	}
+	// IO 已经使用[IOPHYSMEM, EXTPHYSMEM)
+	size_t num_alloc = PADDR(boot_alloc(0)) / PGSIZE;
+	for (i = npages_basemem; i < num_alloc; i++)
+	{
+		pages[i].pp_ref = 1;
+	}
+	// [EXTPHYSMEM, ...)
+	for (i = 0; i < npages; i++)
+	{
+		pages[i].pp_ref = 0;
+		pages[i].pp_link = page_free_list;
+		page_free_list = &pages[i];
+	}
+	
 }
 
 //
@@ -529,7 +535,7 @@ tlb_invalidate(pde_t *pgdir, void *va)
 
 //
 // Check that the pages on the page_free_list are reasonable.
-//
+// page_free_list=0xf0198ff8,  pages=0xf0159000
 static void
 check_page_free_list(bool only_low_memory)
 {
@@ -541,16 +547,20 @@ check_page_free_list(bool only_low_memory)
 	if (!page_free_list)
 		panic("'page_free_list' is a null pointer!");
 
+	cprintf("only_low_memory=%d\n", only_low_memory);
 	if (only_low_memory) {
 		// Move pages with lower addresses first in the free
-		// list, since entry_pgdir does not map all pages.
+		// list, since entry_pgdir does not map all pages. 
 		struct PageInfo *pp1, *pp2;
-		struct PageInfo **tp[2] = { &pp1, &pp2 };
-		for (pp = page_free_list; pp; pp = pp->pp_link) {
-			int pagetype = PDX(page2pa(pp)) >= pdx_limit;
-			*tp[pagetype] = pp;
-			tp[pagetype] = &pp->pp_link;
+		struct PageInfo **tp[2] = { &pp1, &pp2 };//&pp1=>是指向指针pp1, tp[0]=>指向pp1的指针，*tp[0]=>pp1的指针
+		for (pp = page_free_list; pp; pp = pp->pp_link) {   
+			int pagetype = PDX(page2pa(pp)) >= pdx_limit;	
+			//cprintf("PDX(page2pa(pp))=%p page2pa(pp)=%p  pagetype=%d, pp=%p, pp->link=%p\n", PDX(page2pa(pp)), page2pa(pp), pagetype, pp, pp->pp_link);
+			*tp[pagetype] = pp;						
+			tp[pagetype] = &pp->pp_link;					//pagetype=1，p2指向pp，指向p2的指针=&pp->pp_link
 		}
+		// PDX(page2pa(pp))=0x1 page2pa(pp)=0x400000  pagetype=1, pp=0xf015c000, pp->link=0xf015bff8
+		// PDX(page2pa(pp))=0x0 page2pa(pp)=0x1000  pagetype=0, pp=0xf015a008, pp->link=0x0
 		*tp[1] = 0;
 		*tp[0] = pp2;
 		page_free_list = pp1;
@@ -558,9 +568,14 @@ check_page_free_list(bool only_low_memory)
 
 	// if there's a page that shouldn't be on the free list,
 	// try to make sure it eventually causes trouble.
-	for (pp = page_free_list; pp; pp = pp->pp_link)
+	int i = 0;
+	cprintf("page_free_list=%p\n", page_free_list);
+	for (pp = page_free_list; pp; pp = pp->pp_link, i++)
+	{		
+		cprintf("i=%d, pp=%p, pp->link=%p\n", i, pp, pp->pp_link);
 		if (PDX(page2pa(pp)) < pdx_limit)
 			memset(page2kva(pp), 0x97, 128);
+	}	
 
 	first_free_page = (char *) boot_alloc(0);
 	for (pp = page_free_list; pp; pp = pp->pp_link) {

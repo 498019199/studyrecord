@@ -62,6 +62,9 @@ void	page_decref(struct PageInfo *pp);
 
 void	tlb_invalidate(pde_t *pgdir, void *va);
 
+// 0011,1111,1111,1111,1000 | 48bit 03 FF F8
+//      0111,1111,1111,1111 | 32bit 7F FF
+// PageInfo是4，2一共48位6字节。physaddr_t是32位4字节。48位强转32位。
 static inline physaddr_t
 page2pa(struct PageInfo *pp)
 {
