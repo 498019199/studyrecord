@@ -273,12 +273,12 @@ page_init(void)
 	}
 	// IO 已经使用[IOPHYSMEM, EXTPHYSMEM)
 	size_t num_alloc = PADDR(boot_alloc(0)) / PGSIZE;
-	for (i = npages_basemem; i < num_alloc; i++)
+	for (i = npages_basemem; i < npages_basemem + num_alloc; i++)
 	{
 		pages[i].pp_ref = 1;
 	}
 	// [EXTPHYSMEM, ...)
-	for (i = 0; i < npages; i++)
+	for (; i < npages; i++)
 	{
 		pages[i].pp_ref = 0;
 		pages[i].pp_link = page_free_list;
