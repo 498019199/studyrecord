@@ -16,7 +16,7 @@
             "externalConsole": false,
             "MIMode": "gdb",
             "miDebuggerArgs": "/usr/bin/gdb-multiarch",
-            "miDebuggerServerAddress": "localhost:25000",
+            "miDebuggerServerAddress": "localhost:26000",
             "setupCommands": [
                 {
                     "description": "Enable pretty-printing for gdb",

@@ -303,7 +303,10 @@ struct PageInfo *
 page_alloc(int alloc_flags)
 {
 	// Fill this function in
-	assert (NULL == page_free_list);
+	//assert (page_free_list);
+	if (NULL == page_free_list)
+		return NULL;
+	
 	struct PageInfo *pp = page_free_list;
 	page_free_list = page_free_list->pp_link;
 	
@@ -326,9 +329,8 @@ page_free(struct PageInfo *pp)
 	// Fill this function in
 	// Hint: You may want to panic if pp->pp_ref is nonzero or
 	// pp->pp_link is not NULL.
-	assert(0 == pp->pp_ref);
+	assert(0 != pp->pp_ref);
 	assert(NULL == pp->pp_link);
-
 	pp->pp_link = page_free_list;
 	page_free_list = pp;
 }
@@ -377,7 +379,7 @@ pgdir_walk(pde_t *pgdir, const void *va, int create)
 	{// pte => | PPN | Flag | => | 20物理页号 | 12标志位 |
 		pte = KADDR(PTE_ADDR(*pde));// 物理页号转物理地址
 	}
-	else
+	else 
 	{
 		struct PageInfo *pp;// page_alloc返回pp是虚拟地址
 		if (!create || 0 == (pp = page_alloc(ALLOC_ZERO)))
@@ -547,7 +549,7 @@ check_page_free_list(bool only_low_memory)
 	if (!page_free_list)
 		panic("'page_free_list' is a null pointer!");
 
-	cprintf("only_low_memory=%d\n", only_low_memory);
+	//cprintf("only_low_memory=%d\n", only_low_memory);
 	if (only_low_memory) {
 		// Move pages with lower addresses first in the free
 		// list, since entry_pgdir does not map all pages. 
@@ -569,10 +571,10 @@ check_page_free_list(bool only_low_memory)
 	// if there's a page that shouldn't be on the free list,
 	// try to make sure it eventually causes trouble.
 	int i = 0;
-	cprintf("page_free_list=%p\n", page_free_list);
+	//cprintf("page_free_list=%p\n", page_free_list);
 	for (pp = page_free_list; pp; pp = pp->pp_link, i++)
 	{		
-		cprintf("i=%d, pp=%p, pp->link=%p\n", i, pp, pp->pp_link);
+		//cprintf("i=%d, pp=%p, pp->link=%p\n", i, pp, pp->pp_link);
 		if (PDX(page2pa(pp)) < pdx_limit)
 			memset(page2kva(pp), 0x97, 128);
 	}	
