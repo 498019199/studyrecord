@@ -302,20 +302,18 @@ page_init(void)
 struct PageInfo *
 page_alloc(int alloc_flags)
 {
-	// Fill this function in
-	//assert (page_free_list);
-	if (NULL == page_free_list)
+	if (NULL == page_free_list)	//assert (page_free_list);
+	{
+		cprintf("page_alloc error : %e\n", E_NO_MEM);
 		return NULL;
-	
+	}
 	struct PageInfo *pp = page_free_list;
 	page_free_list = page_free_list->pp_link;
 	
 	pp->pp_link = NULL;
 	pp->pp_ref = 1;
 	if (alloc_flags & ALLOC_ZERO)
-	{
 		memset(page2kva(pp), 0, PGSIZE);
-	}
 	return pp;
 }
 
@@ -327,7 +325,7 @@ void
 page_free(struct PageInfo *pp)
 {
 	// Fill this function in
-	// Hint: You may want to panic if pp->pp_ref is nonzero or
+	// Hint: You may want to panic if pp->pp_ref is nonzesro or
 	// pp->pp_link is not NULL.
 	assert(0 != pp->pp_ref);
 	assert(NULL == pp->pp_link);
@@ -369,7 +367,7 @@ page_decref(struct PageInfo* pp)
 // table and page directory entries.
 //
 pte_t *// pgdir页目录，va是线性地址，create是否可创建新页，ret 页表项，页表项是物理地址。
-pgdir_walk(pde_t *pgdir, const void *va, int create)
+  pgdir_walk(pde_t *pgdir, const void *va, int create)
 {
 	pde_t* pde = &pgdir[PDX(va)]; // 页目录项
 	pte_t* pte = &pgdir[PTX(va)]; // 页表项
@@ -383,10 +381,10 @@ pgdir_walk(pde_t *pgdir, const void *va, int create)
 	{
 		struct PageInfo *pp;// page_alloc返回pp是虚拟地址
 		if (!create || 0 == (pp = page_alloc(ALLOC_ZERO)))
-			return 0;//create=true,可以分配一个新页表
+			return NULL;//create=true,可以分配一个新页表
 		pte = (pte_t *)page2kva(pp);
 		pp->pp_ref++;// ALLOC_ZERO，pp被重置0。pp_ref记录引用
-		*pde = page2pa(pp) | PTE_U | PTE_W | PTE_P;// page2pa(pp) 物理页号
+		*pde = page2pa(pp) | PTE_P;// page2pa(pp) 物理页号
 	}
 	
 	return &pte[PTX(va)];
@@ -434,8 +432,8 @@ boot_map_region(pde_t *pgdir, uintptr_t va, size_t size, physaddr_t pa, int perm
 // The permissions (the low 12 bits) of the page table entry
 // should be set to 'perm|PTE_P'.
 //
-// Requirements
-//   - If there is already a page mapped at 'va', it should be page_remove()d.
+// Requirements 
+//   - If there is already a page mapped at 'va', it should be page_remove().
 //   - If necessary, on demand, a page table should be allocated and inserted
 //     into 'pgdir'.
 //   - pp->pp_ref should be incremented if the insertion succeeds.
@@ -458,12 +456,15 @@ int
 page_insert(pde_t *pgdir, struct PageInfo *pp, void *va, int perm)
 {
 	pte_t *pte = pgdir_walk(pgdir, va, 0);
-	if (0 != pte)
+	if (NULL != pte)// 如果va映射存在pgdir，删除va的映射
 		page_remove(pgdir, va);
-
+	// 获取新的va映射pte
 	pte = pgdir_walk(pgdir, va, 1);	
-	physaddr_t pa = page2pa(pp);
-	*pte = PGNUM(pa) | perm;
+	if (NULL == pte)
+		return -E_NO_MEM;	
+
+	*pte = page2pa(pp) | PTE_P | perm;//建立pp到pte映射
+	
 	return 0;
 }
 
@@ -482,11 +483,12 @@ struct PageInfo *
 page_lookup(pde_t *pgdir, void *va, pte_t **pte_store)
 {
 	pte_t *pte = pgdir_walk(pgdir, va, 0);
-	if (0 != pte_store)
-		*pte_store = pte;
+	if (NULL == pte)
+		return NULL;	
 	if (0 == (PTE_P & *pte))
-		return 0;
-
+		return NULL;
+	if (NULL != pte_store)
+		*pte_store = pte;
 	return pa2page(PTE_ADDR(pte));
 }
 
@@ -510,7 +512,7 @@ page_remove(pde_t *pgdir, void *va)
 {
 	pte_t *pte = 0;
 	struct PageInfo *pp = page_lookup(pgdir, va, &pte);
-	if( 0 == pp)
+	if( NULL == pp)
 		return ;
 
 	page_decref(pp);// 释放内存页
