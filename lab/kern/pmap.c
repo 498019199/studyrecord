@@ -165,9 +165,9 @@ mem_init(void)
 	// or page_insert
 	page_init();
 
-	check_page_free_list(1);
-	check_page_alloc();
-	check_page();
+	check_page_free_list(1);// test page_init()  构建内存链表
+	check_page_alloc();		// test page_alloc(), page_free()。链表节点add,remove
+	check_page();			// test memory map,memory remap
 
 	//////////////////////////////////////////////////////////////////////
 	// Now we set up virtual memory
@@ -307,11 +307,12 @@ page_alloc(int alloc_flags)
 		cprintf("page_alloc error : %e\n", E_NO_MEM);
 		return NULL;
 	}
+
 	struct PageInfo *pp = page_free_list;
 	page_free_list = page_free_list->pp_link;
-	
 	pp->pp_link = NULL;
-	pp->pp_ref = 1;
+    pp->pp_ref = 0;
+
 	if (alloc_flags & ALLOC_ZERO)
 		memset(page2kva(pp), 0, PGSIZE);
 	return pp;
@@ -327,7 +328,7 @@ page_free(struct PageInfo *pp)
 	// Fill this function in
 	// Hint: You may want to panic if pp->pp_ref is nonzesro or
 	// pp->pp_link is not NULL.
-	assert(0 != pp->pp_ref);
+	assert(0 == pp->pp_ref);
 	assert(NULL == pp->pp_link);
 	pp->pp_link = page_free_list;
 	page_free_list = pp;
@@ -371,7 +372,6 @@ pte_t *// pgdir页目录，va是线性地址，create是否可创建新页，ret
 {
 	pde_t* pde = &pgdir[PDX(va)]; // 页目录项
 	pte_t* pte = &pgdir[PTX(va)]; // 页表项
-	pde_t *new_pg = 0;
 
 	if (PTE_P & *pde)//pde不为空，二级有效
 	{// pte => | PPN | Flag | => | 20物理页号 | 12标志位 |
@@ -455,16 +455,15 @@ boot_map_region(pde_t *pgdir, uintptr_t va, size_t size, physaddr_t pa, int perm
 int
 page_insert(pde_t *pgdir, struct PageInfo *pp, void *va, int perm)
 {
-	pte_t *pte = pgdir_walk(pgdir, va, 0);
-	if (NULL != pte)// 如果va映射存在pgdir，删除va的映射
-		page_remove(pgdir, va);
-	// 获取新的va映射pte
-	pte = pgdir_walk(pgdir, va, 1);	
-	if (NULL == pte)
-		return -E_NO_MEM;	
+	pte_t *pte = pgdir_walk(pgdir, va, 1);// 在页表获取页表项
+    if (NULL == pte)
+		return -E_NO_MEM;
 
-	*pte = page2pa(pp) | PTE_P | perm;//建立pp到pte映射
-	
+    pp->pp_ref++;
+	if ((*pte) & PTE_P)
+		page_remove(pgdir, va);// 如果va映射存在，清除老的va的页表项
+	*pte = page2pa(pp) | PTE_P | perm;//建立新映射
+    pgdir[PDX(va)] |= perm;// 子页表项权限改变上一级也改变？？？ assert(kern_pgdir[0] & PTE_U);
 	return 0;
 }
 
@@ -489,7 +488,7 @@ page_lookup(pde_t *pgdir, void *va, pte_t **pte_store)
 		return NULL;
 	if (NULL != pte_store)
 		*pte_store = pte;
-	return pa2page(PTE_ADDR(pte));
+	return pa2page(PTE_ADDR(*pte));
 }
 
 //
@@ -512,8 +511,8 @@ page_remove(pde_t *pgdir, void *va)
 {
 	pte_t *pte = 0;
 	struct PageInfo *pp = page_lookup(pgdir, va, &pte);
-	if( NULL == pp)
-		return ;
+	if(!pp || !(*pte & PTE_P))
+		return;
 
 	page_decref(pp);// 释放内存页
 	tlb_invalidate(pgdir, va);
@@ -779,7 +778,7 @@ check_page(void)
 
 	// temporarily steal the rest of the free pages
 	fl = page_free_list;
-	page_free_list = 0;
+	page_free_list = 0;// 只用3个内存页
 
 	// should be no free memory
 	assert(!page_alloc(0));
@@ -791,8 +790,17 @@ check_page(void)
 	assert(page_insert(kern_pgdir, pp1, 0x0, PTE_W) < 0);
 
 	// free pp0 and try again: pp0 should be used for page table
-	page_free(pp0);
-	assert(page_insert(kern_pgdir, pp1, 0x0, PTE_W) == 0);
+	page_free(pp0);// 内存页链表就一个节点pp0
+	/*
+	                            				pp0 0xf015bfe8
+0xf015bfe0:     0xf015bfd8      0x00000000      0x00000000      0x00000001
+                pp1 0xf015bff0                  pp2 0xf015bff8
+0xf015bff0:     0x00000000      0x00000001      0x00000000      0x00000001
+
+pgdir=0xf011b000, pte[]
+0xf011b000:     0x00000000      0x00000000      0x00000000
+	*/
+	assert(page_insert(kern_pgdir, pp1, 0x0, PTE_W) == 0);// 建立一个pp1
 	assert(PTE_ADDR(kern_pgdir[0]) == page2pa(pp0));
 	assert(check_va2pa(kern_pgdir, 0x0) == page2pa(pp1));
 	assert(pp1->pp_ref == 1);
