@@ -191,6 +191,7 @@ mem_init(void)
 	//       overwrite memory.  Known as a "guard page".
 	//     Permissions: kernel RW, user NONE
 	// Your code goes here:
+	boot_map_region(kern_pgdir, KSTACKTOP - KSTKSIZE, KSTKSIZE, PADDR(bootstack), PTE_W);
 
 	//////////////////////////////////////////////////////////////////////
 	// Map all of physical memory at KERNBASE.
@@ -200,7 +201,7 @@ mem_init(void)
 	// we just set up the mapping anyway.
 	// Permissions: kernel RW, user NONE
 	// Your code goes here:
-
+	boot_map_region(kern_pgdir, KERNBASE, -1, 0, PTE_W);
 	// Check that the initial page directory has been set up correctly.
 	check_kern_pgdir();
 
@@ -412,13 +413,13 @@ boot_map_region(pde_t *pgdir, uintptr_t va, size_t size, physaddr_t pa, int perm
 	pte_t * pte = 0;
 	for ( ; ; )
 	{
-		pte = pgdir_walk(pgdir, (const void*)va, 1);
-		if (0 == pte)
-			return;
-		if (*pte & PTE_P)
-			panic("mappages: remap");
 		if (last == start)
 			break;
+		pte = pgdir_walk(pgdir, (const void*)va, 1);
+		if (0 == pte)
+			break;
+		if (NULL == pte)
+			panic("mappages: remap");
 
 		*pte = PGNUM(pa) | perm | PTE_P;
 		start += PGSIZE;

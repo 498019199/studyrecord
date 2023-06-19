@@ -34,9 +34,9 @@
  *                     |                              | RW/--
  *    KERNBASE, ---->  +------------------------------+ 0xf0000000      --+
  *    KSTACKTOP        |     CPU0's Kernel Stack      | RW/--  KSTKSIZE   |
- *                     | - - - - - - - - - - - - - - -|                   |
+ *                     | - - - - - - - - - - - - - - -|                   | KSTACKTOP - KSTKSIZE
  *                     |      Invalid Memory (*)      | --/--  KSTKGAP    |
- *                     +------------------------------+                   |
+ *                     +------------------------------+                   | KSTACKTOP - KSTKSIZE - PGSIZE
  *                     |     CPU1's Kernel Stack      | RW/--  KSTKSIZE   |
  *                     | - - - - - - - - - - - - - - -|                 PTSIZE
  *                     |      Invalid Memory (*)      | --/--  KSTKGAP    |
