@@ -179,7 +179,7 @@ mem_init(void)
 	//      (ie. perm = PTE_U | PTE_P)
 	//    - pages itself -- kernel RW, user NONE
 	// Your code goes here:
-	kern_pgdir[PDX(UPAGES)] = PADDR(kern_pgdir) | PTE_U | PTE_P;
+	boot_map_region(kern_pgdir, UPAGES, PTSIZE, PADDR(pages), PTE_U);
 	//////////////////////////////////////////////////////////////////////
 	// Use the physical memory that 'bootstack' refers to as the kernel
 	// stack.  The kernel stack grows down from virtual address KSTACKTOP.
@@ -210,7 +210,6 @@ mem_init(void)
 	// somewhere between KERNBASE and KERNBASE+4MB right now, which is
 	// mapped the same way by both page tables.
 	//
-	// If the machine reboots at this point, you've probably set up your
 	// kern_pgdir wrong.
 	lcr3(PADDR(kern_pgdir));
 
@@ -387,7 +386,7 @@ pte_t *// pgdir页目录，va是线性地址，create是否可创建新页，ret
 		pp->pp_ref++;// ALLOC_ZERO，pp被重置0。pp_ref记录引用
 		*pde = page2pa(pp) | PTE_P;// page2pa(pp) 物理页号
 
-		cprintf("pgdir_walk %p, PDX(va) : %p\n", va, pde);
+		//cprintf("pgdir_walk %p, PDX(va) : %p\n", va, pde);
 	}
 	
 	return &pte[PTX(va)];
@@ -411,7 +410,7 @@ boot_map_region(pde_t *pgdir, uintptr_t va, size_t size, physaddr_t pa, int perm
 		panic("boot_map_region: size");
 
 	uintptr_t start = ROUNDDOWN(va, PGSIZE);
-	uintptr_t last = ROUNDDOWN(va + size, PGSIZE);
+	uintptr_t last = ROUNDDOWN(va + PGSIZE * size, PGSIZE);
 	pte_t * pte = 0;
 	for ( ; ; )
 	{
@@ -748,7 +747,8 @@ check_va2pa(pde_t *pgdir, uintptr_t va)
 {
 	pte_t *p;
 
-	pgdir = &pgdir[PDX(va)];
+	pgdir = &pgdir[PDX(va)];//PDX(va)=956
+	cprintf("pgdir : %p\n", pgdir);
 	if (!(*pgdir & PTE_P))
 		return ~0;
 	p = (pte_t*) KADDR(PTE_ADDR(*pgdir));
