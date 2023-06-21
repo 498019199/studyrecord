@@ -179,7 +179,7 @@ mem_init(void)
 	//      (ie. perm = PTE_U | PTE_P)
 	//    - pages itself -- kernel RW, user NONE
 	// Your code goes here:
-	kern_pgdir[PDX(UPAGES)] = PADDR(kern_pgdir) | PTE_U | PTE_W;
+	kern_pgdir[PDX(UPAGES)] = PADDR(kern_pgdir) | PTE_U | PTE_P;
 	//////////////////////////////////////////////////////////////////////
 	// Use the physical memory that 'bootstack' refers to as the kernel
 	// stack.  The kernel stack grows down from virtual address KSTACKTOP.
@@ -373,7 +373,7 @@ pte_t *// pgdir页目录，va是线性地址，create是否可创建新页，ret
 {
 	pde_t* pde = &pgdir[PDX(va)]; // 页目录项
 	pte_t* pte = &pgdir[PTX(va)]; // 页表项
-
+	
 	if (PTE_P & *pde)//pde不为空，二级有效
 	{// pte => | PPN | Flag | => | 20物理页号 | 12标志位 |
 		pte = KADDR(PTE_ADDR(*pde));// 物理页号转物理地址
@@ -386,6 +386,8 @@ pte_t *// pgdir页目录，va是线性地址，create是否可创建新页，ret
 		pte = (pte_t *)page2kva(pp);
 		pp->pp_ref++;// ALLOC_ZERO，pp被重置0。pp_ref记录引用
 		*pde = page2pa(pp) | PTE_P;// page2pa(pp) 物理页号
+
+		cprintf("pgdir_walk %p, PDX(va) : %p\n", va, pde);
 	}
 	
 	return &pte[PTX(va)];
