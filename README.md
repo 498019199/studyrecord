@@ -1,6 +1,6 @@
 lab->MIT6.828 study os. important boot load, paging, lock, mulpty task, file system, network
 疑问：
-
+check_kern_pgdir()的assert(check_va2pa(pgdir, UPAGES + i) == PADDR(pages) + i);调试好久不知道为啥错误
 解决：
 1.在pmap.h中page2pa强转类型。48转32为啥是shr 0x3 %eax。不是直接舍弃，而是位移3bit.
 因为在x86 32位系统。寄存器eax...都是32位的，如果是48位结构体应该分别存储2个寄存器中.
