@@ -195,13 +195,13 @@ mem_init(void)
 
 	//////////////////////////////////////////////////////////////////////
 	// Map all of physical memory at KERNBASE.
-	// Ie.  the VA range [KERNBASE, 2^32) should map to           2^32=0x100000000, KERNBASE上面只有256M空间了
+	// Ie.  the VA range [KERNBASE, 2^32) should map to          
 	//      the PA range [0, 2^32 - KERNBASE)
 	// We might not have 2^32 - KERNBASE bytes of physical memory, but
 	// we just set up the mapping anyway.
 	// Permissions: kernel RW, user NONE
 	// Your code goes here:
-	boot_map_region(kern_pgdir, KERNBASE, -KERNBASE, 0, PTE_W);//KERNBASE上面的全部映射
+	boot_map_region(kern_pgdir, KERNBASE, 0x10000000, 0, PTE_W);//the VA range [KERNBASE, 2^32) should map to the PA range [0, 2^32 - KERNBASE)
 	// Check that the initial page directory has been set up correctly.
 	check_kern_pgdir();
 
@@ -382,9 +382,9 @@ pte_t *// pgdir页目录，va是线性地址，create是否可创建新页，ret
 		struct PageInfo *pp;// page_alloc返回pp是虚拟地址
 		if (!create || 0 == (pp = page_alloc(ALLOC_ZERO)))
 			return NULL;//create=true,可以分配一个新页表
-		pte = (pte_t *)page2kva(pp);
 		pp->pp_ref++;// ALLOC_ZERO，pp被重置0。pp_ref记录引用
-		*pde = page2pa(pp) | PTE_P;// page2pa(pp) 物理页号
+		*pde = page2pa(pp) | PTE_P | PTE_W;// page2pa(pp) 物理页号
+		pte = (pte_t *)page2kva(pp);
 
 		//cprintf("pgdir_walk %p, PDX(va) : %p\n", va, pde);
 	}
@@ -410,25 +410,20 @@ boot_map_region(pde_t *pgdir, uintptr_t va, size_t size, physaddr_t pa, int perm
 		panic("boot_map_region: size");
 
 	uintptr_t a = va;
-	//cprintf("boot_map_region     a=%x\n", a);
 	uintptr_t last = size + a;
-	//cprintf("boot_map_region     last=%x\n", last);
-	pte_t * pte;
+	cprintf("boot_map_region  a=%x   last=%x   size=%d\n", a,last,size);
 	for (int i = 0; i < size / PGSIZE; i++)
 	{
-		pte = pgdir_walk(pgdir, (const void*)a, 1);
+		pte_t * pte = pgdir_walk(pgdir, (const void*)a, 1);
 		//cprintf("boot_map_region     pte=%p\n", pte);
 		if (pte == NULL)
 			break;
 		// if( *pte & PTE_U)
 		// 	panic("remap!");
-		if (last == a)
-			break;
-
 		*pte = pa | perm | PTE_P;
+
 		a += PGSIZE;
 		pa += PGSIZE;
-
 		//cprintf("boot_map_region     value=%x, a=%x, pa=%x\n", *pte, a, pa);
 	}
 	
@@ -708,7 +703,7 @@ check_kern_pgdir(void)
 	pgdir = kern_pgdir;
 
 	// check pages array 查看（UPAGES，0xef040000）是否挂载在pages上。error UPAGES没有分配物理内存。boot_map_region(kern_pgdir, UPAGES) 代码错误
-	/*n = ROUNDUP(npages*sizeof(struct PageInfo), PGSIZE);// n=0x0x40000
+	n = ROUNDUP(npages*sizeof(struct PageInfo), PGSIZE);// n=0x0x40000
 	for (i = 0; i < n; i += PGSIZE)
 		assert(check_va2pa(pgdir, UPAGES + i) == PADDR(pages) + i);//(0xf011b000, 0xef000000+i)==(0xf015a000 + i)
 
@@ -720,7 +715,7 @@ check_kern_pgdir(void)
 	// check kernel stack
 	for (i = 0; i < KSTKSIZE; i += PGSIZE)
 		assert(check_va2pa(pgdir, KSTACKTOP - KSTKSIZE + i) == PADDR(bootstack) + i);
-	assert(check_va2pa(pgdir, KSTACKTOP - PTSIZE) == ~0);*/
+	assert(check_va2pa(pgdir, KSTACKTOP - PTSIZE) == ~0);
 
 	// check PDE permissions
 	for (i = 0; i < NPDENTRIES; i++) {
@@ -732,7 +727,7 @@ check_kern_pgdir(void)
 			break;
 		default:
 			if (i >= PDX(KERNBASE)) {
-				cprintf("2 check_kern_pgdir %d, %p\n", i, pgdir[i]);
+				cprintf("2 check_kern_pgdir %d, pa=%p, va=%p\n", i, pgdir[i], KADDR(PTE_ADDR(pgdir[i])));
 				assert(pgdir[i] & PTE_P);
 				assert(pgdir[i] & PTE_W);
 			} else{
