@@ -8,6 +8,7 @@
 
 #include <kern/pmap.h>
 #include <kern/kclock.h>
+#include <kern/env.h>
 
 // These variables are set by i386_detect_memory()
 size_t npages;			// Amount of physical memory (in pages)
@@ -131,7 +132,7 @@ mem_init(void)
 	i386_detect_memory();
 
 	// Remove this line when you're ready to test this function.
-	//panic("mem_init: This function is not finished\n");
+	panic("mem_init: This function is not finished\n");
 
 	//////////////////////////////////////////////////////////////////////
 	// create initial page directory.
@@ -195,7 +196,7 @@ mem_init(void)
 
 	//////////////////////////////////////////////////////////////////////
 	// Map all of physical memory at KERNBASE.
-	// Ie.  the VA range [KERNBASE, 2^32) should map to          
+	// Ie.  the VA range [KERNBASE, 2^32) should map to
 	//      the PA range [0, 2^32 - KERNBASE)
 	// We might not have 2^32 - KERNBASE bytes of physical memory, but
 	// we just set up the mapping anyway.
@@ -210,6 +211,7 @@ mem_init(void)
 	// somewhere between KERNBASE and KERNBASE+4MB right now, which is
 	// mapped the same way by both page tables.
 	//
+	// If the machine reboots at this point, you've probably set up your
 	// kern_pgdir wrong.
 	lcr3(PADDR(kern_pgdir));
 
@@ -368,7 +370,7 @@ page_decref(struct PageInfo* pp)
 // table and page directory entries.
 //
 pte_t *// pgdir页目录，va是线性地址，create是否可创建新页，ret 页表项，页表项是物理地址。
-  pgdir_walk(pde_t *pgdir, const void *va, int create)
+pgdir_walk(pde_t *pgdir, const void *va, int create)
 {
 	pde_t* pde = &pgdir[PDX(va)]; // 页目录项
 	pte_t* pte = &pgdir[PTX(va)]; // 页表项
@@ -434,7 +436,7 @@ boot_map_region(pde_t *pgdir, uintptr_t va, size_t size, physaddr_t pa, int perm
 // The permissions (the low 12 bits) of the page table entry
 // should be set to 'perm|PTE_P'.
 //
-// Requirements 
+// Requirements
 //   - If there is already a page mapped at 'va', it should be page_remove().
 //   - If necessary, on demand, a page table should be allocated and inserted
 //     into 'pgdir'.
@@ -485,7 +487,7 @@ page_lookup(pde_t *pgdir, void *va, pte_t **pte_store)
 {
 	pte_t *pte = pgdir_walk(pgdir, va, 0);
 	if (NULL == pte)
-		return NULL;	
+	return NULL;
 	if (0 == (PTE_P & *pte))
 		return NULL;
 	if (NULL != pte_store)
@@ -533,6 +535,51 @@ tlb_invalidate(pde_t *pgdir, void *va)
 	invlpg(va);
 }
 
+static uintptr_t user_mem_check_addr;
+
+//
+// Check that an environment is allowed to access the range of memory
+// [va, va+len) with permissions 'perm | PTE_P'.
+// Normally 'perm' will contain PTE_U at least, but this is not required.
+// 'va' and 'len' need not be page-aligned; you must test every page that
+// contains any of that range.  You will test either 'len/PGSIZE',
+// 'len/PGSIZE + 1', or 'len/PGSIZE + 2' pages.
+//
+// A user program can access a virtual address if (1) the address is below
+// ULIM, and (2) the page table gives it permission.  These are exactly
+// the tests you should implement here.
+//
+// If there is an error, set the 'user_mem_check_addr' variable to the first
+// erroneous virtual address.
+//
+// Returns 0 if the user program can access this range of addresses,
+// and -E_FAULT otherwise.
+//
+int
+user_mem_check(struct Env *env, const void *va, size_t len, int perm)
+{
+	// LAB 3: Your code here.
+
+	return 0;
+}
+
+//
+// Checks that environment 'env' is allowed to access the range
+// of memory [va, va+len) with permissions 'perm | PTE_U | PTE_P'.
+// If it can, then the function simply returns.
+// If it cannot, 'env' is destroyed and, if env is the current
+// environment, this function will not return.
+//
+void
+user_mem_assert(struct Env *env, const void *va, size_t len, int perm)
+{
+	if (user_mem_check(env, va, len, perm | PTE_U) < 0) {
+		cprintf("[%08x] user_mem_check assertion failure for "
+			"va %08x\n", env->env_id, user_mem_check_addr);
+		env_destroy(env);	// may not return
+	}
+}
+
 
 // --------------------------------------------------------------
 // Checking functions.
@@ -555,13 +602,13 @@ check_page_free_list(bool only_low_memory)
 	//cprintf("only_low_memory=%d\n", only_low_memory);
 	if (only_low_memory) {
 		// Move pages with lower addresses first in the free
-		// list, since entry_pgdir does not map all pages. 
+		// list, since entry_pgdir does not map all pages.
 		struct PageInfo *pp1, *pp2;
 		struct PageInfo **tp[2] = { &pp1, &pp2 };//&pp1=>是指向指针pp1, tp[0]=>指向pp1的指针，*tp[0]=>pp1的指针
-		for (pp = page_free_list; pp; pp = pp->pp_link) {   
-			int pagetype = PDX(page2pa(pp)) >= pdx_limit;	
+		for (pp = page_free_list; pp; pp = pp->pp_link) {
+			int pagetype = PDX(page2pa(pp)) >= pdx_limit;
 			//cprintf("PDX(page2pa(pp))=%p page2pa(pp)=%p  pagetype=%d, pp=%p, pp->link=%p\n", PDX(page2pa(pp)), page2pa(pp), pagetype, pp, pp->pp_link);
-			*tp[pagetype] = pp;						
+			*tp[pagetype] = pp;
 			tp[pagetype] = &pp->pp_link;					//pagetype=1，p2指向pp，指向p2的指针=&pp->pp_link
 		}
 		// PDX(page2pa(pp))=0x1 page2pa(pp)=0x400000  pagetype=1, pp=0xf015c000, pp->link=0xf015bff8
