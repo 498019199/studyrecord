@@ -132,7 +132,7 @@ mem_init(void)
 	i386_detect_memory();
 
 	// Remove this line when you're ready to test this function.
-	panic("mem_init: This function is not finished\n");
+	//panic("mem_init: This function is not finished\n");
 
 	//////////////////////////////////////////////////////////////////////
 	// create initial page directory.
@@ -413,7 +413,7 @@ boot_map_region(pde_t *pgdir, uintptr_t va, size_t size, physaddr_t pa, int perm
 
 	uintptr_t a = va;
 	uintptr_t last = size + a;
-	cprintf("boot_map_region  a=%x   last=%x   size=%d\n", a,last,size);
+	//cprintf("boot_map_region  a=%x   last=%x   size=%d\n", a,last,size);
 	for (int i = 0; i < size / PGSIZE; i++)
 	{
 		pte_t * pte = pgdir_walk(pgdir, (const void*)a, 1);
