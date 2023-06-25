@@ -414,7 +414,7 @@ boot_map_region(pde_t *pgdir, uintptr_t va, size_t size, physaddr_t pa, int perm
 	uintptr_t last = size + a;
 	//cprintf("boot_map_region     last=%x\n", last);
 	pte_t * pte;
-	for ( ; ; )
+	for (int i = 0; i < size / PGSIZE; i++)
 	{
 		pte = pgdir_walk(pgdir, (const void*)a, 1);
 		//cprintf("boot_map_region     pte=%p\n", pte);
@@ -429,7 +429,7 @@ boot_map_region(pde_t *pgdir, uintptr_t va, size_t size, physaddr_t pa, int perm
 		a += PGSIZE;
 		pa += PGSIZE;
 
-		cprintf("boot_map_region     value=%x, a=%x, pa=%x\n", *pte, a, pa);
+		//cprintf("boot_map_region     value=%x, a=%x, pa=%x\n", *pte, a, pa);
 	}
 	
 }
@@ -736,7 +736,7 @@ check_kern_pgdir(void)
 				assert(pgdir[i] & PTE_P);
 				assert(pgdir[i] & PTE_W);
 			} else{
-				cprintf("1 check_kern_pgdir %d, %p\n", i, pgdir[i]);
+				//cprintf("1 check_kern_pgdir %d, %p\n", i, pgdir[i]);
 				assert(pgdir[i] == 0);
 			}
 			break;
