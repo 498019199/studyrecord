@@ -727,8 +727,8 @@ check_kern_pgdir(void)
 			break;
 		default:
 			if (i >= PDX(KERNBASE)) {
-				cprintf("2 check_kern_pgdir %d, pa=%p, va=%p\n", i, pgdir[i], KADDR(PTE_ADDR(pgdir[i])));
-				assert(pgdir[i] & PTE_P);
+				//cprintf("2 check_kern_pgdir %d, pa=%p, va=%p\n", i, pgdir[i], KADDR(PTE_ADDR(pgdir[i])));
+				assert(pgdir[i] & PTE_P);// look at pgdir_walk privilage
 				assert(pgdir[i] & PTE_W);
 			} else{
 				//cprintf("1 check_kern_pgdir %d, %p\n", i, pgdir[i]);
