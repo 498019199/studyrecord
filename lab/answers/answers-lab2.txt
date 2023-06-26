@@ -1,0 +1,21 @@
+### Question
+uintprt_t，虚拟地址
+
+
+### Question
+2.填空。
+    页表项索引《——》线性地址《——》物理地址直接转换计算
+
+3.内核和用户环境在同一地址空间。为什么用户程序不能读写内核内存，保护内核内存的方法是什么。
+    页权限位。
+
+4.操作系统支持最大物理内存是多大，为什么。
+    256M，	JOS要求这上面的虚拟地址和物理地址一一对应。
+
+5.需要多少空间管理内存，实际上拥有最大物理内存？
+    使用二级页表管理，页表4096bit。$512*4096+4096$(页目录·)
+
+6.页表设置在`kern/entry.S` and `kern/entrypgdir.c`。之后打开分页，`EIP`仍然低位数（略高于1MB）。什么时候过渡到KERNBASE，是什么使我们能够在启用分页和开始在高于KERNBASE的EIP上运行之间继续在低EIP下执行？为什么需要转换？
+    a.`((void (*)(void)) (ELFHDR->e_entry))();` boot loader
+    b.What makes it possible for us to continue executing at a low EIP between when we enable paging and when we begin running at an EIP above KERNBASE?
+    c.entry内存限制只有4M。
