@@ -20,7 +20,7 @@ pde_t *kern_pgdir;		// Kernel's initial page directory
 struct PageInfo *pages;		// Physical page state array
 static struct PageInfo *page_free_list;	// Free list of physical pages
 
-
+extern struct Env *envs;
 // --------------------------------------------------------------
 // Detect machine's physical memory setup.
 // --------------------------------------------------------------
@@ -430,17 +430,16 @@ boot_map_region(pde_t *pgdir, uintptr_t va, size_t size, physaddr_t pa, int perm
 
 	uintptr_t a = va;
 	uintptr_t last = size + a;
-	//cprintf("boot_map_region  a=%x   last=%x   size=%d\n", a,last,size);
+	//cprintf("boot_map_region  a=%x   last=%x   size=%x\n", a,last,size);
+	//cprintf("boot_map_region  PDX-a=%d   PDX-last=%d   size=%x\n", PDX(a), PDX(last),size);
 	for (int i = 0; i < size / PGSIZE; i++)
 	{
 		pte_t * pte = pgdir_walk(pgdir, (const void*)a, 1);
 		//cprintf("boot_map_region     pte=%p\n", pte);
 		if (pte == NULL)
 			break;
-		// if( *pte & PTE_U)
-		// 	panic("remap!");
-		*pte = pa | perm | PTE_P;
 
+		*pte = pa | perm | PTE_P;
 		a += PGSIZE;
 		pa += PGSIZE;
 		//cprintf("boot_map_region     value=%x, a=%x, pa=%x\n", *pte, a, pa);
@@ -789,13 +788,16 @@ check_kern_pgdir(void)
 		case PDX(UPAGES):
 			assert(pgdir[i] & PTE_P);
 			break;
+		case PDX(UENVS):
+			assert(pgdir[i] & PTE_P);
+			break;
 		default:
 			if (i >= PDX(KERNBASE)) {
 				//cprintf("2 check_kern_pgdir %d, pa=%p, va=%p\n", i, pgdir[i], KADDR(PTE_ADDR(pgdir[i])));
 				assert(pgdir[i] & PTE_P);// look at pgdir_walk privilage
 				assert(pgdir[i] & PTE_W);
 			} else{
-				cprintf("1 check_kern_pgdir %d, %p\n", i, pgdir[i]);
+				//cprintf("1 check_kern_pgdir %d, %p\n", i, pgdir[i]);
 				assert(pgdir[i] == 0);
 			}
 			break;
