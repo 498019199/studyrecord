@@ -9,5 +9,8 @@
 
         "**/.o": true,
         "**/.d": true,
+    },
+    "files.associations": {
+        "env.h": "c"
     }
 }
