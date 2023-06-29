@@ -24,7 +24,9 @@ bool vector4::operator!=(const  vector4& rhs) const noexcept
 
 // 向量标准化
 void vector4::normalize() noexcept
-{}
+{
+    
+}
 
 vector4 vector4::normalize() const noexcept
 {}

@@ -30,6 +30,7 @@ public:
     const vector2& operator+=(const  vector2& rhs) noexcept;
     const vector2& operator-=(const  vector2& rhs) noexcept;
     const vector2& operator*=(const  vector2& rhs) noexcept;
+    const vector2& operator*=(float rhs) noexcept;
     const vector2& operator/=(const  vector2& rhs) noexcept;
 
     bool operator==(const  vector2& rhs) const noexcept;

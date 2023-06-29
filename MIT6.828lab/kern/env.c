@@ -351,6 +351,11 @@ void
 env_create(uint8_t *binary, enum EnvType type)
 {
 	// LAB 3: Your code here.
+	struct Env* e;
+	env_alloc(&e, 0);
+
+	load_icode(e, binary);
+	e->env_type = type;
 }
 
 //
