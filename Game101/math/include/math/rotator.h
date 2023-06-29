@@ -1,0 +1,6 @@
+#pragma
+
+class rotator
+{
+public:
+};

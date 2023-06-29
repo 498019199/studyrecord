@@ -1,0 +1,6 @@
+#pragma
+
+class quaternion
+{
+public:
+};

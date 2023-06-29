@@ -53,27 +53,27 @@ public:
     static float dot(const  vector2& lhs, const vector2& rhs) noexcept;
 };
 
-inline vector2& operator+(const  vector2& lhs, const  vector2& rhs) noexcept;
+inline vector2& operator+(const  vector2& lhs, const  vector2& rhs) noexcept
 {
     return lhs.operator+=(rhs);
 }
 
-inline vector2& operator-(const  vector2& lhs, const  vector2& rhs) noexcept;
+inline vector2& operator-(const  vector2& lhs, const  vector2& rhs) noexcept
 {
     return lhs.operator!-=(rhs);
 }
 
-inline vector2& operator*(const  vector2& lhs, const  vector2& rhs) noexcept;
+inline vector2& operator*(const  vector2& lhs, const  vector2& rhs) noexcept
 {
     return lhs.operator*=(rhs);
 }
 
-inline vector2& operator/(const  vector2& lhs, const  vector2& rhs) noexcept;
+inline vector2& operator/(const  vector2& lhs, const  vector2& rhs) noexcept
 {
     return lhs.operator/=(rhs);
 }
 
-inline bool operator==(const  vector2& lhs, const  vector2& rhs) noexcept;
+inline bool operator==(const  vector2& lhs, const  vector2& rhs) noexcept
 {
     return lhs.operator==(rhs);
 }

@@ -16,7 +16,7 @@ public:
     vector4(vector4* vec) noexcept 
         :x(vec->x),y(vec->y),z(vec->z),o(vec->o) {}
     vector4(vector4& vec) noexcept 
-        :x(vec.x),y(vec.y),z(vec.z),z(vec.o) {}
+        :x(vec.x),y(vec.y),z(vec.z),o(vec.o) {}
     vector4(vector4&& vec) noexcept 
         :x(vec.x),y(vec.y),z(vec.z),o(vec.o) {}
     vector4(const vector4* vec) noexcept 
@@ -24,13 +24,13 @@ public:
     vector4(const vector4& vec) noexcept 
         :x(vec.x),y(vec.y),z(vec.z),o(vec.o) {}
 
-    vector4(float _x, float _y) noexcept 
+    vector4(float _x, float _y, float _z, float _o) noexcept 
         :x(_x),y(_y),z(_z),o(_o) {}
-    vector4(float& _x, float& _y) noexcept 
+    vector4(float& _x, float& _y, float& _z, float& _o) noexcept 
         :x(_x),y(_y),z(_z),o(_o) {}
-    vector4(const float& _x, const float& _y) noexcept 
+    vector4(const float& _x, const float& _y, const float& _z, const float& _o) noexcept 
         :x(_x),y(_y),z(_z),o(_o) {}
-    vector4(float&& _x, float&& _y) noexcept 
+    vector4(float&& _x, float&& _y, float&& _z, float&& _o) noexcept 
         :x(std::move(_x)),y(std::move(_y)),z(std::move(_z)),o(std::move(_o)) {}
 
     const vector4& operator+=(const  vector4& rhs) noexcept;
@@ -58,27 +58,27 @@ public:
     static float dot(const  vector4& lhs, const vector4& rhs) noexcept;
 };
 
-inline vector4& operator+(const  vector4& lhs, const  vector4& rhs) noexcept;
+inline vector4& operator+(const  vector4& lhs, const  vector4& rhs) noexcept
 {
     return lhs.operator+=(rhs);
 }
 
-inline vector4& operator-(const  vector4& lhs, const  vector4& rhs) noexcept;
+inline vector4& operator-(const  vector4& lhs, const  vector4& rhs) noexcept
 {
     return lhs.operator!-=(rhs);
 }
 
-inline vector4& operator*(const  vector4& lhs, const  vector4& rhs) noexcept;
+inline vector4& operator*(const  vector4& lhs, const  vector4& rhs) noexcept
 {
     return lhs.operator*=(rhs);
 }
 
-inline vector4& operator/(const  vector4& lhs, const  vector4& rhs) noexcept;
+inline vector4& operator/(const  vector4& lhs, const  vector4& rhs) noexcept
 {
     return lhs.operator/=(rhs);
 }
 
-inline bool operator==(const  vector4& lhs, const  vector4& rhs) noexcept;
+inline bool operator==(const  vector4& lhs, const  vector4& rhs) noexcept
 {
     return lhs.operator==(rhs);
 }
