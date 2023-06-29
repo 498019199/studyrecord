@@ -304,6 +304,22 @@ region_alloc(struct Env *e, void *va, size_t len)
 static void
 load_icode(struct Env *e, uint8_t *binary)
 {
+	if (((struct Elf*)binary)->e_magic != ELF_MAGIC)
+	{
+		return ;
+	}
+	struct Proghdr *ph = (struct Proghdr *) ( binary + ((struct Elf*)binary)->e_phoff);
+	struct Proghdr *eph = ph + ((struct Elf*)binary)->e_phnum;
+	for (; ph < eph; ph++)
+	{
+		if (ELF_PROG_LOAD != ph->p_type)
+		{
+			continue;
+		}
+		boot_alloc(ph->p_memsz);
+		binary + ph->p_offset;
+		(ph->p_pa);
+	}
 	// Hints:
 	//  Load each program segment into virtual memory
 	//  at the address specified in the ELF segment header.
