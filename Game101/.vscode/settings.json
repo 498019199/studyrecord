@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "cmath": "cpp",
+        "atomic": "cpp",
+        "string": "cpp"
+    }
+}
