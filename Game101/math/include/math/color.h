@@ -1,5 +1,4 @@
-#pragma
-module cmath
+#pragma once
 class color
 {
 public:

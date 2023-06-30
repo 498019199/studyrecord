@@ -1,31 +1,40 @@
 #include <cmath>
+
 #include <math/vector2.h>
 
-void vector2::operator+=(const  vector2& rhs) noexcept
+const vector2& vector2::operator+=(const  vector2& rhs) noexcept
 {
     this->x += rhs.x;
     this->y += rhs.y;
+    return *this;
 }
 
-void vector2::operator-=(const  vector2& rhs) noexcept
+const vector2& vector2::operator-=(const  vector2& rhs) noexcept
 {
     this->x -= rhs.x;
     this->y -= rhs.y;
+    return *this;
 }
 
-void vector2::operator*=(float rhs) noexcept
+const vector2& vector2::operator*=(float rhs) noexcept
 {
     this->x *= rhs;
     this->y *= rhs;
+    return *this;
 }
 
-void vector2::operator*=(const  vector2& rhs) noexcept
+const vector2& vector2::operator/=(float rhs) noexcept
 {
-
+    this->x /= rhs;
+    this->y /= rhs;
+    return *this;
 }
 
-void vector2::operator/=(const  vector2& rhs) noexcept
-{}
+const vector2& vector2::operator*=(const  vector2& rhs) noexcept
+{
+    this->dot(rhs);
+    return *this;
+}
 
 bool vector2::operator==(const  vector2& rhs) const noexcept
 {
@@ -53,10 +62,16 @@ const vector2& normalize(const vector2& rhs) noexcept
 
 // 距离
 float vector2::distance(const  vector2& lhs, const vector2& rhs) noexcept
-{}
+{
+    return std::sqrt((rhs.x - lhs.x) * (rhs.x - lhs.x) + 
+        (rhs.y - lhs.y) * (rhs.y - lhs.y));
+}
 
 float vector2::distance(const vector2& rhs) noexcept
-{}
+{
+    return std::sqrt((rhs.x - this->x) * (rhs.x - this->x) + 
+        (rhs.y - this->y) * (rhs.y - this->y));
+}
 
 // 叉积
 void vector2::cross(const vector2& rhs) noexcept
@@ -67,10 +82,10 @@ void vector2::cross(const  vector2& lhs, const vector2& rhs) noexcept
 // 点积
 float vector2::dot(const vector2& rhs) noexcept
 {
-    return this->x*rhs.x + this->y*rhs.y;
+    return this->x * rhs.x + this->y * rhs.y;
 }
 
 float vector2::dot(const  vector2& lhs, const vector2& rhs) noexcept
 {
-    return lhs.x*rhs.x + lhs.y*rhs.y;
+    return lhs.x * rhs.x + lhs.y * rhs.y;
 }
