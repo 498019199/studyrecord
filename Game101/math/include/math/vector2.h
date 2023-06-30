@@ -4,8 +4,8 @@
 class vector2
 {
 public:
-    float x;
-    float y;
+    float x = 0.f;
+    float y = 0.f;
 
 public:
     // 构造
