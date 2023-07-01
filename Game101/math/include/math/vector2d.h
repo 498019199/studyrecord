@@ -16,16 +16,16 @@ public:
     vector2d() 
         {}
     vector2d(float in_x, float in_y) 
-        :x(in_x),y(in_y) {}
+        :x(in_x), y(in_y) {}
     explicit vector2d(float inf) 
-        :x(inf),y(inf) {}
+        :x(inf), y(inf) {}
     explicit vector2d(const vector2d& vec) 
-        :x(vec.x),y(vec.y) {}
+        :x(vec.x), y(vec.y) {}
     explicit vector2d(const vector2d&& vec)  
-        :x(vec.x),y(vec.y) {}
+        :x(std::move(vec.x)), y(std::move(vec.y)) {}
     explicit vector2d(vector2d* vec) 
-        :x(vec->x),y(vec->y) {}
-    vector2d(std::initializer_list<float> list); 
+        :x(vec->x), y(vec->y) {}
+    //vector2d(std::initializer_list<float> list); 
 
     // 复制构造
     vector2d& operator=(const vector2d& rhs); 
@@ -39,14 +39,17 @@ public:
     vector2d operator/(const  vector2d& rhs) const;
     vector2d operator*(float rhs) const;
     vector2d operator/(float rhs) const;
+    float operator|(const vector2d& rhs) const;
+    float operator^(const vector2d& rhs) const;
 
     vector2d operator+=(const  vector2d& rhs);
     vector2d operator-=(const  vector2d& rhs);
     vector2d operator*=(const  vector2d& rhs);
     vector2d operator/=(const  vector2d& rhs);
-    vector2d operator*=(float rhs) ;
-    vector2d operator/=(float rhs) ;
+    vector2d operator*=(float rhs);
+    vector2d operator/=(float rhs);
 
+    bool is_zero() const;
     bool operator==(const  vector2d& rhs) const;
     bool operator!=(const  vector2d& rhs) const;
 
@@ -55,15 +58,12 @@ public:
     static vector2d normalize(const vector2d& rhs);
 
     // 距离
-    float distance(const vector2d& rhs);
     static float distance(const  vector2d& lhs, const vector2d& rhs);
 
     // 叉积
-    void cross(const vector2d& rhs);
     static void cross(const  vector2d& lhs, const vector2d& rhs);
 
     // 点积
-    float dot(const vector2d& rhs);
     static float dot(const  vector2d& lhs, const vector2d& rhs);
 };
 
