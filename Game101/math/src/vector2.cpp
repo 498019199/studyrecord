@@ -81,7 +81,7 @@ float vector2d::operator|(const vector2d& rhs) const
     return x * rhs.x + y * rhs.y;
 }
 
-vector2d vector2d::operator^(const vector2d& rhs) const
+float vector2d::operator^(const vector2d& rhs) const
 {
     return x * rhs.y - y * rhs.x;
 }
@@ -125,7 +125,7 @@ vector2d vector2d::operator/=(float rhs)
 {
     x /= rhs;
     y /= rhs;
-    return this;
+    return *this;
 }
 
 bool vector2d::is_zero() const
@@ -163,7 +163,7 @@ float vector2d::distance(const  vector2d& lhs, const vector2d& rhs)
         (rhs.y - lhs.y) * (rhs.y - lhs.y));
 }
 
-void vector2d::cross(const  vector2d& lhs, const vector2d& rhs)
+float vector2d::cross(const  vector2d& lhs, const vector2d& rhs)
 {
     return lhs.operator^(rhs);
 }

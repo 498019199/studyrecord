@@ -17,10 +17,10 @@ public:
         {}
     vector2d(float in_x, float in_y) 
         :x(in_x), y(in_y) {}
+    vector2d(const vector2d& vec) 
+        :x(vec.x), y(vec.y) {}
     explicit vector2d(float inf) 
         :x(inf), y(inf) {}
-    explicit vector2d(const vector2d& vec) 
-        :x(vec.x), y(vec.y) {}
     explicit vector2d(const vector2d&& vec)  
         :x(std::move(vec.x)), y(std::move(vec.y)) {}
     explicit vector2d(vector2d* vec) 
@@ -61,7 +61,7 @@ public:
     static float distance(const  vector2d& lhs, const vector2d& rhs);
 
     // 叉积
-    static void cross(const  vector2d& lhs, const vector2d& rhs);
+    static float cross(const  vector2d& lhs, const vector2d& rhs);
 
     // 点积
     static float dot(const  vector2d& lhs, const vector2d& rhs);
