@@ -159,8 +159,8 @@ vector2d normalize(const vector2d& rhs)
 // 距离
 float vector2d::distance(const  vector2d& lhs, const vector2d& rhs)
 {
-    return std::sqrt((rhs.x - lhs.x) * (rhs.x - lhs.x) + 
-        (rhs.y - lhs.y) * (rhs.y - lhs.y));
+    vector2d tmp(lhs.x - rhs.x, lhs.y - rhs.y);
+    return std::sqrt(tmp.x * tmp.x + tmp.y * tmp.y);
 }
 
 float vector2d::cross(const  vector2d& lhs, const vector2d& rhs)
