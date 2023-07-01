@@ -1,5 +1,6 @@
 #pragma once
 #include <utility>
+#include <cstdint>
 
 class vector2d
 {
@@ -12,81 +13,67 @@ public:
     static const vector2d unit_vector;
 public:
     // 构造
-    vector2d() noexcept 
+    vector2d() 
         {}
-    vector2d(float in_x, float in_y) noexcept 
+    vector2d(float in_x, float in_y) 
         :x(in_x),y(in_y) {}
-    explicit vector2d(float inf) noexcept 
+    explicit vector2d(float inf) 
         :x(inf),y(inf) {}
-    explicit vector2d(const vector2d& vec) noexcept 
+    explicit vector2d(const vector2d& vec) 
         :x(vec.x),y(vec.y) {}
-    explicit vector2d(const vector2d&& vec) noexcept 
+    explicit vector2d(const vector2d&& vec)  
         :x(vec.x),y(vec.y) {}
-    explicit vector2d(vector2d* vec) noexcept 
+    explicit vector2d(vector2d* vec) 
         :x(vec->x),y(vec->y) {}
-    //vector2d(std::initializer_list<float> list) noexcept
+    vector2d(std::initializer_list<float> list); 
 
     // 复制构造
-    vector2d& operator=(vector2d* rhs) noexcept 
-    {
-        if (this != rhs)
-        {
-            this->x = rhs->x;
-            this->y = rhs->y;
-        }
-        return *this;        
-    }
-    vector2d& operator=(vector2d& rhs) noexcept 
-    {
-        if (this != &rhs)
-        {
-            this->x = rhs.x;
-            this->y = rhs.y;
-        }
-        return *this;
-    }
-    vector2d& operator=(vector2d&& rhs) noexcept 
-    {
-        if (this != &rhs)
-        {
-            this->x = std::move(rhs.x);
-            this->y = std::move(rhs.y);
-        }
-        return *this;
-    }
+    vector2d& operator=(const vector2d& rhs); 
+    vector2d& operator=(const vector2d&& rhs);
 
-    vector2d operator+(const  vector2d& rhs) const noexcept;
-    vector2d operator-(const  vector2d& rhs) const noexcept;
-    vector2d operator*(float rhs) const noexcept;
-    vector2d operator/(float rhs) const noexcept;
+    vector2d operator-() const;
+    float operator[](int32_t index) const;
+    vector2d operator+(const  vector2d& rhs) const;
+    vector2d operator-(const  vector2d& rhs) const;
+    vector2d operator*(const  vector2d& rhs) const;
+    vector2d operator/(const  vector2d& rhs) const;
+    vector2d operator*(float rhs) const;
+    vector2d operator/(float rhs) const;
 
-    bool operator==(const  vector2d& rhs) const noexcept;
-    bool operator!=(const  vector2d& rhs) const noexcept;
+    vector2d operator+=(const  vector2d& rhs);
+    vector2d operator-=(const  vector2d& rhs);
+    vector2d operator*=(const  vector2d& rhs);
+    vector2d operator/=(const  vector2d& rhs);
+    vector2d operator*=(float rhs) ;
+    vector2d operator/=(float rhs) ;
+
+    bool operator==(const  vector2d& rhs) const;
+    bool operator!=(const  vector2d& rhs) const;
 
     // 向量标准化
-    void normalize() noexcept;
-    static vector2d normalize(const vector2d& rhs) noexcept;
+    void normalize();
+    static vector2d normalize(const vector2d& rhs);
 
     // 距离
-    float distance(const vector2d& rhs) noexcept;
-    static float distance(const  vector2d& lhs, const vector2d& rhs) noexcept;
+    float distance(const vector2d& rhs);
+    static float distance(const  vector2d& lhs, const vector2d& rhs);
 
     // 叉积
-    void cross(const vector2d& rhs) noexcept;
-    static void cross(const  vector2d& lhs, const vector2d& rhs) noexcept;
+    void cross(const vector2d& rhs);
+    static void cross(const  vector2d& lhs, const vector2d& rhs);
 
     // 点积
-    float dot(const vector2d& rhs) noexcept;
-    static float dot(const  vector2d& lhs, const vector2d& rhs) noexcept;
+    float dot(const vector2d& rhs);
+    static float dot(const  vector2d& lhs, const vector2d& rhs);
 };
 
 
-inline bool operator==(const  vector2d& lhs, const  vector2d& rhs) noexcept
+inline bool operator==(const  vector2d& lhs, const  vector2d& rhs)
 {
     return lhs.operator==(rhs);
 }
 
-inline bool operator!=(const  vector2d& lhs, const  vector2d& rhs) noexcept
+inline bool operator!=(const  vector2d& lhs, const  vector2d& rhs)
 {
     return lhs.operator!=(rhs);
 }
