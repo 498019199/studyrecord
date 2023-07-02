@@ -10,4 +10,8 @@ public:
 public:
     // (0, 0, 0)
     static rotator zero_rotator;
+
+public:
+    explicit rotator(float in_x, float in_y, float in_z)
+        :pitch(in_x), yaw(in_y), roll(in_z) {}
 };
