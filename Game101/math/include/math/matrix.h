@@ -1,6 +1,11 @@
 #pragma once
 
-class matrix
+struct matrix
 {
-
+public:
+    union 
+    {
+        float m[4][4];
+    };
+    
 };

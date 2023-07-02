@@ -2,7 +2,7 @@
 #include <utility>
 #include <cstdint>
 
-class vector2d
+struct vector2d
 {
 public:
     float x = 0.f;
@@ -11,6 +11,7 @@ public:
 public:
     static const vector2d zero_vector;
     static const vector2d unit_vector;
+    
 public:
     // 构造
     vector2d() 

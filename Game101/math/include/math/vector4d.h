@@ -2,7 +2,7 @@
 #include <utility>
 #include <cstdint>
 
-class vector4d
+struct vector4d
 {
 public:
     float x = 0.f;
@@ -14,6 +14,7 @@ public:
     static const vector4d zero_vector;
     // (1, 1, 1, 1)
     static const vector4d unit_vector;
+    
 public:
     // 构造
     vector4d() 

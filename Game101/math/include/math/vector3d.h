@@ -2,7 +2,7 @@
 #include <utility>
 #include <cstdint>
 
-class vector3d
+struct vector3d
 {
 public:
     float x = 0.f;
@@ -13,6 +13,7 @@ public:
     static const vector3d zero_vector;
     // (1,1,1)
     static const vector3d unit_vector;
+    
 public:
     // 构造
     vector3d() 
