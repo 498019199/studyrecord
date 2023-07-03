@@ -1,4 +1,4 @@
 #pragma once
 
-class shader
+class render
 {};
