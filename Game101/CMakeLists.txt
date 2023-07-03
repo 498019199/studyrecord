@@ -18,6 +18,8 @@ set(PROJECT_3RD_DIR ${PROJECT_SOURCE_DIR}/3rd)
 #         COMMAND mkdir build && cd build && cmake ../glfw && make -j4 && sudo make install
 #     )
 # else()
+if(NOT EXISTS ${PROJECT_3RD_DIR}/stb)
+else()
 
 add_subdirectory(math)
 file(COPY ${PROJECT_SOURCE_DIR}/math/include DESTINATION "${LIBRARY_OUTPUT_PATH}")
