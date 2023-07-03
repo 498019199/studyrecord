@@ -7,3 +7,5 @@ glad-> 解决多版本OpenGL
 assimp-> 模型解析库
 freetype-> 字体库
 stb_image-> 图像解码库
+
+2023年7月3日，完成三角形测试。

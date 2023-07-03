@@ -1,6 +1,6 @@
 include_directories(${PROJECT_SOURCE_DIR}/3rd/glad/include)
 include_directories(${PROJECT_SOURCE_DIR}/3rd/glfw/include)
-
+include_directories(${PROJECT_SOURCE_DIR}/3rd/stb/include)
 # if(NOT EXISTS ${PROJECT_3RD_DIR}/glfw)
 #     file(MAKE_DIRECTORY "${PROJECT_3RD_DIR}/glfw")
 #     execute_process(
@@ -13,7 +13,9 @@ include_directories(${PROJECT_SOURCE_DIR}/3rd/glfw/include)
 # endif()
 add_executable(test_opengl 
     ${PROJECT_SOURCE_DIR}/render/test/opengl_main.cpp 
-    ${PROJECT_SOURCE_DIR}/3rd/glad/src/glad.c)
+    ${PROJECT_SOURCE_DIR}/3rd/glad/src/glad.c
+    ${PROJECT_SOURCE_DIR}/3rd/stb/src/stb_image.cpp)
+
 target_link_libraries(test_opengl
     ${PROJECT_SOURCE_DIR}/3rd/glfw/lib/glfw3.lib
     opengl32.lib)
