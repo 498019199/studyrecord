@@ -12,6 +12,15 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 set(PROJECT_3RD_DIR ${PROJECT_SOURCE_DIR}/3rd)
 
+# if(NOT EXISTS ${PROJECT_3RD_DIR}/stb)
+#     file(MAKE_DIRECTORY "${PROJECT_3RD_DIR}/stb")
+#     execute_process(
+#         COMMAND git clone https://github.com/glfw/glfw ${PROJECT_3RD_DIR}/glfw
+#         COMMAND cd ${PROJECT_3RD_DIR}/glfw
+#         COMMAND mkdir build && cd build && cmake ../glfw && make -j4 && sudo make install
+#     )
+# else()
+
 add_subdirectory(math)
 file(COPY ${PROJECT_SOURCE_DIR}/math/include DESTINATION "${LIBRARY_OUTPUT_PATH}")
 add_subdirectory(render)

@@ -27,7 +27,7 @@ const char *fragmentShaderSource = "#version 330 core\n"
 
 int main()
 {
-// glfw: initialize and configure
+    // glfw: initialize and configure
     /* Initialize the library */
     int errorCode  = glfwInit();
     if (GLFW_FALSE == errorCode)
