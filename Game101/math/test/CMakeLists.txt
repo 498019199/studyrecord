@@ -11,15 +11,20 @@ include_directories(${PROJECT_SOURCE_DIR}/3rd/glad/include)
 # endif()
 
 # 查找GLFW库
+if(true)
+add_executable(test_main
+    ${PROJECT_SOURCE_DIR}/math/test/main.cpp 
+    ${SRC_LIST})
+else() 
 find_package(glfw3 REQUIRED)
 find_package( OpenGL REQUIRED )
 
-add_executable(test_main 
-    ${PROJECT_SOURCE_DIR}/math/test/main.cpp 
+add_executable(test_opengl 
+    ${PROJECT_SOURCE_DIR}/math/test/opengl_main.cpp 
     ${PROJECT_SOURCE_DIR}/3rd/glad/src/glad.c
     ${SRC_LIST})
 
-target_link_libraries(test_main 
+target_link_libraries(test_opengl
     glfw
-    GL
-    )
+    GL)
+endif()
