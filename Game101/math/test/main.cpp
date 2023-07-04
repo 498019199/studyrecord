@@ -1,8 +1,9 @@
 #include <iostream>
-
+#include <math/vector2d.h>
 
 void checkvecotr()
 {
+    vector2d v1(1.f, 2.f);
     std::cout << "checkvecotr sucess" << std::endl;
 }
 

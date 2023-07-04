@@ -13,7 +13,7 @@ public:
     static const vector2d unit_vector;
     
 public:
-    // 构造
+    // ?��
     vector2d() 
         {}
     vector2d(float in_x, float in_y) 
@@ -28,7 +28,6 @@ public:
         :x(vec->x), y(vec->y) {}
     //vector2d(std::initializer_list<float> list); 
 
-    // 复制构造
     vector2d& operator=(const vector2d& rhs); 
     vector2d& operator=(const vector2d&& rhs);
 
@@ -54,17 +53,13 @@ public:
     bool operator==(const  vector2d& rhs) const;
     bool operator!=(const  vector2d& rhs) const;
 
-    // 向量标准化
     void normalize();
     static vector2d normalize(const vector2d& rhs);
 
-    // 距离
     static float distance(const  vector2d& lhs, const vector2d& rhs);
 
-    // 叉积
     static float cross(const  vector2d& lhs, const vector2d& rhs);
 
-    // 点积
     static float dot(const  vector2d& lhs, const vector2d& rhs);
 };
 

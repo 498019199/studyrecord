@@ -18,14 +18,8 @@ set(PROJECT_3RD_DIR ${PROJECT_SOURCE_DIR}/3rd)
 #         COMMAND mkdir build && cd build && cmake ../glfw && make -j4 && sudo make install
 #     )
 # else()
-if(NOT EXISTS ${PROJECT_3RD_DIR}/assimp)
-    file(MAKE_DIRECTORY "${PROJECT_3RD_DIR}/assimp")
-    execute_process(
-        COMMAND git clone git@github.com:assimp/assimp.git ${PROJECT_3RD_DIR}/assimp
-        COMMAND cd ${PROJECT_3RD_DIR}/glfw
-        COMMAND mkdir build && cd build && cmake ../glfw && make -j4 && sudo make install
-    )
-endif()
+#vscode cmake tool不知道为啥CMAKE_BUILD_TYPE为空
+set(CMAKE_BUILD_TYPE "Debug")
 
 add_subdirectory(math)
 file(COPY ${PROJECT_SOURCE_DIR}/math/include DESTINATION "${LIBRARY_OUTPUT_PATH}")
