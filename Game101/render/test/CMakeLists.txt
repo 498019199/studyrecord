@@ -12,7 +12,11 @@ add_executable(test_opengl
     ${PROJECT_SOURCE_DIR}/render/test/opengl_main.cpp 
     ${PROJECT_SOURCE_DIR}/3rd/glad/src/glad.c)
 
-target_link_libraries(test_opengl
-    render_lib
-    ${PROJECT_SOURCE_DIR}/3rd/glfw/lib/glfw3.lib
-    opengl32.lib)
+
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    target_link_libraries(test_opengl
+        ${PROJECT_SOURCE_DIR}/lib/Debug/render_lib.lib)
+elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
+    target_link_libraries(test_opengl
+        ${PROJECT_SOURCE_DIR}/lib/Release/render_lib.lib)
+endif()
