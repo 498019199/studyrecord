@@ -2,6 +2,7 @@
 
 class shader
 {
+public:   
     ~shader();
 
     void init_shader(int type);

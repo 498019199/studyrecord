@@ -8,4 +8,6 @@ assimp-> 模型解析库
 freetype-> 字体库
 stb_image-> 图像解码库
 
-2023年7月3日，完成三角形测试。
+2023年7月3日，完成三角形测试。// delete
+
+vertex_buffer-> 顶点缓存
