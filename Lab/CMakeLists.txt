@@ -13,3 +13,5 @@ message(${PROJECT_SOURCE_DIR})
 
 add_subdirectory(task)
 file(COPY ${PROJECT_SOURCE_DIR}/task/include DESTINATION "${LIBRARY_OUTPUT_PATH}")
+
+add_subdirectory(common)
