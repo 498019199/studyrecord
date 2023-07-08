@@ -1,4 +1,5 @@
 #include <coroutine>
+#include <memory>
 
 struct task 
 {
@@ -26,3 +27,5 @@ private:
 task foo() {
     co_return;
 }
+
+using ptr_task = std::shared_ptr<task>;

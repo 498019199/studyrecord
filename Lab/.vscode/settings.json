@@ -1,6 +1,7 @@
 {
     "cmake.sourceDirectory": "/home/z/projects/studyrecord/Lab",
     "files.associations": {
-        "coroutine": "cpp"
+        "coroutine": "cpp",
+        "algorithm": "cpp"
     }
 }
