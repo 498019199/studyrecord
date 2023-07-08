@@ -188,6 +188,7 @@ env_setup_vm(struct Env *e)
 	// LAB 3: Your code here.
 	p->pp_ref++;
 	e->env_pgdir = (pte_t *)page2kva(p);
+	page_insert(kern_pgdir, p, UTOP, PTE_U);
 	//boot_map_region(kern_pgdir, UTOP, PGSIZE, PADDR(e->env_pgdir), PTE_U);
 
 	// UVPT maps the env's own page table read-only.
@@ -346,7 +347,7 @@ load_icode(struct Env *e, uint8_t *binary)
 		binary + ph->p_offset;
 	}
 	//((void (*)(void)) (ELFHDR->e_entry))();
-	
+
 	// Hints:
 	//  Load each program segment into virtual memory
 	//  at the address specified in the ELF segment header.
