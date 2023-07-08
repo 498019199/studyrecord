@@ -4,6 +4,7 @@
 #include <algorithm>
 
 #include <unistd.h>
+namespace task{
 
 void task_scheduler::init(int count)
 {
@@ -30,4 +31,5 @@ void task_scheduler::run()
         t.resume();
         //if (t) tasks_.push_back(t);
     }
+}
 }

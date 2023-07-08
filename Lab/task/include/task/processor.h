@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <task/task.h>
 #include <map>
+namespace task{
 
 using task_fun = std::function<void()>;
 class processor
@@ -19,3 +20,4 @@ private:
 };
 
 using ptr_processor = std::shared_ptr<processor>;
+}

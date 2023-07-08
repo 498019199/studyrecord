@@ -2,7 +2,5 @@
 
 int main()
 {
-    task t = foo();
-    t.resume();
     return 0;
 }

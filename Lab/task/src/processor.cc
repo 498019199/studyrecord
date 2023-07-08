@@ -1,4 +1,6 @@
 #include <task/processor.h>
+
+namespace task{
 int sTaskId = 0;
 
 int processor::add_task(const task_fun& func)
@@ -20,4 +22,5 @@ void processor::suspend_task(int task_id)
 void processor::resume_task(int task_id)
 {
     
+}
 }

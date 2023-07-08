@@ -5,7 +5,7 @@
 #include <vector>
 
 
-
+namespace task{
 
 class task_scheduler
 {
@@ -20,3 +20,4 @@ private:
     std::map<int ,ptr_processor> pro_map_;
 };
 
+}
