@@ -1,12 +1,10 @@
 #include <task/processor.h>
 
-namespace task{
-int sTaskId = 0;
+namespace task_space{
 
 int processor::add_task(const task_fun& func)
 {
-    sTaskId++;
-    return sTaskId;
+    return 0;
 }
 
 void processor::remove_task(int task_id)

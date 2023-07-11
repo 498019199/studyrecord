@@ -1,9 +1,10 @@
 #pragma once
 #include <functional>
 #include <cstdint>
-#include <task/task.h>
 #include <map>
-namespace task{
+
+#include <task/task.h>
+namespace task_space{
 
 using task_fun = std::function<void()>;
 class processor

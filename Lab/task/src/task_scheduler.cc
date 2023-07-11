@@ -4,8 +4,9 @@
 #include <algorithm>
 
 #include <unistd.h>
-namespace task{
 
+namespace task_space{
+uint32_t s_task_id = 0;
 void task_scheduler::init(int count)
 {
     count = std::clamp(count, 
@@ -17,9 +18,11 @@ void task_scheduler::init(int count)
     }
 }
 
-void task_scheduler::add_task(task t)
+uint32_t task_scheduler::add_task(const task_fun& t)
 {
-    tasks_.push_back(t);
+    s_task_id++;
+    //tasks_.push_back(t);
+    return s_task_id;
 }
 
 void task_scheduler::run()
@@ -28,7 +31,7 @@ void task_scheduler::run()
     {
         auto t = tasks_.front();
         tasks_.erase(tasks_.begin());
-        t.resume();
+        //t.resume();
         //if (t) tasks_.push_back(t);
     }
 }
