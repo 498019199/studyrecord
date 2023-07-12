@@ -6,3 +6,6 @@ task->coroutine object, 创建，删除，挂起，恢复，堆栈大小
 tcmalloc
 [图解 TCMalloc](https://zhuanlan.zhihu.com/p/29216091)
 [google doc](https://goog-perftools.sourceforge.net/doc/tcmalloc.html)
+
+net module 参考
+[ACID: 分布式服务治理框架](https://github.com/zavier-wong/acid/tree/main)

@@ -19,6 +19,4 @@ private:
     std::vector<task> tasks_;
     std::map<int ,ptr_processor> pro_map_;
 };
-
-
 }
