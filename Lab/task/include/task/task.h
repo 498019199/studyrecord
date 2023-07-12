@@ -1,4 +1,8 @@
+#pragma once
+
 #include <coroutine>
+#include <memory>
+namespace task_space{
 
 struct task 
 {
@@ -23,6 +27,5 @@ private:
     coroutine_handle handle_;
 };
 
-task foo() {
-    co_return;
+using ptr_task = std::shared_ptr<task>;
 }

@@ -188,11 +188,12 @@ env_setup_vm(struct Env *e)
 	// LAB 3: Your code here.
 	p->pp_ref++;
 	e->env_pgdir = (pte_t *)page2kva(p);
+	page_insert(kern_pgdir, p, UTOP, PTE_U);
 	//boot_map_region(kern_pgdir, UTOP, PGSIZE, PADDR(e->env_pgdir), PTE_U);
 
 	// UVPT maps the env's own page table read-only.
 	// Permissions: kernel R, user R
-	e->env_pgdir[PDX(UVPT)] = PADDR(e->env_pgdir) | PTE_P | PTE_U;
+	//e->env_pgdir[PDX(UVPT)] = PADDR(e->env_pgdir) | PTE_P | PTE_U;
 
 	return 0;
 }
@@ -301,25 +302,52 @@ region_alloc(struct Env *e, void *va, size_t len)
 // load_icode panics if it encounters problems.
 //  - How might load_icode fail?  What might be wrong with the given input?
 //
+
+// struct Elf 
+// 	0 uint32_t e_magic;	  0x464c457f	
+// 	1 uint8_t e_elf[12];    0x00010101	0x00000000	0x00000000
+// 	4.h uint16_t e_type;		0003
+// 	4.l uint16_t e_machine;		0002
+// 	5 uint32_t e_version;		0x00000001	
+// 	6 uint32_t e_entry;		0x00800020	
+// 	7 uint32_t e_phoff;		0x00000034
+// 	uint32_t e_shoff;		0x0000782c	
+// 	uint32_t e_flags;		0x00000000	
+// 	uint16_t e_ehsize;		0020
+// 	uint16_t e_phentsize;   0034
+// 	uint16_t e_phnum;		0028
+// 	uint16_t e_shentsize;   0004
+// 	uint16_t e_shnum;		000c
+// 	uint16_t e_shstrndx;	000d
+
 static void
 load_icode(struct Env *e, uint8_t *binary)
 {
-	if (((struct Elf*)binary)->e_magic != ELF_MAGIC)
+	struct Elf* ELFHDR = (struct Elf*)binary;
+	if (ELFHDR->e_magic != ELF_MAGIC)
 	{
 		return ;
 	}
-	struct Proghdr *ph = (struct Proghdr *) ( binary + ((struct Elf*)binary)->e_phoff);
-	struct Proghdr *eph = ph + ((struct Elf*)binary)->e_phnum;
+	struct Proghdr *ph = (struct Proghdr *) ( binary + ELFHDR->e_phoff);
+	struct Proghdr *eph = ph + ELFHDR->e_phnum;
 	for (; ph < eph; ph++)
 	{
 		if (ELF_PROG_LOAD != ph->p_type)
 		{
 			continue;
 		}
-		boot_alloc(ph->p_memsz);
+		region_alloc(e, ph->p_va, ph->p_memsz);
+		if (ph->p_filesz <= ph->p_memsz)
+		{
+			memset(ph->p_va + ph->p_filesz,
+				 0, 
+				 ph->p_memsz - ph->p_filesz);
+		}
+		
 		binary + ph->p_offset;
-		(ph->p_pa);
 	}
+	//((void (*)(void)) (ELFHDR->e_entry))();
+
 	// Hints:
 	//  Load each program segment into virtual memory
 	//  at the address specified in the ELF segment header.

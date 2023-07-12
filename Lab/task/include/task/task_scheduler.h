@@ -1,23 +1,24 @@
-#pragma
+#pragma once
+
+#include <vector>
+
 #include <task/task.h>
+#include <task/processor.h>
+
+namespace task_space{
 
 class task_scheduler
 {
 public:
-    void add_task(task t) 
-    {
-        tasks_.push_back(t);
-    }
-    void run() 
-    {
-        while (!tasks_.empty()) 
-        {
-            auto t = tasks_.front();
-            tasks_.erase(tasks_.begin());
-            t.resume();
-            if (t) tasks_.push_back(t);
-        }
-    }
+    void init(int count);
+
+    uint32_t add_task(const task_fun& t); 
+
+    void run(); 
 private:
     std::vector<task> tasks_;
+    std::map<int ,ptr_processor> pro_map_;
 };
+
+
+}
