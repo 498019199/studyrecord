@@ -10,7 +10,9 @@ public:
 
     void run();
 
+    void render();
 private:
     GLFWwindow* window_;
 };
+
 
