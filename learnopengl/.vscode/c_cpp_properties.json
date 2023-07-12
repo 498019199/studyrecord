@@ -4,8 +4,8 @@
             "name": "Win32",
             "includePath": [
                 "${workspaceFolder}/**",
-                "${workspaceFolder}/3rd/glad/include/**",
-                "${workspaceFolder}/3rd/glfw/include/**"
+                "${workspaceFolder}/3rd/glad/include",
+                "${workspaceFolder}/3rd/glfw/include"
             ],
             "defines": [
                 "_DEBUG",
@@ -14,7 +14,8 @@
             ],
             "windowsSdkVersion": "10.0.22000.0",
             "compilerPath": "cl.exe",
-            "intelliSenseMode": "windows-msvc-x64"
+            "intelliSenseMode": "windows-msvc-x64",
+            "configurationProvider": "ms-vscode.cmake-tools"
         }
     ],
     "version": 4

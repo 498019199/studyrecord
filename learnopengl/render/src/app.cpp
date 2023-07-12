@@ -54,18 +54,24 @@ void app::run()
         //processInput(window_);
  
         // render
-        // ------
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
- 
-        // draw our first triangle
-        //glUseProgram(shaderProgram); // 激活shaderProgram，怎么画
-        //glBindVertexArray(VAO); // 画什么
-        //glDrawArrays(GL_TRIANGLES, 0, 3); // 开始画
+        render();
  
         glfwSwapBuffers(window_);
         glfwPollEvents();
     }
 
     glfwTerminate();
+}
+
+void app::render()
+{
+    // render
+    // ------
+    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    // draw our first triangle
+    //glUseProgram(shaderProgram); // 激活shaderProgram，怎么画
+    //glBindVertexArray(VAO); // 画什么
+    //glDrawArrays(GL_TRIANGLES, 0, 3); // 开始画
 }
