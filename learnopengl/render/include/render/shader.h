@@ -40,6 +40,6 @@ private:
     uint32_t obj_id_;
     ptr_shader pixel_;
     ptr_shader fragment_;
-}
+};
 
 

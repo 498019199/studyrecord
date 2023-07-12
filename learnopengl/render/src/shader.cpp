@@ -15,7 +15,7 @@ void i_shader::init_shader(int type)
 
 void i_shader::bind_shader(const char* shader_script)
 {
-    glShaderSource(shader_id_, 1, shader_script, NULL); // 把这个着色器源码附加到着色器对象。着色器对象，源码字符串数量，VS真正的源码
+    glShaderSource(shader_id_, 1, &shader_script, NULL); // 把这个着色器源码附加到着色器对象。着色器对象，源码字符串数量，VS真正的源码
     glCompileShader(shader_id_);
 
     // check for shader compile errors
