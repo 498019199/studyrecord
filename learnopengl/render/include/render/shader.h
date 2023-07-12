@@ -12,6 +12,8 @@ public:
     void init_shader(int type);
     void bind_shader(const char* shader_script);
     void link_shader();
+
+    int get_shader_id() { return shader_id_; }
 private:
     const char* get_shader_type();
 
@@ -36,10 +38,16 @@ public:
     ~shader_object();
 
     void attach_shader();
+    void use_shader();
+    void detach_shader();
 private:
     uint32_t obj_id_;
     ptr_shader pixel_;
     ptr_shader fragment_;
 };
+
+
+
+
 
 
