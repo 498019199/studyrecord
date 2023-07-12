@@ -13,5 +13,5 @@ elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
 endif()
 
 target_link_libraries(test_opengl PRIVATE 
-    ${PROJECT_3RD_DIR}/glfw/lib/glfw3.lib 
-    opengl32.lib)
+    opengl32.lib
+    ${PROJECT_3RD_DIR}/glfw/lib/glfw3.lib)
