@@ -1,6 +1,11 @@
 #include <render/app.h>
 #include <iostream>
 
+void app::init()
+{
+    render_ = std::make_shared<renderer>();
+}
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
     glViewport(0, 0, width, height);
@@ -54,8 +59,9 @@ void app::run()
         //processInput(window_);
  
         // render
-        render();
- 
+        render_->render(0.f);
+        glfwTerminate();
+        
         glfwSwapBuffers(window_);
         glfwPollEvents();
     }
@@ -65,13 +71,5 @@ void app::run()
 
 void app::render()
 {
-    // render
-    // ------
-    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
 
-    // draw our first triangle
-    //glUseProgram(shaderProgram); // 激活shaderProgram，怎么画
-    //glBindVertexArray(VAO); // 画什么
-    //glDrawArrays(GL_TRIANGLES, 0, 3); // 开始画
 }

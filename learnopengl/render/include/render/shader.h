@@ -3,6 +3,8 @@
 
 class i_shader;
 using ptr_shader = std::shared_ptr<i_shader>;
+class shader_object;
+using ptr_shaderobject = std::shared_ptr<shader_object>;
 
 class i_shader
 {

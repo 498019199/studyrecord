@@ -1,18 +1,19 @@
 #pragma once
 #include <cstdint>
 
-class vertex_buffer
+class index_buffer
 {
 public:  
-    vertex_buffer();
-    ~vertex_buffer();
+    index_buffer();
+    ~index_buffer();
 
-    void bind();
+    void bind(void* data, int size);
     void unbind();
 
     int get_id() { return id_; }
 private:
     uint32_t id_;
 };
+
 
 
