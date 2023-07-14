@@ -9,9 +9,14 @@
             "type": "cppvsdbg",
             "request": "launch",
             "program": "${workspaceFolder}/bin/Debug/test_opengl.exe",
-            "args": [],
+            "args": [
+                "/Zi",
+                "/EHsc",
+                "/Fe:"
+            ],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
+            "preLaunchTask": "build",
             "environment": [],
             "externalConsole": false,
         }
