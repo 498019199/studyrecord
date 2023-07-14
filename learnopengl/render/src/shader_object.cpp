@@ -3,12 +3,17 @@
 
 shader_object::shader_object()
 {
-    obj_id_ = glCreateProgram();
+    //obj_id_ = glCreateProgram();
 }
 
 shader_object::~shader_object()
 {
     
+}
+
+void shader_object::init()
+{
+    obj_id_ = glCreateProgram();
 }
 
 void shader_object::attach_shader()

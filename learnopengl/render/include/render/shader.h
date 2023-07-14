@@ -39,6 +39,7 @@ public:
     shader_object();
     ~shader_object();
 
+    void init();
     void attach_shader();
     void use_shader();
     void detach_shader();
@@ -47,6 +48,7 @@ private:
     ptr_shader pixel_;
     ptr_shader fragment_;
 };
+
 
 
 

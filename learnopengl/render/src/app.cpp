@@ -4,6 +4,11 @@
 void app::init()
 {
     render_ = std::make_shared<renderer>();
+    if (render_)
+    {
+        render_->init();
+    }
+    
 }
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
@@ -59,9 +64,9 @@ void app::run()
         //processInput(window_);
  
         // render
-        render_->render(0.f);
+        render();
         glfwTerminate();
-        
+
         glfwSwapBuffers(window_);
         glfwPollEvents();
     }
@@ -71,5 +76,10 @@ void app::run()
 
 void app::render()
 {
-
+    if (render_)
+    {
+        render_->before_render();
+        render_->render(0.f);
+        render_->after_render();
+    }
 }

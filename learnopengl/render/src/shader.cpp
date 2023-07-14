@@ -4,11 +4,11 @@
 
 i_shader::~i_shader()
 {
-    glDeleteShader(shader_id_);
 }
 
 void i_shader::init_shader(int type)
 {
+    glDeleteShader(shader_id_);
     shader_type_ = type;
     shader_id_ = glCreateShader(shader_type_);
 }

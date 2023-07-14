@@ -7,6 +7,8 @@
 #include <render/index_buffer.h>
 #include <render/vertex_buffer.h>
 
+using ptr_indexs = std::shared_ptr<index_buffer>;
+using ptr_vertexs = std::shared_ptr<vertex_buffer>;
 class renderer
 {
 public:
@@ -17,8 +19,8 @@ public:
 
 private:
     ptr_shaderobject shaderobj_;
-    index_buffer indexs_;
-    vertex_buffer vertexs_;
+    ptr_indexs indexs_;
+    ptr_vertexs vertexs_;
 };
 
 

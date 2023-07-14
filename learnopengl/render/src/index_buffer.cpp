@@ -1,12 +1,7 @@
 #include <render/index_buffer.h>
 #include <glad/glad.h>
 
-index_buffer::index_buffer()
-{
-    glGenBuffers(1, &id_);
-}
-
-index_buffer::bind(void* data, int size)
+void index_buffer::bind(void* data, int size)
 {
     glGenBuffers(1, &id_);
     glBindBuffer(GL_ARRAY_BUFFER, id_); //缓冲绑定到GL_ARRAY_BUFFER
