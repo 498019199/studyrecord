@@ -1,9 +1,12 @@
 #include <render/shader.h>
 #include <glad/glad.h>
+#include <GLFW/glfw3.h>
 
 shader_object::shader_object()
 {
-    //obj_id_ = glCreateProgram();
+    obj_id_ = glCreateProgram();
+    pixel_ = std::make_shared<pixel_shader>();
+    fragment_ = std::make_shared<fragment_shader>();
 }
 
 shader_object::~shader_object()
@@ -11,9 +14,12 @@ shader_object::~shader_object()
     
 }
 
-void shader_object::init()
+void shader_object::init_shader(int type)
 {
-    obj_id_ = glCreateProgram();
+    if(GL_VERTEX_SHADER == type) 
+        pixel_->init_shader(type); 
+    else 
+        fragment_->init_shader(type); 
 }
 
 void shader_object::attach_shader()

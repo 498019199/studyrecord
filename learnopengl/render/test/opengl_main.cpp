@@ -15,8 +15,8 @@ int main()
     {
         return 0;
     }
-    main_app->init();
     main_app->create_windows(SCR_WIDTH, SCR_HEIGHT, "OpenGLLearn");
+    main_app->init();
     main_app->run();
     return 0;
 }

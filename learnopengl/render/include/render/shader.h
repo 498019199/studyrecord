@@ -39,7 +39,10 @@ public:
     shader_object();
     ~shader_object();
 
-    void init();
+    void init_shader(int type);
+    void load_pixel(const char* shader_script) { pixel_->bind_shader(shader_script); }
+    void load_fragment(const char* shader_script) { fragment_->bind_shader(shader_script); }
+
     void attach_shader();
     void use_shader();
     void detach_shader();
@@ -48,7 +51,6 @@ private:
     ptr_shader pixel_;
     ptr_shader fragment_;
 };
-
 
 
 

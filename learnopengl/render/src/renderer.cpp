@@ -1,5 +1,7 @@
 #include <render/renderer.h>
 #include <filesystem>
+#include <fstream>
+#include <sstream>
 
 void renderer::init()
 {
@@ -8,16 +10,34 @@ void renderer::init()
     {
         return;
     }
-    
-    shaderobj_->init();
+
     auto path = std::filesystem::current_path();
-    auto str_path = path.append("//shader").string();
+    path += "\\render\\shader\\";
     for (auto it : {"fragment.glsl", "vertex.glsl"})
     {
-        auto file_name = str_path + it;
+        auto file_name = path.string() + it;
         if (std::filesystem::exists(file_name))
         {
-            //shaderobj_->
+            std::ifstream fp(file_name);
+            if (!fp.is_open()) 
+            {
+                continue;
+            }
+            std::ostringstream oss;
+            oss << fp.rdbuf();
+            std::string content = oss.str();
+            fp.close();
+
+            if (0 == strcmp("vertex.glsl", it))
+            {
+                shaderobj_->init_shader(GL_VERTEX_SHADER);
+                shaderobj_->load_pixel(content.c_str());
+            }
+            else
+            {
+                shaderobj_->init_shader(GL_FRAGMENT_SHADER);
+                shaderobj_->load_fragment(content.c_str());
+            }
         }
         
     }
