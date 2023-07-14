@@ -2,29 +2,29 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-shader_object::shader_object()
+ShaderObject::ShaderObject()
 {
     obj_id_ = glCreateProgram();
-    pixel_ = std::make_shared<pixel_shader>();
-    fragment_ = std::make_shared<fragment_shader>();
+    pixel_ = std::make_shared<PixelShader>();
+    fragment_ = std::make_shared<FragmentShader>();
 }
 
-shader_object::~shader_object()
+ShaderObject::~ShaderObject()
 {
     
 }
 
-void shader_object::init_shader(int type)
+void ShaderObject::InitShader(int type)
 {
     if(GL_VERTEX_SHADER == type) 
-        pixel_->init_shader(type); 
+        pixel_->InitShader(type); 
     else 
-        fragment_->init_shader(type); 
+        fragment_->InitShader(type); 
 }
 
-void shader_object::attach_shader()
+void ShaderObject::AttachShader()
 {
-    glAttachShader(obj_id_, pixel_->get_shader_id());
+    glAttachShader(obj_id_, pixel_->GetShaderId());
     int success;
     char infoLog[512];
     glGetProgramiv(obj_id_, GL_LINK_STATUS, &success);
@@ -33,7 +33,7 @@ void shader_object::attach_shader()
         glGetProgramInfoLog(obj_id_, 512, NULL, infoLog);
     }
 
-    glAttachShader(obj_id_, fragment_->get_shader_id());
+    glAttachShader(obj_id_, fragment_->GetShaderId());
     glGetProgramiv(obj_id_, GL_LINK_STATUS, &success);
     if(!success) 
     {
@@ -43,13 +43,13 @@ void shader_object::attach_shader()
     glLinkProgram(obj_id_);
 }
 
-void shader_object::use_shader()
+void ShaderObject::UseShader()
 {
     glUseProgram(obj_id_);
 }
 
-void shader_object::detach_shader()
+void ShaderObject::DetachShader()
 {
-    glDeleteShader(pixel_->get_shader_id());
-    glDeleteShader(fragment_->get_shader_id());
+    glDeleteShader(pixel_->GetShaderId());
+    glDeleteShader(fragment_->GetShaderId());
 }

@@ -1,15 +1,15 @@
 #pragma once
 #include <cstdint>
 
-class index_buffer
+class IndexBuffer
 {
 public:  
-    ~index_buffer();
+    ~IndexBuffer();
 
-    void bind(void* data, int size);
-    void unbind();
+    void Bind(void* data, int size);
+    void UnBind();
 
-    int get_id() const { return id_; }
+    int GetId() const { return id_; }
 private:
     uint32_t id_ = 0;
 };

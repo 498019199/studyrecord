@@ -1,15 +1,15 @@
 #pragma once
 #include <cstdint>
 
-class vertex_buffer
+class VertexBuffer
 {
 public:  
-    ~vertex_buffer();
+    ~VertexBuffer();
 
-    void bind();
-    void unbind();
+    void Bind();
+    void UnBind();
 
-    int get_id() const { return id_; }
+    int GetId() const { return id_; }
 private:
     uint32_t id_ = 0;
 };

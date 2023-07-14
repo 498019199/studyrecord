@@ -1,14 +1,10 @@
 #include <render/app.h>
+#include <render/renderer.h>
 #include <iostream>
+extern Renderer* gRender;
 
-void app::init()
+void App::Init()
 {
-    render_ = std::make_shared<renderer>();
-    if (render_)
-    {
-        render_->init();
-    }
-    
 }
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
@@ -16,7 +12,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     glViewport(0, 0, width, height);
 }
 
-void app::create_windows(int width, int height, const char* title_name)
+void App::CreateWindows(int width, int height, const char* title_name)
 {
     // glfw: initialize and configure
     int errorCode  = glfwInit(); 
@@ -54,7 +50,7 @@ void app::create_windows(int width, int height, const char* title_name)
     }
 }
 
-void app::run()
+void App::Run()
 {
     // render loop
     // -----------
@@ -65,7 +61,7 @@ void app::run()
         //processInput(window_);
  
         // render
-        render();
+        Render();
         glfwTerminate();
 
         glfwSwapBuffers(window_);
@@ -75,12 +71,12 @@ void app::run()
     glfwTerminate();
 }
 
-void app::render()
+void App::Render()
 {
-    if (render_)
+    if (gRender)
     {
-        render_->before_render();
-        render_->render(0.f);
-        render_->after_render();
+        gRender->BeforeRender();
+        gRender->Render(0.f);
+        gRender->AfterRender();
     }
 }

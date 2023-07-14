@@ -7,23 +7,20 @@
 #include <render/index_buffer.h>
 #include <render/vertex_buffer.h>
 
-using ptr_indexs = std::shared_ptr<index_buffer>;
-using ptr_vertexs = std::shared_ptr<vertex_buffer>;
-class renderer
+using PtrIndexs = std::shared_ptr<IndexBuffer>;
+using PtrVertexs = std::shared_ptr<VertexBuffer>;
+class Renderer
 {
 public:
-    void init();
-    void before_render();
-    void render(float time);
-    void after_render();
+    void Init();
+    void BeforeRender();
+    void Render(float time);
+    void AfterRender();
 
 private:
-    ptr_shaderobject shaderobj_;
-    ptr_indexs indexs_;
-    ptr_vertexs vertexs_;
+    PtrShaderobject shaderobj_;
+    PtrIndexs indexs_;
+    PtrVertexs vertexs_;
 };
 
-
-
-
-using ptr_renderer = std::shared_ptr<renderer>;
+using PtrRenderer = std::shared_ptr<Renderer>;

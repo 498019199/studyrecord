@@ -3,9 +3,9 @@
 #include <fstream>
 #include <sstream>
 
-void renderer::init()
+void Renderer::Init()
 {
-    shaderobj_ = std::make_shared<shader_object>();
+    shaderobj_ = std::make_shared<ShaderObject>();
     if (!shaderobj_)
     {
         return;
@@ -30,23 +30,23 @@ void renderer::init()
 
             if (0 == strcmp("vertex.glsl", it))
             {
-                shaderobj_->init_shader(GL_VERTEX_SHADER);
-                shaderobj_->load_pixel(content.c_str());
+                shaderobj_->InitShader(GL_VERTEX_SHADER);
+                shaderobj_->LoadPixel(content.c_str());
             }
             else
             {
-                shaderobj_->init_shader(GL_FRAGMENT_SHADER);
-                shaderobj_->load_fragment(content.c_str());
+                shaderobj_->InitShader(GL_FRAGMENT_SHADER);
+                shaderobj_->LoadFragment(content.c_str());
             }
         }
         
     }
 
-    indexs_ = std::make_shared<index_buffer>();
-    vertexs_ = std::make_shared<vertex_buffer>();
+    indexs_ = std::make_shared<IndexBuffer>();
+    vertexs_ = std::make_shared<VertexBuffer>();
 }
 
-void renderer::before_render()
+void Renderer::BeforeRender()
 {
     float vertices[] = {
         -0.5f, -0.5f, 0.0f, // left  
@@ -54,14 +54,14 @@ void renderer::before_render()
          0.0f,  0.5f, 0.0f  // top   
     }; 
  
-    shaderobj_->attach_shader();
+    shaderobj_->AttachShader();
     //创建VAO对象
-    vertexs_->bind();
+    vertexs_->Bind();
 	//创建VBO对象，把顶点数组复制到一个顶点缓冲中，供OpenGL使用
-    indexs_->bind(vertices, sizeof(vertices));
+    indexs_->Bind(vertices, sizeof(vertices));
 }
 
-void renderer::render(float time)
+void Renderer::Render(float time)
 {
     // render
     // ------
@@ -69,16 +69,16 @@ void renderer::render(float time)
     glClear(GL_COLOR_BUFFER_BIT);
 
     // draw our first triangle
-    shaderobj_->use_shader(); // 激活shaderProgram，怎么画
-    glBindVertexArray(vertexs_->get_id()); // 画什么
+    shaderobj_->UseShader(); // 激活shaderProgram，怎么画
+    glBindVertexArray(vertexs_->GetId()); // 画什么
     glDrawArrays(GL_TRIANGLES, 0, 3); // 开始画
 }
 
-void renderer::after_render()
+void Renderer::AfterRender()
 {
-    vertexs_->unbind();
-    indexs_->unbind();
+    vertexs_->UnBind();
+    indexs_->UnBind();
 
     // optional: de-allocate all resources
-    shaderobj_->use_shader();
+    shaderobj_->DetachShader();
 }

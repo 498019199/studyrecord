@@ -1,23 +1,23 @@
 #pragma once
 #include <memory>
 
-class i_shader;
-using ptr_shader = std::shared_ptr<i_shader>;
-class shader_object;
-using ptr_shaderobject = std::shared_ptr<shader_object>;
+class IShader;
+using PtrIShader = std::shared_ptr<IShader>;
+class ShaderObject;
+using PtrShaderobject = std::shared_ptr<ShaderObject>;
 
-class i_shader
+class IShader
 {
 public:   
-    ~i_shader();
+    ~IShader();
 
-    void init_shader(int type);
-    void bind_shader(const char* shader_script);
-    void link_shader();
+    void InitShader(int type);
+    void BindShader(const char* shader_script);
+    void LinkShader();
 
-    int get_shader_id() { return shader_id_; }
+    int GetShaderId() { return shader_id_; }
 private:
-    const char* get_shader_type();
+    const char* GetShaderType();
 
 private:
     int shader_type_ = 0;
@@ -25,31 +25,31 @@ private:
 };
 
 // 像素着色器
-class pixel_shader:public i_shader
+class PixelShader:public IShader
 {};
 
 // 片元着色器
-class fragment_shader:public i_shader
+class FragmentShader:public IShader
 {};
 
 // 着色器程序对象(Shader Program Object)
-class shader_object
+class ShaderObject
 {
 public:
-    shader_object();
-    ~shader_object();
+    ShaderObject();
+    ~ShaderObject();
 
-    void init_shader(int type);
-    void load_pixel(const char* shader_script) { pixel_->bind_shader(shader_script); }
-    void load_fragment(const char* shader_script) { fragment_->bind_shader(shader_script); }
+    void InitShader(int type);
+    void LoadPixel(const char* shader_script) { pixel_->BindShader(shader_script); }
+    void LoadFragment(const char* shader_script) { fragment_->BindShader(shader_script); }
 
-    void attach_shader();
-    void use_shader();
-    void detach_shader();
+    void AttachShader();
+    void UseShader();
+    void DetachShader();
 private:
     uint32_t obj_id_;
-    ptr_shader pixel_;
-    ptr_shader fragment_;
+    PtrIShader pixel_;
+    PtrIShader fragment_;
 };
 
 

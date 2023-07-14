@@ -1,20 +1,20 @@
 #pragma once
-#include <render/renderer.h>
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 
-class app
+class App
 {
 public:
-    void init();
+    void Init();
 
     // 实例化GLFW窗口
-    void create_windows(int width, int height, const char* title_name);
+    void CreateWindows(int width, int height, const char* title_name);
 
-    void run();
+    void Run();
 
-    void render();
+    void Render();
 private:
     GLFWwindow* window_;
-    ptr_renderer render_;
 };
 
 
