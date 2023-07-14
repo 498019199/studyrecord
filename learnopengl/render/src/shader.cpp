@@ -33,7 +33,6 @@ void IShader::LinkShader()
 {
     int shaderProgram = glCreateProgram(); // shaderProgram 是多个着色器合并之后并最终链接完成的版本
     glAttachShader(shaderProgram, shader_id_); // 附加
-    // glAttachShader(shaderProgram, fragmentShader);
     glLinkProgram(shader_id_);
     // check for linking errors
     int success;

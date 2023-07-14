@@ -56,7 +56,7 @@ void Renderer::BeforeRender()
  
     shaderobj_->AttachShader();
     //创建VAO对象
-    vertexs_->Bind();
+    vertexs_->Bind(vertices, sizeof(vertices));
 	//创建VBO对象，把顶点数组复制到一个顶点缓冲中，供OpenGL使用
     indexs_->Bind(vertices, sizeof(vertices));
 }
@@ -67,7 +67,7 @@ void Renderer::Render(float time)
     // ------
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
-
+    
     // draw our first triangle
     shaderobj_->UseShader(); // 激活shaderProgram，怎么画
     glBindVertexArray(vertexs_->GetId()); // 画什么

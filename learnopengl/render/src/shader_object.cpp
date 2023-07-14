@@ -46,6 +46,14 @@ void ShaderObject::AttachShader()
 void ShaderObject::UseShader()
 {
     glUseProgram(obj_id_);
+    int success;
+    char infoLog[512];
+    glGetProgramiv(obj_id_, GL_LINK_STATUS, &success);
+    if(!success) 
+    {
+        glGetProgramInfoLog(obj_id_, 512, NULL, infoLog);
+    }
+
 }
 
 void ShaderObject::DetachShader()

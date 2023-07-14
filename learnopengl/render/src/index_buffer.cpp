@@ -1,6 +1,16 @@
 #include <render/index_buffer.h>
 #include <glad/glad.h>
 
+IndexBuffer::IndexBuffer()
+{
+    
+}
+
+IndexBuffer::~IndexBuffer()
+{
+    glDeleteBuffers(1, &id_);
+}
+
 void IndexBuffer::Bind(void* data, int size)
 {
     glGenBuffers(1, &id_);
@@ -14,7 +24,3 @@ void IndexBuffer::UnBind()
     glBindBuffer(GL_ARRAY_BUFFER, 0); 
 }
 
-IndexBuffer::~IndexBuffer()
-{
-    glDeleteBuffers(1, &id_);
-}

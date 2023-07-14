@@ -62,7 +62,6 @@ void App::Run()
  
         // render
         Render();
-        glfwTerminate();
 
         glfwSwapBuffers(window_);
         glfwPollEvents();
