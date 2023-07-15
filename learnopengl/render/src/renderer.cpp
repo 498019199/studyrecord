@@ -56,9 +56,10 @@ void Renderer::BeforeRender()
  
     shaderobj_->AttachShader();
     //创建VAO对象
-    vertex_buf_->Bind(vertices, sizeof(vertices));
-	//创建VBO对象，把顶点数组复制到一个顶点缓冲中，供OpenGL使用
     vertexs_->Bind();
+    //创建VBO对象，把顶点数组复制到一个顶点缓冲中，供OpenGL使用
+    vertex_buf_->Bind(vertices, sizeof(vertices));
+	vertexs_->UnBind();
 }
 
 void Renderer::Render(float time)
@@ -76,9 +77,4 @@ void Renderer::Render(float time)
 
 void Renderer::AfterRender()
 {
-    vertex_buf_->UnBind();
-    vertexs_->UnBind();
-
-    // optional: de-allocate all resources
-    shaderobj_->DetachShader();
 }

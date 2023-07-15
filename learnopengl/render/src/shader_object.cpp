@@ -12,7 +12,7 @@ ShaderObject::ShaderObject()
 
 ShaderObject::~ShaderObject()
 {
-    
+    DetachShader();
 }
 
 void ShaderObject::InitShader(int type)
