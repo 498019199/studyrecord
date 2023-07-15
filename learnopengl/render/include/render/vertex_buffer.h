@@ -1,7 +1,7 @@
 #pragma once
 #include <cstdint>
 
-//VAO
+//VBO对象
 class VertexBuffer
 {
 public:  
@@ -11,8 +11,8 @@ public:
     void Bind(void* data, int size);
     void UnBind();
 
-    int GetId() const { return id_; }
+    int GetId() const { return vbo_id_; }
 private:
-    uint32_t id_ = 0;
+    uint32_t vbo_id_ = 0;
 };
 

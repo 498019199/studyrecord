@@ -2,6 +2,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include <iostream>
 ShaderObject::ShaderObject()
 {
     obj_id_ = glCreateProgram();
@@ -25,22 +26,20 @@ void ShaderObject::InitShader(int type)
 void ShaderObject::AttachShader()
 {
     glAttachShader(obj_id_, pixel_->GetShaderId());
+    glAttachShader(obj_id_, fragment_->GetShaderId());
+    glLinkProgram(obj_id_);
+
     int success;
     char infoLog[512];
     glGetProgramiv(obj_id_, GL_LINK_STATUS, &success);
     if(!success) 
     {
         glGetProgramInfoLog(obj_id_, 512, NULL, infoLog);
-    }
+        std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
+    }   
 
-    glAttachShader(obj_id_, fragment_->GetShaderId());
-    glGetProgramiv(obj_id_, GL_LINK_STATUS, &success);
-    if(!success) 
-    {
-        glGetProgramInfoLog(obj_id_, 512, NULL, infoLog);
-    }
-
-    glLinkProgram(obj_id_);
+    glDeleteShader(pixel_->GetShaderId());
+    glDeleteShader(fragment_->GetShaderId());
 }
 
 void ShaderObject::UseShader()
@@ -60,4 +59,5 @@ void ShaderObject::DetachShader()
 {
     glDeleteShader(pixel_->GetShaderId());
     glDeleteShader(fragment_->GetShaderId());
+    glDeleteProgram(obj_id_);
 }

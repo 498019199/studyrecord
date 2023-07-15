@@ -42,8 +42,8 @@ void Renderer::Init()
         
     }
 
-    indexs_ = std::make_shared<IndexBuffer>();
-    vertexs_ = std::make_shared<VertexBuffer>();
+    vertexs_ = std::make_shared<VertexArray>();
+    vertex_buf_ = std::make_shared<VertexBuffer>();
 }
 
 void Renderer::BeforeRender()
@@ -56,9 +56,9 @@ void Renderer::BeforeRender()
  
     shaderobj_->AttachShader();
     //创建VAO对象
-    vertexs_->Bind(vertices, sizeof(vertices));
+    vertex_buf_->Bind(vertices, sizeof(vertices));
 	//创建VBO对象，把顶点数组复制到一个顶点缓冲中，供OpenGL使用
-    indexs_->Bind(vertices, sizeof(vertices));
+    vertexs_->Bind();
 }
 
 void Renderer::Render(float time)
@@ -76,8 +76,8 @@ void Renderer::Render(float time)
 
 void Renderer::AfterRender()
 {
+    vertex_buf_->UnBind();
     vertexs_->UnBind();
-    indexs_->UnBind();
 
     // optional: de-allocate all resources
     shaderobj_->DetachShader();

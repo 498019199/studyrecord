@@ -63,6 +63,8 @@ void App::Run()
         // render
         Render();
 
+        // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
+        // -------------------------------------------------------------------------------
         glfwSwapBuffers(window_);
         glfwPollEvents();
     }
@@ -74,8 +76,6 @@ void App::Render()
 {
     if (gRender)
     {
-        gRender->BeforeRender();
         gRender->Render(0.f);
-        gRender->AfterRender();
     }
 }

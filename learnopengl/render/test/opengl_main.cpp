@@ -22,7 +22,10 @@ int main()
     gMainApp->CreateWindows(SCR_WIDTH, SCR_HEIGHT, "OpenGLLearn");
     gMainApp->Init();
     gRender->Init();
+    
+    gRender->BeforeRender();
     gMainApp->Run();
+    gRender->AfterRender();
 
     delete gMainApp;
     delete gRender;
