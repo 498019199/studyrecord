@@ -7,6 +7,7 @@ VertexBuffer::VertexBuffer()
 
 VertexBuffer::~VertexBuffer()
 {
+    glDeleteBuffers(1, &vbo_id_);
 }
 
 void VertexBuffer::Bind(void* data, int size)
@@ -23,7 +24,5 @@ void VertexBuffer::Bind(void* data, int size)
 
 void VertexBuffer::UnBind()
 {
-    // 解绑VBO
-    glDeleteBuffers(1, &vbo_id_);
 }
 
