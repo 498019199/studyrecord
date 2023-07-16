@@ -44,6 +44,10 @@ void ShaderObject::AttachShader()
 
 void ShaderObject::UseShader()
 {
+    float fTime = glfwGetTime();
+    float greenValue = (std::sin(fTime) / 2.f) + 0.5f;
+    int vertexColorLocation = glGetUniformLocation(obj_id_, "outColor");
+
     glUseProgram(obj_id_);
     int success;
     char infoLog[512];
@@ -53,6 +57,7 @@ void ShaderObject::UseShader()
         glGetProgramInfoLog(obj_id_, 512, NULL, infoLog);
     }
 
+    glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
 }
 
 void ShaderObject::DetachShader()
