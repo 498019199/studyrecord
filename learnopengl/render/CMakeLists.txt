@@ -7,7 +7,8 @@ include_directories(${PROJECT_SOURCE_DIR}/math/include)
 
 aux_source_directory(${PROJECT_SOURCE_DIR}/render/src SRC_LIST)
 list(APPEND SRC_LIST 
-    ${PROJECT_3RD_DIR}/glad/src/glad.c)
+    ${PROJECT_3RD_DIR}/glad/src/glad.c
+    ${PROJECT_3RD_DIR}/stb/src/stb_image.cpp)
 
 add_library(render_lib STATIC ${SRC_LIST})
 
