@@ -1,6 +1,6 @@
 #pragma once
 #include <memory>
-
+#include <string_view>
 class IShader;
 using PtrIShader = std::shared_ptr<IShader>;
 class ShaderObject;
@@ -39,9 +39,12 @@ public:
     ShaderObject();
     ~ShaderObject();
 
-    void InitShader(int type);
-    void LoadPixel(const char* shader_script) { pixel_->BindShader(shader_script); }
-    void LoadFragment(const char* shader_script) { fragment_->BindShader(shader_script); }
+    void LoadShader(const std::string_view& vertexPath, const std::string_view& fragmentPath);
+
+    // uniform工具函数
+    void SetBool(const char*name,  bool value) const;  
+    void SetInt(const char*name, int value) const;   
+    void SetFloat(const char*name, float value) const;
 
     void AttachShader();
     void UseShader();
@@ -51,6 +54,7 @@ private:
     PtrIShader pixel_;
     PtrIShader fragment_;
 };
+
 
 
 

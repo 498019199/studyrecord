@@ -2,6 +2,7 @@ include_directories(${PROJECT_3RD_DIR}/glad/include)
 include_directories(${PROJECT_3RD_DIR}/glfw/include)
 include_directories(${PROJECT_3RD_DIR}/stb/include)
 include_directories(${PROJECT_SOURCE_DIR}/render/include)
+include_directories(${PROJECT_SOURCE_DIR}/common/include)
 include_directories(${PROJECT_SOURCE_DIR}/math/include)
 
 aux_source_directory(${PROJECT_SOURCE_DIR}/render/src SRC_LIST)

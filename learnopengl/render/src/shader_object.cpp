@@ -1,3 +1,5 @@
+#include <common/file.h>
+
 #include <render/shader.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -15,12 +17,15 @@ ShaderObject::~ShaderObject()
     DetachShader();
 }
 
-void ShaderObject::InitShader(int type)
+void ShaderObject::LoadShader(const std::string_view& vertexPath, const std::string_view& fragmentPath)
 {
-    if(GL_VERTEX_SHADER == type) 
-        pixel_->InitShader(type); 
-    else 
-        fragment_->InitShader(type); 
+    std::string vertexShader = CommonWorker::GetFileContents(vertexPath.data());
+    pixel_->InitShader(GL_VERTEX_SHADER);
+    pixel_->BindShader(vertexShader.c_str());
+
+    std::string fragmentShader = CommonWorker::GetFileContents(fragmentPath.data());
+    fragment_->InitShader(GL_FRAGMENT_SHADER);
+    fragment_->BindShader(fragmentShader.c_str());
 }
 
 void ShaderObject::AttachShader()
@@ -44,10 +49,6 @@ void ShaderObject::AttachShader()
 
 void ShaderObject::UseShader()
 {
-    float fTime = glfwGetTime();
-    float greenValue = (std::sin(fTime) / 2.f) + 0.5f;
-    int vertexColorLocation = glGetUniformLocation(obj_id_, "outColor");
-
     glUseProgram(obj_id_);
     int success;
     char infoLog[512];
@@ -56,8 +57,6 @@ void ShaderObject::UseShader()
     {
         glGetProgramInfoLog(obj_id_, 512, NULL, infoLog);
     }
-
-    glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
 }
 
 void ShaderObject::DetachShader()
@@ -65,4 +64,19 @@ void ShaderObject::DetachShader()
     glDeleteShader(pixel_->GetShaderId());
     glDeleteShader(fragment_->GetShaderId());
     glDeleteProgram(obj_id_);
+}
+
+void ShaderObject::SetBool(const char*name,  bool value) const
+{
+    glUniform1i(glGetUniformLocation(obj_id_, name), (int)value); 
+}
+
+void ShaderObject::SetInt(const char*name, int value) const
+{
+    glUniform1i(glGetUniformLocation(obj_id_, name), value); 
+}
+
+void ShaderObject::SetFloat(const char*name, float value) const
+{
+    glUniform1f(glGetUniformLocation(obj_id_, name), value); 
 }
