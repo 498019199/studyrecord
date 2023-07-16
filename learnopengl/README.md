@@ -11,3 +11,5 @@ stb_image-> 图像解码库
 2023年7月3日，完成三角形测试。// delete
 
 2023年7月14日-》draw triangle,拆分成类。
+
+test
