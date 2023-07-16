@@ -2,7 +2,7 @@
 out vec4 FragColor;
 
 in vec3 ourColor;
-in vec2 TexCoord;
+in vec2 TexCoord;// 图片坐标
 uniform sampler2D ourTexture;
 void main()
 {
