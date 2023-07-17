@@ -180,13 +180,6 @@ Vector4D normalize(const Vector4D& rhs)
     return Vector4D(rhs.x / v , rhs.y / v, rhs.z / v, rhs.w / v);
 }
 
-// 距离
-float Vector4D::distance(const  Vector4D& lhs, const Vector4D& rhs)
-{
-    Vector4D tmp(lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z, lhs.w - rhs.w);
-    return std::sqrt(tmp.x * tmp.x + tmp.y * tmp.y + tmp.z * tmp.z + tmp.w * tmp.w);
-}
-
 Vector4D Vector4D::cross(const Vector4D& rhs)
 {
     return this->operator^(rhs);

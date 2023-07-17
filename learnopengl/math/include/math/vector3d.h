@@ -64,9 +64,6 @@ public:
     Vector3D normalize();
     static Vector3D normalize(const Vector3D& rhs);
 
-    // 距离
-    static float distance(const  Vector3D& lhs, const Vector3D& rhs);
-
     // 叉积
     Vector3D cross(const Vector3D& rhs);
     static Vector3D cross(const  Vector3D& lhs, const Vector3D& rhs);

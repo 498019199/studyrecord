@@ -165,12 +165,6 @@ Vector2D normalize(const Vector2D& rhs)
     return Vector2D(rhs.x / v , rhs.y / v);
 }
 
-// 距离
-float Vector2D::distance(const  Vector2D& lhs, const Vector2D& rhs)
-{
-    Vector2D tmp(lhs.x - rhs.x, lhs.y - rhs.y);
-    return std::sqrt(tmp.x * tmp.x + tmp.y * tmp.y);
-}
 
 float Vector2D::cross(const Vector2D& rhs)
 {

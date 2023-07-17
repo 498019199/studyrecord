@@ -61,8 +61,6 @@ public:
     void normalize();
     static Vector2D normalize(const Vector2D& rhs);
 
-    static float distance(const  Vector2D& lhs, const Vector2D& rhs);
-
     float cross(const Vector2D& rhs);
     static float cross(const  Vector2D& lhs, const Vector2D& rhs);
 

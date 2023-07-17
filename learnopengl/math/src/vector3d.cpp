@@ -169,13 +169,6 @@ Vector3D normalize(const Vector3D& rhs)
     return Vector3D(rhs.x / v , rhs.y / v, rhs.z / v);
 }
 
-// 距离
-float Vector3D::distance(const  Vector3D& lhs, const Vector3D& rhs)
-{
-    Vector3D tmp(lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z);
-    return std::sqrt(tmp.x * tmp.x + tmp.y * tmp.y + tmp.z * tmp.z);
-}
-
 Vector3D Vector3D::cross(const Vector3D& rhs)
 {
     return this->operator^(rhs);

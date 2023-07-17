@@ -65,9 +65,6 @@ public:
     void normalize();
     static Vector4D normalize(const Vector4D& rhs);
 
-    // 距离
-    static float distance(const  Vector4D& lhs, const Vector4D& rhs);
-
     // 叉积
     Vector4D cross(const Vector4D& rhs);
     static Vector4D cross(const  Vector4D& lhs, const Vector4D& rhs);
