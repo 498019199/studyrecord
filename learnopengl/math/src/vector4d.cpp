@@ -178,9 +178,19 @@ float vector4d::distance(const  vector4d& lhs, const vector4d& rhs)
     return std::sqrt(tmp.x * tmp.x + tmp.y * tmp.y + tmp.z * tmp.z + tmp.w * tmp.w);
 }
 
+vector4d vector4d::cross(const vector4d& rhs)
+{
+    return this->operator^(rhs);
+}
+
 vector4d vector4d::cross(const  vector4d& lhs, const vector4d& rhs)
 {
     return lhs.operator^(rhs);
+}
+
+float vector4d::dot(const vector4d& rhs)
+{
+    return this->operator|(rhs);
 }
 
 float vector4d::dot(const  vector4d& lhs, const vector4d& rhs)

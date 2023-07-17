@@ -1,6 +1,7 @@
 #pragma once
 #include <utility>
 #include <cstdint>
+#include <iostream>
 
 struct vector4d
 {
@@ -64,12 +65,29 @@ public:
     static float distance(const  vector4d& lhs, const vector4d& rhs);
 
     // 叉积
+    vector4d cross(const vector4d& rhs);
     static vector4d cross(const  vector4d& lhs, const vector4d& rhs);
 
     // 点积
+    float dot(const vector4d& rhs);
     static float dot(const  vector4d& lhs, const vector4d& rhs);
+
+    friend std::ostream& operator<<(std::ostream& os, const  vector4d& lhs) 
+    {
+        os << lhs.x << " " << lhs.y << " " << lhs.z << " " << lhs.w;
+        return os;
+    }
 };
 
+inline vector4d operator/(float lhs, const vector4d& rhs)
+{
+    return rhs.operator/(rhs);
+}
+
+inline vector4d operator*(float lhs, const vector4d& rhs)
+{
+    return rhs.operator*(rhs);
+}
 
 inline bool operator==(const  vector4d& lhs, const  vector4d& rhs)
 {
@@ -80,3 +98,5 @@ inline bool operator!=(const  vector4d& lhs, const  vector4d& rhs)
 {
     return lhs.operator!=(rhs);
 }
+
+

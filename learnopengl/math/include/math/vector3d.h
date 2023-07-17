@@ -1,6 +1,7 @@
 #pragma once
 #include <utility>
 #include <cstdint>
+#include <iostream>
 
 struct vector3d
 {
@@ -56,19 +57,36 @@ public:
     bool operator!=(const  vector3d& rhs) const;
 
     // 向量标准化
-    void normalize();
+    vector3d normalize();
     static vector3d normalize(const vector3d& rhs);
 
     // 距离
     static float distance(const  vector3d& lhs, const vector3d& rhs);
 
     // 叉积
+    vector3d cross(const vector3d& rhs);
     static vector3d cross(const  vector3d& lhs, const vector3d& rhs);
 
     // 点积
+    float dot(const vector3d& rhs);
     static float dot(const  vector3d& lhs, const vector3d& rhs);
+
+    friend inline std::ostream& operator<<(std::ostream& os, const  vector3d& lhs) 
+    {
+        os << lhs.x << " " << lhs.y << " " << lhs.z;
+        return os;
+    }
 };
 
+inline vector3d operator/(float lhs, const vector3d& rhs)
+{
+    return rhs.operator/(rhs);
+}
+
+inline vector3d operator*(float lhs, const vector3d& rhs)
+{
+    return rhs.operator*(rhs);
+}
 
 inline bool operator==(const  vector3d& lhs, const  vector3d& rhs)
 {
@@ -79,3 +97,5 @@ inline bool operator!=(const  vector3d& lhs, const  vector3d& rhs)
 {
     return lhs.operator!=(rhs);
 }
+
+

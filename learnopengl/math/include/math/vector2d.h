@@ -1,6 +1,7 @@
 #pragma once
 #include <utility>
 #include <cstdint>
+#include <iostream>
 
 struct vector2d
 {
@@ -13,7 +14,7 @@ public:
     static const vector2d unit_vector;
     
 public:
-    // ?��
+    //构造
     vector2d() 
         {}
     vector2d(float in_x, float in_y) 
@@ -58,11 +59,28 @@ public:
 
     static float distance(const  vector2d& lhs, const vector2d& rhs);
 
+    float cross(const vector2d& rhs);
     static float cross(const  vector2d& lhs, const vector2d& rhs);
 
+    float dot(const vector2d& rhs);
     static float dot(const  vector2d& lhs, const vector2d& rhs);
+
+    friend std::ostream& operator<<(std::ostream& os, const  vector2d& lhs) 
+    {
+        os << lhs.x << " " << lhs.y;
+        return os;
+    }
 };
 
+inline vector2d operator/(float lhs, const vector2d& rhs)
+{
+    return rhs.operator/(rhs);
+}
+
+inline vector2d operator*(float lhs, const vector2d& rhs)
+{
+    return rhs.operator*(rhs);
+}
 
 inline bool operator==(const  vector2d& lhs, const  vector2d& rhs)
 {
@@ -73,3 +91,4 @@ inline bool operator!=(const  vector2d& lhs, const  vector2d& rhs)
 {
     return lhs.operator!=(rhs);
 }
+

@@ -146,12 +146,13 @@ bool vector3d::operator!=(const  vector3d& rhs) const
     return !(this->operator==(rhs));
 }
 
-void vector3d::normalize()
+vector3d vector3d::normalize()
 {
     float v = std::sqrt(x*x + y*y);
     x = x/v;
     y = y/v;
     z = z/v;
+    return *this;
 }
 
 vector3d normalize(const vector3d& rhs)
@@ -167,9 +168,19 @@ float vector3d::distance(const  vector3d& lhs, const vector3d& rhs)
     return std::sqrt(tmp.x * tmp.x + tmp.y * tmp.y + tmp.z * tmp.z);
 }
 
+vector3d vector3d::cross(const vector3d& rhs)
+{
+    return this->operator^(rhs);
+}
+
 vector3d vector3d::cross(const  vector3d& lhs, const vector3d& rhs)
 {
     return lhs.operator^(rhs);
+}
+
+float vector3d::dot(const vector3d& rhs)
+{
+    return this->operator|(rhs);
 }
 
 float vector3d::dot(const  vector3d& lhs, const vector3d& rhs)
