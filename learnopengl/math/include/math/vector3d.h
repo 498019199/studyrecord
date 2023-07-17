@@ -56,6 +56,8 @@ public:
     bool operator==(const  vector3d& rhs) const;
     bool operator!=(const  vector3d& rhs) const;
 
+    friend std::ostream& operator<<(std::ostream& os, const  vector3d& lhs);
+
     // 向量标准化
     vector3d normalize();
     static vector3d normalize(const vector3d& rhs);
@@ -70,12 +72,6 @@ public:
     // 点积
     float dot(const vector3d& rhs);
     static float dot(const  vector3d& lhs, const vector3d& rhs);
-
-    friend inline std::ostream& operator<<(std::ostream& os, const  vector3d& lhs) 
-    {
-        os << lhs.x << " " << lhs.y << " " << lhs.z;
-        return os;
-    }
 };
 
 inline vector3d operator/(float lhs, const vector3d& rhs)

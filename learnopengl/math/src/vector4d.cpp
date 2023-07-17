@@ -140,6 +140,12 @@ vector4d vector4d::operator/=(float rhs)
     return *this;
 }
 
+std::ostream& operator<<(std::ostream& os, const  vector4d& lhs)
+{
+    os << lhs.x << " " << lhs.y << " " << lhs.z << " " << lhs.w;
+    return os;
+}
+
 bool vector4d::is_zero() const
 {
     return x == 0.f && y == 0.f && z == 0.f && w == 0.f;

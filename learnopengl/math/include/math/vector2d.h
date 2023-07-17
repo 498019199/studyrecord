@@ -50,6 +50,8 @@ public:
     vector2d operator*=(float rhs);
     vector2d operator/=(float rhs);
 
+    friend std::ostream& operator<<(std::ostream& os, const  vector2d& lhs); 
+
     bool is_zero() const;
     bool operator==(const  vector2d& rhs) const;
     bool operator!=(const  vector2d& rhs) const;
@@ -64,12 +66,6 @@ public:
 
     float dot(const vector2d& rhs);
     static float dot(const  vector2d& lhs, const vector2d& rhs);
-
-    friend std::ostream& operator<<(std::ostream& os, const  vector2d& lhs) 
-    {
-        os << lhs.x << " " << lhs.y;
-        return os;
-    }
 };
 
 inline vector2d operator/(float lhs, const vector2d& rhs)

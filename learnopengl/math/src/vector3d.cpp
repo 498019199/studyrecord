@@ -131,6 +131,12 @@ vector3d vector3d::operator/=(float rhs)
     return *this;
 }
 
+std::ostream& operator<<(std::ostream& os, const  vector3d& lhs) 
+{
+    os << lhs.x << " " << lhs.y << " " << lhs.z;
+    return os;
+}
+
 bool vector3d::is_zero() const
 {
     return x == 0.f && y == 0.f && z == 0.f;

@@ -128,6 +128,12 @@ vector2d vector2d::operator/=(float rhs)
     return *this;
 }
 
+std::ostream& operator<<(std::ostream& os, const  vector2d& lhs) 
+{
+    os << lhs.x << " " << lhs.y;
+    return os;
+}
+
 bool vector2d::is_zero() const
 {
     return x == 0.f && y == 0.f;

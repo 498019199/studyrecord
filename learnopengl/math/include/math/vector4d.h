@@ -53,6 +53,8 @@ public:
     vector4d operator*=(float rhs);
     vector4d operator/=(float rhs);
 
+    friend std::ostream& operator<<(std::ostream& os, const  vector4d& lhs); 
+
     bool is_zero() const;
     bool operator==(const  vector4d& rhs) const;
     bool operator!=(const  vector4d& rhs) const;
@@ -71,12 +73,6 @@ public:
     // 点积
     float dot(const vector4d& rhs);
     static float dot(const  vector4d& lhs, const vector4d& rhs);
-
-    friend std::ostream& operator<<(std::ostream& os, const  vector4d& lhs) 
-    {
-        os << lhs.x << " " << lhs.y << " " << lhs.z << " " << lhs.w;
-        return os;
-    }
 };
 
 inline vector4d operator/(float lhs, const vector4d& rhs)
