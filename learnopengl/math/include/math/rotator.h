@@ -1,5 +1,8 @@
 #pragma once
 
+namespace MathWorker
+{
+
 struct rotator
 {
 public:
@@ -15,3 +18,4 @@ public:
     explicit rotator(float in_x, float in_y, float in_z)
         :pitch(in_x), yaw(in_y), roll(in_z) {}
 };
+}

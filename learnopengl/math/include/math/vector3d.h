@@ -2,8 +2,10 @@
 #include <utility>
 #include <cstdint>
 #include <iostream>
+namespace MathWorker
+{
 
-struct vector3d
+struct Vector3D
 {
 public:
     float x = 0.f;
@@ -11,87 +13,88 @@ public:
     float z = 0.f;
 public:
     // (0,0,0)
-    static const vector3d zero_vector;
+    static const Vector3D zero_vector;
     // (1,1,1)
-    static const vector3d unit_vector;
+    static const Vector3D unit_vector;
     
 public:
     // 构造
-    vector3d() 
+    Vector3D() 
         {}
-    vector3d(float in_x, float in_y, float in_z) 
+    Vector3D(float in_x, float in_y, float in_z) 
         :x(in_x), y(in_y), z(in_z) {}
-    vector3d(const vector3d& vec) 
+    Vector3D(const Vector3D& vec) 
         :x(vec.x), y(vec.y), z(vec.z) {}
-    explicit vector3d(float inf) 
+    explicit Vector3D(float inf) 
         :x(inf), y(inf), z(inf) {}
-    explicit vector3d(const vector3d&& vec)  
+    explicit Vector3D(const Vector3D&& vec)  
         :x(std::move(vec.x)), y(std::move(vec.y)), z(std::move(vec.z)) {}
-    explicit vector3d(vector3d* vec) 
+    explicit Vector3D(Vector3D* vec) 
         :x(vec->x), y(vec->y), z(vec->z) {}
 
     // 复制构造
-    vector3d& operator=(const vector3d& rhs); 
-    vector3d& operator=(const vector3d&& rhs);
+    Vector3D& operator=(const Vector3D& rhs); 
+    Vector3D& operator=(const Vector3D&& rhs);
 
-    vector3d operator-() const;
+    Vector3D operator-() const;
     float operator[](int32_t index) const;
-    vector3d operator+(const  vector3d& rhs) const;
-    vector3d operator-(const  vector3d& rhs) const;
-    vector3d operator*(const  vector3d& rhs) const;
-    vector3d operator/(const  vector3d& rhs) const;
-    vector3d operator*(float rhs) const;
-    vector3d operator/(float rhs) const;
-    float operator|(const vector3d& rhs) const;
-    vector3d operator^(const vector3d& rhs) const;
+    Vector3D operator+(const  Vector3D& rhs) const;
+    Vector3D operator-(const  Vector3D& rhs) const;
+    Vector3D operator*(const  Vector3D& rhs) const;
+    Vector3D operator/(const  Vector3D& rhs) const;
+    Vector3D operator*(float rhs) const;
+    Vector3D operator/(float rhs) const;
+    float operator|(const Vector3D& rhs) const;
+    Vector3D operator^(const Vector3D& rhs) const;
 
-    vector3d operator+=(const  vector3d& rhs);
-    vector3d operator-=(const  vector3d& rhs);
-    vector3d operator*=(const  vector3d& rhs);
-    vector3d operator/=(const  vector3d& rhs);
-    vector3d operator*=(float rhs);
-    vector3d operator/=(float rhs);
+    Vector3D operator+=(const  Vector3D& rhs);
+    Vector3D operator-=(const  Vector3D& rhs);
+    Vector3D operator*=(const  Vector3D& rhs);
+    Vector3D operator/=(const  Vector3D& rhs);
+    Vector3D operator*=(float rhs);
+    Vector3D operator/=(float rhs);
 
     bool is_zero() const;
-    bool operator==(const  vector3d& rhs) const;
-    bool operator!=(const  vector3d& rhs) const;
+    bool operator==(const  Vector3D& rhs) const;
+    bool operator!=(const  Vector3D& rhs) const;
 
-    friend std::ostream& operator<<(std::ostream& os, const  vector3d& lhs);
+    friend std::ostream& operator<<(std::ostream& os, const  Vector3D& lhs);
 
     // 向量标准化
-    vector3d normalize();
-    static vector3d normalize(const vector3d& rhs);
+    Vector3D normalize();
+    static Vector3D normalize(const Vector3D& rhs);
 
     // 距离
-    static float distance(const  vector3d& lhs, const vector3d& rhs);
+    static float distance(const  Vector3D& lhs, const Vector3D& rhs);
 
     // 叉积
-    vector3d cross(const vector3d& rhs);
-    static vector3d cross(const  vector3d& lhs, const vector3d& rhs);
+    Vector3D cross(const Vector3D& rhs);
+    static Vector3D cross(const  Vector3D& lhs, const Vector3D& rhs);
 
     // 点积
-    float dot(const vector3d& rhs);
-    static float dot(const  vector3d& lhs, const vector3d& rhs);
+    float dot(const Vector3D& rhs);
+    static float dot(const  Vector3D& lhs, const Vector3D& rhs);
 };
 
-inline vector3d operator/(float lhs, const vector3d& rhs)
+inline Vector3D operator/(float lhs, const Vector3D& rhs)
 {
     return rhs.operator/(rhs);
 }
 
-inline vector3d operator*(float lhs, const vector3d& rhs)
+inline Vector3D operator*(float lhs, const Vector3D& rhs)
 {
     return rhs.operator*(rhs);
 }
 
-inline bool operator==(const  vector3d& lhs, const  vector3d& rhs)
+inline bool operator==(const  Vector3D& lhs, const  Vector3D& rhs)
 {
     return lhs.operator==(rhs);
 }
 
-inline bool operator!=(const  vector3d& lhs, const  vector3d& rhs)
+inline bool operator!=(const  Vector3D& lhs, const  Vector3D& rhs)
 {
     return lhs.operator!=(rhs);
 }
 
 
+}

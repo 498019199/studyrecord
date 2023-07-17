@@ -2,8 +2,10 @@
 #include <utility>
 #include <cstdint>
 #include <iostream>
+namespace MathWorker
+{
 
-struct vector4d
+struct Vector4D
 {
 public:
     float x = 0.f;
@@ -12,87 +14,87 @@ public:
     float w = 0.f;
 public:
     // (0, 0, 0, 0)
-    static const vector4d zero_vector;
+    static const Vector4D zero_vector;
     // (1, 1, 1, 1)
-    static const vector4d unit_vector;
+    static const Vector4D unit_vector;
     
 public:
     // 构造
-    vector4d() 
+    Vector4D() 
         {}
-    vector4d(float in_x, float in_y, float in_z, float in_w) 
+    Vector4D(float in_x, float in_y, float in_z, float in_w) 
         :x(in_x), y(in_y), z(in_z), w(in_w) {}
-    vector4d(const vector4d& vec) 
+    Vector4D(const Vector4D& vec) 
         :x(vec.x), y(vec.y), z(vec.z), w(vec.w) {}
-    explicit vector4d(float inf) 
+    explicit Vector4D(float inf) 
         :x(inf), y(inf), z(inf), w(inf) {}
-    explicit vector4d(const vector4d&& vec)  
+    explicit Vector4D(const Vector4D&& vec)  
         :x(std::move(vec.x)), y(std::move(vec.y)), z(std::move(vec.z)), w(std::move(vec.w)) {}
-    explicit vector4d(vector4d* vec) 
+    explicit Vector4D(Vector4D* vec) 
         :x(vec->x), y(vec->y), z(vec->z), w(vec->w) {}
 
     // 复制构造
-    vector4d& operator=(const vector4d& rhs); 
-    vector4d& operator=(const vector4d&& rhs);
+    Vector4D& operator=(const Vector4D& rhs); 
+    Vector4D& operator=(const Vector4D&& rhs);
 
-    vector4d operator-() const;
+    Vector4D operator-() const;
     float operator[](int32_t index) const;
-    vector4d operator+(const  vector4d& rhs) const;
-    vector4d operator-(const  vector4d& rhs) const;
-    vector4d operator*(const  vector4d& rhs) const;
-    vector4d operator/(const  vector4d& rhs) const;
-    vector4d operator*(float rhs) const;
-    vector4d operator/(float rhs) const;
-    float operator|(const vector4d& rhs) const;
-    vector4d operator^(const vector4d& rhs) const;
+    Vector4D operator+(const  Vector4D& rhs) const;
+    Vector4D operator-(const  Vector4D& rhs) const;
+    Vector4D operator*(const  Vector4D& rhs) const;
+    Vector4D operator/(const  Vector4D& rhs) const;
+    Vector4D operator*(float rhs) const;
+    Vector4D operator/(float rhs) const;
+    float operator|(const Vector4D& rhs) const;
+    Vector4D operator^(const Vector4D& rhs) const;
 
-    vector4d operator+=(const  vector4d& rhs);
-    vector4d operator-=(const  vector4d& rhs);
-    vector4d operator*=(const  vector4d& rhs);
-    vector4d operator/=(const  vector4d& rhs);
-    vector4d operator*=(float rhs);
-    vector4d operator/=(float rhs);
+    Vector4D operator+=(const  Vector4D& rhs);
+    Vector4D operator-=(const  Vector4D& rhs);
+    Vector4D operator*=(const  Vector4D& rhs);
+    Vector4D operator/=(const  Vector4D& rhs);
+    Vector4D operator*=(float rhs);
+    Vector4D operator/=(float rhs);
 
-    friend std::ostream& operator<<(std::ostream& os, const  vector4d& lhs); 
+    friend std::ostream& operator<<(std::ostream& os, const  Vector4D& lhs); 
 
     bool is_zero() const;
-    bool operator==(const  vector4d& rhs) const;
-    bool operator!=(const  vector4d& rhs) const;
+    bool operator==(const  Vector4D& rhs) const;
+    bool operator!=(const  Vector4D& rhs) const;
 
     // 向量标准化
     void normalize();
-    static vector4d normalize(const vector4d& rhs);
+    static Vector4D normalize(const Vector4D& rhs);
 
     // 距离
-    static float distance(const  vector4d& lhs, const vector4d& rhs);
+    static float distance(const  Vector4D& lhs, const Vector4D& rhs);
 
     // 叉积
-    vector4d cross(const vector4d& rhs);
-    static vector4d cross(const  vector4d& lhs, const vector4d& rhs);
+    Vector4D cross(const Vector4D& rhs);
+    static Vector4D cross(const  Vector4D& lhs, const Vector4D& rhs);
 
     // 点积
-    float dot(const vector4d& rhs);
-    static float dot(const  vector4d& lhs, const vector4d& rhs);
+    float dot(const Vector4D& rhs);
+    static float dot(const  Vector4D& lhs, const Vector4D& rhs);
 };
 
-inline vector4d operator/(float lhs, const vector4d& rhs)
+inline Vector4D operator/(float lhs, const Vector4D& rhs)
 {
     return rhs.operator/(rhs);
 }
 
-inline vector4d operator*(float lhs, const vector4d& rhs)
+inline Vector4D operator*(float lhs, const Vector4D& rhs)
 {
     return rhs.operator*(rhs);
 }
 
-inline bool operator==(const  vector4d& lhs, const  vector4d& rhs)
+inline bool operator==(const  Vector4D& lhs, const  Vector4D& rhs)
 {
     return lhs.operator==(rhs);
 }
 
-inline bool operator!=(const  vector4d& lhs, const  vector4d& rhs)
+inline bool operator!=(const  Vector4D& lhs, const  Vector4D& rhs)
 {
     return lhs.operator!=(rhs);
 }
 
-
+}

@@ -2,89 +2,92 @@
 #include <utility>
 #include <cstdint>
 #include <iostream>
+namespace MathWorker
+{
 
-struct vector2d
+struct Vector2D
 {
 public:
     float x = 0.f;
     float y = 0.f;
 
 public:
-    static const vector2d zero_vector;
-    static const vector2d unit_vector;
+    static const Vector2D zero_vector;
+    static const Vector2D unit_vector;
     
 public:
     //构造
-    vector2d() 
+    Vector2D() 
         {}
-    vector2d(float in_x, float in_y) 
+    Vector2D(float in_x, float in_y) 
         :x(in_x), y(in_y) {}
-    vector2d(const vector2d& vec) 
+    Vector2D(const Vector2D& vec) 
         :x(vec.x), y(vec.y) {}
-    explicit vector2d(float inf) 
+    explicit Vector2D(float inf) 
         :x(inf), y(inf) {}
-    explicit vector2d(const vector2d&& vec)  
+    explicit Vector2D(const Vector2D&& vec)  
         :x(std::move(vec.x)), y(std::move(vec.y)) {}
-    explicit vector2d(vector2d* vec) 
+    explicit Vector2D(Vector2D* vec) 
         :x(vec->x), y(vec->y) {}
-    //vector2d(std::initializer_list<float> list); 
+    //Vector2D(std::initializer_list<float> list); 
 
-    vector2d& operator=(const vector2d& rhs); 
-    vector2d& operator=(const vector2d&& rhs);
+    Vector2D& operator=(const Vector2D& rhs); 
+    Vector2D& operator=(const Vector2D&& rhs);
 
-    vector2d operator-() const;
+    Vector2D operator-() const;
     float operator[](int32_t index) const;
-    vector2d operator+(const  vector2d& rhs) const;
-    vector2d operator-(const  vector2d& rhs) const;
-    vector2d operator*(const  vector2d& rhs) const;
-    vector2d operator/(const  vector2d& rhs) const;
-    vector2d operator*(float rhs) const;
-    vector2d operator/(float rhs) const;
-    float operator|(const vector2d& rhs) const;
-    float operator^(const vector2d& rhs) const;
+    Vector2D operator+(const  Vector2D& rhs) const;
+    Vector2D operator-(const  Vector2D& rhs) const;
+    Vector2D operator*(const  Vector2D& rhs) const;
+    Vector2D operator/(const  Vector2D& rhs) const;
+    Vector2D operator*(float rhs) const;
+    Vector2D operator/(float rhs) const;
+    float operator|(const Vector2D& rhs) const;
+    float operator^(const Vector2D& rhs) const;
 
-    vector2d operator+=(const  vector2d& rhs);
-    vector2d operator-=(const  vector2d& rhs);
-    vector2d operator*=(const  vector2d& rhs);
-    vector2d operator/=(const  vector2d& rhs);
-    vector2d operator*=(float rhs);
-    vector2d operator/=(float rhs);
+    Vector2D operator+=(const  Vector2D& rhs);
+    Vector2D operator-=(const  Vector2D& rhs);
+    Vector2D operator*=(const  Vector2D& rhs);
+    Vector2D operator/=(const  Vector2D& rhs);
+    Vector2D operator*=(float rhs);
+    Vector2D operator/=(float rhs);
 
-    friend std::ostream& operator<<(std::ostream& os, const  vector2d& lhs); 
+    friend std::ostream& operator<<(std::ostream& os, const  Vector2D& lhs); 
 
     bool is_zero() const;
-    bool operator==(const  vector2d& rhs) const;
-    bool operator!=(const  vector2d& rhs) const;
+    bool operator==(const  Vector2D& rhs) const;
+    bool operator!=(const  Vector2D& rhs) const;
 
     void normalize();
-    static vector2d normalize(const vector2d& rhs);
+    static Vector2D normalize(const Vector2D& rhs);
 
-    static float distance(const  vector2d& lhs, const vector2d& rhs);
+    static float distance(const  Vector2D& lhs, const Vector2D& rhs);
 
-    float cross(const vector2d& rhs);
-    static float cross(const  vector2d& lhs, const vector2d& rhs);
+    float cross(const Vector2D& rhs);
+    static float cross(const  Vector2D& lhs, const Vector2D& rhs);
 
-    float dot(const vector2d& rhs);
-    static float dot(const  vector2d& lhs, const vector2d& rhs);
+    float dot(const Vector2D& rhs);
+    static float dot(const  Vector2D& lhs, const Vector2D& rhs);
 };
 
-inline vector2d operator/(float lhs, const vector2d& rhs)
+inline Vector2D operator/(float lhs, const Vector2D& rhs)
 {
     return rhs.operator/(rhs);
 }
 
-inline vector2d operator*(float lhs, const vector2d& rhs)
+inline Vector2D operator*(float lhs, const Vector2D& rhs)
 {
     return rhs.operator*(rhs);
 }
 
-inline bool operator==(const  vector2d& lhs, const  vector2d& rhs)
+inline bool operator==(const  Vector2D& lhs, const  Vector2D& rhs)
 {
     return lhs.operator==(rhs);
 }
 
-inline bool operator!=(const  vector2d& lhs, const  vector2d& rhs)
+inline bool operator!=(const  Vector2D& lhs, const  Vector2D& rhs)
 {
     return lhs.operator!=(rhs);
 }
 
+}

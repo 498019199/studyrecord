@@ -2,11 +2,14 @@
 #include <cassert>
 
 #include <math/vector4d.h>
-static const vector4d zero_vector(0, 0, 0, 0);
-static const vector4d unit_vector(1, 1, 1, 1);
+namespace MathWorker
+{
+
+static const Vector4D zero_vector(0, 0, 0, 0);
+static const Vector4D unit_vector(1, 1, 1, 1);
 
 
-vector4d& vector4d::operator=(const vector4d& rhs) 
+Vector4D& Vector4D::operator=(const Vector4D& rhs) 
 {
     if (this != &rhs)
     {
@@ -18,13 +21,13 @@ vector4d& vector4d::operator=(const vector4d& rhs)
     return *this;
 }
 
-float vector4d::operator[](int32_t index) const
+float Vector4D::operator[](int32_t index) const
 {
     assert(index >= 0 && index < 4);
     return (&x)[index];
 }
 
-vector4d& vector4d::operator=(const vector4d&& rhs) 
+Vector4D& Vector4D::operator=(const Vector4D&& rhs) 
 {
     if (this != &rhs)
     {
@@ -36,49 +39,49 @@ vector4d& vector4d::operator=(const vector4d&& rhs)
     return *this;
 }
 
-vector4d vector4d::operator-() const
+Vector4D Vector4D::operator-() const
 {
-    return vector4d(-x, -y, -z, -w);
+    return Vector4D(-x, -y, -z, -w);
 }
 
-vector4d vector4d::operator+(const vector4d& rhs) const
+Vector4D Vector4D::operator+(const Vector4D& rhs) const
 {
-    return vector4d(x + rhs.x, y + rhs.y, z + rhs.z, w + rhs.w);
+    return Vector4D(x + rhs.x, y + rhs.y, z + rhs.z, w + rhs.w);
 }
 
-vector4d vector4d::operator-(const  vector4d& rhs) const
+Vector4D Vector4D::operator-(const  Vector4D& rhs) const
 {
-    return vector4d(x - rhs.x, y - rhs.y, z - rhs.z, w - rhs.w);
+    return Vector4D(x - rhs.x, y - rhs.y, z - rhs.z, w - rhs.w);
 }
 
-vector4d vector4d::operator*(const  vector4d& rhs) const
+Vector4D Vector4D::operator*(const  Vector4D& rhs) const
 {
-    return vector4d(x * rhs.x, y * rhs.y, z * rhs.z, w * rhs.w);
+    return Vector4D(x * rhs.x, y * rhs.y, z * rhs.z, w * rhs.w);
 }
 
-vector4d vector4d::operator/(const  vector4d& rhs) const
+Vector4D Vector4D::operator/(const  Vector4D& rhs) const
 {
-    return vector4d(x / rhs.x, y / rhs.y, z / rhs.z, w / rhs.w);
+    return Vector4D(x / rhs.x, y / rhs.y, z / rhs.z, w / rhs.w);
 }
 
-vector4d vector4d::operator*(float rhs) const
+Vector4D Vector4D::operator*(float rhs) const
 {
-    return vector4d(x * rhs, y * rhs, z * rhs, w * rhs);
+    return Vector4D(x * rhs, y * rhs, z * rhs, w * rhs);
 }
 
-vector4d vector4d::operator/(float rhs) const
+Vector4D Vector4D::operator/(float rhs) const
 {
-    return vector4d(x / rhs, y / rhs, z / rhs, z / rhs);
+    return Vector4D(x / rhs, y / rhs, z / rhs, z / rhs);
 }
 
-float vector4d::operator|(const vector4d& rhs) const
+float Vector4D::operator|(const Vector4D& rhs) const
 {
     return x * rhs.x + y * rhs.y + z * rhs.z + w * rhs.w;
 }
 
-vector4d vector4d::operator^(const vector4d& rhs) const
+Vector4D Vector4D::operator^(const Vector4D& rhs) const
 {
-	return vector4d(
+	return Vector4D(
         (y * rhs.z - z * rhs.y),
 		(z * rhs.x - x * rhs.z),
 		(x * rhs.y - y * rhs.x),
@@ -86,7 +89,7 @@ vector4d vector4d::operator^(const vector4d& rhs) const
         );
 }
 
-vector4d vector4d::operator+=(const  vector4d& rhs) 
+Vector4D Vector4D::operator+=(const  Vector4D& rhs) 
 {
     x += rhs.x;
     y += rhs.y;
@@ -95,7 +98,7 @@ vector4d vector4d::operator+=(const  vector4d& rhs)
     return *this;
 }
 
-vector4d vector4d::operator-=(const  vector4d& rhs) 
+Vector4D Vector4D::operator-=(const  Vector4D& rhs) 
 {
     x -= rhs.x;
     y -= rhs.y;
@@ -104,7 +107,7 @@ vector4d vector4d::operator-=(const  vector4d& rhs)
     return *this;
 }
 
-vector4d vector4d::operator*=(const  vector4d& rhs) 
+Vector4D Vector4D::operator*=(const  Vector4D& rhs) 
 {
     x *= rhs.x;
     y *= rhs.y;
@@ -113,7 +116,7 @@ vector4d vector4d::operator*=(const  vector4d& rhs)
     return *this;
 }
 
-vector4d vector4d::operator/=(const  vector4d& rhs)
+Vector4D Vector4D::operator/=(const  Vector4D& rhs)
 {
     x /= rhs.x;
     y /= rhs.y;
@@ -122,7 +125,7 @@ vector4d vector4d::operator/=(const  vector4d& rhs)
     return *this;
 }
 
-vector4d vector4d::operator*=(float rhs) 
+Vector4D Vector4D::operator*=(float rhs) 
 {
     x *= rhs;
     y *= rhs;
@@ -131,7 +134,7 @@ vector4d vector4d::operator*=(float rhs)
     return *this;
 }
 
-vector4d vector4d::operator/=(float rhs) 
+Vector4D Vector4D::operator/=(float rhs) 
 {
     x /= rhs;
     y /= rhs;
@@ -140,29 +143,29 @@ vector4d vector4d::operator/=(float rhs)
     return *this;
 }
 
-std::ostream& operator<<(std::ostream& os, const  vector4d& lhs)
+std::ostream& operator<<(std::ostream& os, const  Vector4D& lhs)
 {
     os << lhs.x << " " << lhs.y << " " << lhs.z << " " << lhs.w;
     return os;
 }
 
-bool vector4d::is_zero() const
+bool Vector4D::is_zero() const
 {
     return x == 0.f && y == 0.f && z == 0.f && w == 0.f;
 }
 
-bool vector4d::operator==(const  vector4d& rhs) const
+bool Vector4D::operator==(const  Vector4D& rhs) const
 {
     return this->x == rhs.x && this->y == rhs.y && 
         this->z == rhs.z && this->w == rhs.w;
 }
 
-bool vector4d::operator!=(const  vector4d& rhs) const
+bool Vector4D::operator!=(const  Vector4D& rhs) const
 {
     return !(this->operator==(rhs));
 }
 
-void vector4d::normalize()
+void Vector4D::normalize()
 {
     float v = std::sqrt(x*x + y*y);
     x = x/v;
@@ -171,35 +174,36 @@ void vector4d::normalize()
     w = w/v;
 }
 
-vector4d normalize(const vector4d& rhs)
+Vector4D normalize(const Vector4D& rhs)
 {
     float v = std::sqrt(rhs.x * rhs.x + rhs.y * rhs.y + rhs.z * rhs.z + rhs.w * rhs.w);
-    return vector4d(rhs.x / v , rhs.y / v, rhs.z / v, rhs.w / v);
+    return Vector4D(rhs.x / v , rhs.y / v, rhs.z / v, rhs.w / v);
 }
 
 // 距离
-float vector4d::distance(const  vector4d& lhs, const vector4d& rhs)
+float Vector4D::distance(const  Vector4D& lhs, const Vector4D& rhs)
 {
-    vector4d tmp(lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z, lhs.w - rhs.w);
+    Vector4D tmp(lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z, lhs.w - rhs.w);
     return std::sqrt(tmp.x * tmp.x + tmp.y * tmp.y + tmp.z * tmp.z + tmp.w * tmp.w);
 }
 
-vector4d vector4d::cross(const vector4d& rhs)
+Vector4D Vector4D::cross(const Vector4D& rhs)
 {
     return this->operator^(rhs);
 }
 
-vector4d vector4d::cross(const  vector4d& lhs, const vector4d& rhs)
+Vector4D Vector4D::cross(const  Vector4D& lhs, const Vector4D& rhs)
 {
     return lhs.operator^(rhs);
 }
 
-float vector4d::dot(const vector4d& rhs)
+float Vector4D::dot(const Vector4D& rhs)
 {
     return this->operator|(rhs);
 }
 
-float vector4d::dot(const  vector4d& lhs, const vector4d& rhs)
+float Vector4D::dot(const  Vector4D& lhs, const Vector4D& rhs)
 {
     return lhs.operator|(rhs);
+}
 }

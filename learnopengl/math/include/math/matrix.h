@@ -1,5 +1,8 @@
 #pragma once
 
+namespace MathWorker
+{
+
 struct matrix
 {
 public:
@@ -9,3 +12,4 @@ public:
     };
     
 };
+}

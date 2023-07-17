@@ -2,11 +2,13 @@
 #include <cassert>
 
 #include <math/vector3d.h>
-static const vector3d zero_vector(0, 0, 0);
-static const vector3d unit_vector(1, 1, 1);
+namespace MathWorker
+{
+static const Vector3D zero_vector(0, 0, 0);
+static const Vector3D unit_vector(1, 1, 1);
 
 
-vector3d& vector3d::operator=(const vector3d& rhs) 
+Vector3D& Vector3D::operator=(const Vector3D& rhs) 
 {
     if (this != &rhs)
     {
@@ -17,13 +19,13 @@ vector3d& vector3d::operator=(const vector3d& rhs)
     return *this;
 }
 
-float vector3d::operator[](int32_t index) const
+float Vector3D::operator[](int32_t index) const
 {
     assert(index >= 0 && index < 3);
     return (&x)[index];
 }
 
-vector3d& vector3d::operator=(const vector3d&& rhs) 
+Vector3D& Vector3D::operator=(const Vector3D&& rhs) 
 {
     if (this != &rhs)
     {
@@ -34,56 +36,56 @@ vector3d& vector3d::operator=(const vector3d&& rhs)
     return *this;
 }
 
-vector3d vector3d::operator-() const
+Vector3D Vector3D::operator-() const
 {
-    return vector3d(-x, -y, -z);
+    return Vector3D(-x, -y, -z);
 }
 
-vector3d vector3d::operator+(const vector3d& rhs) const
+Vector3D Vector3D::operator+(const Vector3D& rhs) const
 {
-    return vector3d(x + rhs.x, y + rhs.y, z + rhs.z);
+    return Vector3D(x + rhs.x, y + rhs.y, z + rhs.z);
 }
 
-vector3d vector3d::operator-(const  vector3d& rhs) const
+Vector3D Vector3D::operator-(const  Vector3D& rhs) const
 {
-    return vector3d(x - rhs.x, y - rhs.y, z - rhs.z);
+    return Vector3D(x - rhs.x, y - rhs.y, z - rhs.z);
 }
 
-vector3d vector3d::operator*(const  vector3d& rhs) const
+Vector3D Vector3D::operator*(const  Vector3D& rhs) const
 {
-    return vector3d(x * rhs.x, y * rhs.y, z * rhs.z);
+    return Vector3D(x * rhs.x, y * rhs.y, z * rhs.z);
 }
 
-vector3d vector3d::operator/(const  vector3d& rhs) const
+Vector3D Vector3D::operator/(const  Vector3D& rhs) const
 {
-    return vector3d(x / rhs.x, y / rhs.y, z / rhs.z);
+    return Vector3D(x / rhs.x, y / rhs.y, z / rhs.z);
 }
 
-vector3d vector3d::operator*(float rhs) const
+Vector3D Vector3D::operator*(float rhs) const
 {
-    return vector3d(x * rhs, y * rhs, z * rhs);
+    return Vector3D(x * rhs, y * rhs, z * rhs);
 }
 
-vector3d vector3d::operator/(float rhs) const
+Vector3D Vector3D::operator/(float rhs) const
 {
-    return vector3d(x / rhs, y / rhs, z / rhs);
+    return Vector3D(x / rhs, y / rhs, z / rhs);
 }
 
-float vector3d::operator|(const vector3d& rhs) const
+float Vector3D::operator|(const Vector3D& rhs) const
 {
     return x * rhs.x + y * rhs.y + z * rhs.z;
 }
 
-vector3d vector3d::operator^(const vector3d& rhs) const
+Vector3D Vector3D::operator^(const Vector3D& rhs) const
 {
-    return vector3d(
+    return Vector3D(
         (y * rhs.z - z * rhs.y),
         (z * rhs.x - x * rhs.z),
         (x * rhs.y - y * rhs.x)
     );
 }
 
-vector3d vector3d::operator+=(const  vector3d& rhs) 
+Vector3D Vector3D::operator+=(const  Vector3D& rhs) 
 {
     x += rhs.x;
     y += rhs.y;
@@ -91,7 +93,7 @@ vector3d vector3d::operator+=(const  vector3d& rhs)
     return *this;
 }
 
-vector3d vector3d::operator-=(const  vector3d& rhs) 
+Vector3D Vector3D::operator-=(const  Vector3D& rhs) 
 {
     x -= rhs.x;
     y -= rhs.y;
@@ -99,7 +101,7 @@ vector3d vector3d::operator-=(const  vector3d& rhs)
     return *this;
 }
 
-vector3d vector3d::operator*=(const  vector3d& rhs) 
+Vector3D Vector3D::operator*=(const  Vector3D& rhs) 
 {
     x *= rhs.x;
     y *= rhs.y;
@@ -107,7 +109,7 @@ vector3d vector3d::operator*=(const  vector3d& rhs)
     return *this;
 }
 
-vector3d vector3d::operator/=(const  vector3d& rhs)
+Vector3D Vector3D::operator/=(const  Vector3D& rhs)
 {
     x /= rhs.x;
     y /= rhs.y;
@@ -115,7 +117,7 @@ vector3d vector3d::operator/=(const  vector3d& rhs)
     return *this;
 }
 
-vector3d vector3d::operator*=(float rhs) 
+Vector3D Vector3D::operator*=(float rhs) 
 {
     x *= rhs;
     y *= rhs;
@@ -123,7 +125,7 @@ vector3d vector3d::operator*=(float rhs)
     return *this;
 }
 
-vector3d vector3d::operator/=(float rhs) 
+Vector3D Vector3D::operator/=(float rhs) 
 {
     x /= rhs;
     y /= rhs;
@@ -131,28 +133,28 @@ vector3d vector3d::operator/=(float rhs)
     return *this;
 }
 
-std::ostream& operator<<(std::ostream& os, const  vector3d& lhs) 
+std::ostream& operator<<(std::ostream& os, const  Vector3D& lhs) 
 {
     os << lhs.x << " " << lhs.y << " " << lhs.z;
     return os;
 }
 
-bool vector3d::is_zero() const
+bool Vector3D::is_zero() const
 {
     return x == 0.f && y == 0.f && z == 0.f;
 }
 
-bool vector3d::operator==(const  vector3d& rhs) const
+bool Vector3D::operator==(const  Vector3D& rhs) const
 {
     return this->x == rhs.x && this->y == rhs.y && this->z == rhs.z;
 }
 
-bool vector3d::operator!=(const  vector3d& rhs) const
+bool Vector3D::operator!=(const  Vector3D& rhs) const
 {
     return !(this->operator==(rhs));
 }
 
-vector3d vector3d::normalize()
+Vector3D Vector3D::normalize()
 {
     float v = std::sqrt(x*x + y*y);
     x = x/v;
@@ -161,35 +163,36 @@ vector3d vector3d::normalize()
     return *this;
 }
 
-vector3d normalize(const vector3d& rhs)
+Vector3D normalize(const Vector3D& rhs)
 {
     float v = std::sqrt(rhs.x * rhs.x + rhs.y * rhs.y + rhs.z * rhs.z);
-    return vector3d(rhs.x / v , rhs.y / v, rhs.z / v);
+    return Vector3D(rhs.x / v , rhs.y / v, rhs.z / v);
 }
 
 // 距离
-float vector3d::distance(const  vector3d& lhs, const vector3d& rhs)
+float Vector3D::distance(const  Vector3D& lhs, const Vector3D& rhs)
 {
-    vector3d tmp(lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z);
+    Vector3D tmp(lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z);
     return std::sqrt(tmp.x * tmp.x + tmp.y * tmp.y + tmp.z * tmp.z);
 }
 
-vector3d vector3d::cross(const vector3d& rhs)
+Vector3D Vector3D::cross(const Vector3D& rhs)
 {
     return this->operator^(rhs);
 }
 
-vector3d vector3d::cross(const  vector3d& lhs, const vector3d& rhs)
+Vector3D Vector3D::cross(const  Vector3D& lhs, const Vector3D& rhs)
 {
     return lhs.operator^(rhs);
 }
 
-float vector3d::dot(const vector3d& rhs)
+float Vector3D::dot(const Vector3D& rhs)
 {
     return this->operator|(rhs);
 }
 
-float vector3d::dot(const  vector3d& lhs, const vector3d& rhs)
+float Vector3D::dot(const  Vector3D& lhs, const Vector3D& rhs)
 {
     return lhs.operator|(rhs);
+}
 }
