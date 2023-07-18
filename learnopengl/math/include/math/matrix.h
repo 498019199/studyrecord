@@ -3,7 +3,7 @@
 namespace MathWorker
 {
 
-struct matrix
+struct Matrix
 {
 public:
     union 

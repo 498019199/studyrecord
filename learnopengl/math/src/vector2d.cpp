@@ -137,7 +137,7 @@ std::ostream& operator<<(std::ostream& os, const  Vector2D& lhs)
     return os;
 }
 
-bool Vector2D::is_zero() const
+bool Vector2D::IsZero() const
 {
     return x == 0.f && y == 0.f;
 }
@@ -152,36 +152,36 @@ bool Vector2D::operator!=(const  Vector2D& rhs) const
     return !(this->operator==(rhs));
 }
 
-void Vector2D::normalize()
+void Vector2D::Normalize()
 {
     float v = std::sqrt(x*x + y*y);
     x = x/v;
     y = y/v;
 }
 
-Vector2D normalize(const Vector2D& rhs)
+Vector2D Normalize(const Vector2D& rhs)
 {
     float v = std::sqrt(rhs.x * rhs.x + rhs.y * rhs.y);
     return Vector2D(rhs.x / v , rhs.y / v);
 }
 
 
-float Vector2D::cross(const Vector2D& rhs)
+float Vector2D::Cross(const Vector2D& rhs)
 {
     return this->operator^(rhs);
 }
 
-float Vector2D::cross(const  Vector2D& lhs, const Vector2D& rhs)
+float Vector2D::Cross(const  Vector2D& lhs, const Vector2D& rhs)
 {
     return lhs.operator^(rhs);
 }
 
-float Vector2D::dot(const Vector2D& rhs)
+float Vector2D::Dot(const Vector2D& rhs)
 {
     return this->operator|(rhs);
 }
 
-float Vector2D::dot(const  Vector2D& lhs, const Vector2D& rhs)
+float Vector2D::Dot(const  Vector2D& lhs, const Vector2D& rhs)
 {
     return lhs.operator|(rhs);
 }

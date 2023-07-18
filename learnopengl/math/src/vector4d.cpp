@@ -149,7 +149,7 @@ std::ostream& operator<<(std::ostream& os, const  Vector4D& lhs)
     return os;
 }
 
-bool Vector4D::is_zero() const
+bool Vector4D::IsZero() const
 {
     return x == 0.f && y == 0.f && z == 0.f && w == 0.f;
 }
@@ -165,7 +165,7 @@ bool Vector4D::operator!=(const  Vector4D& rhs) const
     return !(this->operator==(rhs));
 }
 
-void Vector4D::normalize()
+void Vector4D::Normalize()
 {
     float v = std::sqrt(x*x + y*y);
     x = x/v;
@@ -174,28 +174,28 @@ void Vector4D::normalize()
     w = w/v;
 }
 
-Vector4D normalize(const Vector4D& rhs)
+Vector4D Normalize(const Vector4D& rhs)
 {
     float v = std::sqrt(rhs.x * rhs.x + rhs.y * rhs.y + rhs.z * rhs.z + rhs.w * rhs.w);
     return Vector4D(rhs.x / v , rhs.y / v, rhs.z / v, rhs.w / v);
 }
 
-Vector4D Vector4D::cross(const Vector4D& rhs)
+Vector4D Vector4D::Cross(const Vector4D& rhs)
 {
     return this->operator^(rhs);
 }
 
-Vector4D Vector4D::cross(const  Vector4D& lhs, const Vector4D& rhs)
+Vector4D Vector4D::Cross(const  Vector4D& lhs, const Vector4D& rhs)
 {
     return lhs.operator^(rhs);
 }
 
-float Vector4D::dot(const Vector4D& rhs)
+float Vector4D::Dot(const Vector4D& rhs)
 {
     return this->operator|(rhs);
 }
 
-float Vector4D::dot(const  Vector4D& lhs, const Vector4D& rhs)
+float Vector4D::Dot(const  Vector4D& lhs, const Vector4D& rhs)
 {
     return lhs.operator|(rhs);
 }

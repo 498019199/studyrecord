@@ -57,21 +57,21 @@ public:
 
     friend std::ostream& operator<<(std::ostream& os, const  Vector4D& lhs); 
 
-    bool is_zero() const;
+    bool IsZero() const;
     bool operator==(const  Vector4D& rhs) const;
     bool operator!=(const  Vector4D& rhs) const;
 
     // 向量标准化
-    void normalize();
-    static Vector4D normalize(const Vector4D& rhs);
+    void Normalize();
+    static Vector4D Normalize(const Vector4D& rhs);
 
     // 叉积
-    Vector4D cross(const Vector4D& rhs);
-    static Vector4D cross(const  Vector4D& lhs, const Vector4D& rhs);
+    Vector4D Cross(const Vector4D& rhs);
+    static Vector4D Cross(const  Vector4D& lhs, const Vector4D& rhs);
 
     // 点积
-    float dot(const Vector4D& rhs);
-    static float dot(const  Vector4D& lhs, const Vector4D& rhs);
+    float Dot(const Vector4D& rhs);
+    static float Dot(const  Vector4D& lhs, const Vector4D& rhs);
 };
 
 inline Vector4D operator/(float lhs, const Vector4D& rhs)

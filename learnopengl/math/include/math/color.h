@@ -3,7 +3,7 @@
 namespace MathWorker
 {
 
-struct color
+struct Color
 {
 public:
 };

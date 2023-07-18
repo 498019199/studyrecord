@@ -3,7 +3,7 @@
 namespace MathWorker
 {
 
-struct quaternion
+struct Quaternion
 {
 public:
     float x = 0.f;
@@ -13,10 +13,10 @@ public:
 
 public:
     // (0, 0, 0, 0)
-    static quaternion zero_quat;
+    static Quaternion ZeroQuat;
 
 public:
-    explicit quaternion(float in_x, float in_y, float in_z, float in_w)
+    explicit Quaternion(float in_x, float in_y, float in_z, float in_w)
         :x(in_x), y(in_y), z(in_z), w(in_w) {}
 };
 }

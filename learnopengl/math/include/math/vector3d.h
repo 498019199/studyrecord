@@ -54,23 +54,23 @@ public:
     Vector3D operator*=(float rhs);
     Vector3D operator/=(float rhs);
 
-    bool is_zero() const;
+    bool IsZero() const;
     bool operator==(const  Vector3D& rhs) const;
     bool operator!=(const  Vector3D& rhs) const;
 
     friend std::ostream& operator<<(std::ostream& os, const  Vector3D& lhs);
 
     // 向量标准化
-    Vector3D normalize();
-    static Vector3D normalize(const Vector3D& rhs);
+    Vector3D Normalize();
+    static Vector3D Normalize(const Vector3D& rhs);
 
     // 叉积
-    Vector3D cross(const Vector3D& rhs);
-    static Vector3D cross(const  Vector3D& lhs, const Vector3D& rhs);
+    Vector3D Cross(const Vector3D& rhs);
+    static Vector3D Cross(const  Vector3D& lhs, const Vector3D& rhs);
 
     // 点积
-    float dot(const Vector3D& rhs);
-    static float dot(const  Vector3D& lhs, const Vector3D& rhs);
+    float Dot(const Vector3D& rhs);
+    static float Dot(const  Vector3D& lhs, const Vector3D& rhs);
 };
 
 inline Vector3D operator/(float lhs, const Vector3D& rhs)

@@ -54,18 +54,18 @@ public:
 
     friend std::ostream& operator<<(std::ostream& os, const  Vector2D& lhs); 
 
-    bool is_zero() const;
+    bool IsZero() const;
     bool operator==(const  Vector2D& rhs) const;
     bool operator!=(const  Vector2D& rhs) const;
 
-    void normalize();
-    static Vector2D normalize(const Vector2D& rhs);
+    void Normalize();
+    static Vector2D Normalize(const Vector2D& rhs);
 
-    float cross(const Vector2D& rhs);
-    static float cross(const  Vector2D& lhs, const Vector2D& rhs);
+    float Cross(const Vector2D& rhs);
+    static float Cross(const  Vector2D& lhs, const Vector2D& rhs);
 
-    float dot(const Vector2D& rhs);
-    static float dot(const  Vector2D& lhs, const Vector2D& rhs);
+    float Dot(const Vector2D& rhs);
+    static float Dot(const  Vector2D& lhs, const Vector2D& rhs);
 };
 
 inline Vector2D operator/(float lhs, const Vector2D& rhs)

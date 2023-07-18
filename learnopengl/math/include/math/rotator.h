@@ -3,7 +3,7 @@
 namespace MathWorker
 {
 
-struct rotator
+struct Rotator
 {
 public:
     float pitch = 0.f;
@@ -12,10 +12,10 @@ public:
 
 public:
     // (0, 0, 0)
-    static rotator zero_rotator;
+    static Rotator ZeroRotator;
 
 public:
-    explicit rotator(float in_x, float in_y, float in_z)
+    explicit Rotator(float in_x, float in_y, float in_z)
         :pitch(in_x), yaw(in_y), roll(in_z) {}
 };
 }

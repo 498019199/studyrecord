@@ -32,14 +32,14 @@ void checkvecotr()
 	std::cout << v << std::endl;
 
 	// inner product
-	std::cout << v.dot(u) << std::endl;
-	std::cout << Vector3D::dot(v, u) << std::endl;
+	std::cout << v.Dot(u) << std::endl;
+	std::cout << Vector3D::Dot(v, u) << std::endl;
 	
 	// norm
 	// std::cout << v.norm2() << std::endl;
 	// std::cout << v.norm() << std::endl;
-	std::cout << v.normalize() << std::endl;
-	v.normalize();
+	std::cout << v.Normalize() << std::endl;
+	v.Normalize();
 	std::cout << v << std::endl;
 	std::cout << v[2] << std::endl;
 
@@ -47,12 +47,12 @@ void checkvecotr()
 	//std::cout << vecf3::cos_theta(v, u) << std::endl;
 	//std::cout << v.cos_theta(u) << std::endl;
 
-	// cross
-	std::cout << Vector3D::cross(v, u) << std::endl;
-	std::cout << v.cross(u) << std::endl;
+	// Cross
+	std::cout << Vector3D::Cross(v, u) << std::endl;
+	std::cout << v.Cross(u) << std::endl;
 	//
-	std::cout << Vector3D::dot(v, u) << std::endl;
-	std::cout << v.dot(u) << std::endl;
+	std::cout << Vector3D::Dot(v, u) << std::endl;
+	std::cout << v.Dot(u) << std::endl;
 
 	// lerp
 	// std::cout << vecf3::lerp(v, u, 0.5) << std::endl;
@@ -64,8 +64,8 @@ void checkvecotr()
 	std::cout << iv * 7 << std::endl;
 
 	// project, perpendicular
-	//std::cout << v.project(u.normalize()) << std::endl;
-	//std::cout << v.perpendicular(u.normalize()) << std::endl;
+	//std::cout << v.project(u.Normalize()) << std::endl;
+	//std::cout << v.perpendicular(u.Normalize()) << std::endl;
 
 	Vector3D vs[4];
 
