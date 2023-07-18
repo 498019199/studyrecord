@@ -60,9 +60,18 @@ public:
     float Cross(const Vector2D& rhs);
     float Dot(const Vector2D& rhs);
 
+    // 标准化
     static Vector2D Normalize(const Vector2D& rhs);
+    // 叉积
     static float Cross(const  Vector2D& lhs, const Vector2D& rhs);
+    // 点积
     static float Dot(const  Vector2D& lhs, const Vector2D& rhs);
+    // 距离
+    static float Distance(const  Vector2D& lhs, const Vector2D& rhs);
+    // 返回由两个向量的最大分量组成的向量。
+    static Vector2D Min(const Vector2D& lhs, const Vector2D& rhs);
+    // 返回由两个向量的最小分量组成的向量。
+    static Vector2D  Max(const Vector2D& lhs, const Vector2D& rhs);
 };
 
 inline Vector2D operator/(float lhs, const Vector2D& rhs)

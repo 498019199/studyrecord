@@ -70,6 +70,11 @@ public:
     static Vector3D Normalize(const Vector3D& rhs);
     static Vector3D Cross(const  Vector3D& lhs, const Vector3D& rhs);
     static float Dot(const  Vector3D& lhs, const Vector3D& rhs);
+    float Distance(const  Vector3D& lhs, const Vector3D& rhs);
+    // 返回由两个向量的最大分量组成的向量。
+    static Vector3D Min(const Vector3D& lhs, const Vector3D& rhs);
+    // 返回由两个向量的最小分量组成的向量。
+    static Vector3D  Max(const Vector3D& lhs, const Vector3D& rhs);
 };
 
 inline Vector3D operator/(float lhs, const Vector3D& rhs)

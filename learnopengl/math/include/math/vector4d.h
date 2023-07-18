@@ -68,6 +68,11 @@ public:
     static Vector4D Normalize(const Vector4D& rhs);
     static Vector4D Cross(const  Vector4D& lhs, const Vector4D& rhs);
     static float Dot(const  Vector4D& lhs, const Vector4D& rhs);
+    float Distance(const  Vector4D& lhs, const Vector4D& rhs);
+    // 返回由两个向量的最大分量组成的向量。
+    static Vector4D Min(const Vector4D& lhs, const Vector4D& rhs);
+    // 返回由两个向量的最小分量组成的向量。
+    static Vector4D  Max(const Vector4D& lhs, const Vector4D& rhs);
 };
 
 inline Vector4D operator/(float lhs, const Vector4D& rhs)

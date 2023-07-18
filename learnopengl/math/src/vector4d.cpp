@@ -199,4 +199,30 @@ float Vector4D::Dot(const  Vector4D& lhs, const Vector4D& rhs)
 {
     return lhs.operator|(rhs);
 }
+
+float Distance(const  Vector4D& lhs, const Vector4D& rhs)
+{
+    Vector4D tmp(lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z, lhs.w - rhs.w);
+    return std::sqrt(tmp.x * tmp.x + tmp.y * tmp.y + tmp.z * tmp.z + tmp.w * tmp.w);
+}
+
+Vector4D Min(const Vector4D& lhs, const Vector4D& rhs)
+{
+    return Vector4D(
+        std::min<float>(lhs.x, rhs.x),
+        std::min<float>(lhs.y, rhs.y),
+        std::min<float>(lhs.z, rhs.z),
+        std::min<float>(lhs.w, rhs.w),
+    );
+}
+
+Vector4D  Max(const Vector4D& lhs, const Vector4D& rhs)
+{
+    return Vector4D(
+        std::max<float>(lhs.x, rhs.x),
+        std::max<float>(lhs.y, rhs.y),
+        std::max<float>(lhs.z, rhs.z),
+        std::max<float>(lhs.w, rhs.w)
+    );
+}
 }

@@ -183,4 +183,29 @@ float Vector2D::Dot(const  Vector2D& lhs, const Vector2D& rhs)
 {
     return lhs.operator|(rhs);
 }
+
+float Vector2D::Distance(const  Vector2D& lhs, const Vector2D& rhs)
+{
+    Vector2D tmp(lhs.x - rhs.x, lhs.y - rhs.y);
+    return std::sqrt(tmp.x * tmp.x + tmp.y * tmp.y);
+}
+
+Vector2D Min(const Vector2D& lhs, const Vector2D& rhs)
+{
+    return Vector2D(
+        std::min<float>(lhs.x, rhs.x),
+        std::min<float>(lhs.y, rhs.y)
+    );
+}
+
+Vector2D  Max(const Vector2D& lhs, const Vector2D& rhs)
+{
+    return Vector2D(
+        std::max<float>(lhs.x, rhs.x),
+        std::max<float>(lhs.y, rhs.y)
+    );
+}
+
+
+
 }

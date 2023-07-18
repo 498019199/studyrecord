@@ -186,4 +186,28 @@ float Vector3D::Dot(const  Vector3D& lhs, const Vector3D& rhs)
 {
     return lhs.operator|(rhs);
 }
+
+float Vector3D::Distance(const  Vector3D& lhs, const Vector3D& rhs)
+{
+    Vector3D tmp(lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z);
+    return std::sqrt(tmp.x * tmp.x + tmp.y * tmp.y + tmp.z * tmp.z);
+}
+
+Vector3D Min(const Vector3D& lhs, const Vector3D& rhs)
+{
+    return Vector3D(
+        std::min<float>(lhs.x, rhs.x),
+        std::min<float>(lhs.y, rhs.y),
+        std::min<float>(lhs.z, rhs.z)
+    );
+}
+
+Vector3D  Max(const Vector3D& lhs, const Vector3D& rhs)
+{
+    return Vector3D(
+        std::max<float>(lhs.x, rhs.x),
+        std::max<float>(lhs.y, rhs.y),
+        std::max<float>(lhs.z, rhs.z)
+    );
+}
 }
