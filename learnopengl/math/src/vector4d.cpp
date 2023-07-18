@@ -212,7 +212,7 @@ Vector4D Min(const Vector4D& lhs, const Vector4D& rhs)
         std::min<float>(lhs.x, rhs.x),
         std::min<float>(lhs.y, rhs.y),
         std::min<float>(lhs.z, rhs.z),
-        std::min<float>(lhs.w, rhs.w),
+        std::min<float>(lhs.w, rhs.w)
     );
 }
 
