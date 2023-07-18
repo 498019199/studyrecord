@@ -55,22 +55,18 @@ public:
     Vector4D operator*=(float rhs);
     Vector4D operator/=(float rhs);
 
-    friend std::ostream& operator<<(std::ostream& os, const  Vector4D& lhs); 
-
-    bool IsZero() const;
     bool operator==(const  Vector4D& rhs) const;
     bool operator!=(const  Vector4D& rhs) const;
 
-    // 向量标准化
+    friend std::ostream& operator<<(std::ostream& os, const  Vector4D& lhs); 
+
+    bool IsZero() const;
     void Normalize();
-    static Vector4D Normalize(const Vector4D& rhs);
-
-    // 叉积
     Vector4D Cross(const Vector4D& rhs);
-    static Vector4D Cross(const  Vector4D& lhs, const Vector4D& rhs);
-
-    // 点积
     float Dot(const Vector4D& rhs);
+
+    static Vector4D Normalize(const Vector4D& rhs);
+    static Vector4D Cross(const  Vector4D& lhs, const Vector4D& rhs);
     static float Dot(const  Vector4D& lhs, const Vector4D& rhs);
 };
 

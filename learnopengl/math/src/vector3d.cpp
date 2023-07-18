@@ -2,12 +2,10 @@
 #include <cassert>
 
 #include <math/vector3d.h>
+
+
 namespace MathWorker
 {
-static const Vector3D zero_vector(0, 0, 0);
-static const Vector3D unit_vector(1, 1, 1);
-
-
 Vector3D& Vector3D::operator=(const Vector3D& rhs) 
 {
     if (this != &rhs)

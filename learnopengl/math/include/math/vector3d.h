@@ -12,10 +12,13 @@ public:
     float y = 0.f;
     float z = 0.f;
 public:
-    // (0,0,0)
-    static const Vector3D zero_vector;
-    // (1,1,1)
-    static const Vector3D unit_vector;
+    // static const Vector3D ForwardVector(0.f, 0.f, 1.f);
+    // static const Vector3D BackVector(0, 0.f, -1.f);
+    // static const Vector3D UpVector(0.f, 1.f, 0.f);
+    // static const Vector3D DownVector(0.f,-1.f, 0.f);
+    // static const Vector3D LeftVector(-1.f, 0.f, 0.f);
+    // static const Vector3D RightVector(1.f, 0.f, 0.f);
+    // static const Vector3D ZeroVector(0.f, 0.f, 0.f);
     
 public:
     // 构造
@@ -54,22 +57,18 @@ public:
     Vector3D operator*=(float rhs);
     Vector3D operator/=(float rhs);
 
-    bool IsZero() const;
     bool operator==(const  Vector3D& rhs) const;
     bool operator!=(const  Vector3D& rhs) const;
 
     friend std::ostream& operator<<(std::ostream& os, const  Vector3D& lhs);
 
-    // 向量标准化
+    bool IsZero() const;
     Vector3D Normalize();
-    static Vector3D Normalize(const Vector3D& rhs);
-
-    // 叉积
     Vector3D Cross(const Vector3D& rhs);
-    static Vector3D Cross(const  Vector3D& lhs, const Vector3D& rhs);
-
-    // 点积
     float Dot(const Vector3D& rhs);
+
+    static Vector3D Normalize(const Vector3D& rhs);
+    static Vector3D Cross(const  Vector3D& lhs, const Vector3D& rhs);
     static float Dot(const  Vector3D& lhs, const Vector3D& rhs);
 };
 

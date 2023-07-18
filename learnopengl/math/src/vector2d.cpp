@@ -4,9 +4,7 @@
 #include <math/vector2d.h>
 namespace MathWorker
 {
-
-static const Vector2D zero_vector(0,0);
-static const Vector2D unit_vector(1,1);
+static const Vector2D Zero(0,0);
 
 // Vector2D::Vector2D(std::initializer_list<float> list)
 // {

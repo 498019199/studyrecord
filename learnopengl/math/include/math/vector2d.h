@@ -4,7 +4,6 @@
 #include <iostream>
 namespace MathWorker
 {
-
 struct Vector2D
 {
 public:
@@ -12,9 +11,8 @@ public:
     float y = 0.f;
 
 public:
-    static const Vector2D zero_vector;
-    static const Vector2D unit_vector;
-    
+    static const Vector2D Zero;
+
 public:
     //构造
     Vector2D() 
@@ -54,17 +52,16 @@ public:
 
     friend std::ostream& operator<<(std::ostream& os, const  Vector2D& lhs); 
 
-    bool IsZero() const;
     bool operator==(const  Vector2D& rhs) const;
     bool operator!=(const  Vector2D& rhs) const;
 
+    bool IsZero() const;
     void Normalize();
-    static Vector2D Normalize(const Vector2D& rhs);
-
     float Cross(const Vector2D& rhs);
-    static float Cross(const  Vector2D& lhs, const Vector2D& rhs);
-
     float Dot(const Vector2D& rhs);
+
+    static Vector2D Normalize(const Vector2D& rhs);
+    static float Cross(const  Vector2D& lhs, const Vector2D& rhs);
     static float Dot(const  Vector2D& lhs, const Vector2D& rhs);
 };
 
