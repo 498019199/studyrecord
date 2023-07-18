@@ -2,7 +2,7 @@
 #include <cassert>
 
 #include <math/vector3d.h>
-
+#include <math/math.h>
 
 namespace MathWorker
 {
@@ -154,7 +154,7 @@ bool Vector3D::operator!=(const  Vector3D& rhs) const
 
 Vector3D Vector3D::Normalize()
 {
-    float v = std::sqrt(x*x + y*y);
+    static float v = std::sqrt(x*x + y*y);
     x = x/v;
     y = y/v;
     z = z/v;
@@ -163,8 +163,10 @@ Vector3D Vector3D::Normalize()
 
 Vector3D Normalize(const Vector3D& rhs)
 {
-    float v = std::sqrt(rhs.x * rhs.x + rhs.y * rhs.y + rhs.z * rhs.z);
-    return Vector3D(rhs.x / v , rhs.y / v, rhs.z / v);
+    static float SquareSum = (rhs.x * rhs.x + rhs.y * rhs.y + rhs.z * rhs.z);
+    static float Scale = InvSqrt(SquareSum);
+
+    return Vector3D(rhs.x * Scale , rhs.y * Scale, rhs.z * Scale);
 }
 
 Vector3D Vector3D::Cross(const Vector3D& rhs)

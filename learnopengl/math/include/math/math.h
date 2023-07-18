@@ -35,6 +35,9 @@ namespace MathWorker
 		return x * RAD2DEG;
 	}
     
+    // 平方根倒数算法
+    float InvSqrt(float x);
+    
     // 返回 from 与 to 之间的角度
     template<typename T>
     float Angle(const T& from, const T& to);

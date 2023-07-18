@@ -2,6 +2,7 @@
 #include <cassert>
 
 #include <math/vector2d.h>
+#include <math/math.h>
 namespace MathWorker
 {
 static const Vector2D Zero(0,0);
@@ -152,9 +153,9 @@ bool Vector2D::operator!=(const  Vector2D& rhs) const
 
 void Vector2D::Normalize()
 {
-    float v = std::sqrt(x*x + y*y);
-    x = x/v;
-    y = y/v;
+    static float Scale = InvSqrt(x*x + y*y);
+    x = x * Scale;
+    y = y * Scale;
 }
 
 Vector2D Normalize(const Vector2D& rhs)

@@ -2,6 +2,7 @@
 #include <cassert>
 
 #include <math/vector4d.h>
+#include <math/math.h>
 namespace MathWorker
 {
 
@@ -167,7 +168,7 @@ bool Vector4D::operator!=(const  Vector4D& rhs) const
 
 void Vector4D::Normalize()
 {
-    float v = std::sqrt(x*x + y*y);
+    static float v = std::sqrt(x*x + y*y);
     x = x/v;
     y = y/v;
     z = z/v;
@@ -176,8 +177,10 @@ void Vector4D::Normalize()
 
 Vector4D Normalize(const Vector4D& rhs)
 {
-    float v = std::sqrt(rhs.x * rhs.x + rhs.y * rhs.y + rhs.z * rhs.z + rhs.w * rhs.w);
-    return Vector4D(rhs.x / v , rhs.y / v, rhs.z / v, rhs.w / v);
+    static float SquareSum = (rhs.x * rhs.x + rhs.y * rhs.y + rhs.z * rhs.z + rhs.w * rhs.w);
+    static float Scale = InvSqrt(SquareSum);
+
+    return Vector4D(rhs.x * Scale , rhs.y * Scale, rhs.z * Scale, rhs.w * Scale);
 }
 
 Vector4D Vector4D::Cross(const Vector4D& rhs)
