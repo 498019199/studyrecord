@@ -5,7 +5,7 @@
 namespace MathWorker
 {
 
-struct Vector3D
+class Vector3D
 {
 public:
     float x = 0.f;

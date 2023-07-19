@@ -4,7 +4,7 @@
 #include <iostream>
 namespace MathWorker
 {
-struct Vector2D
+class Vector2D
 {
 public:
     float x = 0.f;

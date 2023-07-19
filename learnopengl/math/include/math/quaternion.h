@@ -1,7 +1,9 @@
 #pragma once
 
+
 namespace MathWorker
 {
+class Vector3D;
 
 struct Quaternion
 {
@@ -16,7 +18,15 @@ public:
     static Quaternion ZeroQuat;
 
 public:
-    explicit Quaternion(float in_x, float in_y, float in_z, float in_w)
-        :x(in_x), y(in_y), z(in_z), w(in_w) {}
+	constexpr Quaternion() noexcept
+	{
+	}
+
+	explicit constexpr Quaternion(const float * rhs) noexcept;
+	constexpr Quaternion(const Vector3D& vec, float s) noexcept;
+	Quaternion(const Quaternion & rhs) noexcept;
+	Quaternion(Quaternion&& rhs) noexcept;
+	constexpr Quaternion(float x, float y, float z, float w) noexcept;
 };
+
 }
