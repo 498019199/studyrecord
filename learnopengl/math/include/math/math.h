@@ -34,13 +34,14 @@ namespace MathWorker
 	{
 		return x * RAD2DEG;
 	}
-    
+	
     // 平方根倒数算法
     float InvSqrt(float x);
     
     // 返回 from 与 to 之间的角度
     template<typename T>
     float Angle(const T& from, const T& to);
+	
     // 	在两个点之间进行线性插值。
     template<typename T>
     T Lerp(const T& lhs, const T& rhs, float s);

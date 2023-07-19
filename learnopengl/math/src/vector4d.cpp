@@ -175,6 +175,14 @@ void Vector4D::Normalize()
     w = w/v;
 }
 
+float Vector4D::Norm(const Vector4D& lhs)
+{
+    return std::sqrt(lhs.x * lhs.x + 
+        lhs.y * lhs.y + 
+        lhs.z * lhs.z + 
+        lhs.w * lhs.w);
+}
+
 Vector4D Normalize(const Vector4D& rhs)
 {
     static float SquareSum = (rhs.x * rhs.x + rhs.y * rhs.y + rhs.z * rhs.z + rhs.w * rhs.w);

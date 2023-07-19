@@ -184,6 +184,13 @@ float Vector3D::Dot(const Vector3D& rhs)
     return this->operator|(rhs);
 }
 
+float Vector3D::Norm(const Vector3D& lsh)
+{
+    return std::sqrt(lsh.x * lsh.x + 
+        lsh.y * lsh.y + 
+        lsh.z * lsh.z);
+}
+
 float Vector3D::Dot(const  Vector3D& lhs, const Vector3D& rhs)
 {
     return lhs.operator|(rhs);

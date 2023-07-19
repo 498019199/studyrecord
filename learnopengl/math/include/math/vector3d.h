@@ -60,13 +60,16 @@ public:
     bool operator==(const  Vector3D& rhs) const;
     bool operator!=(const  Vector3D& rhs) const;
 
+    // show info x y z
     friend std::ostream& operator<<(std::ostream& os, const  Vector3D& lhs);
 
     bool IsZero() const;
     Vector3D Normalize();
     Vector3D Cross(const Vector3D& rhs);
     float Dot(const Vector3D& rhs);
-
+    
+    // 模
+    static float Norm(const Vector3D& lsh);
     static Vector3D Normalize(const Vector3D& rhs);
     static Vector3D Cross(const  Vector3D& lhs, const Vector3D& rhs);
     static float Dot(const  Vector3D& lhs, const Vector3D& rhs);
@@ -86,16 +89,4 @@ inline Vector3D operator*(float lhs, const Vector3D& rhs)
 {
     return rhs.operator*(rhs);
 }
-
-inline bool operator==(const  Vector3D& lhs, const  Vector3D& rhs)
-{
-    return lhs.operator==(rhs);
-}
-
-inline bool operator!=(const  Vector3D& lhs, const  Vector3D& rhs)
-{
-    return lhs.operator!=(rhs);
-}
-
-
 }

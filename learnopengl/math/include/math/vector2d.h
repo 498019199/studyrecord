@@ -60,8 +60,10 @@ public:
     float Cross(const Vector2D& rhs);
     float Dot(const Vector2D& rhs);
 
+    // 模
+    static float Norm(const Vector2D& lhs);
     // 标准化
-    static Vector2D Normalize(const Vector2D& rhs);
+    static Vector2D Normalize(const Vector2D& lhs);
     // 叉积
     static float Cross(const  Vector2D& lhs, const Vector2D& rhs);
     // 点积
@@ -82,16 +84,6 @@ inline Vector2D operator/(float lhs, const Vector2D& rhs)
 inline Vector2D operator*(float lhs, const Vector2D& rhs)
 {
     return rhs.operator*(rhs);
-}
-
-inline bool operator==(const  Vector2D& lhs, const  Vector2D& rhs)
-{
-    return lhs.operator==(rhs);
-}
-
-inline bool operator!=(const  Vector2D& lhs, const  Vector2D& rhs)
-{
-    return lhs.operator!=(rhs);
 }
 
 }

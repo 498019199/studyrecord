@@ -65,6 +65,8 @@ public:
     Vector4D Cross(const Vector4D& rhs);
     float Dot(const Vector4D& rhs);
 
+    // 模
+    static float Norm(const Vector4D& lhs);
     static Vector4D Normalize(const Vector4D& rhs);
     static Vector4D Cross(const  Vector4D& lhs, const Vector4D& rhs);
     static float Dot(const  Vector4D& lhs, const Vector4D& rhs);
@@ -83,16 +85,6 @@ inline Vector4D operator/(float lhs, const Vector4D& rhs)
 inline Vector4D operator*(float lhs, const Vector4D& rhs)
 {
     return rhs.operator*(rhs);
-}
-
-inline bool operator==(const  Vector4D& lhs, const  Vector4D& rhs)
-{
-    return lhs.operator==(rhs);
-}
-
-inline bool operator!=(const  Vector4D& lhs, const  Vector4D& rhs)
-{
-    return lhs.operator!=(rhs);
 }
 
 }

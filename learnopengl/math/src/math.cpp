@@ -12,18 +12,26 @@ float InvSqrt(float x)
     return x;
 }
 
-// template float Angle(const Vector2D& lsh, const Vector2D& rhs);
-// template float Angle(const Vector3D& lsh, const Vector3D& rhs);
-// template float Angle(const Vector4D& lsh, const Vector4D& rhs);
+template Vector2D Lerp(const Vector2D& lsh, const Vector2D& rhs, float s);
+template Vector3D Lerp(const Vector3D& lsh, const Vector3D& rhs, float s);
+template Vector4D Lerp(const Vector4D& lsh, const Vector4D& rhs, float s);
+template<typename T>
+T Lerp(const T& lhs, const T& rhs, float s)
+{
+    return (lhs + (rhs - lhs) * s);
+}
+
+template float Angle(const Vector2D& lsh, const Vector2D& rhs);
+template float Angle(const Vector3D& lsh, const Vector3D& rhs);
+template float Angle(const Vector4D& lsh, const Vector4D& rhs);
 template<typename T>
 float Angle(const T& lsh, const T& rsh)
 {
-    // float xn = ;
-    // return Rad2Deg(
-    //         std::acos(
-    //             T::Dot(lsh, rhs) /
-    //             ));
-    return 0;
+    float xn = T::Norm(lsh);
+    float yn = T::Norm(rsh);
+    float xyn = xn * yn;
+    float angle = std::acos((lsh | rsh) / xyn);
+    return Rad2Deg(angle);
 }
 
 }

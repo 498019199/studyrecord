@@ -151,6 +151,11 @@ bool Vector2D::operator!=(const  Vector2D& rhs) const
     return !(this->operator==(rhs));
 }
 
+float Vector2D::Norm(const Vector2D& lhs)
+{
+    return std::sqrt(lhs.x * lhs.x + lhs.y * lhs.y);
+}
+
 void Vector2D::Normalize()
 {
     static float Scale = InvSqrt(x*x + y*y);
@@ -163,7 +168,6 @@ Vector2D Normalize(const Vector2D& rhs)
     float v = std::sqrt(rhs.x * rhs.x + rhs.y * rhs.y);
     return Vector2D(rhs.x / v , rhs.y / v);
 }
-
 
 float Vector2D::Cross(const Vector2D& rhs)
 {
