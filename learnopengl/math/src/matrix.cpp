@@ -6,7 +6,10 @@ namespace MathWorker
 
 Matrix::Matrix(const float* rhs) noexcept
 {
-    
+    _11 = rhs[ 0];	_12 = rhs[ 1];	_13 = rhs[ 2];	_14 = rhs[ 3];	
+	_21 = rhs[ 4];	_22 = rhs[ 5];	_23 = rhs[ 6];	_24 = rhs[ 7];	
+	_31 = rhs[ 8];	_32 = rhs[ 9];	_33 = rhs[10];	_34 = rhs[11];	
+	_41 = rhs[12];	_42 = rhs[13];	_43 = rhs[14];	_44 = rhs[15];
 }
 
 Matrix::Matrix(const Matrix& rhs) noexcept
@@ -34,6 +37,76 @@ Matrix::Matrix(float f11, float f12, float f13, float f14,
                 _31(f31),_32(f32),_33(f33),_34(f34),
                 _41(f41),_42(f42),_43(f43),_44(f44)
 {
-    
+}
+
+Matrix& Matrix::operator=(const Matrix& rhs) noexcept
+{
+    if (this != &rhs)
+	{
+        for (size_t i = 0; i < row_num; i++)
+            for (size_t j = 0; j < row_num; j++)
+                m[i][j] += rhs.m[i][j];
+	}
+    return *this;
+}
+
+Matrix& Matrix::operator=(Matrix&& rhs) noexcept
+{
+    if (this != &rhs)
+	{
+        for (size_t i = 0; i < row_num; i++)
+            for (size_t j = 0; j < row_num; j++)
+                m[i][j] += rhs.m[i][j];
+	}
+    return *this;
+}
+
+Matrix& Matrix::operator+=(const Matrix& rhs) noexcept
+{
+    for (size_t i = 0; i < row_num; i++)
+        for (size_t j = 0; j < row_num; j++)
+            m[i][j] += rhs.m[i][j];
+    return *this;    
+}
+
+Matrix& Matrix::operator-=(const Matrix& rhs) noexcept
+{
+    for (size_t i = 0; i < row_num; i++)
+        for (size_t j = 0; j < row_num; j++)
+            m[i][j] -= rhs.m[i][j];
+    return *this;
+}
+
+Matrix& Matrix::operator*=(const Matrix& rhs) noexcept
+{
+    for (size_t i = 0; i < row_num; i++)
+        for (size_t j = 0; j < row_num; j++)
+            m[i][j] *= rhs.m[i][j];
+    return *this;      
+}
+
+Matrix& Matrix::operator/=(float rhs) noexcept
+{
+    for (size_t i = 0; i < row_num; i++)
+        for (size_t j = 0; j < row_num; j++)
+            m[i][j] = m[i][j] / rhs;
+    return *this;
+}
+
+Matrix& Matrix::operator*=(float rhs) noexcept
+{
+    for (size_t i = 0; i < row_num; i++)
+        for (size_t j = 0; j < row_num; j++)
+            m[i][j] = m[i][j] * rhs;
+    return *this;
+}
+
+Matrix Matrix::operator-() const noexcept
+{
+    auto tmp = Matrix(*this);
+    for (size_t i = 0; i < row_num; i++)
+        for (size_t j = 0; j < row_num; j++)
+            tmp.m[i][j] = -m[i][j];
+    return tmp;
 }
 }

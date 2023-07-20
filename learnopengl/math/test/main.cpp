@@ -95,12 +95,19 @@ void checkvecotr()
 
 void checkmatrix()
 {
-    std::cout << "checkmatrix sucess" << std::endl;
+    //std::cout << "checkmatrix sucess" << std::endl;
+	// test contruct
+	float a[16]= {11, 12, 13, 14,21, 22, 23, 24,31, 32, 33, 34,41, 42, 43, 44};
+	auto tmp1 = Matrix(a);
+	auto tmp2 = Matrix(tmp1);
+	auto tmp3 = Matrix(11, 12, 13, 14,21, 22, 23, 24,31, 32, 33, 34,41, 42, 43, 44);
+	Matrix tmp4 = {11, 12, 13, 14,21, 22, 23, 24,31, 32, 33, 34,41, 42, 43, 44};
 }
 
 void checkquaternion()
 {
-    std::cout << "checkquaternion sucess" << std::endl;
+    //std::cout << "checkquaternion sucess" << std::endl;
+	// test contruct
 }
 
 int main()

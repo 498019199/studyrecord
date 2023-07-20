@@ -5,6 +5,8 @@ namespace MathWorker
 
 struct Matrix
 {
+    enum  { row_num = 4, col_num = 4};
+	enum  { elem_num = row_num * col_num };
 public:
     union 
     {
@@ -29,7 +31,21 @@ public:
                 float f21, float f22, float f23, float f24,
                 float f31, float f32, float f33, float f34,
                 float f41, float f42, float f43, float f44) noexcept;
+
+    Matrix& operator=(const Matrix& rhs) noexcept;
+    Matrix& operator=(Matrix&& rhs) noexcept;
+    
+    Matrix operator-() const noexcept;
+    Matrix& operator+=(const Matrix& rhs) noexcept;
+    Matrix& operator-=(const Matrix& rhs) noexcept;
+    Matrix& operator*=(const Matrix& rhs) noexcept;
+    Matrix& operator*=(float rhs) noexcept;
+    Matrix& operator/=(float rhs) noexcept;
+
+    bool operator==(const Matrix& rhs) const noexcept;
 };
+
+
 
 
 }
