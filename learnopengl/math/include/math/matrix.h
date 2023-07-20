@@ -35,7 +35,6 @@ public:
     Matrix& operator=(const Matrix& rhs) noexcept;
     Matrix& operator=(Matrix&& rhs) noexcept;
     
-    Matrix operator-() const noexcept;
     Matrix& operator+=(const Matrix& rhs) noexcept;
     Matrix& operator-=(const Matrix& rhs) noexcept;
     Matrix& operator*=(const Matrix& rhs) noexcept;

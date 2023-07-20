@@ -100,13 +100,4 @@ Matrix& Matrix::operator*=(float rhs) noexcept
             m[i][j] = m[i][j] * rhs;
     return *this;
 }
-
-Matrix Matrix::operator-() const noexcept
-{
-    auto tmp = Matrix(*this);
-    for (size_t i = 0; i < row_num; i++)
-        for (size_t j = 0; j < row_num; j++)
-            tmp.m[i][j] = -m[i][j];
-    return tmp;
-}
 }

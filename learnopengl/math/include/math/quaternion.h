@@ -27,6 +27,21 @@ public:
 	Quaternion(const Quaternion & rhs) noexcept;
 	Quaternion(Quaternion&& rhs) noexcept;
 	constexpr Quaternion(float x, float y, float z, float w) noexcept;
-};
 
+	Quaternion& operator=(const Quaternion & rhs) noexcept;
+	Quaternion& operator=(Quaternion&& rhs) noexcept;
+
+		// 赋值操作符
+	const Quaternion& operator+=(const Quaternion & rhs) noexcept;
+	const Quaternion& operator-=(const Quaternion & rhs) noexcept;
+	const Quaternion& operator*=(const Quaternion & rhs) noexcept;
+	const Quaternion& operator*=(float rhs) noexcept;
+	const Quaternion& operator/=(float rhs) noexcept;
+	
+	// 取方向向量
+	const Vector3D GetV() const noexcept;
+	void SetV(const Vector3D& rhs) noexcept;
+
+	bool operator==(const Quaternion& rhs) const noexcept;
+};
 }

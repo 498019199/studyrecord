@@ -35,4 +35,81 @@ constexpr Quaternion::Quaternion(float x1, float y1, float z1, float w1) noexcep
     
 }
 
+Quaternion& Quaternion::operator=(const Quaternion & rhs) noexcept
+{
+	if (this != &rhs)
+    {
+        x = rhs.x; y = rhs.y; z = rhs.z, w = rhs.w;
+    }
+    return *this;
+}
+
+Quaternion& Quaternion::operator=(Quaternion&& rhs) noexcept
+{
+	if (this != &rhs)
+    {
+        x = rhs.x; y = rhs.y; z = rhs.z, w = rhs.w;
+    }
+    return *this;
+}
+
+const Quaternion& Quaternion::operator+=(const Quaternion & rhs) noexcept
+{
+	x += rhs.x;
+    y += rhs.y;
+    z += rhs.z;
+    w += rhs.w;
+    return *this;
+}
+
+const Quaternion& Quaternion::operator-=(const Quaternion & rhs) noexcept
+{
+	x -= rhs.x;
+    y -= rhs.y;
+    z -= rhs.z;
+    w -= rhs.w;
+    return *this;
+}
+
+const Quaternion& Quaternion::operator*=(const Quaternion & rhs) noexcept
+{
+	x *= rhs.x;
+    y *= rhs.y;
+    z *= rhs.z;
+    w *= rhs.w;
+    return *this;
+}
+
+const Quaternion& Quaternion::operator*=(float rhs) noexcept
+{
+	x *= rhs;
+    y *= rhs;
+    z *= rhs;
+    w *= rhs;
+    return *this;
+}
+
+const Quaternion& Quaternion::operator/=(float rhs) noexcept
+{
+	x /= rhs;
+    y /= rhs;
+    z /= rhs;
+    w /= rhs;
+    return *this;
+}
+
+const Vector3D Quaternion::GetV() const noexcept
+{
+	return Vector3D(this->x, this->y, this->z);
+}
+
+void Quaternion::SetV(const Vector3D& rhs) noexcept
+{
+	x = rhs.x; y = rhs.y; z = rhs.z;
+}
+
+bool Quaternion::operator==(const Quaternion& rhs) const noexcept
+{
+	return x == rhs.x && y == rhs.y && z == rhs.z && w == rhs.w;
+}
 }
