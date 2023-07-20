@@ -34,4 +34,23 @@ float Angle(const T& lsh, const T& rsh)
     return Rad2Deg(angle);
 }
 
+
+
+Matrix MatrixMove(float X, float Y, float Z)
+{
+    return Matrix(
+        1, 0, 0, 0,
+        0, 1, 0, 0,
+        0, 0, 1, 0,
+        X, Y, Z, 1);
+}
+
+Matrix MatrixScale(float X, float Y, float Z)
+{
+    return Matrix(
+        X, 0, 0, 0,
+        0, Y, 0, 0,
+        0, 0, Z, 0,
+        0, 0, 0, 1 );
+}
 }
