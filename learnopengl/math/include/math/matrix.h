@@ -3,7 +3,7 @@
 namespace MathWorker
 {
 
-struct Matrix
+class Matrix
 {
     enum  { row_num = 4, col_num = 4};
 	enum  { elem_num = row_num * col_num };
