@@ -51,6 +51,27 @@ Matrix MatrixScale(float X, float Y, float Z)
         X, 0, 0, 0,
         0, Y, 0, 0,
         0, 0, Z, 0,
-        0, 0, 0, 1 );
+        1, 1, 1, 1 );
+}
+
+Matrix MatrixRotateX(float X)
+{
+    float sf, sx;
+    SinCos(X, sf, sx);
+    return Matrix();
+}
+
+Matrix MatrixRotateY(float Y)
+{
+    float sf, sx;
+    SinCos(Y, sf, sx);    
+    return Matrix();
+}
+
+Matrix MatrixRotateZ(float Z)
+{
+    float sf, sx;
+    SinCos(Z, sf, sx);   
+    return Matrix();
 }
 }

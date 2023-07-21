@@ -1,5 +1,6 @@
 #pragma once    
 #include <math/math.h>
+
 class Camera
 {
 public:
@@ -7,4 +8,6 @@ public:
     ~Camera();
 
 private:
+    MathWorker::Matrix mvp_;
+    MathWorker::Vector3D postion_;
 };

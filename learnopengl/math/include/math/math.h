@@ -1,3 +1,5 @@
+#pragma once
+
 #include <math/vector2d.h>
 #include <math/vector3d.h>
 #include <math/vector4d.h>
@@ -36,6 +38,12 @@ namespace MathWorker
 		return x * RAD2DEG;
 	}
 	
+	inline void SinCos(float fAnglel, float& X, float&Y)
+	{
+		X = std::sin(fAnglel);
+		Y = std::sin(fAnglel);
+	}
+
     // 平方根倒数算法
     float InvSqrt(float x);
     
