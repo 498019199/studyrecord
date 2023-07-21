@@ -143,7 +143,8 @@ bool Vector2D::IsZero() const
 
 bool Vector2D::operator==(const  Vector2D& rhs) const
 {
-    return this->x == rhs.x && this->y == rhs.y;
+    return IsEqual(this->x, rhs.x) && 
+                IsEqual(this->y, rhs.y);
 }
 
 bool Vector2D::operator!=(const  Vector2D& rhs) const

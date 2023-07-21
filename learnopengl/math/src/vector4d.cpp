@@ -157,8 +157,10 @@ bool Vector4D::IsZero() const
 
 bool Vector4D::operator==(const  Vector4D& rhs) const
 {
-    return this->x == rhs.x && this->y == rhs.y && 
-        this->z == rhs.z && this->w == rhs.w;
+    return IsEqual(this->x, rhs.x) && 
+                IsEqual(this->y, rhs.y) && 
+                    IsEqual(this->z, rhs.z) && 
+                        IsEqual(this->w, rhs.w);
 }
 
 bool Vector4D::operator!=(const  Vector4D& rhs) const

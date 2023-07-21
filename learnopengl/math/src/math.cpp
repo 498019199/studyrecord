@@ -2,6 +2,14 @@
 
 namespace MathWorker
 {
+template bool IsEqual(float X, float Y);
+template bool IsEqual(double X, double Y);
+template<typename T>
+bool IsEqual(T X, T Y)
+{
+    return std::abs(X - Y) < std::numeric_limits<T>::epsilon();
+}
+
 float InvSqrt(float x)
 {
     float xhalf = 0.5f*x;

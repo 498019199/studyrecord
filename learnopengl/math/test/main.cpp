@@ -102,12 +102,16 @@ void checkmatrix()
 	auto tmp2 = Matrix(tmp1);
 	auto tmp3 = Matrix(11, 12, 13, 14,21, 22, 23, 24,31, 32, 33, 34,41, 42, 43, 44);
 	Matrix tmp4 = {11, 12, 13, 14,21, 22, 23, 24,31, 32, 33, 34,41, 42, 43, 44};
+	assert(tmp1 == tmp2);
+	assert(tmp1 == tmp3);
+	assert(tmp1 == tmp4);
 }
 
 void checkquaternion()
 {
     //std::cout << "checkquaternion sucess" << std::endl;
 	// test contruct
+	auto q1 = Quaternion();
 }
 
 int main()

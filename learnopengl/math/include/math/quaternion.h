@@ -43,5 +43,7 @@ public:
 	void SetV(const Vector3D& rhs) noexcept;
 
 	bool operator==(const Quaternion& rhs) const noexcept;
+	bool operator!=(const Quaternion& rhs) const noexcept;
 };
+
 }

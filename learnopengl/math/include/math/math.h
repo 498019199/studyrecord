@@ -4,7 +4,7 @@
 #include <math/vector3d.h>
 #include <math/vector4d.h>
 #include <math/matrix.h>
-
+#include <math/Quaternion.h>
 namespace MathWorker
 {
     const float PI = 3.141592f;
@@ -43,6 +43,10 @@ namespace MathWorker
 		X = std::sin(fAnglel);
 		Y = std::sin(fAnglel);
 	}
+
+	// 浮点相等
+	template<typename T>
+	bool IsEqual(T X, T Y);
 
     // 平方根倒数算法
     float InvSqrt(float x);

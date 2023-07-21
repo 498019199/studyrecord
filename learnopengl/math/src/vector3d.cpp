@@ -144,7 +144,9 @@ bool Vector3D::IsZero() const
 
 bool Vector3D::operator==(const  Vector3D& rhs) const
 {
-    return this->x == rhs.x && this->y == rhs.y && this->z == rhs.z;
+    return IsEqual(this->x, rhs.x) && 
+                IsEqual(this->y, rhs.y) && 
+                    IsEqual(this->z, rhs.z);
 }
 
 bool Vector3D::operator!=(const  Vector3D& rhs) const

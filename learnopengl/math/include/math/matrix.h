@@ -42,7 +42,11 @@ public:
     Matrix& operator/=(float rhs) noexcept;
 
     bool operator==(const Matrix& rhs) const noexcept;
+    bool operator!=(const Matrix& rhs) const noexcept;
 };
+
+
+
 
 
 

@@ -1,5 +1,5 @@
 #include <math/quaternion.h>
-#include <math/vector3d.h>
+#include <math/math.h>
 
 namespace MathWorker
 {
@@ -110,6 +110,15 @@ void Quaternion::SetV(const Vector3D& rhs) noexcept
 
 bool Quaternion::operator==(const Quaternion& rhs) const noexcept
 {
-	return x == rhs.x && y == rhs.y && z == rhs.z && w == rhs.w;
+    return IsEqual(this->x, rhs.x) && 
+                IsEqual(this->y, rhs.y) && 
+                    IsEqual(this->z, rhs.z) && 
+                        IsEqual(this->w, rhs.w);
 }
+
+bool Quaternion::operator!=(const Quaternion& rhs) const noexcept
+{
+	return !(this->operator==(rhs));
+}
+
 }
