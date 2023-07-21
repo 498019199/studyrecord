@@ -14,7 +14,7 @@ constexpr Quaternion::Quaternion(const float * rhs) noexcept
 constexpr Quaternion::Quaternion(const Vector3D& vec, float s) noexcept
     :x(vec.x),y(vec.y),z(vec.z),w(s)
 {
-    
+	
 }
 
 Quaternion::Quaternion(const Quaternion & rhs) noexcept
@@ -119,6 +119,12 @@ bool Quaternion::operator==(const Quaternion& rhs) const noexcept
 bool Quaternion::operator!=(const Quaternion& rhs) const noexcept
 {
 	return !(this->operator==(rhs));
+}
+
+std::ostream& operator<<(std::ostream& os, const  Quaternion& lhs)
+{
+	os << lhs.x << " " << lhs.y << " " << lhs.z << " " << lhs.w;
+    return os;
 }
 
 }

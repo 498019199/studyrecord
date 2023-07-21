@@ -105,6 +105,7 @@ void checkmatrix()
 	assert(tmp1 == tmp2);
 	assert(tmp1 == tmp3);
 	assert(tmp1 == tmp4);
+	std::cout << "test matrix contruct success" << tmp1<< std::endl;
 }
 
 void checkquaternion()
@@ -112,6 +113,11 @@ void checkquaternion()
     //std::cout << "checkquaternion sucess" << std::endl;
 	// test contruct
 	auto q1 = Quaternion();
+	auto q2 = Quaternion(1,2,3, 4);
+	//auto q3 = Quaternion(Vector3D(1,2,3), 4.f);
+	auto q4 = Quaternion(q2);
+	//assert(q4 == q3);
+	std::cout << "test quaternion  contruct success" << q1 << std::endl;
 }
 
 int main()

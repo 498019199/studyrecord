@@ -116,4 +116,12 @@ bool Matrix::operator!=(const Matrix& rhs) const noexcept
     return !(this->operator==(rhs));
 }
 
+std::ostream& operator<<(std::ostream& os, const  Matrix& lhs)
+{
+    os << lhs._11 << " " << lhs._12 << " " << lhs._13 << " " << lhs._14 << std::endl;
+    os << lhs._21 << " " << lhs._22 << " " << lhs._23 << " " << lhs._24 << std::endl;
+    os << lhs._31 << " " << lhs._32 << " " << lhs._33 << " " << lhs._34 << std::endl;
+    os << lhs._41 << " " << lhs._42 << " " << lhs._43 << " " << lhs._44 << std::endl;
+    return os;
+}
 }

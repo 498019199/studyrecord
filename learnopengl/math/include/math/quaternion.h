@@ -1,5 +1,5 @@
 #pragma once
-
+#include <iostream>
 
 namespace MathWorker
 {
@@ -44,6 +44,11 @@ public:
 
 	bool operator==(const Quaternion& rhs) const noexcept;
 	bool operator!=(const Quaternion& rhs) const noexcept;
+
+	friend std::ostream& operator<<(std::ostream& os, const  Quaternion& lhs); 
 };
+
+
+
 
 }
