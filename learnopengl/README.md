@@ -13,3 +13,7 @@ stb_image-> 图像解码库
 2023年7月16日-》了解着色器，图片加载。下周开始复习《复习3D数学基础：图形与游戏开发》
 2023年7月19日-》完成vector code
 2023年7月21日-》完成matrix,quaternion 基础操作
+2023年7月21日-》想要研究esc
+
+关注的库
+https://github.com/Ubpa/UECS
