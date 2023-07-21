@@ -17,3 +17,5 @@ stb_image-> 图像解码库
 
 关注的库
 https://github.com/Ubpa/UECS
+
+Delegate 委托 
