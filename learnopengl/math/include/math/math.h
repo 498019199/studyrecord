@@ -43,7 +43,22 @@ namespace MathWorker
     template<typename T>
     float Angle(const T& from, const T& to);
 	
-    // 	在两个点之间进行线性插值。
+    // 	线性插值。
     template<typename T>
     T Lerp(const T& lhs, const T& rhs, float s);
+
+	// 矩形平移
+	Matrix MatrixMove(float X, float Y, float Z);
+	// 矩形缩放
+	Matrix MatrixScale(float X, float Y, float Z);
+	// 矩阵旋转
+	Matrix MatrixRotateX(float X);
+	Matrix MatrixRotateY(float Y);
+	Matrix MatrixRotateZ(float Z);
+	Matrix MatrixRotate(Vector3D Pos, float Angle);
+
+	// 矩阵的行列式
+	float Determinant(const Matrix& m);
+	// 矩阵的逆
+	Matrix MatrixInverse(const Matrix& m);
 }
