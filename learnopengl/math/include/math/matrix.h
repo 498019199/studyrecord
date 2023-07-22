@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 
 namespace MathWorker
 {
@@ -42,7 +43,15 @@ public:
     Matrix& operator/=(float rhs) noexcept;
 
     bool operator==(const Matrix& rhs) const noexcept;
+    bool operator!=(const Matrix& rhs) const noexcept;
+
+    friend std::ostream& operator<<(std::ostream& os, const  Matrix& lhs); 
 };
+
+
+
+
+
 
 
 

@@ -1,5 +1,5 @@
 #pragma once
-
+#include <iostream>
 
 namespace MathWorker
 {
@@ -43,5 +43,12 @@ public:
 	void SetV(const Vector3D& rhs) noexcept;
 
 	bool operator==(const Quaternion& rhs) const noexcept;
+	bool operator!=(const Quaternion& rhs) const noexcept;
+
+	friend std::ostream& operator<<(std::ostream& os, const  Quaternion& lhs); 
 };
+
+
+
+
 }

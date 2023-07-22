@@ -80,6 +80,7 @@
         "xlocmon": "cpp",
         "xloctime": "cpp",
         "fstream": "cpp",
-        "cassert": "cpp"
+        "cassert": "cpp",
+        "regex": "cpp"
     }
 }

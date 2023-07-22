@@ -1,0 +1,7 @@
+namespace CommonWorker
+{
+class HashMap
+{
+    
+};
+}

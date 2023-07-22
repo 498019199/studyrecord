@@ -1,4 +1,5 @@
 #include <math/matrix.h>
+#include <math/math.h>
 #include <utility>
 
 namespace MathWorker
@@ -99,5 +100,28 @@ Matrix& Matrix::operator*=(float rhs) noexcept
         for (size_t j = 0; j < row_num; j++)
             m[i][j] = m[i][j] * rhs;
     return *this;
+}
+
+bool Matrix::operator==(const Matrix& rhs) const noexcept
+{
+    for (size_t i = 0; i < row_num; i++)
+        for (size_t j = 0; j < row_num; j++)
+            if (!IsEqual(m[i][j], rhs.m[i][j]))
+                return false;
+    return true;
+}
+
+bool Matrix::operator!=(const Matrix& rhs) const noexcept
+{
+    return !(this->operator==(rhs));
+}
+
+std::ostream& operator<<(std::ostream& os, const  Matrix& lhs)
+{
+    os << lhs._11 << " " << lhs._12 << " " << lhs._13 << " " << lhs._14 << std::endl;
+    os << lhs._21 << " " << lhs._22 << " " << lhs._23 << " " << lhs._24 << std::endl;
+    os << lhs._31 << " " << lhs._32 << " " << lhs._33 << " " << lhs._34 << std::endl;
+    os << lhs._41 << " " << lhs._42 << " " << lhs._43 << " " << lhs._44 << std::endl;
+    return os;
 }
 }

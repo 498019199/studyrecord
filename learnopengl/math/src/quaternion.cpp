@@ -1,5 +1,5 @@
 #include <math/quaternion.h>
-#include <math/vector3d.h>
+#include <math/math.h>
 
 namespace MathWorker
 {
@@ -14,7 +14,7 @@ constexpr Quaternion::Quaternion(const float * rhs) noexcept
 constexpr Quaternion::Quaternion(const Vector3D& vec, float s) noexcept
     :x(vec.x),y(vec.y),z(vec.z),w(s)
 {
-    
+	
 }
 
 Quaternion::Quaternion(const Quaternion & rhs) noexcept
@@ -110,6 +110,21 @@ void Quaternion::SetV(const Vector3D& rhs) noexcept
 
 bool Quaternion::operator==(const Quaternion& rhs) const noexcept
 {
-	return x == rhs.x && y == rhs.y && z == rhs.z && w == rhs.w;
+    return IsEqual(this->x, rhs.x) && 
+                IsEqual(this->y, rhs.y) && 
+                    IsEqual(this->z, rhs.z) && 
+                        IsEqual(this->w, rhs.w);
 }
+
+bool Quaternion::operator!=(const Quaternion& rhs) const noexcept
+{
+	return !(this->operator==(rhs));
+}
+
+std::ostream& operator<<(std::ostream& os, const  Quaternion& lhs)
+{
+	os << lhs.x << " " << lhs.y << " " << lhs.z << " " << lhs.w;
+    return os;
+}
+
 }

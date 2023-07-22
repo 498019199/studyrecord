@@ -2,6 +2,14 @@
 
 namespace MathWorker
 {
+template bool IsEqual(float X, float Y);
+template bool IsEqual(double X, double Y);
+template<typename T>
+bool IsEqual(T X, T Y)
+{
+    return std::abs(X - Y) < std::numeric_limits<T>::epsilon();
+}
+
 float InvSqrt(float x)
 {
     float xhalf = 0.5f*x;
@@ -34,4 +42,44 @@ float Angle(const T& lsh, const T& rsh)
     return Rad2Deg(angle);
 }
 
+
+
+Matrix MatrixMove(float X, float Y, float Z)
+{
+    return Matrix(
+        1, 0, 0, 0,
+        0, 1, 0, 0,
+        0, 0, 1, 0,
+        X, Y, Z, 1);
+}
+
+Matrix MatrixScale(float X, float Y, float Z)
+{
+    return Matrix(
+        X, 0, 0, 0,
+        0, Y, 0, 0,
+        0, 0, Z, 0,
+        1, 1, 1, 1 );
+}
+
+Matrix MatrixRotateX(float X)
+{
+    float sf, sx;
+    SinCos(X, sf, sx);
+    return Matrix();
+}
+
+Matrix MatrixRotateY(float Y)
+{
+    float sf, sx;
+    SinCos(Y, sf, sx);    
+    return Matrix();
+}
+
+Matrix MatrixRotateZ(float Z)
+{
+    float sf, sx;
+    SinCos(Z, sf, sx);   
+    return Matrix();
+}
 }
