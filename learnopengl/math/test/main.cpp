@@ -5,6 +5,10 @@
 #include <cassert>
 using namespace MathWorker;
 
+// #define CheckAssert(op)\
+// 	std::cout << std::endl;\
+// 	assert(op)\
+
 void checkvecotr()
 {
 	// test contruct
@@ -106,6 +110,11 @@ void checkmatrix()
 	assert(tmp1 == tmp3);
 	assert(tmp1 == tmp4);
 	std::cout << "test matrix contruct success" << tmp1<< std::endl;
+
+	// test matrix multiplication
+	assert(Matrix(12,1,13,14, 12,0,12,15,  10,0,10,7, 2,0,2,2) == 
+		Mul(Matrix(1,2,3,4,  0,0,5,6,  0,2,1,3,  0,1,0,0), 
+		Matrix(0,1,1,1,  2,0,2,2,  0,0,0,3,  2,0,2,0)));
 }
 
 void checkquaternion()
@@ -121,9 +130,23 @@ void checkquaternion()
 	std::cout << "test quaternion  contruct success" << q1 << std::endl;
 }
 
+void checkmath()
+{
+	auto m1 = Matrix(11, 12, 13, 14,
+					21, 22, 23, 24,
+					31, 32, 33, 34,
+					41, 42, 43, 44);
+	auto m2 = Matrix(11, 21, 31, 41,
+					 12, 22, 32, 42,
+					 13, 23, 33, 43,
+					 14, 24, 34, 44);
+	assert(Transpose(m1) == m2);
+}
+
 int main()
 {
     checkvecotr();
     checkmatrix();
     checkquaternion();
+	checkmath();
 }

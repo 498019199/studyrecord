@@ -69,6 +69,11 @@ namespace MathWorker
 	Matrix MatrixRotateZ(float Z);
 	Matrix MatrixRotate(Vector3D Pos, float Angle);
 
+	// 矩形乘法
+	Matrix Mul(const Matrix&lhs, const Matrix& rhs);
+	Matrix Mul(const Vector4D&lhs, const Matrix& rhs);
+	// 矩阵转置
+	Matrix Transpose(const Matrix& m);
 	// 矩阵的行列式
 	float Determinant(const Matrix& m);
 	// 矩阵的逆

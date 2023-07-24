@@ -80,9 +80,7 @@ Matrix& Matrix::operator-=(const Matrix& rhs) noexcept
 
 Matrix& Matrix::operator*=(const Matrix& rhs) noexcept
 {
-    for (size_t i = 0; i < row_num; i++)
-        for (size_t j = 0; j < row_num; j++)
-            m[i][j] *= rhs.m[i][j];
+    *this = Mul(*this, rhs);
     return *this;      
 }
 
