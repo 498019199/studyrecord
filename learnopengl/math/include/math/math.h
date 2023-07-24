@@ -71,7 +71,7 @@ namespace MathWorker
 
 	// 矩形乘法
 	Matrix Mul(const Matrix&lhs, const Matrix& rhs);
-	Matrix Mul(const Vector4D&lhs, const Matrix& rhs);
+	Vector4D Mul(const Vector4D&lhs, const Matrix& rhs);
 	// 矩阵转置
 	Matrix Transpose(const Matrix& m);
 	// 矩阵的行列式

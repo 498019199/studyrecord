@@ -62,23 +62,35 @@ Matrix MatrixScale(float X, float Y, float Z)
 
 Matrix MatrixRotateX(float X)
 {
-    float sf, sx;
-    SinCos(X, sf, sx);
-    return Matrix();
+    float sf, cf;
+    SinCos(X, sf, cf);
+    return Matrix(
+        1,  0,   0,   0,
+        0,  cf,  sf,  0,
+        0,  -sf, cf,  0,
+        1,  1,   1,   1);
 }
 
 Matrix MatrixRotateY(float Y)
 {
-    float sf, sx;
-    SinCos(Y, sf, sx);    
-    return Matrix();
+    float sf, cf;
+    SinCos(Y, sf, cf);    
+    return Matrix(
+        cf,  0,  -sf,  0,
+        0,   1,  0,    0,
+        sf,  0,  cf,   0,
+        1,   1,  1,    1);
 }
 
 Matrix MatrixRotateZ(float Z)
 {
-    float sf, sx;
-    SinCos(Z, sf, sx);   
-    return Matrix();
+    float sf, cf;
+    SinCos(Z, sf, cf);   
+    return Matrix(
+        cf,  sf,  0,  0,
+        -sf, cf,  0,  0,
+        0,   0,   1,  0,
+        1,   1,   1,  1);
 }
 
 Matrix Mul(const Matrix&lhs, const Matrix& rhs)
