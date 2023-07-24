@@ -23,7 +23,7 @@ public:
 	}
 
 	explicit constexpr Quaternion(const float * rhs) noexcept;
-	constexpr Quaternion(const Vector3D& vec, float s) noexcept;
+	Quaternion(const Vector3D& vec, float s) noexcept;
 	Quaternion(const Quaternion & rhs) noexcept;
 	Quaternion(Quaternion&& rhs) noexcept;
 	constexpr Quaternion(float x, float y, float z, float w) noexcept;
@@ -31,7 +31,7 @@ public:
 	Quaternion& operator=(const Quaternion & rhs) noexcept;
 	Quaternion& operator=(Quaternion&& rhs) noexcept;
 
-		// 赋值操作符
+	// 赋值操作符
 	const Quaternion& operator+=(const Quaternion & rhs) noexcept;
 	const Quaternion& operator-=(const Quaternion & rhs) noexcept;
 	const Quaternion& operator*=(const Quaternion & rhs) noexcept;

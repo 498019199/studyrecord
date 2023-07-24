@@ -114,9 +114,10 @@ void checkquaternion()
 	// test contruct
 	auto q1 = Quaternion();
 	auto q2 = Quaternion(1,2,3, 4);
-	//auto q3 = Quaternion(Vector3D(1,2,3), 4.f);
+	auto v1 = Vector3D(1.f, 2.f, 3.f);
+	auto q3 = Quaternion(v1, 4.f);
 	auto q4 = Quaternion(q2);
-	//assert(q4 == q3);
+	assert(q4 == q3);
 	std::cout << "test quaternion  contruct success" << q1 << std::endl;
 }
 

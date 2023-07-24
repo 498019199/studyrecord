@@ -20,17 +20,18 @@ public:
     
 public:
     // 构造
-    Vector4D() 
-        {}
-    Vector4D(float in_x, float in_y, float in_z, float in_w) 
+    constexpr Vector4D() noexcept
+    {
+    }
+    constexpr Vector4D(float in_x, float in_y, float in_z, float in_w) noexcept
         :x(in_x), y(in_y), z(in_z), w(in_w) {}
-    Vector4D(const Vector4D& vec) 
+    Vector4D(const Vector4D& vec) noexcept
         :x(vec.x), y(vec.y), z(vec.z), w(vec.w) {}
-    explicit Vector4D(float inf) 
+    constexpr explicit Vector4D(float inf) noexcept
         :x(inf), y(inf), z(inf), w(inf) {}
-    explicit Vector4D(const Vector4D&& vec)  
+    explicit Vector4D(const Vector4D&& vec) noexcept
         :x(std::move(vec.x)), y(std::move(vec.y)), z(std::move(vec.z)), w(std::move(vec.w)) {}
-    explicit Vector4D(Vector4D* vec) 
+    explicit Vector4D(Vector4D* vec) noexcept
         :x(vec->x), y(vec->y), z(vec->z), w(vec->w) {}
 
     // 复制构造

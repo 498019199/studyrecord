@@ -15,17 +15,18 @@ public:
 
 public:
     //构造
-    Vector2D() 
-        {}
-    Vector2D(float in_x, float in_y) 
+    constexpr Vector2D() noexcept
+    {
+    }
+    constexpr Vector2D(float in_x, float in_y) noexcept
         :x(in_x), y(in_y) {}
-    Vector2D(const Vector2D& vec) 
+    Vector2D(const Vector2D& vec) noexcept
         :x(vec.x), y(vec.y) {}
-    explicit Vector2D(float inf) 
+    constexpr explicit Vector2D(float inf) noexcept
         :x(inf), y(inf) {}
-    explicit Vector2D(const Vector2D&& vec)  
+    explicit Vector2D(const Vector2D&& vec) noexcept
         :x(std::move(vec.x)), y(std::move(vec.y)) {}
-    explicit Vector2D(Vector2D* vec) 
+    explicit Vector2D(Vector2D* vec) noexcept
         :x(vec->x), y(vec->y) {}
     //Vector2D(std::initializer_list<float> list); 
 

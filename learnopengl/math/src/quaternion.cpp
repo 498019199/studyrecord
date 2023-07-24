@@ -11,7 +11,7 @@ constexpr Quaternion::Quaternion(const float * rhs) noexcept
     
 }
 
-constexpr Quaternion::Quaternion(const Vector3D& vec, float s) noexcept
+Quaternion::Quaternion(const Vector3D& vec, float s) noexcept
     :x(vec.x),y(vec.y),z(vec.z),w(s)
 {
 	

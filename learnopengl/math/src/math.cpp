@@ -42,8 +42,6 @@ float Angle(const T& lsh, const T& rsh)
     return Rad2Deg(angle);
 }
 
-
-
 Matrix MatrixMove(float X, float Y, float Z)
 {
     return Matrix(

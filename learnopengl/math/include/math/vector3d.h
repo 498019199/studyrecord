@@ -22,17 +22,18 @@ public:
     
 public:
     // 构造
-    Vector3D() 
-        {}
-    Vector3D(float in_x, float in_y, float in_z) 
+    constexpr Vector3D() noexcept
+    {
+    }
+    constexpr Vector3D(float in_x, float in_y, float in_z) noexcept
         :x(in_x), y(in_y), z(in_z) {}
-    Vector3D(const Vector3D& vec) 
+    Vector3D(const Vector3D& vec) noexcept
         :x(vec.x), y(vec.y), z(vec.z) {}
-    explicit Vector3D(float inf) 
+    constexpr explicit Vector3D(float inf) noexcept
         :x(inf), y(inf), z(inf) {}
-    explicit Vector3D(const Vector3D&& vec)  
+    explicit Vector3D(const Vector3D&& vec) noexcept
         :x(std::move(vec.x)), y(std::move(vec.y)), z(std::move(vec.z)) {}
-    explicit Vector3D(Vector3D* vec) 
+    explicit Vector3D(Vector3D* vec) noexcept
         :x(vec->x), y(vec->y), z(vec->z) {}
 
     // 复制构造
