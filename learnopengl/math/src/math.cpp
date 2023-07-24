@@ -102,9 +102,13 @@ Matrix Mul(const Matrix&lhs, const Matrix& rhs)
         lhs._41 * rhs._14 + lhs._42 * rhs._24 + lhs._43 * rhs._34 + lhs._44 * rhs._44);
 }
 
-Matrix Mul(const Vector4D&lhs, const Matrix& rhs)
+Vector4D Mul(const Vector4D&lhs, const Matrix& rhs)
 {
-    return Matrix();
+    return Vector4D(
+        lhs.x * rhs._11 + lhs.y * rhs._21 + lhs.z * rhs._31 + lhs.w * rhs._41,
+        lhs.x * rhs._12 + lhs.y * rhs._22 + lhs.z * rhs._32 + lhs.w * rhs._42,
+        lhs.x * rhs._13 + lhs.y * rhs._23 + lhs.z * rhs._33 + lhs.w * rhs._34,
+        lhs.x * rhs._14 + lhs.y * rhs._24 + lhs.z * rhs._34 + lhs.w * rhs._44);
 }
 
 Matrix Transpose(const Matrix& m)
