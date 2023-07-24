@@ -102,6 +102,7 @@ Matrix Mul(const Matrix&lhs, const Matrix& rhs)
         lhs._41 * rhs._14 + lhs._42 * rhs._24 + lhs._43 * rhs._34 + lhs._44 * rhs._44);
 }
 
+// 1*4 mul 4*4
 Vector4D Mul(const Vector4D&lhs, const Matrix& rhs)
 {
     return Vector4D(
