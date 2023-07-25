@@ -36,17 +36,24 @@ public:
     Matrix& operator=(const Matrix& rhs) noexcept;
     Matrix& operator=(Matrix&& rhs) noexcept;
     
+    Matrix& operator+(const Matrix& rhs) noexcept;
+    Matrix& operator-(const Matrix& rhs) noexcept;
     Matrix& operator+=(const Matrix& rhs) noexcept;
     Matrix& operator-=(const Matrix& rhs) noexcept;
+    
     Matrix& operator*=(const Matrix& rhs) noexcept;
+
     Matrix& operator*=(float rhs) noexcept;
     Matrix& operator/=(float rhs) noexcept;
+    Matrix& operator*(float rhs) noexcept;
+    Matrix& operator/(float rhs) noexcept;
 
     bool operator==(const Matrix& rhs) const noexcept;
     bool operator!=(const Matrix& rhs) const noexcept;
 
     friend std::ostream& operator<<(std::ostream& os, const  Matrix& lhs); 
 };
+
 
 
 

@@ -6,8 +6,8 @@
 using namespace MathWorker;
 
 // #define CheckAssert(op)\
-// 	std::cout << std::endl;\
-// 	assert(op)\
+//  	std::cout << ##op << std::endl;\
+//  	assert(op)\
 
 void checkvecotr()
 {
@@ -109,12 +109,24 @@ void checkmatrix()
 	assert(tmp1 == tmp2);
 	assert(tmp1 == tmp3);
 	assert(tmp1 == tmp4);
-	std::cout << "test matrix contruct success" << tmp1<< std::endl;
+	std::cout << "test matrix contruct success" << std::endl << tmp1 << std::endl;
 
 	// test matrix multiplication
 	assert(Matrix(12,1,13,14, 12,0,12,15,  10,0,10,7, 2,0,2,2) == 
 		Mul(Matrix(1,2,3,4,  0,0,5,6,  0,2,1,3,  0,1,0,0), 
 		Matrix(0,1,1,1,  2,0,2,2,  0,0,0,3,  2,0,2,0)));
+	// test +,-
+	assert(Matrix(3,3,3,3, 3,3,3,3,  3,3,3,3, 3,3,3,3) == 
+		(Matrix(1,1,1,1,  1,1,1,1,  1,1,1,1,  1,1,1,1) + 
+		Matrix(2,2,2,2, 2,2,2,2,  2,2,2,2, 2,2,2,2)));
+	assert(Matrix(2,2,2,2, 2,2,2,2,  2,2,2,2, 2,2,2,2) == 
+		(Matrix(3,3,3,3, 3,3,3,3,  3,3,3,3, 3,3,3,3) - 
+		Matrix(1,1,1,1,  1,1,1,1,  1,1,1,1,  1,1,1,1)));
+	// test matrix scalar
+	assert(Matrix(2,2,2,2, 2,2,2,2,  2,2,2,2, 2,2,2,2) == 
+		Matrix(1,1,1,1,  1,1,1,1,  1,1,1,1,  1,1,1,1) * 2);
+	assert(Matrix(2,2,2,2, 2,2,2,2,  2,2,2,2, 2,2,2,2) / 2 == 
+		Matrix(1,1,1,1,  1,1,1,1,  1,1,1,1,  1,1,1,1));
 }
 
 void checkquaternion()
@@ -132,6 +144,7 @@ void checkquaternion()
 
 void checkmath()
 {
+	// athmatic matrix
 	auto m1 = Matrix(11, 12, 13, 14,
 					21, 22, 23, 24,
 					31, 32, 33, 34,
@@ -141,6 +154,16 @@ void checkmath()
 					 13, 23, 33, 43,
 					 14, 24, 34, 44);
 	assert(Transpose(m1) == m2);
+
+	// test rotation matrix
+	assert(Matrix(2,2,2,2,  2,2,2,2,  2,2,2,2,  2,2,2,2) == MatrixRotateX(0));
+	assert(Matrix(2,2,2,2,  2,2,2,2,  2,2,2,2,  2,2,2,2) == MatrixRotateY(0));
+	assert(Matrix(2,2,2,2,  2,2,2,2,  2,2,2,2,  2,2,2,2) == MatrixRotateZ(0));
+	assert(Matrix(2,2,2,2,  2,2,2,2,  2,2,2,2,  2,2,2,2) == MatrixRotate(Vector4D(0,0,0,0), 0));
+	// move
+	assert(Matrix(2,2,2,2,  2,2,2,2,  2,2,2,2,  2,2,2,2) == MatrixMove(0,0,0));
+	// Scale
+	assert(Matrix(2,2,2,2,  2,2,2,2,  2,2,2,2,  2,2,2,2) == MatrixScale(0,0,0));
 }
 
 int main()

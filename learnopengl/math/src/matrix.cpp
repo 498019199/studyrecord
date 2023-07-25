@@ -62,20 +62,30 @@ Matrix& Matrix::operator=(Matrix&& rhs) noexcept
     return *this;
 }
 
-Matrix& Matrix::operator+=(const Matrix& rhs) noexcept
-{
-    for (size_t i = 0; i < row_num; i++)
-        for (size_t j = 0; j < row_num; j++)
-            m[i][j] += rhs.m[i][j];
-    return *this;    
-}
-
-Matrix& Matrix::operator-=(const Matrix& rhs) noexcept
+Matrix& Matrix::operator-(const Matrix& rhs) noexcept
 {
     for (size_t i = 0; i < row_num; i++)
         for (size_t j = 0; j < row_num; j++)
             m[i][j] -= rhs.m[i][j];
-    return *this;
+    return *this; 
+}
+
+Matrix& Matrix::operator+(const Matrix& rhs) noexcept
+{
+    for (size_t i = 0; i < row_num; i++)
+        for (size_t j = 0; j < row_num; j++)
+            m[i][j] += rhs.m[i][j];
+    return *this;         
+}
+
+Matrix& Matrix::operator+=(const Matrix& rhs) noexcept
+{
+    return this->operator+(rhs);
+}
+
+Matrix& Matrix::operator-=(const Matrix& rhs) noexcept
+{
+    return this->operator-(rhs);
 }
 
 Matrix& Matrix::operator*=(const Matrix& rhs) noexcept
@@ -84,7 +94,7 @@ Matrix& Matrix::operator*=(const Matrix& rhs) noexcept
     return *this;      
 }
 
-Matrix& Matrix::operator/=(float rhs) noexcept
+Matrix& Matrix::operator/(float rhs) noexcept
 {
     for (size_t i = 0; i < row_num; i++)
         for (size_t j = 0; j < row_num; j++)
@@ -92,12 +102,22 @@ Matrix& Matrix::operator/=(float rhs) noexcept
     return *this;
 }
 
-Matrix& Matrix::operator*=(float rhs) noexcept
+Matrix& Matrix::operator*(float rhs) noexcept
 {
     for (size_t i = 0; i < row_num; i++)
         for (size_t j = 0; j < row_num; j++)
             m[i][j] = m[i][j] * rhs;
     return *this;
+}
+
+Matrix& Matrix::operator/=(float rhs) noexcept
+{
+    return this->operator/(rhs);
+}
+
+Matrix& Matrix::operator*=(float rhs) noexcept
+{
+    return this->operator*(rhs);
 }
 
 bool Matrix::operator==(const Matrix& rhs) const noexcept

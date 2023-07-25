@@ -61,13 +61,15 @@ namespace MathWorker
 
 	// 矩形平移
 	Matrix MatrixMove(float X, float Y, float Z);
+	Matrix MatrixMove(const Vector4D& Move);
 	// 矩形缩放
 	Matrix MatrixScale(float X, float Y, float Z);
+	Matrix MatrixScale(const Vector4D& Scale);
 	// 矩阵旋转
 	Matrix MatrixRotateX(float X);
 	Matrix MatrixRotateY(float Y);
 	Matrix MatrixRotateZ(float Z);
-	Matrix MatrixRotate(Vector3D Pos, float Angle);
+	Matrix MatrixRotate(const Vector4D& Pos, float Angle);
 
 	// 矩形乘法
 	Matrix Mul(const Matrix&lhs, const Matrix& rhs);

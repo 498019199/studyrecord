@@ -51,6 +51,11 @@ Matrix MatrixMove(float X, float Y, float Z)
         X, Y, Z, 1);
 }
 
+Matrix MatrixMove(const Vector4D& Move)
+{
+    return MatrixMove(Move.x, Move.y, Move.z);
+}
+
 Matrix MatrixScale(float X, float Y, float Z)
 {
     return Matrix(
@@ -58,6 +63,11 @@ Matrix MatrixScale(float X, float Y, float Z)
         0, Y, 0, 0,
         0, 0, Z, 0,
         1, 1, 1, 1 );
+}
+
+Matrix MatrixScale(const Vector4D& Scale)
+{
+    return MatrixScale(Scale.x, Scale.y, Scale.z);
 }
 
 Matrix MatrixRotateX(float X)
@@ -91,6 +101,11 @@ Matrix MatrixRotateZ(float Z)
         -sf, cf,  0,  0,
         0,   0,   1,  0,
         1,   1,   1,  1);
+}
+
+Matrix MatrixRotate(const Vector4D& Pos, float Angle)
+{
+    return Matrix();
 }
 
 Matrix Mul(const Matrix&lhs, const Matrix& rhs)
