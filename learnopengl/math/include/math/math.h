@@ -80,4 +80,9 @@ namespace MathWorker
 	float Determinant(const Matrix& m);
 	// 矩阵的逆
 	Matrix MatrixInverse(const Matrix& m);
+
+	// // 正交投影
+	// Matrix OrthogonalProjection(const Matrix& m);
+	// // 透视投影
+	// Matrix PerspectiveProjection(const Matrix& m);
 }
