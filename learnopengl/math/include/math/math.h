@@ -66,9 +66,9 @@ namespace MathWorker
 	Matrix MatrixScale(float X, float Y, float Z);
 	Matrix MatrixScale(const Vector4D& Scale);
 	// 矩阵旋转
-	Matrix MatrixRotateX(float X);
-	Matrix MatrixRotateY(float Y);
-	Matrix MatrixRotateZ(float Z);
+	Matrix MatrixRotateX(float Angle);
+	Matrix MatrixRotateY(float Angle);
+	Matrix MatrixRotateZ(float Angle);
 	Matrix MatrixRotate(const Vector4D& Pos, float Angle);
 
 	// 矩形乘法
