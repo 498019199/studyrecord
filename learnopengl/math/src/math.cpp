@@ -70,42 +70,62 @@ Matrix MatrixScale(const Vector4D& Scale)
     return MatrixScale(Scale.x, Scale.y, Scale.z);
 }
 
-Matrix MatrixRotateX(float X)
+Matrix MatrixRotateX(float Angle)
 {
-    float sf, cf;
-    SinCos(X, sf, cf);
+    float fs, fc;
+    SinCos(Angle, fs, fc);
     return Matrix(
         1,  0,   0,   0,
-        0,  cf,  sf,  0,
-        0,  -sf, cf,  0,
+        0,  fc,  fs,  0,
+        0,  -fs, fc,  0,
         1,  1,   1,   1);
 }
 
-Matrix MatrixRotateY(float Y)
+Matrix MatrixRotateY(float Angle)
 {
-    float sf, cf;
-    SinCos(Y, sf, cf);    
+    float fs, fc;
+    SinCos(Angle, fs, fc);    
     return Matrix(
-        cf,  0,  -sf,  0,
+        fc,  0,  -fs,  0,
         0,   1,  0,    0,
-        sf,  0,  cf,   0,
+        fs,  0,  fc,   0,
         1,   1,  1,    1);
 }
 
-Matrix MatrixRotateZ(float Z)
+Matrix MatrixRotateZ(float Angle)
 {
-    float sf, cf;
-    SinCos(Z, sf, cf);   
+    float fs, fc;
+    SinCos(Angle, fs, fc);   
     return Matrix(
-        cf,  sf,  0,  0,
-        -sf, cf,  0,  0,
+        fc,  fs,  0,  0,
+        -fs, fc,  0,  0,
         0,   0,   1,  0,
         1,   1,   1,  1);
 }
 
-Matrix MatrixRotate(const Vector4D& Pos, float Angle)
+Matrix MatrixRotate(const Vector4D& n, float Angle)
 {
-    return Matrix();
+    float fs = 0.0f, fc = 0.0f;
+	SinCos(Angle, fs, fc);
+	Vector4D v(n.x, n.y, n.z, 1.0f);
+	v.Normalize();
+		
+	float a = 1.0f - fc;
+	float ax = a * v.x;
+	float ay = a * v.y;
+	float az = a * v.z;
+
+	Matrix m;
+	m._11 = v.x * ax + fc;
+	m._12 = v.x * ay + v.z * fs;
+	m._13 = v.x * az - v.y * fs;
+	m._21 = v.x * ay - v.z * fs;
+	m._22 = v.y * ay + fc;
+	m._23 = v.y * az + v.x * fs;
+	m._31 = v.x * az + v.y *fs;
+	m._32 = v.y * az - v.x * fs;
+	m._33= v.z * az + fc;
+    return m;
 }
 
 Matrix Mul(const Matrix&lhs, const Matrix& rhs)
