@@ -48,8 +48,8 @@ namespace MathWorker
 	template<typename T>
 	bool IsEqual(T X, T Y);
 
-    // 平方根倒数算法
-    float InvSqrt(float x);
+	//  平方根倒数速算法
+	float RecipSqrt(float number) noexcept;
     
     // 返回 from 与 to 之间的角度
     template<typename T>
