@@ -5,6 +5,10 @@
 #include <GLFW/glfw3.h>
 
 #include <iostream>
+
+namespace RenderWorker
+{
+
 ShaderObject::ShaderObject()
 {
     obj_id_ = glCreateProgram();
@@ -79,4 +83,5 @@ void ShaderObject::SetInt(const char*name, int value) const
 void ShaderObject::SetFloat(const char*name, float value) const
 {
     glUniform1f(glGetUniformLocation(obj_id_, name), value); 
+}
 }

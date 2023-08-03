@@ -2,6 +2,10 @@
 #include <glad/glad.h>
 #include <stb/stb_image.h>
 
+namespace RenderWorker
+{
+
+
 Texture2D::Texture2D()
 {
     // 创建纹理对象
@@ -32,3 +36,4 @@ void Texture2D::LoadImage(const std::string_view& filename)
 }
 
 
+}

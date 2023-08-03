@@ -1,6 +1,8 @@
 #include <render/vertex_array.h>
 #include <glad/glad.h>
 
+namespace RenderWorker
+{
 VertexArray::VertexArray()
 {
     glGenVertexArrays(1, &vao_id_);
@@ -23,3 +25,4 @@ void VertexArray::UnBind()
     glBindVertexArray(0); 
 }
 
+}

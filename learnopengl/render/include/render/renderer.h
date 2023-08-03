@@ -9,6 +9,8 @@
 #include <render/index_buffer.h>
 #include <render/texture.h>
 
+namespace RenderWorker
+{
 using PtrVertexs = std::shared_ptr<VertexArray>;
 using PtrVertexBuf = std::shared_ptr<VertexBuffer>;
 using PtrIndexs = std::shared_ptr<IndexBuffer>;
@@ -31,3 +33,4 @@ private:
 };
 
 using PtrRenderer = std::shared_ptr<Renderer>;
+}

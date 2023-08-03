@@ -2,6 +2,9 @@
 #include <glad/glad.h>
 #include <iostream>
 
+namespace RenderWorker
+{
+
 IShader::~IShader()
 {
 }
@@ -52,4 +55,9 @@ const char* IShader::GetShaderType()
         return "FRAGMENT";
     }
     return "VERTEX";
+}
+
+
+
+
 }

@@ -1,6 +1,9 @@
 #include <render/renderer.h>
 #include <filesystem>
 
+namespace RenderWorker
+{
+
 void Renderer::Init()
 {
     shaderobj_ = std::make_shared<ShaderObject>();
@@ -66,4 +69,7 @@ void Renderer::Render(float time)
 
 void Renderer::AfterRender()
 {
+}
+
+
 }

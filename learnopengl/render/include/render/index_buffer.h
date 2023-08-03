@@ -1,5 +1,7 @@
 #pragma once
 #include <cstdint>
+namespace RenderWorker
+{
 
 //EBO对象
 class IndexBuffer
@@ -15,5 +17,5 @@ public:
 private:
     uint32_t ebo_id_ = 0;
 };
-
+}
 

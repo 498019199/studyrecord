@@ -1,6 +1,8 @@
 #include <render/app.h>
 #include <render/renderer.h>
 #include <iostream>
+namespace RenderWorker
+{
 extern Renderer* gRender;
 
 void App::Init()
@@ -129,3 +131,4 @@ void App::Render()
     }
 }
 
+}

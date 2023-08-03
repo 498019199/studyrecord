@@ -1,6 +1,7 @@
 #include <render/index_buffer.h>
 #include <glad/glad.h>
-
+namespace RenderWorker
+{
 IndexBuffer::IndexBuffer()
 {
     
@@ -23,4 +24,5 @@ void IndexBuffer::UnBind()
 {
     // 解绑VBO
     glDeleteBuffers(1, &ebo_id_);
+}
 }

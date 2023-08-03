@@ -15,7 +15,7 @@ stb_image-> 图像解码库
 2023年7月21日-》完成matrix,quaternion 基础操作
 2023年7月21日-》想要研究esc,(esc)[https://github.com/Ubpa/UECS].no no no
 2023年7月24/25日-》matrix 线性变化
-2023年7月25/31日-》理解2d->3d旋转花了久
-
+2023年7月25/29日-》理解2d->3d旋转花了久
+30-8/3 把铁道的积累2个月任务清完了
 Delegate 委托 
 

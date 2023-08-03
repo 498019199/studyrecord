@@ -1,6 +1,7 @@
 #pragma once
 #include <cstdint>
-
+namespace RenderWorker
+{
 //VAO对象
 class VertexArray
 {
@@ -17,6 +18,6 @@ private:
 };
 
 
-
+}
 
 

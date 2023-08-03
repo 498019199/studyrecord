@@ -1,6 +1,8 @@
 #pragma once
 #include <memory>
 #include <string_view>
+namespace RenderWorker
+{
 class IShader;
 using PtrIShader = std::shared_ptr<IShader>;
 class ShaderObject;
@@ -58,6 +60,6 @@ private:
 
 
 
-
+}
 
 

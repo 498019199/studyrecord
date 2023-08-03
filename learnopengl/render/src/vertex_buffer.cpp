@@ -1,6 +1,9 @@
 #include <render/vertex_buffer.h>
 #include <glad/glad.h>
 
+namespace RenderWorker
+{
+
 VertexBuffer::VertexBuffer()
 {
 }
@@ -33,3 +36,4 @@ void VertexBuffer::UnBind()
 {
 }
 
+}

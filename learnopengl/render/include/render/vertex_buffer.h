@@ -1,6 +1,7 @@
 #pragma once
 #include <cstdint>
-
+namespace RenderWorker
+{
 //VBO对象
 class VertexBuffer
 {
@@ -16,3 +17,4 @@ private:
     uint32_t vbo_id_ = 0;
 };
 
+}

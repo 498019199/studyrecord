@@ -2,6 +2,8 @@
 #include <memory>
 #include <string_view>
 
+namespace RenderWorker
+{
 class Texture2D
 {
 public:
@@ -15,3 +17,4 @@ private:
     int width_;
     int height_;
 };
+}

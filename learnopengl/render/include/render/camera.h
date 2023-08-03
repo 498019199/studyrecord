@@ -1,6 +1,9 @@
 #pragma once    
 #include <math/math.h>
 
+namespace RenderWorker
+{
+
 class Camera
 {
 public:
@@ -11,3 +14,5 @@ private:
     MathWorker::Matrix mvp_;
     MathWorker::Vector3D postion_;
 };
+
+}
