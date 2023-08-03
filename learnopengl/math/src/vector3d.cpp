@@ -166,7 +166,7 @@ Vector3D Vector3D::Normalize()
 Vector3D Normalize(const Vector3D& rhs)
 {
     static float SquareSum = (rhs.x * rhs.x + rhs.y * rhs.y + rhs.z * rhs.z);
-    static float Scale = InvSqrt(SquareSum);
+    static float Scale = RecipSqrt(SquareSum);
 
     return Vector3D(rhs.x * Scale , rhs.y * Scale, rhs.z * Scale);
 }

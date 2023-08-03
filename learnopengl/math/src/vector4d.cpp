@@ -188,7 +188,7 @@ float Vector4D::Norm(const Vector4D& lhs)
 Vector4D Normalize(const Vector4D& rhs)
 {
     static float SquareSum = (rhs.x * rhs.x + rhs.y * rhs.y + rhs.z * rhs.z + rhs.w * rhs.w);
-    static float Scale = InvSqrt(SquareSum);
+    static float Scale = RecipSqrt(SquareSum);
 
     return Vector4D(rhs.x * Scale , rhs.y * Scale, rhs.z * Scale, rhs.w * Scale);
 }

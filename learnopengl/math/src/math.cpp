@@ -10,14 +10,23 @@ bool IsEqual(T X, T Y)
     return std::abs(X - Y) < std::numeric_limits<T>::epsilon();
 }
 
-float InvSqrt(float x)
+// From Quake III. But the magic number is from http://www.lomont.org/Math/Papers/2003/InvSqrt.pdf
+float RecipSqrt(float number) noexcept
 {
-    float xhalf = 0.5f*x;
-    int i = *(int*)&x; // get bits for floating VALUE
-    i = 0x5f375a86- (i>>1); // gives initial guess y0
-    x = *(float*)&i; // convert bits BACK to float
-    x = x*(1.5f-xhalf*x*x); // Newton step, repeating increases accuracy
-    return x;
+    float const threehalfs = 1.5f;
+
+    float x2 = number * 0.5f;
+    union FNI
+    {
+        float f;
+        int32_t i;
+    } fni;
+    fni.f = number;													// evil floating point bit level hacking
+    fni.i = 0x5f375a86 - (fni.i >> 1);						// what the fuck?
+    fni.f = fni.f * (threehalfs - (x2 * fni.f * fni.f));		// 1st iteration
+    fni.f = fni.f * (threehalfs - (x2 * fni.f * fni.f));		// 2nd iteration, this can be removed
+
+    return fni.f;
 }
 
 template Vector2D Lerp(const Vector2D& lsh, const Vector2D& rhs, float s);

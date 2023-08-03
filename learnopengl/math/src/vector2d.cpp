@@ -159,7 +159,7 @@ float Vector2D::Norm(const Vector2D& lhs)
 
 void Vector2D::Normalize()
 {
-    static float Scale = InvSqrt(x*x + y*y);
+    static float Scale = RecipSqrt(x*x + y*y);
     x = x * Scale;
     y = y * Scale;
 }
