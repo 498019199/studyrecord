@@ -168,13 +168,34 @@ Vector4D Mul(const Vector4D&lhs, const Matrix& rhs)
         lhs.x * rhs._14 + lhs.y * rhs._24 + lhs.z * rhs._34 + lhs.w * rhs._44);
 }
 
-Matrix Transpose(const Matrix& m)
+Matrix Transpose(const Matrix& mat)
 {  
     return Matrix(
-        m._11, m._21, m._31, m._41, 
-        m._12, m._22, m._32, m._42,
-        m._13, m._23, m._33, m._43,
-        m._14, m._24, m._34, m._44);
+        mat._11, mat._21, mat._31, mat._41, 
+        mat._12, mat._22, mat._32, mat._42,
+        mat._13, mat._23, mat._33, mat._43,
+        mat._14, mat._24, mat._34, mat._44);
 }
 
+// 矩阵的行列式
+float Determinant(const Matrix& mat)
+{
+    const float  _3142_3241(mat(2, 0) * mat(3, 1) - mat(2, 1) * mat(3, 0));
+	const float  _3143_3341(mat(2, 0) * mat(3, 2) - mat(2, 2) * mat(3, 0));
+	const float  _3144_3441(mat(2, 0) * mat(3, 3) - mat(2, 3) * mat(3, 0));
+	const float  _3243_3342(mat(2, 1) * mat(3, 2) - mat(2, 2) * mat(3, 1));
+	const float  _3244_3442(mat(2, 1) * mat(3, 3) - mat(2, 3) * mat(3, 1));
+	const float  _3344_3443(mat(2, 2) * mat(3, 3) - mat(2, 3) * mat(3, 2));
+
+    return mat(0, 0) * (mat(1, 1) * _3344_3443 - mat(1, 2) * _3244_3442 + mat(1, 3) * _3243_3342)
+        - mat(0, 1) * (mat(1, 0) * _3344_3443 - mat(1, 2) * _3144_3441 + mat(1, 3) * _3143_3341)
+        + mat(0, 2) * (mat(1, 0) * _3244_3442 - mat(1, 1) * _3144_3441 + mat(1, 3) * _3142_3241)
+        - mat(0, 3) * (mat(1, 0) * _3243_3342 - mat(1, 1) * _3143_3341 + mat(1, 2) * _3142_3241);
+}
+
+// 矩阵的逆
+Matrix MatrixInverse(const Matrix& m)
+{
+    return Matrix();
+}
 }

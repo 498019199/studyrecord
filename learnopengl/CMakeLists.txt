@@ -14,6 +14,7 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     set(CMAKE_CXX_FLAGS_RELEASE "-m64 -O2")
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     message("Clang compiler")
+
     add_definitions(-DPLATFORM_MACOS)
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     message("MSVC compiler")

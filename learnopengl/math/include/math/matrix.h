@@ -32,6 +32,15 @@ public:
                 float f31, float f32, float f33, float f34,
                 float f41, float f42, float f43, float f44) noexcept;
 
+    float& operator()(uint32_t row, uint32_t col)noexcept
+    {
+        return m[row][col];
+	}
+    const float& operator()(uint32_t row, uint32_t col) const noexcept
+    {
+        return m[row][col];
+    }
+
     Matrix& operator=(const Matrix& rhs) noexcept;
     Matrix& operator=(Matrix&& rhs) noexcept;
     
@@ -49,6 +58,7 @@ public:
 
     bool operator==(const Matrix& rhs) const noexcept;
     bool operator!=(const Matrix& rhs) const noexcept;
+
 
     friend std::ostream& operator<<(std::ostream& os, const  Matrix& lhs); 
 };

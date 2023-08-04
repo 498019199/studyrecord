@@ -5,14 +5,18 @@
 
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
-App* gMainApp = nullptr;
-Renderer* gRender = nullptr;
+namespace RenderWorker
+{
+    App* gMainApp = nullptr;
+    Renderer* gRender = nullptr;
+}
+using namespace RenderWorker;
 
 int main()
 {
     
-    gMainApp = new App();
-    gRender = new Renderer();
+    gMainApp = new RenderWorker::App();
+    gRender = new RenderWorker::Renderer();
     if (nullptr == gMainApp || nullptr == gRender)
     {
         return 0;
