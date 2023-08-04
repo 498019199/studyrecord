@@ -12,7 +12,7 @@ public:
     void Bind(void* data, int size);
     void UnBind();
 
-    int GetId() const { return vbo_id_; }
+    uint32_t GetId() const { return vbo_id_; }
 private:
     uint32_t vbo_id_ = 0;
 };

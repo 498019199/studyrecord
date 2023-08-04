@@ -21,7 +21,6 @@ public:
         
         float m[4][4];
     };
-    
 public:
     Matrix()
     {}

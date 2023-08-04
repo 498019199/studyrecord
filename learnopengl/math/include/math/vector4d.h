@@ -80,12 +80,12 @@ public:
 
 inline Vector4D operator/(float lhs, const Vector4D& rhs)
 {
-    return rhs.operator/(rhs);
+    return rhs.operator/(lhs);
 }
 
 inline Vector4D operator*(float lhs, const Vector4D& rhs)
 {
-    return rhs.operator*(rhs);
+    return rhs.operator*(lhs);
 }
 
 }

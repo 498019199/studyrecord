@@ -6,8 +6,6 @@
 namespace MathWorker
 {
 
-static const Vector4D zero_vector(0, 0, 0, 0);
-static const Vector4D unit_vector(1, 1, 1, 1);
 
 
 Vector4D& Vector4D::operator=(const Vector4D& rhs) 

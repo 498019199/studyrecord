@@ -83,11 +83,11 @@ public:
 
 inline Vector3D operator/(float lhs, const Vector3D& rhs)
 {
-    return rhs.operator/(rhs);
+    return rhs.operator/(lhs);
 }
 
 inline Vector3D operator*(float lhs, const Vector3D& rhs)
 {
-    return rhs.operator*(rhs);
+    return rhs.operator*(lhs);
 }
 }

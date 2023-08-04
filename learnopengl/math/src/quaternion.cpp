@@ -8,7 +8,10 @@ Quaternion Quaternion::ZeroQuat(0.f , 0.f, 0.f, 0.f);
 
 constexpr Quaternion::Quaternion(const float * rhs) noexcept
 {
-    
+    x = rhs[0];
+    y = rhs[1];
+    z = rhs[2];
+    w = rhs[3];
 }
 
 Quaternion::Quaternion(const Vector3D& vec, float s) noexcept

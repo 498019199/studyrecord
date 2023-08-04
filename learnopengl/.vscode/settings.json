@@ -82,5 +82,26 @@
         "fstream": "cpp",
         "cassert": "cpp",
         "regex": "cpp"
+    },
+    //terminal
+    "terminal.integrated.profiles.windows": {
+        "PowerShell": {
+        "source": "PowerShell",
+        "icon": "terminal-powershell"
+        },
+        "Command Prompt": {
+        "path": [
+            "${env:windir}\\Sysnative\\cmd.exe",
+            "${env:windir}\\System32\\cmd.exe"
+        ],
+        "args": [
+            // 解决cmd文本环境为UTF-8
+            "-NodeNext", "/C", "chcp 65001"
+        ],
+        "icon": "terminal-cmd"
+        },
+        "Git Bash": {
+        "source": "Git Bash"
+        }
     }
 }

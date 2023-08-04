@@ -6,7 +6,10 @@ namespace MathWorker
 
 constexpr Color::Color(float const * rhs) noexcept
 {
-    
+    A = rhs[0];
+    R = rhs[1];
+    G = rhs[2];
+    B = rhs[3];
 }
 
 Color::Color(Color const & rhs) noexcept
@@ -21,15 +24,15 @@ Color::Color(Color&& rhs) noexcept
     
 }
 
-constexpr Color::Color(float r, float g, float b, float a) noexcept
-    :A(a), R(r), G(r), B(g)
+constexpr Color::Color(float a, float r, float g, float b) noexcept
+    :A(a), R(r), G(g), B(b)
 {
     
 }
 
 Color::Color(uint32_t dw) noexcept
 {
-    static float const f(1 / float(255));
+    static float f(1 / float(255));
 	A = f * (static_cast<float>(static_cast<uint8_t>(dw >> 24)));
 	R = f * (static_cast<float>(static_cast<uint8_t>(dw >> 16)));
 	G = f * (static_cast<float>(static_cast<uint8_t>(dw >> 8)));

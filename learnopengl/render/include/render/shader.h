@@ -13,17 +13,17 @@ class IShader
 public:   
     ~IShader();
 
-    void InitShader(int type);
+    void InitShader(uint32_t type);
     void BindShader(const char* shader_script);
     void LinkShader();
 
-    int GetShaderId() { return shader_id_; }
+    uint32_t GetShaderId() { return shader_id_; }
 private:
     const char* GetShaderType();
 
 private:
-    int shader_type_ = 0;
-    int shader_id_ = 0;
+    uint32_t shader_type_ = 0;
+    uint32_t shader_id_ = 0;
 };
 
 // 像素着色器
@@ -53,6 +53,7 @@ public:
     void DetachShader();
 private:
     uint32_t obj_id_;
+    uint32_t ___;
     PtrIShader pixel_;
     PtrIShader fragment_;
 };

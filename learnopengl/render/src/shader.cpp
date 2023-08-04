@@ -9,7 +9,7 @@ IShader::~IShader()
 {
 }
 
-void IShader::InitShader(int type)
+void IShader::InitShader(uint32_t type)
 {
     glDeleteShader(shader_id_);
     shader_type_ = type;
@@ -34,7 +34,7 @@ void IShader::BindShader(const char* shader_script)
 
 void IShader::LinkShader()
 {
-    int shaderProgram = glCreateProgram(); // shaderProgram 是多个着色器合并之后并最终链接完成的版本
+    unsigned int shaderProgram = glCreateProgram(); // shaderProgram 是多个着色器合并之后并最终链接完成的版本
     glAttachShader(shaderProgram, shader_id_); // 附加
     glLinkProgram(shader_id_);
     // check for linking errors

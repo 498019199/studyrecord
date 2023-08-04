@@ -79,12 +79,12 @@ public:
 
 inline Vector2D operator/(float lhs, const Vector2D& rhs)
 {
-    return rhs.operator/(rhs);
+    return rhs.operator/(lhs);
 }
 
 inline Vector2D operator*(float lhs, const Vector2D& rhs)
 {
-    return rhs.operator*(rhs);
+    return rhs.operator*(lhs);
 }
 
 }
