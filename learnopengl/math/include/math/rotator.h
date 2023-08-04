@@ -15,6 +15,9 @@ public:
     static Rotator ZeroRotator;
 
 public:
+    Rotator()
+    {}
+    
     explicit Rotator(float in_x, float in_y, float in_z)
         :pitch(in_x), yaw(in_y), roll(in_z) {}
 };

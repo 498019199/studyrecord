@@ -4,7 +4,8 @@
 #include <math/vector3d.h>
 #include <math/vector4d.h>
 #include <math/matrix.h>
-#include <math/Quaternion.h>
+#include <math/quaternion.h>
+#include <math/rotator.h>
 namespace MathWorker
 {
     const float PI = 3.141592f;
@@ -85,4 +86,12 @@ namespace MathWorker
 	// Matrix OrthogonalProjection(const Matrix& m);
 	// // 透视投影
 	// Matrix PerspectiveProjection(const Matrix& m);
+
+	// 相互转换
+	Matrix ToMatrix(const Quaternion& quat);
+	Matrix ToMatrix(const Rotator& rot);
+	Quaternion ToQuaternion(const Matrix& mat);
+	Quaternion ToQuaternion(const Rotator& rot);
+	Rotator ToRotator(const Matrix& mat);
+	Rotator ToRotator(const Quaternion& quat);
 }

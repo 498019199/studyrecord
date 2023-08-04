@@ -249,4 +249,35 @@ Matrix MatrixInverse(const Matrix& mat)
 
     return mat;
 }
+
+Matrix ToMatrix(const Quaternion& quat)
+{
+    return Matrix();
+}
+
+Matrix ToMatrix(const Rotator& rot)
+{
+    return Matrix();
+}
+
+Quaternion ToQuaternion(const Matrix& mat)
+{
+    return Quaternion();
+}
+
+Quaternion ToQuaternion(const Rotator& rot)
+{
+    return Quaternion();    
+}
+
+Rotator ToRotator(const Matrix& mat)
+{
+    return Rotator();
+}
+
+Rotator ToRotator(const Quaternion& quat)
+{
+    return Rotator();
+}
+
 }
