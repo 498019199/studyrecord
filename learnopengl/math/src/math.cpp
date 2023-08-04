@@ -194,8 +194,59 @@ float Determinant(const Matrix& mat)
 }
 
 // 矩阵的逆
-Matrix MatrixInverse(const Matrix& m)
+Matrix MatrixInverse(const Matrix& mat)
 {
-    return Matrix();
+    const float  _2132_2231(mat(1, 0) * mat(2, 1) - mat(1, 1) * mat(2, 0));
+    const float  _2133_2331(mat(1, 0) * mat(2, 2) - mat(1, 2) * mat(2, 0));
+    const float  _2134_2431(mat(1, 0) * mat(2, 3) - mat(1, 3) * mat(2, 0));
+    const float  _2142_2241(mat(1, 0) * mat(3, 1) - mat(1, 1) * mat(3, 0));
+    const float  _2143_2341(mat(1, 0) * mat(3, 2) - mat(1, 2) * mat(3, 0));
+    const float  _2144_2441(mat(1, 0) * mat(3, 3) - mat(1, 3) * mat(3, 0));
+    const float  _2233_2332(mat(1, 1) * mat(2, 2) - mat(1, 2) * mat(2, 1));
+    const float  _2234_2432(mat(1, 1) * mat(2, 3) - mat(1, 3) * mat(2, 1));
+    const float  _2243_2342(mat(1, 1) * mat(3, 2) - mat(1, 2) * mat(3, 1));
+    const float  _2244_2442(mat(1, 1) * mat(3, 3) - mat(1, 3) * mat(3, 1));
+    const float  _2334_2433(mat(1, 2) * mat(2, 3) - mat(1, 3) * mat(2, 2));
+    const float  _2344_2443(mat(1, 2) * mat(3, 3) - mat(1, 3) * mat(3, 2));
+    const float  _3142_3241(mat(2, 0) * mat(3, 1) - mat(2, 1) * mat(3, 0));
+    const float  _3143_3341(mat(2, 0) * mat(3, 2) - mat(2, 2) * mat(3, 0));
+    const float  _3144_3441(mat(2, 0) * mat(3, 3) - mat(2, 3) * mat(3, 0));
+    const float  _3243_3342(mat(2, 1) * mat(3, 2) - mat(2, 2) * mat(3, 1));
+    const float  _3244_3442(mat(2, 1) * mat(3, 3) - mat(2, 3) * mat(3, 1));
+    const float  _3344_3443(mat(2, 2) * mat(3, 3) - mat(2, 3) * mat(3, 2));
+    
+    // 行列式的值
+    const float  det(Determinant(mat));
+    if (IsEqual<float>(det, 0))
+    {
+        return mat;
+    }
+    else
+    {
+        // 标准伴随矩阵的转置 / 行列式的值
+        float invDet(float(1) / det);
+        return Matrix(
+            +invDet * (mat(1, 1) * _3344_3443 - mat(1, 2) * _3244_3442 + mat(1, 3) * _3243_3342),//c11
+            -invDet * (mat(0, 1) * _3344_3443 - mat(0, 2) * _3244_3442 + mat(0, 3) * _3243_3342),//c21
+            +invDet * (mat(0, 1) * _2344_2443 - mat(0, 2) * _2244_2442 + mat(0, 3) * _2243_2342),//c31
+            -invDet * (mat(0, 1) * _2334_2433 - mat(0, 2) * _2234_2432 + mat(0, 3) * _2233_2332),//c41
+            
+            -invDet * (mat(1, 0) * _3344_3443 - mat(1, 2) * _3144_3441 + mat(1, 3) * _3143_3341),//c12
+            +invDet * (mat(0, 0) * _3344_3443 - mat(0, 2) * _3144_3441 + mat(0, 3) * _3143_3341),//c22
+            -invDet * (mat(0, 0) * _2344_2443 - mat(0, 2) * _2144_2441 + mat(0, 3) * _2143_2341),//32
+            +invDet * (mat(0, 0) * _2334_2433 - mat(0, 2) * _2134_2431 + mat(0, 3) * _2133_2331),//c42
+            
+            +invDet * (mat(1, 0) * _3244_3442 - mat(1, 1) * _3144_3441 + mat(1, 3) * _3142_3241),//c13
+            -invDet * (mat(0, 0) * _3244_3442 - mat(0, 1) * _3144_3441 + mat(0, 3) * _3142_3241),//c23
+            +invDet * (mat(0, 0) * _2244_2442 - mat(0, 1) * _2144_2441 + mat(0, 3) * _2142_2241),//c33
+            -invDet * (mat(0, 0) * _2234_2432 - mat(0, 1) * _2134_2431 + mat(0, 3) * _2132_2231),//c43
+            
+            -invDet * (mat(1, 0) * _3243_3342 - mat(1, 1) * _3143_3341 + mat(1, 2) * _3142_3241),//c14
+            +invDet * (mat(0, 0) * _3243_3342 - mat(0, 1) * _3143_3341 + mat(0, 2) * _3142_3241),//c24
+            -invDet * (mat(0, 0) * _2243_2342 - mat(0, 1) * _2143_2341 + mat(0, 2) * _2142_2241),//c34
+            +invDet * (mat(0, 0) * _2233_2332 - mat(0, 1) * _2133_2331 + mat(0, 2) * _2132_2231));//c44
+    }
+
+    return mat;
 }
 }
