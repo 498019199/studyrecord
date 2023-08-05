@@ -12,7 +12,7 @@ public:
 
 public:
     // (0, 0, 0)
-    static Rotator ZeroRotator;
+    static const Rotator ZeroRotator;
 
 public:
     Rotator()

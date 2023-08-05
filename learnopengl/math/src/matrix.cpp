@@ -31,6 +31,14 @@ Matrix::Matrix(float f11, float f12, float f13, float f14,
     M[3][0] = f41; M[3][1] = f42; M[3][2] = f43; M[3][3] = f44;
 }
 
+Matrix::Matrix(const Vector3D& inX, const Vector3D& inY, const Vector3D& inZ, const Vector3D& inW)
+{
+    M[0][0] = inX.x; M[0][1] = inX.y; M[0][2] = inX.z; M[0][3] = 0.f;
+    M[1][0] = inY.x; M[1][1] = inY.y; M[1][2] = inY.z; M[1][3] = 0.f;
+    M[2][0] = inZ.x; M[2][1] = inZ.y; M[2][2] = inZ.z; M[2][3] = 0.f;
+    M[3][0] = inW.x; M[3][1] = inW.y; M[3][2] = inW.z; M[3][3] = 0.f;
+}
+
 Matrix& Matrix::operator=(const Matrix& rhs) noexcept
 {
     if (this != &rhs)
@@ -123,6 +131,14 @@ bool Matrix::operator==(const Matrix& rhs) const noexcept
 bool Matrix::operator!=(const Matrix& rhs) const noexcept
 {
     return !(this->operator==(rhs));
+}
+
+void Matrix::Identity()
+{
+	M[0][0] = 1; M[0][1] = 0;  M[0][2] = 0;  M[0][3] = 0;
+	M[1][0] = 0; M[1][1] = 1;  M[1][2] = 0;  M[1][3] = 0;
+	M[2][0] = 0; M[2][1] = 0;  M[2][2] = 1;  M[2][3] = 0;
+	M[3][0] = 0; M[3][1] = 0;  M[3][2] = 0;  M[3][3] = 1;    
 }
 
 std::ostream& operator<<(std::ostream& os, const  Matrix& lhs)

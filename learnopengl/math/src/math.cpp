@@ -2,6 +2,21 @@
 
 namespace MathWorker
 {
+const Vector3D Vector3D::ZeroVector(0.0f, 0.0f, 0.0f);
+const Vector3D Vector3D::OneVector(1.0f, 1.0f, 1.0f);
+const Vector3D Vector3D::UpVector(0.0f, 0.0f, 1.0f);
+const Vector3D Vector3D::DownVector(0.0f, 0.0f, -1.0f);
+const Vector3D Vector3D::ForwardVector(1.0f, 0.0f, 0.0f);
+const Vector3D Vector3D::BackwardVector(-1.0f, 0.0f, 0.0f);
+const Vector3D Vector3D::RightVector(0.0f, 1.0f, 0.0f);
+const Vector3D Vector3D::LeftVector(0.0f, -1.0f, 0.0f);
+const Vector2D Vector2D::ZeroVector(0.0f, 0.0f);
+const Vector2D Vector2D::UnitVector(1.0f, 1.0f);
+const Rotator Rotator::ZeroRotator(0.f,0.f,0.f);
+const Vector3D Vector3D::XAxisVector(1.0f, 0.0f, 0.0f);
+const Vector3D Vector3D::YAxisVector(0.0f, 1.0f, 0.0f);
+const Vector3D Vector3D::ZAxisVector(0.0f, 0.0f, 1.0f);
+
     template bool IsEqual(float X, float Y);
     template bool IsEqual(double X, double Y);
     template <typename T>

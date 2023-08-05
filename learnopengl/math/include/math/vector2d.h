@@ -11,8 +11,8 @@ public:
     float y = 0.f;
 
 public:
-    static const Vector2D Zero;
-
+    static const Vector2D ZeroVector;
+    static const Vector2D UnitVector;
 public:
     //构造
     constexpr Vector2D() noexcept
