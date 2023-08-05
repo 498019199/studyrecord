@@ -1,6 +1,6 @@
 #pragma once
 #include <iostream>
-
+#include <common/micro.h>
 namespace MathWorker
 {
 
@@ -9,22 +9,12 @@ class Matrix
     enum  { row_num = 4, col_num = 4};
 	enum  { elem_num = row_num * col_num };
 public:
-    union 
-    {
-        struct 
-        {
-            float _11; float _12; float _13; float _14;
-            float _21; float _22; float _23; float _24;
-            float _31; float _32; float _33; float _34;
-            float _41; float _42; float _43; float _44;
-        };
-        
-        float m[4][4];
+    union { 
+        MS_ALIGN(16) float M[4][4]; 
     };
 public:
     Matrix()
     {}
-	explicit Matrix(const float* rhs) noexcept;
 	Matrix(const Matrix& rhs) noexcept;
     Matrix(Matrix&& rhs) noexcept;
     Matrix(float f11, float f12, float f13, float f14,
@@ -34,11 +24,11 @@ public:
 
     float& operator()(uint32_t row, uint32_t col)noexcept
     {
-        return m[row][col];
+        return M[row][col];
 	}
     const float& operator()(uint32_t row, uint32_t col) const noexcept
     {
-        return m[row][col];
+        return M[row][col];
     }
 
     Matrix& operator=(const Matrix& rhs) noexcept;

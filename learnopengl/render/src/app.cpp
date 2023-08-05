@@ -8,7 +8,9 @@ extern Renderer* gRender;
 void App::Init()
 {
 }
-
+#ifdef __cplusplus
+extern "C" {
+#endif
 // key input
 // ---------------------------------------------------------------------------------------------------------
 void keyInput(GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -51,6 +53,9 @@ void mouseWheel(GLFWwindow* window, double xoffset, double yoffset)
 {
 
 }
+#ifdef __cplusplus
+}
+#endif
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
 // ---------------------------------------------------------------------------------------------
