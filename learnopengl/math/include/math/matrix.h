@@ -15,6 +15,7 @@ public:
 public:
     Matrix()
     {}
+    Matrix(const Vector3D& inX, const Vector3D& inY, const Vector3D& inZ, const Vector3D& inW);
 	Matrix(const Matrix& rhs) noexcept;
     Matrix(Matrix&& rhs) noexcept;
     Matrix(float f11, float f12, float f13, float f14,
@@ -49,9 +50,13 @@ public:
     bool operator==(const Matrix& rhs) const noexcept;
     bool operator!=(const Matrix& rhs) const noexcept;
 
+    void Identity();
 
     friend std::ostream& operator<<(std::ostream& os, const  Matrix& lhs); 
 };
+
+
+
 
 
 

@@ -12,38 +12,14 @@ public:
     float y = 0.f;
     float z = 0.f;
 public:
-	/** A zero vector (0,0,0) */
-	static const Vector3D ZeroVector;
-
-	/** One vector (1,1,1) */
-	static const Vector3D OneVector;
-
-	/** Unreal up vector (0,0,1) */
-	static const Vector3D UpVector;
-
-	/** Unreal down vector (0,0,-1) */
-	static const Vector3D DownVector;
-
-	/** Unreal forward vector (1,0,0) */
-	static const Vector3D ForwardVector;
-
-	/** Unreal backward vector (-1,0,0) */
-	static const Vector3D BackwardVector;
-
-	/** Unreal right vector (0,1,0) */
-	static const Vector3D RightVector;
-
-	/** Unreal left vector (0,-1,0) */
-	static const Vector3D LeftVector;
-
-	/** Unit X axis vector (1,0,0) */
-	static const Vector3D XAxisVector;
-
-	/** Unit Y axis vector (0,1,0) */
-	static const Vector3D YAxisVector;
-
-	/** Unit Z axis vector (0,0,1) */
-	static const Vector3D ZAxisVector;
+    // static const Vector3D ForwardVector(0.f, 0.f, 1.f);
+    // static const Vector3D BackVector(0, 0.f, -1.f);
+    // static const Vector3D UpVector(0.f, 1.f, 0.f);
+    // static const Vector3D DownVector(0.f,-1.f, 0.f);
+    // static const Vector3D LeftVector(-1.f, 0.f, 0.f);
+    // static const Vector3D RightVector(1.f, 0.f, 0.f);
+    // static const Vector3D ZeroVector(0.f, 0.f, 0.f);
+    
 public:
     // 构造
     constexpr Vector3D() noexcept
