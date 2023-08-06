@@ -42,7 +42,7 @@ namespace MathWorker
 	inline void SinCos(float fAnglel, float& X, float&Y)
 	{
 		X = std::sin(fAnglel);
-		Y = std::sin(fAnglel);
+		Y = std::cos(fAnglel);
 	}
 
 	// 浮点相等
@@ -70,7 +70,7 @@ namespace MathWorker
 	Matrix MatrixRotateX(float Angle);
 	Matrix MatrixRotateY(float Angle);
 	Matrix MatrixRotateZ(float Angle);
-	Matrix MatrixRotate(const Vector4D& Pos, float Angle);
+	Matrix MatrixRotate(const Vector3D& Pos, float Angle);
 
 	// 矩形乘法
 	Matrix Mul(const Matrix&lhs, const Matrix& rhs);

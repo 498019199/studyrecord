@@ -3,7 +3,7 @@
 #include <common/micro.h>
 namespace MathWorker
 {
-
+class Vector3D;
 class Matrix
 {
     enum  { row_num = 4, col_num = 4};

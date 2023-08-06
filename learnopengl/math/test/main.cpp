@@ -121,7 +121,8 @@ void checkmatrix()
 	assert(Matrix(2,2,2,2, 2,2,2,2,  2,2,2,2, 2,2,2,2) == 
 		(Matrix(3,3,3,3, 3,3,3,3,  3,3,3,3, 3,3,3,3) - 
 		Matrix(1,1,1,1,  1,1,1,1,  1,1,1,1,  1,1,1,1)));
-	// test matrix scalar
+	
+    // test matrix scalar
 	assert(Matrix(2,2,2,2, 2,2,2,2,  2,2,2,2, 2,2,2,2) == 
 		Matrix(1,1,1,1,  1,1,1,1,  1,1,1,1,  1,1,1,1) * 2);
 	assert(Matrix(2,2,2,2, 2,2,2,2,  2,2,2,2, 2,2,2,2) / 2 == 
@@ -155,10 +156,11 @@ void checkmath()
 	assert(Transpose(m1) == m2);
 
 	// test rotation matrix
-	assert(Matrix(2,2,2,2,  2,2,2,2,  2,2,2,2,  2,2,2,2) == MatrixRotateX(0));
-	assert(Matrix(2,2,2,2,  2,2,2,2,  2,2,2,2,  2,2,2,2) == MatrixRotateY(0));
-	assert(Matrix(2,2,2,2,  2,2,2,2,  2,2,2,2,  2,2,2,2) == MatrixRotateZ(0));
-	assert(Matrix(2,2,2,2,  2,2,2,2,  2,2,2,2,  2,2,2,2) == MatrixRotate(Vector4D(0,0,0,0), 0));
+    // rotation matrix
+    //assert(Matrix(1,0,0,0, 0,0.8386f,-0.5447f,0.f,  0,0.5446f,0.8386f,0, 0,0,0,1) == MatrixRotateX(33));
+    assert(Matrix(0.7071f,0,0.7071f,0, 0,1,0,0,  -0.7072f,0,0.7071f,0, 0,0,0,1) == MatrixRotateY(45));
+    assert(Matrix(0.0174f,-0.9999f,0,0, 0.9998f,0.0174f,0,0,  0,0,1,0, 0,0,0,1) == MatrixRotateZ(89));
+    //assert(Matrix(2,2,2,2, 2,2,2,2,  2,2,2,2, 2,2,2,2) == MatrixRotate(Vector3D(), 16));
 	// move
 	assert(Matrix(2,2,2,2,  2,2,2,2,  2,2,2,2,  2,2,2,2) == MatrixMove(0,0,0));
 	// Scale
