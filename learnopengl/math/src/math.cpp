@@ -243,6 +243,30 @@ namespace MathWorker
         }
     }
 
+	Matrix OrthoLH(float w, float h, float Near, float Far)
+    {
+        return Matrix();        
+    }
+	Matrix OrthoOffCenterLH(float l, float r, float b, float t, float zn, float zf)
+    {
+        return Matrix();        
+    }
+
+	Matrix LookAtLH(const Vector3D& Eye, const Vector3D& At, const Vector3D& Up)
+    {
+        return Matrix();        
+    }
+
+	Matrix PerspectiveLH(float w, float h, float Near, float Far)
+    {
+        return Matrix();        
+    }
+
+	Matrix PerspectiveFovLH(float Fov, float Aspect, float Near, float Far)
+    {
+        return Matrix();        
+    }
+    
     Matrix ToMatrix(const Quaternion &quat)
     {
         return Matrix();

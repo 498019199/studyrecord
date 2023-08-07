@@ -82,10 +82,14 @@ namespace MathWorker
 	// 矩阵的逆
 	Matrix MatrixInverse(const Matrix& m);
 
-	// // 正交投影
-	// Matrix OrthogonalProjection(const Matrix& m);
-	// // 透视投影
-	// Matrix PerspectiveProjection(const Matrix& m);
+	// 正交投影
+	Matrix OrthoLH(float w, float h, float Near, float Far);
+	Matrix OrthoOffCenterLH(float l, float r, float b, float t, float n, float f);
+
+	// 透视投影
+	Matrix LookAtLH(const Vector3D& Eye, const Vector3D& At, const Vector3D& Up);
+	Matrix PerspectiveLH(float w, float h, float Near, float Far);
+	Matrix PerspectiveFovLH(float Fov, float Aspect, float Near, float Far);
 
 	// 相互转换
 	Matrix ToMatrix(const Quaternion& quat);
@@ -95,3 +99,4 @@ namespace MathWorker
 	Rotator ToRotator(const Matrix& mat);
 	Rotator ToRotator(const Quaternion& quat);
 }
+
