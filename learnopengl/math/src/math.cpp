@@ -2,6 +2,12 @@
 
 namespace MathWorker
 {
+    void SinCos(float fAnglel, float& X, float&Y)
+	{
+		X = std::sin(fAnglel);
+		Y = std::cos(fAnglel);
+	}
+
     template bool IsEqual(float X, float Y);
     template bool IsEqual(double X, double Y);
     template <typename T>
@@ -185,7 +191,10 @@ namespace MathWorker
         const float _3244_3442(mat(2, 1) * mat(3, 3) - mat(2, 3) * mat(3, 1));
         const float _3344_3443(mat(2, 2) * mat(3, 3) - mat(2, 3) * mat(3, 2));
 
-        return mat(0, 0) * (mat(1, 1) * _3344_3443 - mat(1, 2) * _3244_3442 + mat(1, 3) * _3243_3342) - mat(0, 1) * (mat(1, 0) * _3344_3443 - mat(1, 2) * _3144_3441 + mat(1, 3) * _3143_3341) + mat(0, 2) * (mat(1, 0) * _3244_3442 - mat(1, 1) * _3144_3441 + mat(1, 3) * _3142_3241) - mat(0, 3) * (mat(1, 0) * _3243_3342 - mat(1, 1) * _3143_3341 + mat(1, 2) * _3142_3241);
+        return mat(0, 0) * (mat(1, 1) * _3344_3443 - mat(1, 2) * _3244_3442 + mat(1, 3) * _3243_3342) - 
+        mat(0, 1) * (mat(1, 0) * _3344_3443 - mat(1, 2) * _3144_3441 + mat(1, 3) * _3143_3341) + 
+        mat(0, 2) * (mat(1, 0) * _3244_3442 - mat(1, 1) * _3144_3441 + mat(1, 3) * _3142_3241) - 
+        mat(0, 3) * (mat(1, 0) * _3243_3342 - mat(1, 1) * _3143_3341 + mat(1, 2) * _3142_3241);
     }
 
     // 矩阵的逆
@@ -247,14 +256,29 @@ namespace MathWorker
     {
         return Matrix();        
     }
-	Matrix OrthoOffCenterLH(float l, float r, float b, float t, float zn, float zf)
+	Matrix OrthoOffCenterLH(float l, float r, float b, float t, float n, float f)
     {
-        return Matrix();        
+        float rsl = r - l;
+        float ral = r + l;
+        float nsf = n - f;
+        float tsb = t - b;
+        return Matrix(
+            2/rsl,      0,          0,              0,
+            0,          2/tsb,      0,              0,
+            0,          0,          2/nsf,          0,
+            -ral/rsl,   -(t+b)/tsb, (n + f)/nsf,    1);        
     }
 
 	Matrix LookAtLH(const Vector3D& Eye, const Vector3D& At, const Vector3D& Up)
     {
-        return Matrix();        
+        Vector3D zaxis = Vector3D::Normalize(Eye - At);
+        Vector3D xaxis = Vector3D::Normalize(Up ^ zaxis);
+        Vector3D yaxis = zaxis ^ xaxis;
+        return Matrix(
+            xaxis.x, yaxis.x, zaxis.y, 0,
+            xaxis.y, yaxis.y, zaxis.z, 0,
+            xaxis.z, yaxis.z, zaxis.z, 0,
+            xaxis | Eye, yaxis | Eye, zaxis | Eye, 1);        
     }
 
 	Matrix PerspectiveLH(float w, float h, float Near, float Far)
@@ -266,7 +290,7 @@ namespace MathWorker
     {
         return Matrix();        
     }
-    
+
     Matrix ToMatrix(const Quaternion &quat)
     {
         return Matrix();

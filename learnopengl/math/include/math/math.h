@@ -39,11 +39,7 @@ namespace MathWorker
 		return x * RAD2DEG;
 	}
 	
-	inline void SinCos(float fAnglel, float& X, float&Y)
-	{
-		X = std::sin(fAnglel);
-		Y = std::cos(fAnglel);
-	}
+	void SinCos(float fAnglel, float& X, float&Y);
 
 	// 浮点相等
 	template<typename T>
@@ -82,12 +78,13 @@ namespace MathWorker
 	// 矩阵的逆
 	Matrix MatrixInverse(const Matrix& m);
 
+	Matrix LookAtLH(const Vector3D& Eye, const Vector3D& At, const Vector3D& Up);
+
 	// 正交投影
 	Matrix OrthoLH(float w, float h, float Near, float Far);
 	Matrix OrthoOffCenterLH(float l, float r, float b, float t, float n, float f);
 
 	// 透视投影
-	Matrix LookAtLH(const Vector3D& Eye, const Vector3D& At, const Vector3D& Up);
 	Matrix PerspectiveLH(float w, float h, float Near, float Far);
 	Matrix PerspectiveFovLH(float Fov, float Aspect, float Near, float Far);
 
@@ -99,4 +96,6 @@ namespace MathWorker
 	Rotator ToRotator(const Matrix& mat);
 	Rotator ToRotator(const Quaternion& quat);
 }
+
+
 
