@@ -41,35 +41,35 @@ constexpr Quaternion_T<T>::Quaternion_T(T x, T y, T z, T w) noexcept
 }
 
 template <typename T>
-const Quaternion_T<T>& Quaternion_T<T>::operator+=(const Quaternion_T & rhs) noexcept
+const Quaternion_T<T>& Quaternion_T<T>::operator+=(const Quaternion_T & rhs) const noexcept
 {
 	this->quat_ += rhs.quat_;
 	return *this;
 }
 
 template <typename T>
-const Quaternion_T<T>& Quaternion_T<T>::operator-=(const Quaternion_T & rhs) noexcept
+const Quaternion_T<T>& Quaternion_T<T>::operator-=(const Quaternion_T & rhs) const noexcept
 {
 	this->quat_ -= rhs.quat_;
 	return *this;
 }
 
 template <typename T>
-const Quaternion_T<T>& Quaternion_T<T>::operator*=(const Quaternion_T & rhs) noexcept
+const Quaternion_T<T>& Quaternion_T<T>::operator*=(const Quaternion_T & rhs) const noexcept
 {
 	*this = Mul(*this, rhs);
 	return *this;
 }
 
 template <typename T>
-const Quaternion_T<T>& Quaternion_T<T>::operator*=(T rhs) noexcept
+const Quaternion_T<T>& Quaternion_T<T>::operator*=(T rhs) const noexcept
 {
 	this->quat_ *= static_cast<T>(rhs);
 	return *this;
 }
 
 template <typename T>
-const Quaternion_T<T>& Quaternion_T<T>::operator/=(T rhs) noexcept
+const Quaternion_T<T>& Quaternion_T<T>::operator/=(T rhs) const noexcept
 {
 	this->quat_ /= static_cast<T>(rhs);
 	return *this;
@@ -85,6 +85,38 @@ Quaternion_T<T>& Quaternion_T<T>::operator=(const Quaternion_T & rhs) noexcept
 
 	return *this;
 }
+
+template <typename T>
+Quaternion_T<T>& Quaternion_T<T>::operator+(const Quaternion_T & rhs) const noexcept
+{
+	return this->operator+=(rhs);
+}
+
+template <typename T>
+Quaternion_T<T>& Quaternion_T<T>::operator-(const Quaternion_T & rhs) const noexcept
+{
+	return this->operator-=(rhs);
+}
+
+template <typename T>
+Quaternion_T<T>& Quaternion_T<T>::operator*(const Quaternion_T & rhs) const noexcept
+{
+	return this->operator*=(rhs);
+}
+
+template <typename T>
+Quaternion_T<T>& Quaternion_T<T>::operator*(T rhs) const noexcept
+{
+	return this->operator*=(rhs);
+}
+
+template <typename T>
+Quaternion_T<T>& Quaternion_T<T>::operator/(T rhs) const noexcept
+{
+	return this->operator/=(rhs);
+}
+
+
 
 template <typename T>
 Quaternion_T<T>& Quaternion_T<T>::operator=(Quaternion_T&& rhs) noexcept
