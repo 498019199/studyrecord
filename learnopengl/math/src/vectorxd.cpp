@@ -124,20 +124,18 @@ Vector_T<ValTy, SIZE>::operator-(const U& rhs) const noexcept
     return this->operator-=(rhs);    
 }
 
-// operator * 点积
+// operator 叉积
 template <typename ValTy, int SIZE>
-template <typename U>
-const Vector_T<ValTy, SIZE>& 
-Vector_T<ValTy, SIZE>::operator|(const Vector_T<U, SIZE>& rhs) const noexcept
-{
-    return Dot<ValTy, SIZE>(*this, rhs);
-}
-
-template <typename ValTy, int SIZE>
-template <typename U>
-ValTy Vector_T<ValTy, SIZE>::operator^(const Vector_T<U, SIZE>& rhs) const noexcept
+Vector_T<ValTy, SIZE> Vector_T<ValTy, SIZE>::operator^(const Vector_T<ValTy, SIZE>& rhs) const noexcept
 {
     return Cross<ValTy, SIZE>(*this, rhs);
+}
+
+// operator 点积
+template <typename ValTy, int SIZE>
+ValTy Vector_T<ValTy, SIZE>::operator|(const Vector_T& rhs) const noexcept
+{
+    return Dot<ValTy, SIZE>(*this, rhs);
 }
 
 // operator * 数乘

@@ -79,17 +79,17 @@ public:
     Vector_T<Valty, 4> Col(size_t index) const noexcept;
 
     //赋值操作符
-    Matrix4_T& operator+=(const Matrix4_T& rhs) const noexcept;
-    Matrix4_T& operator-=(const Matrix4_T& rhs) const noexcept;
-    Matrix4_T& operator*=(const Matrix4_T& rhs) const noexcept;
-    Matrix4_T& operator*=(value_type rhs) const noexcept;
-    Matrix4_T& operator/=(value_type rhs) const noexcept;
+    Matrix4_T& operator+=(const Matrix4_T& rhs) noexcept;
+    Matrix4_T& operator-=(const Matrix4_T& rhs) noexcept;
+    Matrix4_T& operator*=(const Matrix4_T& rhs) noexcept;
+    Matrix4_T& operator*=(value_type rhs) noexcept;
+    Matrix4_T& operator/=(value_type rhs) noexcept;
 
-    Matrix4_T& operator+(const Matrix4_T& rhs) const noexcept;
-    Matrix4_T& operator-(const Matrix4_T& rhs) const noexcept;
-    Matrix4_T& operator*(const Matrix4_T& rhs) const noexcept;
-    Matrix4_T& operator*(value_type rhs) const noexcept;
-    Matrix4_T& operator/(value_type rhs) const noexcept;
+    Matrix4_T operator+(const Matrix4_T& rhs) const noexcept;
+    Matrix4_T operator-(const Matrix4_T& rhs) const noexcept;
+    Matrix4_T operator*(const Matrix4_T& rhs) const noexcept;
+    Matrix4_T operator*(value_type rhs) const noexcept;
+    Matrix4_T operator/(value_type rhs) const noexcept;
 
     Matrix4_T& operator=(const Matrix4_T& rhs) noexcept;
     Matrix4_T& operator=(Matrix4_T&& rhs) noexcept;

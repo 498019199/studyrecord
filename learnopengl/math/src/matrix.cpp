@@ -107,14 +107,14 @@ Matrix4_T<Valty>::operator=(const Matrix4_T& rhs) noexcept
 
 template <typename Valty>
 Matrix4_T<Valty>& 
-Matrix4_T<Valty>::operator/=(value_type rhs) const noexcept
+Matrix4_T<Valty>::operator/=(value_type rhs) noexcept
 {
 	return this->operator*=(RecipSqrt(rhs));
 }
 
 template <typename Valty>
 Matrix4_T<Valty>& 
-Matrix4_T<Valty>::operator*=(value_type rhs) const noexcept
+Matrix4_T<Valty>::operator*=(value_type rhs) noexcept
 {
 	for (size_type i = 0; i < row_num; ++i)
 	{
@@ -125,7 +125,7 @@ Matrix4_T<Valty>::operator*=(value_type rhs) const noexcept
 
 template <typename Valty>
 Matrix4_T<Valty>& 
-Matrix4_T<Valty>::operator*=(const Matrix4_T& rhs) const noexcept
+Matrix4_T<Valty>::operator*=(const Matrix4_T& rhs) noexcept
 {
 	*this = Mul(*this, rhs);
 	return *this;
@@ -133,7 +133,7 @@ Matrix4_T<Valty>::operator*=(const Matrix4_T& rhs) const noexcept
 
 template <typename Valty>
 Matrix4_T<Valty>& 
-Matrix4_T<Valty>::operator-=(const Matrix4_T& rhs) const noexcept
+Matrix4_T<Valty>::operator-=(const Matrix4_T& rhs) noexcept
 {
 	this->m_ -= rhs.m_;
 	return *this;
@@ -141,45 +141,50 @@ Matrix4_T<Valty>::operator-=(const Matrix4_T& rhs) const noexcept
 
 template <typename Valty>
 Matrix4_T<Valty>& 
-Matrix4_T<Valty>::operator+=(const Matrix4_T<Valty>& rhs) const noexcept
+Matrix4_T<Valty>::operator+=(const Matrix4_T<Valty>& rhs) noexcept
 {
 	this->m_ += rhs.m_;
 	return *this;
 }
 
 template <typename Valty>
-Matrix4_T<Valty>& 
+Matrix4_T<Valty>
 Matrix4_T<Valty>::operator+(const Matrix4_T& rhs) const noexcept
 {
-	return this->operator+=(rhs);
+    Matrix4_T<Valty> tmp(*this);
+	return tmp.operator+=(rhs);
 }
 
 template <typename Valty>
-Matrix4_T<Valty>& 
+Matrix4_T<Valty> 
 Matrix4_T<Valty>::operator-(const Matrix4_T& rhs) const noexcept
 {
-	return this->operator-=(rhs);
+    Matrix4_T<Valty> tmp(*this);
+	return tmp.operator-=(rhs);
 }
 
 template <typename Valty>
-Matrix4_T<Valty>& 
+Matrix4_T<Valty>
 Matrix4_T<Valty>::operator*(const Matrix4_T& rhs) const noexcept
 {
-	return this->operator*=(rhs);
+    Matrix4_T<Valty> tmp(*this);
+	return tmp.operator*=(rhs);
 }
 
 template <typename Valty>
-Matrix4_T<Valty>& 
+Matrix4_T<Valty>
 Matrix4_T<Valty>::operator*(value_type rhs) const noexcept
 {
-	return this->operator*=(rhs);
+    Matrix4_T<Valty> tmp(*this);
+	return tmp.operator*=(rhs);
 }
 
 template <typename Valty>
-Matrix4_T<Valty>& 
+Matrix4_T<Valty> 
 Matrix4_T<Valty>::operator/(value_type rhs) const noexcept
 {
-	return this->operator/=(rhs);
+    Matrix4_T<Valty> tmp(*this);
+	return tmp.operator/=(rhs);
 }
 
 

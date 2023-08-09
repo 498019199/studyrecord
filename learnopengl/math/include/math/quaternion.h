@@ -87,19 +87,19 @@ public:
 	}
 
 	// 赋值操作符
-	const Quaternion_T& operator+=(const Quaternion_T & rhs) const noexcept;
-	const Quaternion_T& operator-=(const Quaternion_T & rhs) const noexcept;
-	const Quaternion_T& operator*=(const Quaternion_T & rhs) const noexcept;
-	const Quaternion_T& operator*=(T rhs) const noexcept;
-	const Quaternion_T& operator/=(T rhs) const noexcept;
+	const Quaternion_T& operator+=(const Quaternion_T & rhs) noexcept;
+	const Quaternion_T& operator-=(const Quaternion_T & rhs) noexcept;
+	const Quaternion_T& operator*=(const Quaternion_T & rhs) noexcept;
+	const Quaternion_T& operator*=(T rhs) noexcept;
+	const Quaternion_T& operator/=(T rhs) noexcept;
 	Quaternion_T& operator=(const Quaternion_T & rhs) noexcept;
 	Quaternion_T& operator=(Quaternion_T&& rhs) noexcept;
 
-	const Quaternion_T& operator+(const Quaternion_T & rhs) const noexcept;
-	const Quaternion_T& operator-(const Quaternion_T & rhs) const noexcept;
-	const Quaternion_T& operator*(const Quaternion_T & rhs) const noexcept;
-	const Quaternion_T& operator*(T rhs) const noexcept;
-	const Quaternion_T& operator/(T rhs) const noexcept;
+	Quaternion_T operator+(const Quaternion_T & rhs) const noexcept;
+	Quaternion_T operator-(const Quaternion_T & rhs) const noexcept;
+	Quaternion_T operator*(const Quaternion_T & rhs) const noexcept;
+	Quaternion_T operator*(T rhs) const noexcept;
+	Quaternion_T operator/(T rhs) const noexcept;
 
 	// 一元操作符
 	Quaternion_T const operator+() const noexcept;

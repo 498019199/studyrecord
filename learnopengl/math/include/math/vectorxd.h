@@ -162,11 +162,9 @@ public:
 	const Vector_T& operator-(const U& rhs) const noexcept;
 
 	// operator 叉积
-	template <typename U>
-	const Vector_T& operator^(const Vector_T<U, SIZE>& rhs) const noexcept;
+	Vector_T operator^(const Vector_T& rhs) const noexcept;
 	// operator 点积
-	template <typename U>
-	ValTy operator|(const Vector_T<U, SIZE>& rhs) const noexcept;
+	ValTy operator|(const Vector_T& rhs) const noexcept;
 
 	// operator * 数乘
 	template <typename U>
