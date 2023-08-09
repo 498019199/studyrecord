@@ -148,6 +148,22 @@ namespace MathWorker
         return (lhs + (rhs - lhs) * s);
     }
 
+    template float Distance(const float2 & lhs, const float2 & rhs) noexcept;
+    template<typename T>
+    T Distance(const Vector_T<T, 2>& lhs, const Vector_T<T, 2>& rhs) noexcept
+    {
+        Vector_T<T, 2> tmp(lhs.x() - rhs.x(), lhs.y() - rhs.y());
+        return Length(tmp);
+    }
+    
+    template float Distance(const float3 & lhs, const float3 & rhs) noexcept;
+    template<typename T>
+    T Distance(const Vector_T<T, 3>& lhs, const Vector_T<T, 3>& rhs) noexcept
+    {
+        Vector_T<T, 3> tmp(lhs.x() - rhs.x(), lhs.y() - rhs.y(), lhs.z() - rhs.z());
+        return Length(tmp);
+    }
+
     template float Angle(const float2 &lsh, const float2 &rhs);
     template float Angle(const float3 &lsh, const float3 &rhs);
     template float Angle(const float4 &lsh, const float4 &rhs);

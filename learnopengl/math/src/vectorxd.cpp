@@ -258,7 +258,17 @@ bool Vector_T<ValTy, SIZE>::operator!=(const Vector_T& rhs) const noexcept
     return !(this->operator==(rhs));
 }
 
-
+template <typename ValTy, int SIZE>
+std::string Vector_T<ValTy, SIZE>::print() const noexcept
+{
+    std::string tmp;
+    for(auto it: vec_)
+    {
+        tmp << it << " ";
+    }
+    tmp.append(" \r\n");
+    return tmp;
+}
 
 // template <typename U, int SIZE>
 // const Vector_T<U, SIZE>& 
@@ -294,12 +304,18 @@ bool Vector_T<ValTy, SIZE>::operator!=(const Vector_T& rhs) const noexcept
 //     return lhs.operator/(rhs);  
 // }
 
-// template <typename U, int SIZE>
-// const Vector_T<U, SIZE>& 
-// operator*(const Vector_T<U, SIZE>& lhs, const U& rhs) noexcept
-// {
-//     return lhs.operator*=(rhs);
-// }
+template <typename U, int SIZE>
+const Vector_T<U, SIZE>& 
+operator*(const Vector_T<U, SIZE>& lhs, const U& rhs) noexcept
+{
+    return lhs.operator*=(rhs);
+}
+template <typename U, int SIZE>
+const Vector_T<U, SIZE>& 
+operator*(const U& lhs, const Vector_T<U, SIZE>& rhs) noexcept
+{
+    return rhs.operator*=(lhs);
+}
 
 // template <typename U, int SIZE>
 // const Vector_T<U, SIZE>& 

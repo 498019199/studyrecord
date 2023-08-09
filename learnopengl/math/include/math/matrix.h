@@ -99,6 +99,7 @@ public:
     Matrix4_T operator-() const noexcept;
 
     bool operator==(const Matrix4_T& rhs) const noexcept;
+    bool operator!=(const Matrix4_T& rhs) const noexcept;
 private:
 	Vector_T<Vector_T<Valty, col_num>, row_num> m_;
 };

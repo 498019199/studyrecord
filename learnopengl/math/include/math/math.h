@@ -88,6 +88,12 @@ namespace MathWorker
 	template<typename T>
 	T Normalize(const T & rhs) noexcept;
 
+	// 距离
+	template<typename T>
+	T Distance(const Vector_T<T, 2> & lhs, const Vector_T<T, 2> & rhs) noexcept;
+	template<typename T>
+	T Distance(const Vector_T<T, 3> & lhs, const Vector_T<T, 3> & rhs) noexcept;
+    
     // 返回 from 与 to 之间的角度
     template<typename T>
     typename T::value_type Angle(const T& from, const T& to);

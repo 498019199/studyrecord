@@ -216,6 +216,12 @@ bool Matrix4_T<Valty>::operator==(const Matrix4_T<Valty>& rhs) const noexcept
 	return m_ == rhs.m_;
 }
 
+template <typename Valty>
+bool Matrix4_T<Valty>::operator!=(const Matrix4_T<Valty>& rhs) const noexcept
+{
+	return !this->operator==(rhs);
+}
+
 // 实例化模板
 template class Matrix4_T<float>;
 }

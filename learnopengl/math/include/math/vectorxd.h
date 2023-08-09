@@ -1,5 +1,6 @@
 #pragma once
 #include <array>
+#include <string>
 
 namespace MathWorker
 {
@@ -32,32 +33,32 @@ public:
 	Vector_T(const Vector_T<U, M>& rhs) noexcept;
 
 	Vector_T(const ValTy& x, const ValTy& y) noexcept
-		:vec_ {x, y}
+		:vec_ {{x, y}}
 	{
 		static_assert(2 == elem_num, "must be 2D vecotr");
 	}
 	Vector_T(ValTy&& x, ValTy&& y) noexcept
-		: vec_{ std::move(x), std::move(y) }
+		: vec_{ {std::move(x), std::move(y)} }
 	{
 		static_assert(2 == elem_num, "must be 2D vecotr");
 	}
 	Vector_T(const ValTy& x, const ValTy& y, const ValTy& z) noexcept
-		: vec_{ x, y , z}
+		: vec_{ {x, y , z} }
 	{
 		static_assert(3 == elem_num, "must be 3D vecotr");
 	}
 	Vector_T(ValTy&& x, ValTy&& y, ValTy&& z) noexcept
-		: vec_{ std::move(x), std::move(y) , std::move(z) }
+		: vec_{ {std::move(x), std::move(y) , std::move(z)} }
 	{
 		static_assert(3 == elem_num, "must be 3D vecotr");
 	}
 	Vector_T(const ValTy& x, const ValTy& y, const ValTy& z, const ValTy& w) noexcept
-		: vec_{ x, y , z, w }
+		: vec_{ {x, y , z, w} }
 	{
 		static_assert(4 == elem_num, "must be 4D vecotr");
 	}
 	Vector_T(ValTy&& x, ValTy&& y, ValTy&& z, ValTy&& w) noexcept
-		: vec_{ std::move(x), std::move(y) , std::move(z), std::move(w) }
+		: vec_{ {std::move(x), std::move(y) , std::move(z), std::move(w)} }
 	{
 		static_assert(4 == elem_num, "must be 4D vecotr");
 	}
@@ -202,6 +203,14 @@ public:
 	bool operator==(const Vector_T& rhs) const noexcept;
 	// operator ==
 	bool operator!=(const Vector_T& rhs) const noexcept;
+
+    // print
+    std::string print() const noexcept;
+    // friend
+    template <typename U, int SIZE>
+    friend Vector_T operator*(const Vector_T<U, SIZE>& lhs, const U& rhs) noexcept;
+    template <typename U, int SIZE>
+    friend Vector_T operator*(const U& lhs, const Vector_T<U, SIZE>& rhs) noexcept;
 private:
 	DetailType vec_;
 };
