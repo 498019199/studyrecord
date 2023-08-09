@@ -1,136 +1,181 @@
 #include <math/matrix.h>
 #include <math/math.h>
-#include <utility>
-
 namespace MathWorker
 {
-Matrix::Matrix(const Matrix& rhs) noexcept
-{
-    M[0][0] = rhs.M[0][0]; M[0][1] = rhs.M[0][1]; M[0][2] = rhs.M[0][2]; M[0][3] = rhs.M[0][3];
-    M[1][0] = rhs.M[1][0]; M[1][1] = rhs.M[1][1]; M[1][2] = rhs.M[1][2]; M[1][3] = rhs.M[1][3];
-    M[2][0] = rhs.M[2][0]; M[2][1] = rhs.M[2][1]; M[2][2] = rhs.M[2][2]; M[2][3] = rhs.M[2][3];
-    M[3][0] = rhs.M[3][0]; M[3][1] = rhs.M[3][1]; M[3][2] = rhs.M[3][2]; M[3][3] = rhs.M[3][3];
-}
 
-Matrix::Matrix(Matrix&& rhs) noexcept
+template <typename Valty>
+Matrix4_T<Valty>::Matrix4_T(const Valty* rhs) noexcept
 {
-    M[0][0] = rhs.M[0][0]; M[0][1] = rhs.M[0][1]; M[0][2] = rhs.M[0][2]; M[0][3] = rhs.M[0][3];
-    M[1][0] = rhs.M[1][0]; M[1][1] = rhs.M[1][1]; M[1][2] = rhs.M[1][2]; M[1][3] = rhs.M[1][3];
-    M[2][0] = rhs.M[2][0]; M[2][1] = rhs.M[2][1]; M[2][2] = rhs.M[2][2]; M[2][3] = rhs.M[2][3];
-    M[3][0] = rhs.M[3][0]; M[3][1] = rhs.M[3][1]; M[3][2] = rhs.M[3][2]; M[3][3] = rhs.M[3][3];
-}
-
-Matrix::Matrix(float f11, float f12, float f13, float f14,
-                float f21, float f22, float f23, float f24,
-                float f31, float f32, float f33, float f34,
-                float f41, float f42, float f43, float f44) noexcept
-{
-    M[0][0] = f11; M[0][1] = f12; M[0][2] = f13; M[0][3] = f14;
-    M[1][0] = f21; M[1][1] = f22; M[1][2] = f23; M[1][3] = f24;
-    M[2][0] = f31; M[2][1] = f32; M[2][2] = f33; M[2][3] = f34;
-    M[3][0] = f41; M[3][1] = f42; M[3][2] = f43; M[3][3] = f44;
-}
-
-Matrix& Matrix::operator=(const Matrix& rhs) noexcept
-{
-    if (this != &rhs)
+	for (Matrix4_T::size_type i = 0; i < row_num; ++i)
 	{
-        for (size_t i = 0; i < row_num; i++)
-            for (size_t j = 0; j < row_num; j++)
-                M[i][j] += rhs.M[i][j];
+		this->m_[i] = Vector_T<Valty, col_num>(rhs);
+		rhs += col_num;
 	}
-    return *this;
 }
 
-Matrix& Matrix::operator=(Matrix&& rhs) noexcept
+template <typename Valty>
+Matrix4_T<Valty>::Matrix4_T(const Matrix4_T& rhs) noexcept
+	:m_(std::move(rhs.m_))
 {
-    if (this != &rhs)
+
+}
+
+template <typename Valty>
+Matrix4_T<Valty>::Matrix4_T(Matrix4_T&& rhs) noexcept
+    :m_(std::move(rhs.m_))
+{
+
+}
+
+template <typename Valty>
+Matrix4_T<Valty>::Matrix4_T(Valty f11, Valty f12, Valty f13, Valty f14
+    , Valty f21, Valty f22, Valty f23, Valty f24
+    , Valty f31, Valty f32, Valty f33, Valty f34
+    , Valty f41, Valty f42, Valty f43, Valty f44) noexcept
+{
+    m_[0][0] = f11; m_[0][1] = f12; m_[0][2] = f13; m_[0][3] = f14;
+    m_[1][0] = f21; m_[1][1] = f22; m_[1][2] = f23; m_[1][3] = f24;
+    m_[2][0] = f31; m_[2][1] = f32; m_[2][2] = f33; m_[2][3] = f34;
+    m_[3][0] = f41; m_[3][1] = f42; m_[3][2] = f43; m_[3][3] = f44;
+}
+
+template <typename Valty>
+Vector_T<Valty, 4> Matrix4_T<Valty>::Col(size_t index) const noexcept
+{
+	Vector_T<Valty, col_num> tmp;
+	for (Matrix4_T::size_type i = 0; i < row_num; ++i)
 	{
-        for (size_t i = 0; i < row_num; i++)
-            for (size_t j = 0; j < row_num; j++)
-                M[i][j] += rhs.M[i][j];
+		tmp[i] = this->m_[i][index];
 	}
-    return *this;
+
+	return tmp;
 }
 
-Matrix& Matrix::operator-(const Matrix& rhs) noexcept
+template <typename Valty>
+const Vector_T<Valty, 4>& Matrix4_T<Valty>::Row(size_t index)  const noexcept
 {
-    for (size_t i = 0; i < row_num; i++)
-        for (size_t j = 0; j < row_num; j++)
-            M[i][j] -= rhs.M[i][j];
-    return *this; 
+	return this->m_[index];
 }
 
-Matrix& Matrix::operator+(const Matrix& rhs) noexcept
+template <typename Valty>
+void Matrix4_T<Valty>::Col(size_t index, const Vector_T<Valty, 4>& rhs) noexcept
 {
-    for (size_t i = 0; i < row_num; i++)
-        for (size_t j = 0; j < row_num; j++)
-            M[i][j] += rhs.M[i][j];
-    return *this;         
+	for (Matrix4_T::size_type i = 0; i < row_num; ++i)
+	{
+		this->m_[i][index] = rhs[i];
+	}
 }
 
-Matrix& Matrix::operator+=(const Matrix& rhs) noexcept
+template <typename Valty>
+void Matrix4_T<Valty>::Row(size_t index, const Vector_T<Valty, 4>& rhs) noexcept
 {
-    return this->operator+(rhs);
+	this->m_[index] = rhs;
 }
 
-Matrix& Matrix::operator-=(const Matrix& rhs) noexcept
+template <typename Valty>
+Matrix4_T<Valty> Matrix4_T<Valty>::operator-() const noexcept
 {
-    return this->operator-(rhs);
+	Matrix4_T<Valty> tmp(*this);
+	tmp.m_ = -this->m_;
+	return tmp;
 }
 
-Matrix& Matrix::operator*=(const Matrix& rhs) noexcept
+template <typename Valty>
+Matrix4_T<Valty> Matrix4_T<Valty>::operator+() const noexcept
 {
-    *this = Mul(*this, rhs);
-    return *this;      
+	return *this;
 }
 
-Matrix& Matrix::operator/(float rhs) noexcept
+template <typename Valty>
+Matrix4_T<Valty>& Matrix4_T<Valty>::operator=(Matrix4_T&& rhs) noexcept
 {
-    for (size_t i = 0; i < row_num; i++)
-        for (size_t j = 0; j < row_num; j++)
-            M[i][j] = M[i][j] / rhs;
-    return *this;
+	this->m_ = std::move(rhs.m_);
+	return *this;
 }
 
-Matrix& Matrix::operator*(float rhs) noexcept
+template <typename Valty>
+Matrix4_T<Valty>& 
+Matrix4_T<Valty>::operator=(const Matrix4_T& rhs) noexcept
 {
-    for (size_t i = 0; i < row_num; i++)
-        for (size_t j = 0; j < row_num; j++)
-            M[i][j] = M[i][j] * rhs;
-    return *this;
+	if (this != &rhs)
+	{
+		this->m_ = rhs.m_;
+	}
+
+	return *this;
 }
 
-Matrix& Matrix::operator/=(float rhs) noexcept
+template <typename Valty>
+Matrix4_T<Valty>& 
+Matrix4_T<Valty>::operator/=(value_type rhs) noexcept
 {
-    return this->operator/(rhs);
+	return this->operator*=(RecipSqrt(rhs));
 }
 
-Matrix& Matrix::operator*=(float rhs) noexcept
+template <typename Valty>
+Matrix4_T<Valty>& 
+Matrix4_T<Valty>::operator*=(value_type rhs) noexcept
 {
-    return this->operator*(rhs);
+	for (size_type i = 0; i < row_num; ++i)
+	{
+		this->m_[i] *= rhs;
+	}
+	return *this;
 }
 
-bool Matrix::operator==(const Matrix& rhs) const noexcept
+template <typename Valty>
+Matrix4_T<Valty>& 
+Matrix4_T<Valty>::operator*=(const Matrix4_T& rhs) noexcept
 {
-    for (size_t i = 0; i < row_num; i++)
-        for (size_t j = 0; j < row_num; j++)
-            if (!IsEqual(M[i][j], rhs.M[i][j]))
-                return false;
-    return true;
+	*this = Mul(*this, rhs);
+	return *this;
 }
 
-bool Matrix::operator!=(const Matrix& rhs) const noexcept
+template <typename Valty>
+Matrix4_T<Valty>& 
+Matrix4_T<Valty>::operator-=(const Matrix4_T& rhs) noexcept
 {
-    return !(this->operator==(rhs));
+	this->m_ -= rhs.m_;
+	return *this;
 }
 
-std::ostream& operator<<(std::ostream& os, const  Matrix& lhs)
+template <typename Valty>
+Matrix4_T<Valty>& 
+Matrix4_T<Valty>::operator+=(const Matrix4_T<Valty>& rhs) noexcept
 {
-    os << lhs.M[0][0] << " " << lhs.M[0][1] << " " << lhs.M[0][2] << " " << lhs.M[0][3] << std::endl;
-    os << lhs.M[1][0] << " " << lhs.M[1][1] << " " << lhs.M[1][2] << " " << lhs.M[1][3] << std::endl;
-    os << lhs.M[2][0] << " " << lhs.M[2][1] << " " << lhs.M[2][2] << " " << lhs.M[2][3] << std::endl;
-    os << lhs.M[3][0] << " " << lhs.M[3][1] << " " << lhs.M[3][2] << " " << lhs.M[3][3] << std::endl;
-    return os;
+	this->m_ += rhs.m_;
+	return *this;
 }
+
+
+template <typename Valty>
+const Matrix4_T<Valty> & 
+Matrix4_T<Valty>::Zero() noexcept
+{
+    static const Matrix4_T out(0, 0, 0, 0,
+                                0, 0, 0, 0,
+                                0, 0, 0, 0,
+                                0, 0, 0, 0);
+    return out;
+}
+
+template <typename Valty>
+const Matrix4_T<Valty> & 
+Matrix4_T<Valty>::Identity() noexcept
+{
+    static const Matrix4_T out(1, 0, 0, 0,
+                                0, 1, 0, 0,
+                                0, 0, 1, 0,
+                                0, 0, 0, 1);
+    return out;
+}
+
+template <typename Valty>
+bool Matrix4_T<Valty>::operator==(const Matrix4_T<Valty>& rhs) const noexcept
+{
+	return m_ == rhs.m_;
+}
+
+// 实例化模板
+template class Matrix4_T<float>;
 }

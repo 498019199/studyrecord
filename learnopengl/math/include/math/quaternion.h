@@ -1,54 +1,112 @@
 #pragma once
-#include <iostream>
+#include <math/vectorxd.h>
 
 namespace MathWorker
 {
-class Vector3D;
-
-struct Quaternion
+template <typename T>
+class Quaternion_T
 {
 public:
-    float x = 0.f;
-    float y = 0.f;
-    float z = 0.f;
-    float w = 0.f;
-
+	enum { elem_num = 4 };
+	typedef T value_type;
+	typedef typename Vector_T<T, elem_num>::pointer pointer;
+	typedef typename Vector_T<T, elem_num>::const_pointer const_pointer;
+	typedef typename Vector_T<T, elem_num>::reference reference;
+	typedef typename Vector_T<T, elem_num>::const_reference const_reference;
+	typedef typename Vector_T<T, elem_num>::iterator iterator;
+	typedef typename Vector_T<T, elem_num>::const_iterator const_iterator;
+	typedef typename Vector_T<T, elem_num>::size_type size_type;
 public:
-    // (0, 0, 0, 0)
-    static Quaternion ZeroQuat;
-
-public:
-	constexpr Quaternion() noexcept
+	constexpr Quaternion_T() noexcept
 	{
 	}
 
-	explicit constexpr Quaternion(const float * rhs) noexcept;
-	Quaternion(const Vector3D& vec, float s) noexcept;
-	Quaternion(const Quaternion & rhs) noexcept;
-	Quaternion(Quaternion&& rhs) noexcept;
-	constexpr Quaternion(float x, float y, float z, float w) noexcept;
+	explicit constexpr Quaternion_T(const T * rhs) noexcept;
+	constexpr Quaternion_T(const Vector_T<T, 3>& vec, T s) noexcept;
+	Quaternion_T(const Quaternion_T & rhs) noexcept;
+	Quaternion_T(Quaternion_T&& rhs) noexcept;
+	constexpr Quaternion_T(T x, T y, T z, T w) noexcept;
 
-	Quaternion& operator=(const Quaternion & rhs) noexcept;
-	Quaternion& operator=(Quaternion&& rhs) noexcept;
+	// 取向量
+	iterator begin() noexcept
+	{
+		return quat_.begin();
+	}
+	constexpr const_iterator begin() const noexcept
+	{
+		return quat_.begin();
+	}
+	iterator end() noexcept
+	{
+		return quat_.end();
+	}
+	constexpr const_iterator end() const noexcept
+	{
+		return quat_.end();
+	}
+	reference operator[](size_type nIndex) noexcept
+	{
+		return quat_[nIndex];
+	}
+	constexpr const_reference operator[](size_type nIndex) const noexcept
+	{
+		return quat_[nIndex];
+	}
+
+	reference x() noexcept
+	{
+		return quat_[0];
+	}
+	constexpr const_reference x() const noexcept
+	{
+		return quat_[0];
+	}
+	reference y() noexcept
+	{
+		return quat_[1];
+	}
+	constexpr const_reference y() const noexcept
+	{
+		return quat_[1];
+	}
+	reference z() noexcept
+	{
+		return quat_[2];
+	}
+	constexpr const_reference z() const noexcept
+	{
+		return quat_[2];
+	}
+	reference w() noexcept
+	{
+		return quat_[3];
+	}
+	constexpr const_reference w() const noexcept
+	{
+		return quat_[3];
+	}
 
 	// 赋值操作符
-	const Quaternion& operator+=(const Quaternion & rhs) noexcept;
-	const Quaternion& operator-=(const Quaternion & rhs) noexcept;
-	const Quaternion& operator*=(const Quaternion & rhs) noexcept;
-	const Quaternion& operator*=(float rhs) noexcept;
-	const Quaternion& operator/=(float rhs) noexcept;
-	
+	const Quaternion_T& operator+=(const Quaternion_T & rhs) noexcept;
+	const Quaternion_T& operator-=(const Quaternion_T & rhs) noexcept;
+	const Quaternion_T& operator*=(const Quaternion_T & rhs) noexcept;
+	const Quaternion_T& operator*=(T rhs) noexcept;
+	const Quaternion_T& operator/=(T rhs) noexcept;
+	Quaternion_T& operator=(const Quaternion_T & rhs) noexcept;
+	Quaternion_T& operator=(Quaternion_T&& rhs) noexcept;
+
+	// 一元操作符
+	Quaternion_T const operator+() const noexcept;
+	Quaternion_T const operator-() const noexcept;
+
 	// 取方向向量
-	const Vector3D GetV() const noexcept;
-	void SetV(const Vector3D& rhs) noexcept;
+	const Vector_T<T, 3> GetV() const noexcept;
+	void SetV(Vector_T<T, 3> const & rhs) noexcept;
 
-	bool operator==(const Quaternion& rhs) const noexcept;
-	bool operator!=(const Quaternion& rhs) const noexcept;
-
-	friend std::ostream& operator<<(std::ostream& os, const  Quaternion& lhs); 
+	bool operator==(Quaternion_T<T> const & rhs) const noexcept;
+	static const Quaternion_T& Identity() noexcept;
+private:
+	Vector_T<T, elem_num> quat_;
 };
-
-
-
 
 }

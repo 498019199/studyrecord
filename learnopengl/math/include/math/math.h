@@ -1,11 +1,34 @@
 #pragma once
-
-#include <math/vector2d.h>
-#include <math/vector3d.h>
-#include <math/vector4d.h>
+#include <math/vectorxd.h>
 #include <math/matrix.h>
 #include <math/quaternion.h>
+#include <stdint.h>
 #include <math/rotator.h>
+
+template<typename T, int SIZE>
+class Vector_T;
+typedef MathWorker::Vector_T<int32_t, 1> int1;
+typedef MathWorker::Vector_T<int32_t, 2> int2;
+typedef MathWorker::Vector_T<int32_t, 3> int3;
+typedef MathWorker::Vector_T<int32_t, 4> int4;
+typedef MathWorker::Vector_T<uint32_t, 1> uint1;
+typedef MathWorker::Vector_T<uint32_t, 2> uint2;
+typedef MathWorker::Vector_T<uint32_t, 3> uint3;
+typedef MathWorker::Vector_T<uint32_t, 4> uint4;
+typedef MathWorker::Vector_T<float, 1> float1;
+typedef MathWorker::Vector_T<float, 2> float2;
+typedef MathWorker::Vector_T<float, 3> float3;
+typedef MathWorker::Vector_T<float, 4> float4;
+
+template <typename T>
+class Quaternion_T;
+typedef MathWorker::Quaternion_T<float> quat;
+
+template <typename T>
+class Matrix4_T;
+typedef MathWorker::Matrix4_T<float> float4x4;
+
+
 namespace MathWorker
 {
     const float PI = 3.141592f;
@@ -29,15 +52,8 @@ namespace MathWorker
 	const float DEG2RAD = 0.01745329f;			// 角度化弧度因数
 	const float RAD2DEG = 57.29577f;			// 弧度化角度因数
 
-	inline float Deg2Rad(const float x)
-	{
-		return x * DEG2RAD;
-	}
-	// 弧度化角度
-	inline float Rad2Deg(const float x)
-	{
-		return x * RAD2DEG;
-	}
+	inline float Deg2Rad(const float x){ return x * DEG2RAD; }
+	inline float Rad2Deg(const float x){return x * RAD2DEG;}
 	
 	void SinCos(float fAnglel, float& X, float&Y);
 
@@ -48,53 +64,116 @@ namespace MathWorker
 	//  平方根倒数速算法
 	float RecipSqrt(float number) noexcept;
     
+	// 叉积
+	template<typename T>
+	T Cross(const Vector_T<T, 2> & lhs, const Vector_T<T, 2> & rhs) noexcept;
+	template<typename T>
+	Vector_T<T, 3> Cross(const Vector_T<T, 3> & lhs, const Vector_T<T, 3> & rhs) noexcept;
+	template<typename T>
+	Vector_T<T, 4> Cross(const Vector_T<T, 4> & lhs, const Vector_T<T, 4> & rhs) noexcept;
+
+	// 点积
+	template<typename T>
+	typename T::value_type Dot(const T & lhs, const T & rhs) noexcept;
+
+	// 长度的平方
+	template<typename T>
+	typename T::value_type LengthSq(const T & rhs) noexcept;
+
+	// 求模，向量的长
+	template<typename T>
+	typename T::value_type Length(const T & rhs) noexcept;
+
+	// 向量标准化
+	template<typename T>
+	T Normalize(const T & rhs) noexcept;
+
     // 返回 from 与 to 之间的角度
     template<typename T>
-    float Angle(const T& from, const T& to);
+    typename T::value_type Angle(const T& from, const T& to);
 	
     // 	线性插值。
     template<typename T>
     T Lerp(const T& lhs, const T& rhs, float s);
 
 	// 矩形平移
-	Matrix MatrixMove(float X, float Y, float Z);
-	Matrix MatrixMove(const Vector4D& Move);
+	template<typename T>
+	Matrix4_T<T> MatrixMove(T X, T Y, T Z);
+	template<typename T>
+	Matrix4_T<T> MatrixMove(const Vector_T<T, 3>& Move);
+
 	// 矩形缩放
-	Matrix MatrixScale(float X, float Y, float Z);
-	Matrix MatrixScale(const Vector4D& Scale);
+	template<typename T>
+	Matrix4_T<T> MatrixScale(T X, T Y, T Z);
+	template<typename T>
+	Matrix4_T<T> MatrixScale(const Vector_T<T, 3>& Scale);
+
 	// 矩阵旋转
-	Matrix MatrixRotateX(float Angle);
-	Matrix MatrixRotateY(float Angle);
-	Matrix MatrixRotateZ(float Angle);
-	Matrix MatrixRotate(const Vector3D& Pos, float Angle);
+	template<typename T>
+	Matrix4_T<T> MatrixRotateX(T Angle);
+	template<typename T>
+	Matrix4_T<T> MatrixRotateY(T Angle);
+	template<typename T>
+	Matrix4_T<T> MatrixRotateZ(T Angle);
+	template<typename T>
+	Matrix4_T<T> MatrixRotate(const Vector_T<T, 3>& Pos, T Angle);
 
 	// 矩形乘法
-	Matrix Mul(const Matrix&lhs, const Matrix& rhs);
-	Vector4D Mul(const Vector4D&lhs, const Matrix& rhs);
-	// 矩阵转置
-	Matrix Transpose(const Matrix& m);
-	// 矩阵的行列式
-	float Determinant(const Matrix& m);
-	// 矩阵的逆
-	Matrix MatrixInverse(const Matrix& m);
+	template<typename T>
+	Matrix4_T<T> Mul(const Matrix4_T<T>&lhs, const Matrix4_T<T>& rhs);
+	template<typename T>
+	Vector_T<T, 4> Mul(const Vector_T<T, 4>&lhs, const Matrix4_T<T>& rhs);
 
-	Matrix LookAtLH(const Vector3D& Eye, const Vector3D& At, const Vector3D& Up);
+	// 矩阵转置
+	template<typename T>
+	Matrix4_T<T> Transpose(const Matrix4_T<T>& m);
+
+	// 矩阵的行列式
+	template<typename T>
+	float Determinant(const Matrix4_T<T>& m);
+
+	// 矩阵的逆
+	template<typename T>
+	Matrix4_T<T> MatrixInverse(const Matrix4_T<T>& m);
+
+	template<typename T>
+	Matrix4_T<T> LookAtLH(const Vector_T<float, 3>& Eye, const Vector_T<float, 3>& At, const Vector_T<float, 3>& Up);
 
 	// 正交投影
-	Matrix OrthoLH(float w, float h, float Near, float Far);
-	Matrix OrthoOffCenterLH(float l, float r, float b, float t, float n, float f);
+	template<typename T>
+	Matrix4_T<T> OrthoLH(float w, float h, float Near, float Far);
+	template<typename T>
+	Matrix4_T<T> OrthoOffCenterLH(float l, float r, float b, float t, float n, float f);
 
 	// 透视投影
-	Matrix PerspectiveLH(float w, float h, float Near, float Far);
-	Matrix PerspectiveFovLH(float Fov, float Aspect, float Near, float Far);
+	template<typename T>
+	Matrix4_T<T> PerspectiveLH(float w, float h, float Near, float Far);
+	template<typename T>
+	Matrix4_T<T> PerspectiveFovLH(float Fov, float Aspect, float Near, float Far);
 
 	// 相互转换
-	Matrix ToMatrix(const Quaternion& quat);
-	Matrix ToMatrix(const Rotator& rot);
-	Quaternion ToQuaternion(const Matrix& mat);
-	Quaternion ToQuaternion(const Rotator& rot);
-	Rotator ToRotator(const Matrix& mat);
-	Rotator ToRotator(const Quaternion& quat);
+	template<typename T>
+	Matrix4_T<T> ToMatrix(const Quaternion_T<T>& quat);
+	template<typename T>
+	Matrix4_T<T> ToMatrix(const Rotator& rot);
+
+
+	// 四元数乘法
+	template <typename T>
+	Quaternion_T<T> Mul(Quaternion_T<T> const & lhs, Quaternion_T<T> const & rhs) noexcept;
+
+
+
+
+	template<typename T>
+	Quaternion_T<T> ToQuaternion(const Matrix4_T<T>& mat);
+	template<typename T>
+	Quaternion_T<T> ToQuaternion(const Rotator& rot);
+
+	template<typename T>
+	Rotator ToRotator(const Matrix4_T<T>& mat);
+	template<typename T>
+	Rotator ToRotator(const Quaternion_T<T>& quat);
 }
 
 

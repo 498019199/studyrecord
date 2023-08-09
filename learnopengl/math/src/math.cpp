@@ -1,4 +1,5 @@
 #include <math/math.h>
+#include "math_helper.h"
 
 namespace MathWorker
 {
@@ -35,117 +36,238 @@ namespace MathWorker
         return fni.f;
     }
 
-    template Vector2D Lerp(const Vector2D &lsh, const Vector2D &rhs, float s);
-    template Vector3D Lerp(const Vector3D &lsh, const Vector3D &rhs, float s);
-    template Vector4D Lerp(const Vector4D &lsh, const Vector4D &rhs, float s);
+	template int32_t Cross(const int2 & lhs, const int2 & rhs) noexcept;
+    template uint32_t Cross(const uint2 & lhs, const uint2 & rhs) noexcept;
+    template float Cross(const float2 & lhs, const float2 & rhs) noexcept;
+	template<typename T>
+	T Cross(const Vector_T<T, 2> & lhs, const Vector_T<T, 2> & rhs) noexcept
+	{
+		return lhs.x() * rhs.y() - lhs.y() * rhs.x();
+	}
+
+    template int3 Cross(const int3 & lhs, const int3 & rhs) noexcept;
+    template uint3 Cross(const uint3 & lhs, const uint3 & rhs) noexcept;
+    template float3 Cross(const float3 & lhs, const float3 & rhs) noexcept;
+    template<typename T>
+    Vector_T<T, 3> Cross(const Vector_T<T, 3>& lhs, const Vector_T<T, 3>& rhs) noexcept
+    {
+        return Vector_T<T, 3>((lhs.y() * rhs.z() - lhs.z() * rhs.y()),
+        (lhs.z() * rhs.x() - lhs.x() * rhs.z()),
+        (lhs.x() * rhs.y() - lhs.y() * rhs.x()));
+    }
+
+	template int4 Cross(const int4 & lhs, const int4 & rhs) noexcept;
+	template uint4 Cross(const uint4 & lhs, const uint4 & rhs) noexcept;
+	template float4 Cross(const float4 & lhs, const float4 & rhs) noexcept;
+	template<typename T>
+	Vector_T<T, 4>
+		Cross(const Vector_T<T, 4> & lhs, const Vector_T<T, 4> & rhs) noexcept
+	{
+		return Vector_T<T, 4>((lhs.y() * rhs.z() - lhs.z() * rhs.y()),
+			(lhs.z() * rhs.x() - lhs.x() * rhs.z()),
+			(lhs.x() * rhs.y() - lhs.y() * rhs.x()),
+			1);
+	}
+
+    template int32_t Dot(const int1 & lhs, const int1 & rhs) noexcept;
+    template int32_t Dot(const int2 & lhs, const int2 & rhs) noexcept;
+    template int32_t Dot(const int3 & lhs, const int3 & rhs) noexcept;
+    template int32_t Dot(const int4 & lhs, const int4 & rhs) noexcept;
+    template uint32_t Dot(const uint1 & lhs, const uint1 & rhs) noexcept;
+    template uint32_t Dot(const uint2 & lhs, const uint2 & rhs) noexcept;
+    template uint32_t Dot(const uint3 & lhs, const uint3 & rhs) noexcept;
+    template uint32_t Dot(const uint4 & lhs, const uint4 & rhs) noexcept;
+    template float Dot(const float1 & lhs, const float1 & rhs) noexcept;
+    template float Dot(const float2 & lhs, const float2 & rhs) noexcept;
+    template float Dot(const float3 & lhs, const float3 & rhs) noexcept;
+    template float Dot(const float4 & lhs, const float4 & rhs) noexcept;
+	template float Dot(const quat & lhs, const quat & rhs) noexcept;
+    template<typename T>
+    typename T::value_type Dot(const T & lhs, const T & rhs) noexcept
+    {
+        return MathHelper::dot_helper < typename T::value_type,
+            T::elem_num> ::Do(&lhs[0], &rhs[0]);
+    }
+
+    template int32_t LengthSq(const int1 & rhs) noexcept;
+    template int32_t LengthSq(const int2 & rhs) noexcept;
+    template int32_t LengthSq(const int3 & rhs) noexcept;
+    template int32_t LengthSq(const int4 & rhs) noexcept;
+    template uint32_t LengthSq(const uint1 & rhs) noexcept;
+    template uint32_t LengthSq(const uint2 & rhs) noexcept;
+    template uint32_t LengthSq(const uint3 & rhs) noexcept;
+    template uint32_t LengthSq(const uint4 & rhs) noexcept;
+    template float LengthSq(const float1 & rhs) noexcept;
+    template float LengthSq(const float2 & rhs) noexcept;
+    template float LengthSq(const float3 & rhs) noexcept;
+    template float LengthSq(const float4 & rhs) noexcept;
+	template float LengthSq(const quat & rhs) noexcept;
+    template<typename T>
+    typename T::value_type LengthSq(const T & rhs) noexcept
+    {
+        return Dot(rhs, rhs);
+    }
+
+    template float Length(const float1 & rhs) noexcept;
+    template float Length(const float2 & rhs) noexcept;
+    template float Length(const float3 & rhs) noexcept;
+    template float Length(const float4 & rhs) noexcept;
+	template float Length(const quat & rhs) noexcept;
+    template<typename T>
+    typename T::value_type Length(const T & rhs) noexcept
+    {
+        return std::sqrt(LengthSq(rhs));
+    }
+
+	template float1 Normalize(const float1 & rhs) noexcept;
+	template float2 Normalize(const float2 & rhs) noexcept;
+	template float3 Normalize(const float3 & rhs) noexcept;
+	template float4 Normalize(const float4 & rhs) noexcept;
+	template quat Normalize(const quat & rhs) noexcept;
+	template<typename T>
+	T Normalize(const T & rhs) noexcept
+	{
+		typename T::value_type tmp = 
+            RecipSqrt(
+                LengthSq(rhs));
+		return rhs * tmp;
+	}
+
+    template int2 Lerp(const int2 &lsh, const int2 &rhs, float s);
+    template int3 Lerp(const int3 &lsh, const int3 &rhs, float s);
+    template int4 Lerp(const int4 &lsh, const int4 &rhs, float s);
+    template uint2 Lerp(const uint2 &lsh, const uint2 &rhs, float s);
+    template uint3 Lerp(const uint3 &lsh, const uint3 &rhs, float s);
+    template uint4 Lerp(const uint4 &lsh, const uint4 &rhs, float s);
+    template float2 Lerp(const float2 &lsh, const float2 &rhs, float s);
+    template float3 Lerp(const float3 &lsh, const float3 &rhs, float s);
+    template float4 Lerp(const float4 &lsh, const float4 &rhs, float s);
     template <typename T>
     T Lerp(const T &lhs, const T &rhs, float s)
     {
         return (lhs + (rhs - lhs) * s);
     }
 
-    template float Angle(const Vector2D &lsh, const Vector2D &rhs);
-    template float Angle(const Vector3D &lsh, const Vector3D &rhs);
-    template float Angle(const Vector4D &lsh, const Vector4D &rhs);
+    template float Angle(const float2 &lsh, const float2 &rhs);
+    template float Angle(const float3 &lsh, const float3 &rhs);
+    template float Angle(const float4 &lsh, const float4 &rhs);
     template <typename T>
-    float Angle(const T &lsh, const T &rsh)
+    typename T::value_type Angle(const T &lsh, const T &rsh)
     {
-        float xn = T::Norm(lsh);
-        float yn = T::Norm(rsh);
-        float xyn = xn * yn;
-        float angle = std::acos((lsh | rsh) / xyn);
+        typename T::value_type xn = Length(lsh);
+        typename T::value_type yn = Length(rsh);
+        typename T::value_type xyn = xn * yn;
+        typename T::value_type angle = std::acos((lsh | rsh) / xyn);
         return Rad2Deg(angle);
     }
 
-    Matrix MatrixMove(float X, float Y, float Z)
+    template float4x4 MatrixMove(float X, float Y, float Z);
+    template<typename T>
+    Matrix4_T<T> MatrixMove(T X, T Y, T Z)
     {
-        return Matrix(
+        return Matrix4_T<T>(
             1, 0, 0, 0,
             0, 1, 0, 0,
             0, 0, 1, 0,
             X, Y, Z, 1);
     }
 
-    Matrix MatrixMove(const Vector4D &Move)
+    template<float> float4x4 MatrixMove(const float3& Move);
+    template<typename T>
+    Matrix4_T<T> MatrixMove(const Vector_T<T, 3> &Move)
     {
-        return MatrixMove(Move.x, Move.y, Move.z);
+        return MatrixMove(Move.x()(), Move.y(), Move.z());
     }
 
-    Matrix MatrixScale(float X, float Y, float Z)
+    template float4x4 MatrixScale(float X, float Y, float Z);
+    template<typename T>
+    Matrix4_T<T> MatrixScale(T X, T Y, T Z)
     {
-        return Matrix(
+        return Matrix4_T<T>(
             X, 0, 0, 0,
             0, Y, 0, 0,
             0, 0, Z, 0,
             1, 1, 1, 1);
     }
 
-    Matrix MatrixScale(const Vector4D &Scale)
+    template float4x4 MatrixScale(const float3& Scale);
+    template<typename T>
+    Matrix4_T<T> MatrixScale(const Vector_T<T, 3> &Scale)
     {
-        return MatrixScale(Scale.x, Scale.y, Scale.z);
+        return MatrixScale(Scale.x(), Scale.y(), Scale.z());
     }
 
-    Matrix MatrixRotateX(float Angle)
+    template float4x4 MatrixRotateX(float Angle);
+    template<typename T>
+    Matrix4_T<T> MatrixRotateX(T Angle)
     {
         float fs, fc;
         SinCos(Angle, fs, fc);
-        return Matrix(
-            1, 0, 0, 0,
-            0, fc, fs, 0,
+        return Matrix4_T<T>(
+            1, 0,   0,  0,
+            0, fc,  fs, 0,
             0, -fs, fc, 0,
-            0, 0, 0, 1);
+            0, 0,   0,  1);
     }
 
-    Matrix MatrixRotateY(float Angle)
+    template float4x4 MatrixRotateY(float Angle);
+    template<typename T>
+    Matrix4_T<T> MatrixRotateY(T Angle)
     {
         float fs, fc;
         SinCos(Angle, fs, fc);
-        return Matrix(
+        return Matrix4_T<T>(
             fc, 0, -fs, 0,
             0, 1, 0, 0,
             fs, 0, fc, 0,
             0, 0, 0, 1);
     }
 
-    Matrix MatrixRotateZ(float Angle)
+    template float4x4 MatrixRotateZ(float Angle);
+    template<typename T>
+    Matrix4_T<T> MatrixRotateZ(T Angle)
     {
         float fs, fc;
         SinCos(Angle, fs, fc);
-        return Matrix(
+        return Matrix4_T<T>(
             fc, fs, 0, 0,
             -fs, fc, 0, 0,
             0, 0, 1, 0,
             0, 0, 0, 1);
     }
 
-    Matrix MatrixRotate(const Vector3D &n, float Angle)
+    template float4x4 MatrixRotate(const float3& n, float Angle);
+    template<typename T>
+    Matrix4_T<T> MatrixRotate(const Vector_T<T, 3>& n, T Angle)
     {
         float fs = 0.0f, fc = 0.0f;
         SinCos(Angle, fs, fc);
-        Vector4D v(n.x, n.y, n.z, 1.0f);
-        v.Normalize();
+        Vector_T<T, 4> v(n.x(), n.y(), n.z(), 1.0f);
+        v = Normalize(v);
 
         float a = 1.0f - fc;
-        float ax = a * v.x;
-        float ay = a * v.y;
-        float az = a * v.z;
+        float ax = a * v.x();
+        float ay = a * v.y();
+        float az = a * v.z();
 
-        Matrix matrix;
-        matrix(0, 0) = v.x * ax + fc;
-        matrix(0, 1) = v.x * ay + v.z * fs;
-        matrix(0, 2) = v.x * az - v.y * fs;
-        matrix(1, 0) = v.x * ay - v.z * fs;
-        matrix(1, 1) = v.y * ay + fc;
-        matrix(1, 2) = v.y * az + v.x * fs;
-        matrix(2, 0) = v.x * az + v.y * fs;
-        matrix(2, 1) = v.y * az - v.x * fs;
-        matrix(2, 2) = v.z * az + fc;
+        Matrix4_T<T> matrix;
+        matrix(0, 0) = v.x() * ax + fc;
+        matrix(0, 1) = v.x() * ay + v.z() * fs;
+        matrix(0, 2) = v.x() * az - v.y() * fs;
+        matrix(1, 0) = v.x() * ay - v.z() * fs;
+        matrix(1, 1) = v.y() * ay + fc;
+        matrix(1, 2) = v.y() * az + v.x() * fs;
+        matrix(2, 0) = v.x() * az + v.y() * fs;
+        matrix(2, 1) = v.y() * az - v.x() * fs;
+        matrix(2, 2) = v.z() * az + fc;
         return matrix;
     }
 
-    Matrix Mul(const Matrix &lhs, const Matrix &rhs)
+    template float4x4 Mul(const float4x4& lhs, const float4x4& rhs);
+    template<typename T>
+    Matrix4_T<T> Mul(const Matrix4_T<T> &lhs, const Matrix4_T<T> &rhs)
     {
-        return Matrix(
+        return Matrix4_T<T>(
             lhs(0, 0) * rhs(0, 0) + lhs(0, 1) * rhs(1, 0) + lhs(0, 2) * rhs(2, 0) + lhs(0, 3) * rhs(3, 0),
             lhs(0, 0) * rhs(0, 1) + lhs(0, 1) * rhs(1, 1) + lhs(0, 2) * rhs(2, 1) + lhs(0, 3) * rhs(3, 1),
             lhs(0, 0) * rhs(0, 2) + lhs(0, 1) * rhs(1, 2) + lhs(0, 2) * rhs(2, 2) + lhs(0, 3) * rhs(3, 2),
@@ -165,24 +287,30 @@ namespace MathWorker
     }
 
     // 1*4 mul 4*4
-    Vector4D Mul(const Vector4D &a, const Matrix &mat)
+    template float4 Mul(const float4& a, const float4x4& mat);
+    template<typename T>
+    Vector_T<T, 4> Mul(const Vector_T<T, 4> &a, const Matrix4_T<T> &mat)
     {
-		return Vector4D(a.x * mat(0, 0) + a.y * mat(1, 0) + a.z * mat(2, 0) + a.w * mat(3, 0),
-                        a.x * mat(0, 1) + a.y * mat(1, 1) + a.z * mat(2, 1) + a.w * mat(3, 1),
-                        a.x * mat(0, 2) + a.y * mat(1, 2) + a.z * mat(2, 2) + a.w * mat(3, 2),
-                        a.x * mat(0, 3) + a.y * mat(1, 3) + a.z * mat(2, 3) + a.w * mat(3, 3));
+		return Vector_T<T, 4>(a.x() * mat(0, 0) + a.y() * mat(1, 0) + a.z() * mat(2, 0) + a.w() * mat(3, 0),
+                                a.x() * mat(0, 1) + a.y() * mat(1, 1) + a.z() * mat(2, 1) + a.w() * mat(3, 1),
+                                a.x() * mat(0, 2) + a.y() * mat(1, 2) + a.z() * mat(2, 2) + a.w() * mat(3, 2),
+                                a.x() * mat(0, 3) + a.y() * mat(1, 3) + a.z() * mat(2, 3) + a.w() * mat(3, 3));
     }
 
-    Matrix Transpose(const Matrix &mat)
+    template float4x4 Transpose(const float4x4& mat);
+    template<typename T>
+    Matrix4_T<T> Transpose(const Matrix4_T<T> &mat)
     {
-        return Matrix(mat(0, 0), mat(1, 0), mat(2, 0), mat(3, 0),
+        return Matrix4_T<T>(mat(0, 0), mat(1, 0), mat(2, 0), mat(3, 0),
                       mat(0, 1), mat(1, 1), mat(2, 1), mat(3, 1),
                       mat(0, 2), mat(1, 2), mat(2, 2), mat(3, 2),
                       mat(0, 3), mat(1, 3), mat(2, 3), mat(3, 3));
     }
 
     // 矩阵的行列式
-    float Determinant(const Matrix &mat)
+    template float Determinant(const float4x4& mat);
+    template<typename T>
+    float Determinant(const Matrix4_T<T> &mat)
     {
         const float _3142_3241(mat(2, 0) * mat(3, 1) - mat(2, 1) * mat(3, 0));
         const float _3143_3341(mat(2, 0) * mat(3, 2) - mat(2, 2) * mat(3, 0));
@@ -198,7 +326,9 @@ namespace MathWorker
     }
 
     // 矩阵的逆
-    Matrix MatrixInverse(const Matrix &mat)
+    template float4x4 MatrixInverse(const float4x4& mat);
+    template<typename T>
+    Matrix4_T<T> MatrixInverse(const Matrix4_T<T>& mat)
     {
         const float _2132_2231(mat(1, 0) * mat(2, 1) - mat(1, 1) * mat(2, 0));
         const float _2133_2331(mat(1, 0) * mat(2, 2) - mat(1, 2) * mat(2, 0));
@@ -229,7 +359,7 @@ namespace MathWorker
         {
             // 标准伴随矩阵的转置 / 行列式的值
             float invDet(float(1) / det);
-            return Matrix(
+            return Matrix4_T<T>(
                 +invDet * (mat(1, 1) * _3344_3443 - mat(1, 2) * _3244_3442 + mat(1, 3) * _3243_3342), // c11
                 -invDet * (mat(0, 1) * _3344_3443 - mat(0, 2) * _3244_3442 + mat(0, 3) * _3243_3342), // c21
                 +invDet * (mat(0, 1) * _2344_2443 - mat(0, 2) * _2244_2442 + mat(0, 3) * _2243_2342), // c31
@@ -237,7 +367,7 @@ namespace MathWorker
 
                 -invDet * (mat(1, 0) * _3344_3443 - mat(1, 2) * _3144_3441 + mat(1, 3) * _3143_3341), // c12
                 +invDet * (mat(0, 0) * _3344_3443 - mat(0, 2) * _3144_3441 + mat(0, 3) * _3143_3341), // c22
-                -invDet * (mat(0, 0) * _2344_2443 - mat(0, 2) * _2144_2441 + mat(0, 3) * _2143_2341), // 32
+                -invDet * (mat(0, 0) * _2344_2443 - mat(0, 2) * _2144_2441 + mat(0, 3) * _2143_2341), // c32
                 +invDet * (mat(0, 0) * _2334_2433 - mat(0, 2) * _2134_2431 + mat(0, 3) * _2133_2331), // c42
 
                 +invDet * (mat(1, 0) * _3244_3442 - mat(1, 1) * _3144_3441 + mat(1, 3) * _3142_3241), // c13
@@ -252,71 +382,97 @@ namespace MathWorker
         }
     }
 
-	Matrix OrthoLH(float w, float h, float Near, float Far)
+    template<typename T>
+	Matrix4_T<T> OrthoLH(float w, float h, float Near, float Far)
     {
-        return Matrix();        
+        return Matrix4_T<T>();        
     }
-	Matrix OrthoOffCenterLH(float l, float r, float b, float t, float n, float f)
+
+    template<typename T>
+	Matrix4_T<T> OrthoOffCenterLH(float l, float r, float b, float t, float n, float f)
     {
         float rsl = r - l;
         float ral = r + l;
         float nsf = n - f;
         float tsb = t - b;
-        return Matrix(
+        return Matrix4_T<T>(
             2/rsl,      0,          0,              0,
             0,          2/tsb,      0,              0,
             0,          0,          2/nsf,          0,
             -ral/rsl,   -(t+b)/tsb, (n + f)/nsf,    1);        
     }
 
-	Matrix LookAtLH(const Vector3D& Eye, const Vector3D& At, const Vector3D& Up)
+    template float4x4 LookAtLH(const float3& Eys, const float3& At, const float3& Up);
+    template<typename T>
+	Matrix4_T<T> LookAtLH(const Vector_T<float, 3>& Eye, const Vector_T<float, 3>& At, const Vector_T<float, 3>& Up)
     {
-        Vector3D zaxis = Vector3D::Normalize(Eye - At);
-        Vector3D xaxis = Vector3D::Normalize(Up ^ zaxis);
-        Vector3D yaxis = zaxis ^ xaxis;
-        return Matrix(
-            xaxis.x, yaxis.x, zaxis.y, 0,
-            xaxis.y, yaxis.y, zaxis.z, 0,
-            xaxis.z, yaxis.z, zaxis.z, 0,
+        Vector_T<float, 3> zaxis = Normalize(Eye - At);
+        Vector_T<float, 3> xaxis = Normalize(Up ^ zaxis);
+        Vector_T<float, 3> yaxis = zaxis ^ xaxis;
+        return Matrix4_T<T>(
+            xaxis.x(), yaxis.x(), zaxis.x(), 0,
+            xaxis.y(), yaxis.y(), zaxis.y(), 0,
+            xaxis.z(), yaxis.z(), zaxis.z(), 0,
             xaxis | Eye, yaxis | Eye, zaxis | Eye, 1);        
     }
 
-	Matrix PerspectiveLH(float w, float h, float Near, float Far)
+    template<typename T>
+	Matrix4_T<T> PerspectiveLH(float w, float h, float Near, float Far)
     {
-        return Matrix();        
+        return Matrix4_T<T>();        
     }
 
-	Matrix PerspectiveFovLH(float Fov, float Aspect, float Near, float Far)
+    template<typename T>
+	Matrix4_T<T> PerspectiveFovLH(float Fov, float Aspect, float Near, float Far)
     {
-        return Matrix();        
+        return Matrix4_T<T>();        
     }
 
-    Matrix ToMatrix(const Quaternion &quat)
+
+
+    template<typename T>
+	Quaternion_T<T> Mul(const Quaternion_T<T>& lhs, const Quaternion_T<T>& rhs) noexcept
+	{
+		return Quaternion_T<T>(
+			lhs.x() * rhs.w() - lhs.y() * rhs.z() + lhs.z() * rhs.y() + lhs.w() * rhs.x(),
+			lhs.x() * rhs.z() + lhs.y() * rhs.w() - lhs.z() * rhs.x() + lhs.w() * rhs.y(),
+			lhs.y() * rhs.x() - lhs.x() * rhs.y() + lhs.z() * rhs.w() + lhs.w() * rhs.z(),
+			lhs.w() * rhs.w() - lhs.x() * rhs.x() - lhs.y() * rhs.y() - lhs.z() * rhs.z());
+	}
+
+
+    template<typename T>
+    Matrix4_T<T> ToMatrix(const Quaternion_T<T> &quat)
     {
-        return Matrix();
+        return Matrix4_T<T>();
     }
 
-    Matrix ToMatrix(const Rotator &rot)
+    template<typename T>
+    Matrix4_T<T> ToMatrix(const Rotator &rot)
     {
-        return Matrix();
+        return Matrix4_T<T>();
     }
 
-    Quaternion ToQuaternion(const Matrix &mat)
+    template<typename T>
+    Quaternion_T<T> ToQuaternion(const Matrix4_T<T> &mat)
     {
-        return Quaternion();
+        return Quaternion_T<T>();
     }
 
-    Quaternion ToQuaternion(const Rotator &rot)
+    template<typename T>
+    Quaternion_T<T> ToQuaternion(const Rotator &rot)
     {
-        return Quaternion();
+        return Quaternion_T<T>();
     }
 
-    Rotator ToRotator(const Matrix &mat)
+    template<typename T>
+    Rotator ToRotator(const Matrix4_T<T> &mat)
     {
         return Rotator();
     }
 
-    Rotator ToRotator(const Quaternion &quat)
+    template<typename T>
+    Rotator ToRotator(const Quaternion_T<T> &quat)
     {
         return Rotator();
     }
