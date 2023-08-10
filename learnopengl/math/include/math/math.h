@@ -5,29 +5,31 @@
 #include <stdint.h>
 #include <math/rotator.h>
 
-template<typename T, int SIZE>
-class Vector_T;
-typedef MathWorker::Vector_T<int32_t, 1> int1;
-typedef MathWorker::Vector_T<int32_t, 2> int2;
-typedef MathWorker::Vector_T<int32_t, 3> int3;
-typedef MathWorker::Vector_T<int32_t, 4> int4;
-typedef MathWorker::Vector_T<uint32_t, 1> uint1;
-typedef MathWorker::Vector_T<uint32_t, 2> uint2;
-typedef MathWorker::Vector_T<uint32_t, 3> uint3;
-typedef MathWorker::Vector_T<uint32_t, 4> uint4;
-typedef MathWorker::Vector_T<float, 1> float1;
-typedef MathWorker::Vector_T<float, 2> float2;
-typedef MathWorker::Vector_T<float, 3> float3;
-typedef MathWorker::Vector_T<float, 4> float4;
+namespace MathWorker
+{
+	template<typename T, int SIZE>
+	class Vector_T;
+	using int1 = Vector_T<int32_t, 1>;
+	using int2 = Vector_T<int32_t, 2>;
+	using int3 = Vector_T<int32_t, 3>;
+	using int4 = Vector_T<int32_t, 4>;
+	using uint1 = Vector_T<uint32_t, 1>;
+	using uint2 = Vector_T<uint32_t, 2>;
+	using uint3 = Vector_T<uint32_t, 3>;
+	using uint4 = Vector_T<uint32_t, 4>;
+	using float1 = Vector_T<float, 1>;
+	using float2 = Vector_T<float, 2>;
+	using float3 = Vector_T<float, 3>;
+	using float4 = Vector_T<float, 4>;
 
-template <typename T>
-class Quaternion_T;
-typedef MathWorker::Quaternion_T<float> quat;
+	template <typename T>
+	class Quaternion_T;
+	using quat = Quaternion_T<float>;
 
-template <typename T>
-class Matrix4_T;
-typedef MathWorker::Matrix4_T<float> float4x4;
-
+	template <typename T>
+	class Matrix4_T;
+	using float4x4 = Matrix4_T<float>;
+}
 
 namespace MathWorker
 {

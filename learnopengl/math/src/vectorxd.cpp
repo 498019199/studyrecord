@@ -73,22 +73,6 @@ Vector_T<ValTy, SIZE>::operator+=(const U& rhs) noexcept
     return *this;
 }
 
-template <typename ValTy, int SIZE>
-template <typename U>
-const Vector_T<ValTy, SIZE>& 
-Vector_T<ValTy, SIZE>::operator+(const Vector_T<U, SIZE>& rhs) const noexcept
-{
-    return this->operator+=(rhs);   
-}
-
-template <typename ValTy, int SIZE>
-template <typename U>
-const Vector_T<ValTy, SIZE>& 
-Vector_T<ValTy, SIZE>::operator+(const U& rhs) noexcept
-{
-    return this->operator+=(rhs);    
-}
-
 // operator -
 template <typename ValTy, int SIZE>
 template <typename U>
@@ -106,22 +90,6 @@ Vector_T<ValTy, SIZE>::operator-=(const U& rhs) const noexcept
 {
     MathHelper::vector_helper<ValTy, SIZE>::DoSub(&vec_[0], &vec_[0], rhs);
     return *this;
-}
-
-template <typename ValTy, int SIZE>
-template <typename U>
-const Vector_T<ValTy, SIZE>& 
-Vector_T<ValTy, SIZE>::operator-(const Vector_T<U, SIZE>& rhs) const noexcept
-{
-    return this->operator-=(rhs);
-}
-
-template <typename ValTy, int SIZE>
-template <typename U>
-const Vector_T<ValTy, SIZE>& 
-Vector_T<ValTy, SIZE>::operator-(const U& rhs) const noexcept 
-{
-    return this->operator-=(rhs);    
 }
 
 // operator 叉积
@@ -148,14 +116,6 @@ Vector_T<ValTy, SIZE>::operator*=(const U& rhs) const noexcept
     return *this;
 }
 
-template <typename ValTy, int SIZE>
-template <typename U>
-const Vector_T<ValTy, SIZE>& 
-Vector_T<ValTy, SIZE>::operator*(const U& rhs) const noexcept
-{
-    return this->operator*=(rhs);
-}
-
 // operator /
 template <typename ValTy, int SIZE>
 template <typename U>
@@ -173,22 +133,6 @@ Vector_T<ValTy, SIZE>::operator/=(const U& rhs) const noexcept
 {
     MathHelper::vector_helper<ValTy, SIZE>::DoScale(&vec_[0], &vec_[0], rhs);
     return *this;
-}
-
-template <typename ValTy, int SIZE>
-template <typename U>
-const Vector_T<ValTy, SIZE>& 
-Vector_T<ValTy, SIZE>::operator/(const Vector_T<U, SIZE>& rhs) const noexcept
-{
-    return this->operator/=(rhs);    
-}
-
-template <typename ValTy, int SIZE>
-template <typename U>
-const Vector_T<ValTy, SIZE>& 
-Vector_T<ValTy, SIZE>::operator/(const U& rhs) const noexcept
-{
-    return this->operator/=(rhs);
 }
 
 // 复制构造
@@ -270,57 +214,35 @@ std::string Vector_T<ValTy, SIZE>::print() const noexcept
     return tmp;
 }
 
-// template <typename U, int SIZE>
-// const Vector_T<U, SIZE>& 
-// operator+(const Vector_T<U, SIZE>& lhs, const Vector_T<U, SIZE>& rhs) noexcept
-// {
-//     return lhs.operator+=(rhs);
-// }
 
-// template <typename U, int SIZE>
-// const Vector_T<U, SIZE>& 
-// operator-(const Vector_T<U, SIZE>& lhs, const Vector_T<U, SIZE>& rhs) noexcept
-// {
-//     return lhs.operator-=(rhs);
-// }
+template <typename ValTy, int SIZE>
+Vector_T<ValTy, SIZE> operator+(const Vector_T<ValTy, SIZE>& lhs, const Vector_T<ValTy, SIZE>& rhs) noexcept
+{
+    return lhs.operator+=(rhs);
+}
 
-// template <typename U, int SIZE>
-// const Vector_T<U, SIZE>& 
-// operator|(const Vector_T<U, SIZE>& lhs, const Vector_T<U, SIZE>& rhs) noexcept
-// {
-//     return lhs.operator|(rhs);
-// }
+template <typename ValTy, int SIZE>
+Vector_T<ValTy, SIZE> operator-(const Vector_T<ValTy, SIZE>& lhs, const Vector_T<ValTy, SIZE>& rhs) noexcept
+{
+    return lhs.operator-=(rhs);
+}
 
-// template <typename U, int SIZE>
-// U operator^(const Vector_T<U, SIZE>& lhs, const Vector_T<U, SIZE>& rhs) noexcept
-// {
-//     return lhs.operator^(rhs);  
-// }
-
-// template <typename U, int SIZE>
-// const Vector_T<U, SIZE>& 
-// operator/(const Vector_T<U, SIZE>& lhs, const Vector_T<U, SIZE>& rhs) noexcept
-// {
-//     return lhs.operator/(rhs);  
-// }
-
-template <typename U, int SIZE>
-const Vector_T<U, SIZE>& 
-operator*(const Vector_T<U, SIZE>& lhs, const U& rhs) noexcept
+template <typename ValTy, int SIZE>
+Vector_T<ValTy, SIZE> operator*(const Vector_T<ValTy, SIZE>& lhs, const ValTy& rhs) noexcept
 {
     return lhs.operator*=(rhs);
 }
-template <typename U, int SIZE>
-const Vector_T<U, SIZE>& 
-operator*(const U& lhs, const Vector_T<U, SIZE>& rhs) noexcept
+
+template <typename ValTy, int SIZE>
+Vector_T<ValTy, SIZE> operator*(const ValTy& lhs, const Vector_T<ValTy, SIZE>& rhs) noexcept
 {
     return rhs.operator*=(lhs);
 }
 
-// template <typename U, int SIZE>
-// const Vector_T<U, SIZE>& 
-// operator/(const Vector_T<U, SIZE>& lhs, const U& rhs) noexcept
-// {
-//     return lhs.operator/=(rhs);
-// }
+template <typename ValTy, int SIZE>
+Vector_T<ValTy, SIZE> operator/(const ValTy& lhs, const ValTy& rhs) noexcept
+{
+    return lhs.operator/=(rhs);
+}
+
 }

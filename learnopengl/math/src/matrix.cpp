@@ -211,17 +211,26 @@ Matrix4_T<Valty>::Identity() noexcept
 }
 
 template <typename Valty>
-bool Matrix4_T<Valty>::operator==(const Matrix4_T<Valty>& rhs) const noexcept
+template <typename U>
+bool Matrix4_T<Valty>::operator==(const Matrix4_T<U>& rhs) const noexcept
 {
 	return m_ == rhs.m_;
 }
 
 template <typename Valty>
-bool Matrix4_T<Valty>::operator!=(const Matrix4_T<Valty>& rhs) const noexcept
+template <typename U>
+bool Matrix4_T<Valty>::operator!=(const Matrix4_T<U>& rhs) const noexcept
 {
 	return !this->operator==(rhs);
 }
 
+template <typename Valty>
+std::string Matrix4_T<Valty>::print() const noexcept
+{
+	std::string tmp;
+	tmp = m_.print();
+	return tmp;
+}
 // 实例化模板
 template class Matrix4_T<float>;
 }

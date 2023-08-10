@@ -5,7 +5,11 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/3rd/glad/include",
-                "${workspaceFolder}/3rd/glfw/include"
+                "${workspaceFolder}/3rd/glfw/include",
+
+                "${workspaceFolder}/math/include",
+                "${workspaceFolder}/common/include",
+                "${workspaceFolder}/render/include",
             ],
             "defines": [
                 "_DEBUG",

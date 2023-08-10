@@ -110,9 +110,17 @@ public:
 	void SetV(Vector_T<T, 3> const & rhs) noexcept;
 
 	bool operator==(Quaternion_T<T> const & rhs) const noexcept;
+	bool operator!=(Quaternion_T<T> const & rhs) const noexcept;
 	static const Quaternion_T& Identity() noexcept;
+
+	// print
+    std::string print() const noexcept;
 private:
 	Vector_T<T, elem_num> quat_;
 };
+
+
+
+
 
 }

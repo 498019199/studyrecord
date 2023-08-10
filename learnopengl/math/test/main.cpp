@@ -63,8 +63,8 @@ void checkvecotr()
 	//std::cout << v.project(u.Normalize()) << std::endl;
 	//std::cout << v.perpendicular(u.Normalize()) << std::endl;
 
-	float3 vs[4];
-	std::cout << vs[2] + vs[3] << std::endl;
+	Vector_T<float, 3> vs[4];
+	std::cout << vs[2].print() + vs[3].print() << std::endl;
 	std::cout << float3(vs[0][0] + vs[1][0], vs[0][1] + vs[1][1], vs[0][2] + vs[1][2]).print() << std::endl;
 
 	float3 ddd{ 1,2,3 };
@@ -106,7 +106,7 @@ void checkmatrix()
 	assert(tmp1 == tmp2);
 	assert(tmp1 == tmp3);
 	assert(tmp1 == tmp4);
-	std::cout << "test matrix contruct success" << std::endl << tmp1 << std::endl;
+	std::cout << "test matrix contruct success" << std::endl << tmp1.print() << std::endl;
 
 	// test matrix multiplication
 	assert(float4x4(12,1,13,14, 12,0,12,15,  10,0,10,7, 2,0,2,2) == 
@@ -137,7 +137,7 @@ void checkquaternion()
 	auto q3 = quat(v1, 4.f);
 	auto q4 = quat(q2);
 	assert(q4 == q3);
-	std::cout << "test quaternion  contruct success" << q1 << std::endl;
+	std::cout << "test quaternion  contruct success" << q1.print() << std::endl;
 }
 
 void checkmath()

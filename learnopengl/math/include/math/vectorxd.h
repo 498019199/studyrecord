@@ -10,11 +10,11 @@ class Vector_T
 {
     template<typename ValTy, int SIZE>
     friend class Vector_T;
-	typedef std::array<ValTy, SIZE> DetailType;
+	using DetailType = std::array<ValTy, SIZE>;
 public:
     typedef typename DetailType::value_type value_type;
-	typedef value_type* pointer;
-	typedef  value_type const * const_pointer;
+	using pointer = value_type* ;
+	using const_pointer = value_type const * ;
 	typedef typename DetailType::reference reference;
 	typedef typename DetailType::const_reference const_reference;
 	typedef typename DetailType::iterator iterator;
@@ -146,24 +146,15 @@ public:
 	template <typename U>
 	const Vector_T& operator+=(const U& rhs) noexcept;
 
-	template <typename U>
-	const Vector_T& operator+(const Vector_T<U, SIZE>& rhs) const noexcept;
-	template <typename U>
-	const Vector_T& operator+(const U& rhs) noexcept;
-
 	// operator -
 	template <typename U>
 	const Vector_T& operator-=(const Vector_T<U, SIZE>& rhs) const noexcept;
 	template <typename U>
 	const Vector_T& operator-=(const U& rhs) const noexcept;
 
-	template <typename U>
-	const Vector_T& operator-(const Vector_T<U, SIZE>& rhs) const noexcept;
-	template <typename U>
-	const Vector_T& operator-(const U& rhs) const noexcept;
-
 	// operator 叉积
 	Vector_T operator^(const Vector_T& rhs) const noexcept;
+
 	// operator 点积
 	ValTy operator|(const Vector_T& rhs) const noexcept;
 
@@ -171,19 +162,11 @@ public:
 	template <typename U>
 	const Vector_T& operator*=(const U& rhs) const noexcept;
 
-	template <typename U>
-	const Vector_T& operator*(const U& rhs) const noexcept;
-	
-	 // operator /
+	// operator /
 	template <typename U>
 	const Vector_T& operator/=(const Vector_T<U, SIZE>& rhs) const noexcept;
 	template <typename U>
 	const Vector_T& operator/=(const U& rhs) const noexcept;
-
-	template <typename U>
-	const Vector_T& operator/(const Vector_T<U, SIZE>& rhs) const noexcept;
-	template <typename U>
-	const Vector_T& operator/(const U& rhs) const noexcept;
 
 	// 复制构造
 	Vector_T& operator=(const Vector_T& rhs) noexcept;
@@ -206,11 +189,13 @@ public:
 
     // print
     std::string print() const noexcept;
+
     // friend
-    template <typename U, int SIZE>
-    friend Vector_T operator*(const Vector_T<U, SIZE>& lhs, const U& rhs) noexcept;
-    template <typename U, int SIZE>
-    friend Vector_T operator*(const U& lhs, const Vector_T<U, SIZE>& rhs) noexcept;
+	friend Vector_T operator+(const Vector_T& lhs, const Vector_T& rhs) noexcept;
+	friend Vector_T operator-(const Vector_T& lhs, const Vector_T& rhs) noexcept;
+    friend Vector_T operator*(const ValTy& lhs, const Vector_T& rhs) noexcept;
+    friend Vector_T operator*(const Vector_T& lhs, const ValTy& rhs) noexcept;
+	friend Vector_T operator/(const Vector_T& lhs, const ValTy& rhs) noexcept;
 private:
 	DetailType vec_;
 };

@@ -11,15 +11,15 @@ public:
 	enum  { row_num = 4, col_num = 4};
 	enum  { elem_num = row_num * col_num };
 
-	typedef Valty					value_type;
-	typedef Valty*					pointer;
-	typedef const Valty*		const_pointer;
-	typedef Valty&				reference;
-	typedef const Valty&		const_reference;
-	typedef Valty*					iterator;
-	typedef const Valty*		const_iterator;
-	typedef std::size_t			size_type;
-	typedef std::size_t			difference_type;
+	using value_type = Valty;
+	using pointer = Valty*;
+	using const_pointer = const Valty*;
+	using reference = Valty&;
+	using const_reference = const Valty&;
+    using iterator = Valty*;
+	using const_iterator = const Valty*;
+    using size_type = std::size_t;
+    using difference_type = std::size_t;
 public:
     Matrix4_T()
     {}
@@ -98,8 +98,13 @@ public:
     Matrix4_T operator+() const noexcept;
     Matrix4_T operator-() const noexcept;
 
-    bool operator==(const Matrix4_T& rhs) const noexcept;
-    bool operator!=(const Matrix4_T& rhs) const noexcept;
+    template<typename U>
+    bool operator==(const Matrix4_T<U>& rhs) const noexcept;
+    template<typename U>
+    bool operator!=(const Matrix4_T<U>& rhs) const noexcept;
+    
+    // print
+    std::string print() const noexcept;
 private:
 	Vector_T<Vector_T<Valty, col_num>, row_num> m_;
 };

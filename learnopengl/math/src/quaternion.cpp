@@ -163,6 +163,12 @@ bool Quaternion_T<T>::operator==(Quaternion_T<T> const & rhs) const noexcept
 	return this->quat_ == rhs.quat_;
 }
 
+template<typename T>
+bool Quaternion_T<T>::operator!=(Quaternion_T<T> const & rhs) const noexcept
+{
+	return !(this->operator==(rhs));	
+}
+
 template <typename T>
 const Quaternion_T<T>& Quaternion_T<T>::Identity() noexcept
 {
@@ -170,6 +176,11 @@ const Quaternion_T<T>& Quaternion_T<T>::Identity() noexcept
 	return out;
 }
 
+template<typename T>
+std::string Quaternion_T<T>::print() const noexcept
+{
+    return quat_.print();
+}
 
 template class Quaternion_T<float>;
 }

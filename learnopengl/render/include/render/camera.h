@@ -11,8 +11,8 @@ public:
     ~Camera();
 
 private:
-    MathWorker::Matrix mvp_;
-    MathWorker::Vector3D postion_;
+    MathWorker::float4x4 mvp_;
+    MathWorker::float3 postion_;
 };
 
 }
