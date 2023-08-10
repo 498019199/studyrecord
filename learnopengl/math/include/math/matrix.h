@@ -4,32 +4,32 @@
 
 namespace MathWorker
 {
-template <typename Valty>
+template <typename T>
 class Matrix4_T
 {
 public:
 	enum  { row_num = 4, col_num = 4};
 	enum  { elem_num = row_num * col_num };
 
-	using value_type = Valty;
-	using pointer = Valty*;
-	using const_pointer = const Valty*;
-	using reference = Valty&;
-	using const_reference = const Valty&;
-    using iterator = Valty*;
-	using const_iterator = const Valty*;
+	using value_type = T;
+	using pointer = T*;
+	using const_pointer = const T*;
+	using reference = T&;
+	using const_reference = const T&;
+    using iterator = T*;
+	using const_iterator = const T*;
     using size_type = std::size_t;
     using difference_type = std::size_t;
 public:
     Matrix4_T()
     {}
-	explicit Matrix4_T(const Valty* rhs) noexcept;
+	explicit Matrix4_T(const T* rhs) noexcept;
 	Matrix4_T(const Matrix4_T& rhs) noexcept;
     Matrix4_T(Matrix4_T&& rhs) noexcept;
-    Matrix4_T(Valty f11, Valty f12, Valty f13, Valty f14,
-                Valty f21, Valty f22, Valty f23, Valty f24,
-                Valty f31, Valty f32, Valty f33, Valty f34,
-                Valty f41, Valty f42, Valty f43, Valty f44) noexcept;
+    Matrix4_T(T f11, T f12, T f13, T f14,
+                T f21, T f22, T f23, T f24,
+                T f31, T f32, T f33, T f34,
+                T f41, T f42, T f43, T f44) noexcept;
 	
     reference operator()(size_type row, size_type col)noexcept
     {
@@ -73,10 +73,10 @@ public:
     }
     static const Matrix4_T & Zero() noexcept;
     static const Matrix4_T & Identity() noexcept;
-    void Row(size_type index, const Vector_T<Valty, 4>& rhs) noexcept;
-    const Vector_T<Valty, 4>& Row(size_t index) const noexcept;
-    void Col(size_type index, const Vector_T<Valty, 4>& rhs) noexcept;
-    Vector_T<Valty, 4> Col(size_t index) const noexcept;
+    void Row(size_type index, const Vector_T<T, 4>& rhs) noexcept;
+    const Vector_T<T, 4>& Row(size_t index) const noexcept;
+    void Col(size_type index, const Vector_T<T, 4>& rhs) noexcept;
+    Vector_T<T, 4> Col(size_t index) const noexcept;
 
     //赋值操作符
     Matrix4_T& operator+=(const Matrix4_T& rhs) noexcept;
@@ -98,15 +98,13 @@ public:
     Matrix4_T operator+() const noexcept;
     Matrix4_T operator-() const noexcept;
 
-    template<typename U>
-    bool operator==(const Matrix4_T<U>& rhs) const noexcept;
-    template<typename U>
-    bool operator!=(const Matrix4_T<U>& rhs) const noexcept;
+    bool operator==(const Matrix4_T& rhs) const noexcept;
+    bool operator!=(const Matrix4_T& rhs) const noexcept;
     
     // print
     std::string print() const noexcept;
 private:
-	Vector_T<Vector_T<Valty, col_num>, row_num> m_;
+	Vector_T<Vector_T<T, col_num>, row_num> m_;
 };
 
 

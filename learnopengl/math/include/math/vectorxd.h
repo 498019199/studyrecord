@@ -190,14 +190,14 @@ public:
 	template <typename U>
 	const Vector_T& operator+=(const U& rhs) noexcept
 	{
-		//MathHelper::vector_helper<T, N>::DoAdd(vec_.data(), vec_.data(), rhs);
+		MathHelper::vector_helper<T, N>::DoAdd(vec_.data(), vec_.data(), rhs);
 		return *this;
 	}
 
 	template <typename U>
 	const Vector_T& operator+(const Vector_T<U, N>& rhs) const noexcept
 	{
-    	//MathHelper::vector_helper<T, N>::DoAdd(vec_.data(), vec_.data(), rhs.data());
+    	MathHelper::vector_helper<T, N>::DoAdd(vec_.data(), vec_.data(), rhs.data());
     	return *this;
 	}
 
@@ -205,7 +205,7 @@ public:
 	template <typename U>
 	const Vector_T& operator-=(const Vector_T<U, N>& rhs) const noexcept
 	{
-		//MathHelper::vector_helper<U, N>::DoSub(vec_.data(), vec_.data(), rhs.data());
+		MathHelper::vector_helper<U, N>::DoSub(vec_.data(), vec_.data(), rhs.data());
 		return *this;
 	}
 
@@ -219,7 +219,7 @@ public:
 	template <typename U>
 	const Vector_T& operator-(const Vector_T<U, N>& rhs) const noexcept
 	{
-    	//MathHelper::vector_helper<T, N>::DoSub(vec_.data(), vec_.data(), rhs.data());
+    	MathHelper::vector_helper<T, N>::DoSub(vec_.data(), vec_.data(), rhs.data());
     	return *this;
 	}
 
@@ -239,14 +239,14 @@ public:
 	template <typename U>
 	const Vector_T& operator*=(const U& rhs) const noexcept
 	{
-		//MathHelper::vector_helper<T, N>::DoScale(vec_.data(), vec_.data(), rhs);
+		MathHelper::vector_helper<T, N>::DoScale(vec_.data(), vec_.data(), rhs);
 		return *this;
 	}
 
 	template <typename U>
 	const Vector_T& operator*(const U& rhs) const noexcept
 	{
-		//MathHelper::vector_helper<T, N>::DoScale(vec_.data(), vec_.data(), rhs);
+		MathHelper::vector_helper<T, N>::DoScale(vec_.data(), vec_.data(), rhs);
 		return *this;
 	}
 
@@ -261,14 +261,14 @@ public:
 	template <typename U>
 	const Vector_T& operator/=(const U& rhs) const noexcept
 	{
-    	//MathHelper::vector_helper<T, N>::DoScale(vec_.data(), vec_.data(), rhs);
+    	MathHelper::vector_helper<T, N>::DoScale(vec_.data(), vec_.data(), rhs);
     	return *this;
 	}
 
 	template <typename U>
 	const Vector_T& operator/(const U& rhs) const noexcept
 	{
-    	//MathHelper::vector_helper<T, N>::DoScale(vec_.data(), vec_.data(), rhs);
+    	MathHelper::vector_helper<T, N>::DoScale(vec_.data(), vec_.data(), rhs);
     	return *this;
 	}
 
@@ -339,15 +339,13 @@ public:
 		return tmp;
 	}
 
-    // friend
-    friend Vector_T operator*(const T& lhs, const Vector_T& rhs) noexcept;
 private:
 	DetailType vec_;
 };
 
 
-template <typename T, int N>
-Vector_T<T, N> operator*(const T& lhs, const Vector_T<T, N>& rhs) noexcept
+template <typename T, int N, typename U>
+Vector_T<T, N> operator*(const U& lhs, const Vector_T<T, N>& rhs) noexcept
 {
     return rhs.operator*=(lhs);
 }

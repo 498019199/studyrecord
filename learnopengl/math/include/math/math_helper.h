@@ -128,6 +128,11 @@ namespace MathHelper
 			out[0] = lhs[0] - rhs[0];
 		}
 
+		static void DoSub(T out[1], const T lhs[1], const T & rhs) noexcept
+		{
+			out[0] = lhs[0] - rhs;
+		}
+
 		static void DoMul(T out[1], const T lhs[1], const T rhs[1]) noexcept
 		{
 			out[0] = lhs[0] * rhs[0];
