@@ -1,5 +1,8 @@
 #include <math/math.h>
-#include "math_helper.h"
+#include <math/vectorxd.h>
+#include <math/matrix.h>
+#include <math/quaternion.h>
+#include <math/rotator.h>
 
 namespace MathWorker
 {
@@ -69,15 +72,12 @@ namespace MathWorker
 			1);
 	}
 
-    template int32_t Dot(const int1 & lhs, const int1 & rhs) noexcept;
     template int32_t Dot(const int2 & lhs, const int2 & rhs) noexcept;
     template int32_t Dot(const int3 & lhs, const int3 & rhs) noexcept;
     template int32_t Dot(const int4 & lhs, const int4 & rhs) noexcept;
-    template uint32_t Dot(const uint1 & lhs, const uint1 & rhs) noexcept;
     template uint32_t Dot(const uint2 & lhs, const uint2 & rhs) noexcept;
     template uint32_t Dot(const uint3 & lhs, const uint3 & rhs) noexcept;
     template uint32_t Dot(const uint4 & lhs, const uint4 & rhs) noexcept;
-    template float Dot(const float1 & lhs, const float1 & rhs) noexcept;
     template float Dot(const float2 & lhs, const float2 & rhs) noexcept;
     template float Dot(const float3 & lhs, const float3 & rhs) noexcept;
     template float Dot(const float4 & lhs, const float4 & rhs) noexcept;
@@ -89,15 +89,12 @@ namespace MathWorker
             T::elem_num> ::Do(&lhs[0], &rhs[0]);
     }
 
-    template int32_t LengthSq(const int1 & rhs) noexcept;
     template int32_t LengthSq(const int2 & rhs) noexcept;
     template int32_t LengthSq(const int3 & rhs) noexcept;
     template int32_t LengthSq(const int4 & rhs) noexcept;
-    template uint32_t LengthSq(const uint1 & rhs) noexcept;
     template uint32_t LengthSq(const uint2 & rhs) noexcept;
     template uint32_t LengthSq(const uint3 & rhs) noexcept;
     template uint32_t LengthSq(const uint4 & rhs) noexcept;
-    template float LengthSq(const float1 & rhs) noexcept;
     template float LengthSq(const float2 & rhs) noexcept;
     template float LengthSq(const float3 & rhs) noexcept;
     template float LengthSq(const float4 & rhs) noexcept;
@@ -108,7 +105,6 @@ namespace MathWorker
         return Dot(rhs, rhs);
     }
 
-    template float Length(const float1 & rhs) noexcept;
     template float Length(const float2 & rhs) noexcept;
     template float Length(const float3 & rhs) noexcept;
     template float Length(const float4 & rhs) noexcept;
@@ -119,7 +115,6 @@ namespace MathWorker
         return std::sqrt(LengthSq(rhs));
     }
 
-	template float1 Normalize(const float1 & rhs) noexcept;
 	template float2 Normalize(const float2 & rhs) noexcept;
 	template float3 Normalize(const float3 & rhs) noexcept;
 	template float4 Normalize(const float4 & rhs) noexcept;
@@ -143,7 +138,7 @@ namespace MathWorker
     template float3 Lerp(const float3 &lsh, const float3 &rhs, float s);
     template float4 Lerp(const float4 &lsh, const float4 &rhs, float s);
     template <typename T>
-    T Lerp(const T &lhs, const T &rhs, float s)
+    T Lerp(const T &lhs, const T &rhs, float s) noexcept
     {
         return (lhs + (rhs - lhs) * s);
     }

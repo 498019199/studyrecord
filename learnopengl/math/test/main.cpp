@@ -2,19 +2,18 @@
 #include <iomanip>
 #include <sstream>
 #include <math/math.h>
+#include <math/vectorxd.h>
+#include <math/matrix.h>
+#include <math/quaternion.h>
 #include <cassert>
 using namespace MathWorker;
-
-// #define CheckAssert(op)\
-//  	std::cout << ##op << std::endl;\
-//  	assert(op)\
 
 void checkvecotr()
 {
 	// test contruct
 	float3 v(1, 2, 3);
 	float3 u = { 0,2,3 };
-	float3 w(1.f);
+	float3 w = {1.f, 2.f, 3.f};
 	assert(float3(1,2,3) == v);
 	assert(float3(0,2,3) == u);
 	assert(float3(1.f,1.f,1.f) == w);
@@ -155,7 +154,7 @@ void checkmath()
 
 	// test rotation matrix
     // rotation matrix
-    //assert(Matrix(1,0,0,0, 0,0.8386f,-0.5447f,0.f,  0,0.5446f,0.8386f,0, 0,0,0,1) == MatrixRotateX(33));
+    assert(float4x4(1,0,0,0, 0,0.8386f,-0.5447f,0.f,  0,0.5446f,0.8386f,0, 0,0,0,1) == MatrixRotateX(33));
     assert(float4x4(0.7071f,0,0.7071f,0, 0,1,0,0,  -0.7072f,0,0.7071f,0, 0,0,0,1) == MatrixRotateY(45));
     assert(float4x4(0.0174f,-0.9999f,0,0, 0.9998f,0.0174f,0,0,  0,0,1,0, 0,0,0,1) == MatrixRotateZ(89));
     //assert(Matrix(2,2,2,2, 2,2,2,2,  2,2,2,2, 2,2,2,2) == MatrixRotate(Vector3D(), 16));

@@ -39,16 +39,28 @@ namespace MathHelper
 		}
 
 		static void DoAdd(T out[N], const T lhs[N], const T rhs[N]) noexcept
-        {
-            out[0] = lhs[0] + rhs[0];
-            vector_helper<T, N - 1>::DoAdd(out + 1, lhs + 1, rhs + 1);
-        }
+		{
+			out[0] = lhs[0] + rhs[0];
+			vector_helper<T, N - 1>::DoAdd(out + 1, lhs + 1, rhs + 1);
+		}
+
+		static void DoAdd(T out[N], const T lhs[N], const T& rhs) noexcept
+		{
+			out[0] = lhs[0] + rhs;
+			vector_helper<T, N - 1>::DoAdd(out + 1, lhs + 1, rhs);
+		}
 
 		static void DoSub(T out[N], const T lhs[N], const T rhs[N]) noexcept
         {
             out[0] = lhs[0] - rhs[0];
             vector_helper<T, N - 1>::DoSub(out + 1, lhs + 1, rhs + 1);
         }
+
+		static void DoSub(T out[N], const T lhs[N], const T& rhs) noexcept
+		{
+			out[0] = lhs[0] - rhs;
+			vector_helper<T, N - 1>::DoSub(out + 1, lhs + 1, rhs);
+		}
 
 		static void DoMul(T out[N], const T lhs[N], const T rhs[N]) noexcept
         {
@@ -61,6 +73,12 @@ namespace MathHelper
             out[0] = lhs[0] * rhs;
             vector_helper<T, N - 1>::DoScale(out + 1, lhs + 1, rhs);
         }
+
+		static void DoScale(T out[N], T const lhs[N], const T& rhs) noexcept
+		{
+			out[0] = lhs[0] * rhs;
+			vector_helper<T, N - 1>::DoScale(out + 1, lhs + 1, rhs);
+		}
 
 		static void DoDiv(T out[N], const T lhs[N], const T rhs[N]) noexcept
         {

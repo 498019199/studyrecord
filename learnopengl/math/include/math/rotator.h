@@ -3,7 +3,7 @@
 namespace MathWorker
 {
 
-struct Rotator
+class Rotator
 {
 public:
     float pitch = 0.f;

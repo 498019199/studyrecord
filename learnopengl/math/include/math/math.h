@@ -1,9 +1,6 @@
 #pragma once
-#include <math/vectorxd.h>
-#include <math/matrix.h>
-#include <math/quaternion.h>
 #include <stdint.h>
-#include <math/rotator.h>
+
 
 namespace MathWorker
 {
@@ -29,6 +26,8 @@ namespace MathWorker
 	template <typename T>
 	class Matrix4_T;
 	using float4x4 = Matrix4_T<float>;
+
+	class Rotator;
 }
 
 namespace MathWorker
@@ -100,9 +99,9 @@ namespace MathWorker
     template<typename T>
     typename T::value_type Angle(const T& from, const T& to);
 	
-    // 	线性插值。
-    template<typename T>
-    T Lerp(const T& lhs, const T& rhs, float s);
+	// 线性插值
+	template <typename T>
+	T Lerp(const T& lhs, const T& rhs, float s) noexcept;
 
 	// 矩形平移
 	template<typename T>
