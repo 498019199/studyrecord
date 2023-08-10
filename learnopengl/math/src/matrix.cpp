@@ -231,6 +231,7 @@ std::string Matrix4_T<Valty>::print() const noexcept
 	tmp = m_.print();
 	return tmp;
 }
+
 // 实例化模板
 template class Matrix4_T<float>;
 }

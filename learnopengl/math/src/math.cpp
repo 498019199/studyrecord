@@ -112,7 +112,7 @@ namespace MathWorker
     template<typename T>
     typename T::value_type Length(const T & rhs) noexcept
     {
-        return std::sqrt(LengthSq(rhs));
+        return static_cast<T::value_type>(std::sqrt(LengthSq(rhs)));
     }
 
 	template float2 Normalize(const float2 & rhs) noexcept;
@@ -143,6 +143,7 @@ namespace MathWorker
         return (lhs + (rhs - lhs) * s);
     }
 
+    template int Distance(const int2 & lhs, const int2 & rhs) noexcept;
     template float Distance(const float2 & lhs, const float2 & rhs) noexcept;
     template<typename T>
     T Distance(const Vector_T<T, 2>& lhs, const Vector_T<T, 2>& rhs) noexcept
@@ -151,6 +152,7 @@ namespace MathWorker
         return Length(tmp);
     }
     
+    template int Distance(const int3 & lhs, const int3 & rhs) noexcept;
     template float Distance(const float3 & lhs, const float3 & rhs) noexcept;
     template<typename T>
     T Distance(const Vector_T<T, 3>& lhs, const Vector_T<T, 3>& rhs) noexcept
@@ -172,11 +174,10 @@ namespace MathWorker
         return Rad2Deg(angle);
     }
 
-    template float4x4 MatrixMove(float X, float Y, float Z);
-    template<typename T>
-    Matrix4_T<T> MatrixMove(T X, T Y, T Z)
+
+    float4x4 MatrixMove(float X, float Y, float Z)
     {
-        return Matrix4_T<T>(
+        return Matrix4_T<float>(
             1, 0, 0, 0,
             0, 1, 0, 0,
             0, 0, 1, 0,
@@ -185,16 +186,14 @@ namespace MathWorker
 
     template<float> float4x4 MatrixMove(const float3& Move);
     template<typename T>
-    Matrix4_T<T> MatrixMove(const Vector_T<T, 3> &Move)
+    float4x4 MatrixMove(const Vector_T<T, 3> &Move)
     {
         return MatrixMove(Move.x()(), Move.y(), Move.z());
     }
 
-    template float4x4 MatrixScale(float X, float Y, float Z);
-    template<typename T>
-    Matrix4_T<T> MatrixScale(T X, T Y, T Z)
+    float4x4 MatrixScale(float X, float Y, float Z)
     {
-        return Matrix4_T<T>(
+        return Matrix4_T<float>(
             X, 0, 0, 0,
             0, Y, 0, 0,
             0, 0, Z, 0,
@@ -203,57 +202,49 @@ namespace MathWorker
 
     template float4x4 MatrixScale(const float3& Scale);
     template<typename T>
-    Matrix4_T<T> MatrixScale(const Vector_T<T, 3> &Scale)
+    float4x4 MatrixScale(const Vector_T<T, 3> &Scale)
     {
         return MatrixScale(Scale.x(), Scale.y(), Scale.z());
     }
 
-    template float4x4 MatrixRotateX(float Angle);
-    template<typename T>
-    Matrix4_T<T> MatrixRotateX(T Angle)
+    float4x4 MatrixRotateX(float Angle)
     {
         float fs, fc;
         SinCos(Angle, fs, fc);
-        return Matrix4_T<T>(
+        return Matrix4_T<float>(
             1, 0,   0,  0,
             0, fc,  fs, 0,
             0, -fs, fc, 0,
             0, 0,   0,  1);
     }
 
-    template float4x4 MatrixRotateY(float Angle);
-    template<typename T>
-    Matrix4_T<T> MatrixRotateY(T Angle)
+    float4x4 MatrixRotateY(float Angle)
     {
         float fs, fc;
         SinCos(Angle, fs, fc);
-        return Matrix4_T<T>(
+        return Matrix4_T<float>(
             fc, 0, -fs, 0,
             0, 1, 0, 0,
             fs, 0, fc, 0,
             0, 0, 0, 1);
     }
 
-    template float4x4 MatrixRotateZ(float Angle);
-    template<typename T>
-    Matrix4_T<T> MatrixRotateZ(T Angle)
+    float4x4 MatrixRotateZ(float Angle)
     {
         float fs, fc;
         SinCos(Angle, fs, fc);
-        return Matrix4_T<T>(
+        return Matrix4_T<float>(
             fc, fs, 0, 0,
             -fs, fc, 0, 0,
             0, 0, 1, 0,
             0, 0, 0, 1);
     }
 
-    template float4x4 MatrixRotate(const float3& n, float Angle);
-    template<typename T>
-    Matrix4_T<T> MatrixRotate(const Vector_T<T, 3>& n, T Angle)
+    float4x4 MatrixRotate(const float3& n, float Angle)
     {
         float fs = 0.0f, fc = 0.0f;
         SinCos(Angle, fs, fc);
-        Vector_T<T, 4> v(n.x(), n.y(), n.z(), 1.0f);
+        Vector_T<float, 4> v(n.x(), n.y(), n.z(), 1.0f);
         v = Normalize(v);
 
         float a = 1.0f - fc;
@@ -261,7 +252,7 @@ namespace MathWorker
         float ay = a * v.y();
         float az = a * v.z();
 
-        Matrix4_T<T> matrix;
+        Matrix4_T<float> matrix;
         matrix(0, 0) = v.x() * ax + fc;
         matrix(0, 1) = v.x() * ay + v.z() * fs;
         matrix(0, 2) = v.x() * az - v.y() * fs;
@@ -440,7 +431,7 @@ namespace MathWorker
     }
 
 
-
+    template quat Mul(const quat& lhs, const quat& rhs) noexcept;
     template<typename T>
 	Quaternion_T<T> Mul(const Quaternion_T<T>& lhs, const Quaternion_T<T>& rhs) noexcept
 	{

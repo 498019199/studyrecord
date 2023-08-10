@@ -71,7 +71,7 @@ void checkvecotr()
 
 	// test angle
 	std::stringstream ss;
-	ss << std::setiosflags(std::ios::fixed) << std::setprecision(2) << Angle(int3(1,2,3), int3(3,3,3)) ;
+	ss << std::setiosflags(std::ios::fixed) << std::setprecision(2) << Angle(float3(1,2,3), float3(3,3,3)) ;
 	assert(0 == ss.str().compare("22.21"));
 
 	// test add,sub

@@ -104,26 +104,20 @@ namespace MathWorker
 	T Lerp(const T& lhs, const T& rhs, float s) noexcept;
 
 	// 矩形平移
+	float4x4 MatrixMove(float X, float Y, float Z);
 	template<typename T>
-	Matrix4_T<T> MatrixMove(T X, T Y, T Z);
-	template<typename T>
-	Matrix4_T<T> MatrixMove(const Vector_T<T, 3>& Move);
+	float4x4 MatrixMove(const Vector_T<T, 3>& Move);
 
 	// 矩形缩放
+	float4x4 MatrixScale(float X, float Y, float Z);
 	template<typename T>
-	Matrix4_T<T> MatrixScale(T X, T Y, T Z);
-	template<typename T>
-	Matrix4_T<T> MatrixScale(const Vector_T<T, 3>& Scale);
+	float4x4 MatrixScale(const Vector_T<T, 3>& Scale);
 
 	// 矩阵旋转
-	template<typename T>
-	Matrix4_T<T> MatrixRotateX(T Angle);
-	template<typename T>
-	Matrix4_T<T> MatrixRotateY(T Angle);
-	template<typename T>
-	Matrix4_T<T> MatrixRotateZ(T Angle);
-	template<typename T>
-	Matrix4_T<T> MatrixRotate(const Vector_T<T, 3>& Pos, T Angle);
+	float4x4 MatrixRotateX(float Angle);
+	float4x4 MatrixRotateY(float Angle);
+	float4x4 MatrixRotateZ(float Angle);
+	float4x4 MatrixRotate(const float3& Pos, float Angle);
 
 	// 矩形乘法
 	template<typename T>
