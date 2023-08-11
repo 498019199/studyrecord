@@ -135,20 +135,15 @@ namespace MathWorker
 	template<typename T>
 	Matrix4_T<T> MatrixInverse(const Matrix4_T<T>& m);
 
-	template<typename T>
-	Matrix4_T<T> LookAtLH(const Vector_T<float, 3>& Eye, const Vector_T<float, 3>& At, const Vector_T<float, 3>& Up);
+	float4x4 LookAtLH(const float3& Eye, const float3& At, const float3& Up);
 
 	// 正交投影
-	template<typename T>
-	Matrix4_T<T> OrthoLH(float w, float h, float Near, float Far);
-	template<typename T>
-	Matrix4_T<T> OrthoOffCenterLH(float l, float r, float b, float t, float n, float f);
+	float4x4 OrthoLH(float w, float h, float Near, float Far);
+	float4x4 OrthoOffCenterLH(float l, float r, float b, float t, float n, float f);
 
 	// 透视投影
-	template<typename T>
-	Matrix4_T<T> PerspectiveLH(float w, float h, float Near, float Far);
-	template<typename T>
-	Matrix4_T<T> PerspectiveFovLH(float Fov, float Aspect, float Near, float Far);
+	float4x4 PerspectiveLH(float w, float h, float Near, float Far);
+	float4x4 PerspectiveFovLH(float Fov, float Aspect, float Near, float Far);
 
 	// 相互转换
 	template<typename T>

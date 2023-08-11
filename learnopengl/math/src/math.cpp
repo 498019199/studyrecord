@@ -394,50 +394,44 @@ namespace MathWorker
         }
     }
 
-    template<typename T>
-	Matrix4_T<T> OrthoLH(float w, float h, float Near, float Far)
+	float4x4 OrthoLH(float w, float h, float Near, float Far)
     {
-        return Matrix4_T<T>();        
+        return float4x4();        
     }
 
-    template<typename T>
-	Matrix4_T<T> OrthoOffCenterLH(float l, float r, float b, float t, float n, float f)
+	float4x4 OrthoOffCenterLH(float l, float r, float b, float t, float n, float f)
     {
         float rsl = r - l;
         float ral = r + l;
         float nsf = n - f;
         float tsb = t - b;
-        return Matrix4_T<T>(
+        return float4x4(
             2/rsl,      0,          0,              0,
             0,          2/tsb,      0,              0,
             0,          0,          2/nsf,          0,
             -ral/rsl,   -(t+b)/tsb, (n + f)/nsf,    1);        
     }
 
-    template float4x4 LookAtLH(const float3& Eys, const float3& At, const float3& Up);
-    template<typename T>
-	Matrix4_T<T> LookAtLH(const Vector_T<float, 3>& Eye, const Vector_T<float, 3>& At, const Vector_T<float, 3>& Up)
+	float4x4 LookAtLH(const float3& Eye, const float3& At, const float3& Up)
     {
-        Vector_T<float, 3> zaxis = Normalize(Eye - At);
-        Vector_T<float, 3> xaxis = Normalize(Up ^ zaxis);
-        Vector_T<float, 3> yaxis = zaxis ^ xaxis;
-        return Matrix4_T<T>(
+        float3 zaxis = Normalize(Eye - At);
+        float3 xaxis = Normalize(Up ^ zaxis);
+        float3 yaxis = zaxis ^ xaxis;
+        return float4x4(
             xaxis.x(), yaxis.x(), zaxis.x(), 0,
             xaxis.y(), yaxis.y(), zaxis.y(), 0,
             xaxis.z(), yaxis.z(), zaxis.z(), 0,
             xaxis | Eye, yaxis | Eye, zaxis | Eye, 1);        
     }
 
-    template<typename T>
-	Matrix4_T<T> PerspectiveLH(float w, float h, float Near, float Far)
+    float4x4 PerspectiveLH(float w, float h, float Near, float Far)
     {
-        return Matrix4_T<T>();        
+        return float4x4();        
     }
 
-    template<typename T>
-	Matrix4_T<T> PerspectiveFovLH(float Fov, float Aspect, float Near, float Far)
+	float4x4 PerspectiveFovLH(float Fov, float Aspect, float Near, float Far)
     {
-        return Matrix4_T<T>();        
+        return float4x4();        
     }
 
 
