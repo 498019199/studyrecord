@@ -13,45 +13,45 @@ void checkvecotr()
 	// test contruct
 	float3 v(1, 2, 3);
 	float3 u = { 0,2,3 };
-	float3 w = {1.f, 2.f, 3.f};
+	float3 w = {1.f, 1.f, 1.f};
 	assert(float3(1,2,3) == v);
 	assert(float3(0,2,3) == u);
 	assert(float3(1.f,1.f,1.f) == w);
 
 	std::cout << sizeof(float3) << std::endl;
 	// add
-	std::cout << (-v).print() << std::endl;
-	std::cout << (v + u).print() << std::endl;
-	std::cout << (v - u).print() << std::endl;
+	std::cout << (-v) << std::endl;
+	std::cout << (v + u) << std::endl;
+	std::cout << (v - u) << std::endl;
 	v += u;
-	std::cout << v.print() << std::endl;
+	std::cout << v << std::endl;
 	v -= u;
-	std::cout << v.print() << std::endl;
-	std::cout << (v * 5).print() << std::endl;
-	std::cout << (5 * v).print() << std::endl;
+	std::cout << v << std::endl;
+	std::cout << (v * 5) << std::endl;
+	std::cout << (5 * v) << std::endl;
 	// mul
-	std::cout << (v * 3.f).print() << std::endl;
-	std::cout << (2.5f * v).print() << std::endl;
-	std::cout << (2.5 * float2{ 1.f,2.f }).print() << std::endl;
-	std::cout << (4.f * v).print() << std::endl;
+	std::cout << (v * 3.f) << std::endl;
+	std::cout << (2.5f * v) << std::endl;
+	std::cout << (2.5 * float2{ 1.f,2.f }) << std::endl;
+	std::cout << (4.f * v) << std::endl;
 	v *= 5.f;
-	std::cout << v.print() << std::endl;
-	std::cout << (v / 3.f).print() << std::endl;
+	std::cout << v << std::endl;
+	std::cout << (v / 3.f) << std::endl;
 	v /= 5.f;
-	std::cout << v.print() << std::endl;
+	std::cout << v << std::endl;
 	// normalize
-	std::cout << Normalize(v).print() << std::endl;
+	std::cout << Normalize(v) << std::endl;
 	v = Normalize(v);
-	std::cout << v.print() << std::endl;
+	std::cout << v << std::endl;
 	std::cout << v[2] << std::endl;
 
 	// Cross
-	std::cout << Cross(v, u).print() << std::endl;
+	std::cout << Cross(v, u) << std::endl;
 	// dot
 	std::cout << Dot(v, u) << std::endl;
 
 	// lerp
-	std::cout << Lerp(v, u, 0.5).print() << std::endl;
+	std::cout << Lerp(v, u, 0.5) << std::endl;
 
 	// veci
 	int3 iv{ 1,2,3 };
@@ -63,11 +63,11 @@ void checkvecotr()
 	//std::cout << v.perpendicular(u.Normalize()) << std::endl;
 
 	Vector_T<float, 3> vs[4];
-	std::cout << vs[2].print() + vs[3].print() << std::endl;
-	std::cout << float3(vs[0][0] + vs[1][0], vs[0][1] + vs[1][1], vs[0][2] + vs[1][2]).print() << std::endl;
+	std::cout << vs[2] + vs[3] << std::endl;
+	std::cout << float3(vs[0][0] + vs[1][0], vs[0][1] + vs[1][1], vs[0][2] + vs[1][2]) << std::endl;
 
 	float3 ddd{ 1,2,3 };
-	std::cout << (ddd + (-ddd)).print() << std::endl;
+	std::cout << (ddd + (-ddd)) << std::endl;
 
 	// test angle
 	std::stringstream ss;
@@ -105,7 +105,8 @@ void checkmatrix()
 	assert(tmp1 == tmp2);
 	assert(tmp1 == tmp3);
 	assert(tmp1 == tmp4);
-	std::cout << "test matrix contruct success" << std::endl << tmp1.print() << std::endl;
+	std::cout << "zero matrix " << std::endl << tmp1.Zero() << std::endl;
+	std::cout << "Identity matrix " << std::endl << tmp1.Identity() << std::endl;
 
 	// test matrix multiplication
 	assert(float4x4(12,1,13,14, 12,0,12,15,  10,0,10,7, 2,0,2,2) == 
@@ -124,6 +125,35 @@ void checkmatrix()
 		float4x4(1,1,1,1,  1,1,1,1,  1,1,1,1,  1,1,1,1) * 2);
 	assert(float4x4(2,2,2,2, 2,2,2,2,  2,2,2,2, 2,2,2,2) / 2 == 
 		float4x4(1,1,1,1,  1,1,1,1,  1,1,1,1,  1,1,1,1));
+
+
+	// athmatic matrix
+	auto m1 = float4x4(11, 12, 13, 14,
+					21, 22, 23, 24,
+					31, 32, 33, 34,
+					41, 42, 43, 44);
+	auto m2 = float4x4(11, 21, 31, 41,
+					 12, 22, 32, 42,
+					 13, 23, 33, 43,
+					 14, 24, 34, 44);
+	assert(Transpose(m1) == m2);
+
+	// move 1,0,0,0,  0,1,0,0,  0,0,1,0,  0,0,0,1
+	assert(float4x4(1,0,0,0,  0,1,0,0,  0,0,1,0,  1,2,3,1) == MatrixMove(1, 2, 3));
+	// Scale
+	assert(float4x4(2,0,0,0,  0,0.5,0,0,  0,0,2,0,  0,0,0,1) == MatrixScale(2, 0.5, 2));
+
+	// test rotation matrix
+    // rotation matrix
+    assert(float4x4(1,0,0,0, 0,0.838670671f,0.544638991f,0,  0,-0.544638991f,0.838670671f,0, 0,0,0,1) == MatrixRotateX(Deg2Rad(33)));
+    assert(float4x4(0.500000477f,0,-0.866025388f,0, 0,1,0,0,  0.866025388f,0,0.500000477f,0, 0,0,0,1) == MatrixRotateY(Deg2Rad(60)));
+    assert(float4x4(0.500000477f,0.866025388f,0,0, -0.866025388f,0.500000477f,0,0,  0,0,1,0, 0,0,0,1) == MatrixRotateZ(Deg2Rad(60)));
+
+    assert(float4x4(0.970946252f,0.147502527f,-0.128133610f,0, 
+					-0.128133610f,0.970946252f,0.147502527f,0,  
+					0.147502527f,-0.128133610f,0.970946252f,0, 0,0,0,0) == MatrixRotate(float3(1.f,1.f,1.f), Deg2Rad(16)));
+	
+	std::cout << "test matrix contruct success" << std::endl << tmp1 << std::endl;
 }
 
 void checkquaternion()
@@ -136,38 +166,18 @@ void checkquaternion()
 	auto q3 = quat(v1, 4.f);
 	auto q4 = quat(q2);
 	assert(q4 == q3);
-	std::cout << "test quaternion  contruct success" << q1.print() << std::endl;
+	std::cout << "test quaternion  contruct success " << q2 << std::endl;
 }
 
 void checkmath()
 {
-	// athmatic matrix
-	auto m1 = float4x4(11, 12, 13, 14,
-					21, 22, 23, 24,
-					31, 32, 33, 34,
-					41, 42, 43, 44);
-	auto m2 = float4x4(11, 21, 31, 41,
-					 12, 22, 32, 42,
-					 13, 23, 33, 43,
-					 14, 24, 34, 44);
-	assert(Transpose(m1) == m2);
 
-	// test rotation matrix
-    // rotation matrix
-    assert(float4x4(1,0,0,0, 0,0.8386f,-0.5447f,0.f,  0,0.5446f,0.8386f,0, 0,0,0,1) == MatrixRotateX(33));
-    assert(float4x4(0.7071f,0,0.7071f,0, 0,1,0,0,  -0.7072f,0,0.7071f,0, 0,0,0,1) == MatrixRotateY(45));
-    assert(float4x4(0.0174f,-0.9999f,0,0, 0.9998f,0.0174f,0,0,  0,0,1,0, 0,0,0,1) == MatrixRotateZ(89));
-    //assert(Matrix(2,2,2,2, 2,2,2,2,  2,2,2,2, 2,2,2,2) == MatrixRotate(Vector3D(), 16));
-	// move
-	assert(float4x4(2,2,2,2,  2,2,2,2,  2,2,2,2,  2,2,2,2) == MatrixMove(0,0,0));
-	// Scale
-	assert(float4x4(2,2,2,2,  2,2,2,2,  2,2,2,2,  2,2,2,2) == MatrixScale(0,0,0));
 }
 
 int main()
 {
     checkvecotr();
+	checkquaternion();
     checkmatrix();
-    checkquaternion();
-	checkmath();
+	//checkmath();
 }

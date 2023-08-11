@@ -176,11 +176,6 @@ const Quaternion_T<T>& Quaternion_T<T>::Identity() noexcept
 	return out;
 }
 
-template<typename T>
-std::string Quaternion_T<T>::print() const noexcept
-{
-    return quat_.print();
-}
-
+// print
 template class Quaternion_T<float>;
 }

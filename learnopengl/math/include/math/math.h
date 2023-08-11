@@ -56,8 +56,6 @@ namespace MathWorker
 	inline float Deg2Rad(const float x){ return x * DEG2RAD; }
 	inline float Rad2Deg(const float x){return x * RAD2DEG;}
 	
-	void SinCos(float fAnglel, float& X, float&Y);
-
 	// 浮点相等
 	template<typename T>
 	bool IsEqual(T X, T Y);

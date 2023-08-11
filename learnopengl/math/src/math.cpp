@@ -6,10 +6,20 @@
 
 namespace MathWorker
 {
+    float sin(float x) noexcept
+    {
+        return std::sin(x);
+    }
+
+    float cos(float x) noexcept
+    {
+        return sin(x + PI / 2);
+    }
+
     void SinCos(float fAnglel, float& X, float&Y)
 	{
-		X = std::sin(fAnglel);
-		Y = std::cos(fAnglel);
+        X = sin(fAnglel);
+        Y = cos(fAnglel);
 	}
 
     template bool IsEqual(float X, float Y);
@@ -197,7 +207,7 @@ namespace MathWorker
             X, 0, 0, 0,
             0, Y, 0, 0,
             0, 0, Z, 0,
-            1, 1, 1, 1);
+            0, 0, 0, 1);
     }
 
     template float4x4 MatrixScale(const float3& Scale);
@@ -252,7 +262,7 @@ namespace MathWorker
         float ay = a * v.y();
         float az = a * v.z();
 
-        Matrix4_T<float> matrix;
+        Matrix4_T<float> matrix(Matrix4_T<float>::Zero());
         matrix(0, 0) = v.x() * ax + fc;
         matrix(0, 1) = v.x() * ay + v.z() * fs;
         matrix(0, 2) = v.x() * az - v.y() * fs;

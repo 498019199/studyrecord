@@ -100,23 +100,19 @@ public:
 
     bool operator==(const Matrix4_T& rhs) const noexcept;
     bool operator!=(const Matrix4_T& rhs) const noexcept;
-    
+
     // print
-    std::string print() const noexcept;
+    template <typename T>
+    friend std::ostream& operator<<(std::ostream& os, const Matrix4_T<T>& rhs);
 private:
 	Vector_T<Vector_T<T, col_num>, row_num> m_;
 };
 
 
-
-
-
-
-
-
-
-
-
-
-
+// print
+template <typename T>
+std::ostream& operator<<(std::ostream& os, const Matrix4_T<T>& rhs)
+{
+	return os << rhs.m_;
+}
 }

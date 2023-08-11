@@ -1,6 +1,7 @@
 #pragma once
 #include <array>
 #include <string>
+#include <sstream>
 #include "math_helper.h"
 #include "math/math.h"
 
@@ -32,19 +33,19 @@ public:
 	explicit Vector_T(const T* rhs) noexcept
 	{
     	MathHelper::vector_helper<T, N>
-    	::DoCopy(vec_.data(), rhs);
+    	::DoCopy(data(), rhs);
 	}
 
 	explicit Vector_T(const T& rhs) noexcept
 	{
     	MathHelper::vector_helper<T, N>
-    	::DoAssign(vec_.data(), rhs);
+    	::DoAssign(data(), rhs);
 	}
 
 	Vector_T(const Vector_T& rhs) noexcept
 	{
     	MathHelper::vector_helper<T, N>
-    	::DoCopy(vec_.data(), rhs.data());
+    	::DoCopy(data(), rhs.data());
 	}
 
 	Vector_T(Vector_T&& rhs) noexcept
@@ -56,7 +57,7 @@ public:
 	{
 		static_assert(M >= N, "Could not convert to a smaller vector.");
 		MathHelper::vector_helper<T, N>
-			::DoCopy(vec_.data(), rhs.data());
+			::DoCopy(data(), rhs.data());
 	}
 
 	Vector_T(const T& x, const T& y) noexcept
@@ -124,11 +125,11 @@ public:
 	{
 		return vec_.end();
 	}
-	reference operator[](size_type off) noexcept
+	reference operator[](size_t off) noexcept
 	{
 		return vec_[off];
 	}
-	constexpr const_reference operator[](size_type off) const noexcept
+	constexpr const_reference operator[](size_t off) const noexcept
 	{
 		return vec_[off];
 	}
@@ -181,52 +182,38 @@ public:
 	
 	// operator +
 	template <typename U>
-	const Vector_T& operator+=(const Vector_T<U, N>& rhs) const noexcept
+	const Vector_T& operator+=(const Vector_T<U, N>& rhs) noexcept
 	{
-    	MathHelper::vector_helper<T, N>::DoAdd(vec_.data(), vec_.data(), rhs.data());
+    	MathHelper::vector_helper<T, N>::DoAdd(data(), data(), rhs.data());
     	return *this;
 	}
 
 	template <typename U>
 	const Vector_T& operator+=(const U& rhs) noexcept
 	{
-		MathHelper::vector_helper<T, N>::DoAdd(vec_.data(), vec_.data(), rhs);
+		MathHelper::vector_helper<T, N>::DoAdd(data(), data(), rhs);
 		return *this;
-	}
-
-	template <typename U>
-	const Vector_T& operator+(const Vector_T<U, N>& rhs) const noexcept
-	{
-    	MathHelper::vector_helper<T, N>::DoAdd(vec_.data(), vec_.data(), rhs.data());
-    	return *this;
 	}
 
 	// operator -
 	template <typename U>
-	const Vector_T& operator-=(const Vector_T<U, N>& rhs) const noexcept
+	const Vector_T& operator-=(const Vector_T<U, N>& rhs) noexcept
 	{
-		MathHelper::vector_helper<U, N>::DoSub(vec_.data(), vec_.data(), rhs.data());
+		MathHelper::vector_helper<U, N>::DoSub(data(), data(), rhs.data());
 		return *this;
 	}
 
 	template <typename U>
-	const Vector_T& operator-=(const U& rhs) const noexcept
+	const Vector_T& operator-=(const U& rhs) noexcept
 	{
-    	MathHelper::vector_helper<T, N>::DoSub(vec_.data(), vec_.data(), rhs);
-    	return *this;
-	}
-
-	template <typename U>
-	const Vector_T& operator-(const Vector_T<U, N>& rhs) const noexcept
-	{
-    	MathHelper::vector_helper<T, N>::DoSub(vec_.data(), vec_.data(), rhs.data());
+    	MathHelper::vector_helper<T, N>::DoSub(data(), data(), rhs);
     	return *this;
 	}
 
 	// operator 叉积
 	Vector_T operator^(const Vector_T& rhs) const noexcept
 	{
-		return Cross<T>(*this, rhs);
+		return Cross(*this, rhs);
 	}
 
 	// operator 点积
@@ -237,16 +224,9 @@ public:
 
 	// operator * 数乘
 	template <typename U>
-	const Vector_T& operator*=(const U& rhs) const noexcept
+	const Vector_T& operator*=(const U& rhs) noexcept
 	{
-		MathHelper::vector_helper<T, N>::DoScale(vec_.data(), vec_.data(), rhs);
-		return *this;
-	}
-
-	template <typename U>
-	const Vector_T& operator*(const U& rhs) const noexcept
-	{
-		MathHelper::vector_helper<T, N>::DoScale(vec_.data(), vec_.data(), rhs);
+		MathHelper::vector_helper<T, N>::DoScale(data(), data(), rhs);
 		return *this;
 	}
 
@@ -254,21 +234,14 @@ public:
 	template <typename U>
 	const Vector_T& operator/=(const Vector_T<U, N>& rhs) const noexcept
 	{
-		MathHelper::vector_helper<U, N>::DoDiv(vec_.data(), vec_.data(), rhs.data());
+		MathHelper::vector_helper<U, N>::DoDiv(data(), data(), rhs.data());
 		return *this;
 	}
 
 	template <typename U>
-	const Vector_T& operator/=(const U& rhs) const noexcept
+	const Vector_T& operator/=(const U& rhs) noexcept
 	{
-    	MathHelper::vector_helper<T, N>::DoScale(vec_.data(), vec_.data(), rhs);
-    	return *this;
-	}
-
-	template <typename U>
-	const Vector_T& operator/(const U& rhs) const noexcept
-	{
-    	MathHelper::vector_helper<T, N>::DoScale(vec_.data(), vec_.data(), rhs);
+    	MathHelper::vector_helper<T, N>::DoScale(data(), data(), rhs);
     	return *this;
 	}
 
@@ -291,7 +264,7 @@ public:
 	{
 		static_assert(M >= N, "Could not assign to a smaller vector.");
 
-		MathHelper::vector_helper<T, N>::DoCopy(vec_.data(), rhs.data());
+		MathHelper::vector_helper<T, N>::DoCopy(data(), rhs.data());
 		return *this;
 	}
 
@@ -305,20 +278,20 @@ public:
 	const Vector_T operator-() const noexcept
 	{
 		Vector_T tmp(*this);
-		MathHelper::vector_helper<T, N>::DoNegate(&tmp.vec_[0], &this->vec_[0]);
+		MathHelper::vector_helper<T, N>::DoNegate(tmp.data(), data());
 		return tmp;
 	}
 
 
 	void swap(Vector_T& rhs) noexcept
 	{
-		MathHelper::vector_helper<T, N>::DoSwap(vec_.data(), &rhs[0]);
+		MathHelper::vector_helper<T, N>::DoSwap(data(), rhs.data());
 	}
 
 	// operator ==
 	bool operator==(const Vector_T& rhs) const noexcept
 	{
-		return MathHelper::vector_helper<T, N>::DoEquip(vec_.data(), &rhs[0]);
+		return MathHelper::vector_helper<T, N>::DoEquip(data(), rhs.data());
 	}
 
 	// operator ==
@@ -327,27 +300,54 @@ public:
 		return !(this->operator==(rhs));
 	}
 
-    // print
-    std::string print() const noexcept
-	{
-		std::string tmp;
-		// for(auto it: vec_)
-		// {
-		// 	tmp << it << " ";
-		// }
-		tmp.append(" \r\n");
-		return tmp;
-	}
-
 private:
 	DetailType vec_;
 };
 
+template <typename T, int N>
+Vector_T<T, N> operator+(const Vector_T<T, N>& lhs, const Vector_T<T, N>& rhs) noexcept
+{
+    return Vector_T<T, N>(lhs).operator+=(rhs);
+}
+
+template <typename T, int N>
+Vector_T<T, N> operator-(const Vector_T<T, N>& lhs, const Vector_T<T, N>& rhs) noexcept
+{
+    return Vector_T<T, N>(lhs).operator-=(rhs);
+}
 
 template <typename T, int N, typename U>
 Vector_T<T, N> operator*(const U& lhs, const Vector_T<T, N>& rhs) noexcept
 {
-    return rhs.operator*=(lhs);
+    return Vector_T<T, N>(rhs).operator*=(lhs);
 }
 
+template <typename T, int N, typename U>
+Vector_T<T, N> operator*(const Vector_T<T, N>& lhs, const U& rhs) noexcept
+{
+    return Vector_T<T, N>(lhs).operator*=(rhs);
+}
+
+template <typename T, int N, typename U>
+Vector_T<T, N> operator/(const U& lhs, const Vector_T<T, N>& rhs) noexcept
+{
+    return Vector_T<T, N>(rhs).operator/=(lhs);
+}
+
+template <typename T, int N, typename U>
+Vector_T<T, N> operator/(const Vector_T<T, N>& lhs, const U& rhs) noexcept
+{
+    return Vector_T<T, N>(lhs).operator/=(rhs);
+}
+
+// print
+template <typename T, int N>
+std::ostream& operator<<(std::ostream& os, const Vector_T<T, N>& vec)
+{
+	for (size_t i = 0; i < N; i++)
+	{
+		os << vec[i] << " ";
+	}
+	return os;
+}
 }

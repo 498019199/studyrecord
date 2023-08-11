@@ -115,13 +115,15 @@ public:
 	static const Quaternion_T& Identity() noexcept;
 
 	// print
-    std::string print() const noexcept;
+	template <typename T>
+	friend std::ostream& operator<<(std::ostream& os, const Quaternion_T<T>& rhs);
 private:
 	Vector_T<T, elem_num> quat_;
 };
 
-
-
-
-
+template <typename T>
+std::ostream& operator<<(std::ostream& os, const Quaternion_T<T>& rhs)
+{
+	return os << rhs.quat_;
+}
 }

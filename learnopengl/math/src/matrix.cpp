@@ -109,7 +109,7 @@ template <typename T>
 Matrix4_T<T>& 
 Matrix4_T<T>::operator/=(value_type rhs) noexcept
 {
-	return this->operator*=(RecipSqrt(rhs));
+	return this->operator*=(1/rhs);
 }
 
 template <typename T>
@@ -151,40 +151,35 @@ template <typename T>
 Matrix4_T<T>
 Matrix4_T<T>::operator+(const Matrix4_T& rhs) const noexcept
 {
-    Matrix4_T<T> tmp(*this);
-	return tmp.operator+=(rhs);
+	return Matrix4_T<T>(*this).operator+=(rhs);
 }
 
 template <typename T>
 Matrix4_T<T> 
 Matrix4_T<T>::operator-(const Matrix4_T& rhs) const noexcept
 {
-    Matrix4_T<T> tmp(*this);
-	return tmp.operator-=(rhs);
+	return Matrix4_T<T>(*this).operator-=(rhs);
 }
 
 template <typename T>
 Matrix4_T<T>
 Matrix4_T<T>::operator*(const Matrix4_T& rhs) const noexcept
 {
-    Matrix4_T<T> tmp(*this);
-	return tmp.operator*=(rhs);
+	return Matrix4_T<T>(*this).operator*=(rhs);
 }
 
 template <typename T>
 Matrix4_T<T>
 Matrix4_T<T>::operator*(value_type rhs) const noexcept
 {
-    Matrix4_T<T> tmp(*this);
-	return tmp.operator*=(rhs);
+	return Matrix4_T<T>(*this).operator*=(rhs);
 }
 
 template <typename T>
 Matrix4_T<T> 
 Matrix4_T<T>::operator/(value_type rhs) const noexcept
 {
-    Matrix4_T<T> tmp(*this);
-	return tmp.operator/=(rhs);
+	return Matrix4_T<T>(*this).operator/=(rhs);
 }
 
 
@@ -220,14 +215,6 @@ template <typename T>
 bool Matrix4_T<T>::operator!=(const Matrix4_T<T>& rhs) const noexcept
 {
 	return !this->operator==(rhs);
-}
-
-template <typename T>
-std::string Matrix4_T<T>::print() const noexcept
-{
-	std::string tmp;
-	tmp = m_.print();
-	return tmp;
 }
 
 // 实例化模板
