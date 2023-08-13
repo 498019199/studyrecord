@@ -166,7 +166,7 @@ bool Quaternion_T<T>::operator==(Quaternion_T<T> const & rhs) const noexcept
 template<typename T>
 bool Quaternion_T<T>::operator!=(Quaternion_T<T> const & rhs) const noexcept
 {
-	return !(this->operator==(rhs));	
+	return this->quat_ != rhs.quat_;
 }
 
 template <typename T>

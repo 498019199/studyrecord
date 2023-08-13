@@ -21,7 +21,6 @@ public:
 	constexpr Quaternion_T() noexcept
 	{
 	}
-
 	explicit constexpr Quaternion_T(const T * rhs) noexcept;
 	constexpr Quaternion_T(const Vector_T<T, 3>& vec, T s) noexcept;
 	Quaternion_T(const Quaternion_T & rhs) noexcept;

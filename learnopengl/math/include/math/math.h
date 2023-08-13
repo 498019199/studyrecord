@@ -27,7 +27,9 @@ namespace MathWorker
 	class Matrix4_T;
 	using float4x4 = Matrix4_T<float>;
 
-	class Rotator;
+    template <typename T>
+	class Rotator_T;
+    using rotator = Rotator_T<float>;
 }
 
 namespace MathWorker
@@ -101,6 +103,22 @@ namespace MathWorker
 	template <typename T>
 	T Lerp(const T& lhs, const T& rhs, float s) noexcept;
 
+
+
+	// 四元数乘法
+	template <typename T>
+	Quaternion_T<T> Mul(Quaternion_T<T> const & lhs, Quaternion_T<T> const & rhs) noexcept;
+
+	// 四元数共轭
+	template <typename T>
+	Quaternion_T<T> Conjugate(Quaternion_T<T> const & rhs) noexcept;
+
+	// 四元数的逆
+	template <typename T>
+	Quaternion_T<T> Inverse(const Quaternion_T<T>& rhs) noexcept;
+
+
+
 	// 矩形平移
 	float4x4 MatrixMove(float X, float Y, float Z);
 	template<typename T>
@@ -145,29 +163,17 @@ namespace MathWorker
 	float4x4 PerspectiveLH(float w, float h, float Near, float Far);
 	float4x4 PerspectiveFovLH(float Fov, float Aspect, float Near, float Far);
 
+
+
 	// 相互转换
-	template<typename T>
-	Matrix4_T<T> ToMatrix(const Quaternion_T<T>& quat);
-	template<typename T>
-	Matrix4_T<T> ToMatrix(const Rotator& rot);
+	float4x4 ToMatrix(const quat& quat);
+	float4x4 ToMatrix(const rotator& rot);
 
+	quat ToQuaternion(const float4x4& mat);
+	quat ToQuaternion(const rotator& rot);
 
-	// 四元数乘法
-	template <typename T>
-	Quaternion_T<T> Mul(Quaternion_T<T> const & lhs, Quaternion_T<T> const & rhs) noexcept;
-
-
-
-
-	template<typename T>
-	Quaternion_T<T> ToQuaternion(const Matrix4_T<T>& mat);
-	template<typename T>
-	Quaternion_T<T> ToQuaternion(const Rotator& rot);
-
-	template<typename T>
-	Rotator ToRotator(const Matrix4_T<T>& mat);
-	template<typename T>
-	Rotator ToRotator(const Quaternion_T<T>& quat);
+	rotator ToRotator(const float4x4& mat);
+	rotator ToRotator(const quat& quat);
 }
 
 

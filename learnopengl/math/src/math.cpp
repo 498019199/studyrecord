@@ -446,41 +446,49 @@ namespace MathWorker
 			lhs.w() * rhs.w() - lhs.x() * rhs.x() - lhs.y() * rhs.y() - lhs.z() * rhs.z());
 	}
 
+    template quat Conjugate(quat const & rhs) noexcept;
+	template <typename T>
+	Quaternion_T<T> Conjugate(Quaternion_T<T> const & rhs) noexcept
+	{
+		return Quaternion_T<T>(-rhs.x(), -rhs.y(), -rhs.z(), rhs.w());
+	}
 
-    template<typename T>
-    Matrix4_T<T> ToMatrix(const Quaternion_T<T> &quat)
+	template quat Inverse(const quat& rhs) noexcept;
+	template <typename T>
+	Quaternion_T<T> Inverse(const Quaternion_T<T>& rhs) noexcept
+	{
+		T var(T(1) / Length(rhs));
+		return Quaternion_T<T>(-rhs.x() * var, -rhs.y() * var, -rhs.z() * var, rhs.w() * var);
+	}
+
+    float4x4 ToMatrix(const quat &quat)
     {
-        return Matrix4_T<T>();
+        return float4x4();
     }
 
-    template<typename T>
-    Matrix4_T<T> ToMatrix(const Rotator &rot)
+    float4x4 ToMatrix(const rotator &rot)
     {
-        return Matrix4_T<T>();
+        return float4x4();
     }
 
-    template<typename T>
-    Quaternion_T<T> ToQuaternion(const Matrix4_T<T> &mat)
+    quat ToQuaternion(const float4x4 &mat)
     {
-        return Quaternion_T<T>();
+        return quat();
     }
 
-    template<typename T>
-    Quaternion_T<T> ToQuaternion(const Rotator &rot)
+    quat ToQuaternion(const rotator &rot)
     {
-        return Quaternion_T<T>();
+        return quat();
     }
 
-    template<typename T>
-    Rotator ToRotator(const Matrix4_T<T> &mat)
+    rotator ToRotator(const float4x4 &mat)
     {
-        return Rotator();
+        return rotator();
     }
 
-    template<typename T>
-    Rotator ToRotator(const Quaternion_T<T> &quat)
+    rotator ToRotator(const quat &quat)
     {
-        return Rotator();
+        return rotator();
     }
 
 }
