@@ -21,7 +21,7 @@ namespace MathWorker
 
 	template <typename T>
 	class Quaternion_T;
-	using quat = Quaternion_T<float>;
+	using quater = Quaternion_T<float>;
 
 	template <typename T>
 	class Matrix4_T;
@@ -166,14 +166,14 @@ namespace MathWorker
 
 
 	// 相互转换
-	float4x4 ToMatrix(const quat& quat);
+	float4x4 ToMatrix(const quater& quat);
 	float4x4 ToMatrix(const rotator& rot);
 
-	quat ToQuaternion(const float4x4& mat);
-	quat ToQuaternion(const rotator& rot);
+	quater ToQuaternion(const float4x4& mat);
+	quater ToQuaternion(const rotator& rot);
 
 	rotator ToRotator(const float4x4& mat);
-	rotator ToRotator(const quat& quat);
+	rotator ToRotator(const quater& quat);
 }
 
 

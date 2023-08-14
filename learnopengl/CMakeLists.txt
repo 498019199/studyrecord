@@ -24,32 +24,32 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
 
     add_compile_options("$<$<C_COMPILER_ID:MSVC>:/utf-8>")
     add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
-    
+    add_definitions(-DPLATFORM_WINDOS)
     add_compile_options(
-            # Treat angle bracket headers as external headers.
-            #/external:anglebrackets
+        # Treat angle bracket headers as external headers.
+        #/external:anglebrackets
 
-            # Disable warnings from external headers.
-            #/external:W0
+        # Disable warnings from external headers.
+        #/external:W0
 
-            # Disable specific warnings:
-            /wd4068  # warning C4068: unknown pragma
-            /wd4820  # warning C4820: 'xxx': 'x' bytes padding added after data member 'xxx'
-            /wd4191  # warning C4191: 'reinterpret_cast': unsafe conversion from 'x' to 'x'
-            /wd4625  # copy constructor was implicitly defined as deleted
-            /wd5026  # move constructor was implicitly defined as deleted
-            /wd4626  # assignment operator was implicitly defined as deleted
-            /wd5027  # move assignment operator was implicitly defined as deleted
-            /wd4514  # warning C4514: 'x': unreferenced inline function has been removed
-            /wd4711  # warning C4711: function 'x' selected for automatic inline expansion (informational)
-            /wd4710  # warning C4710: 'x': function not inlined (informational)
-            /wd4996  # warning C4996: 'getenv': This function or variable may be unsafe.
-            /wd5045  # warning C5045: Compiler will insert Spectre mitigation for memory load if /Qspectre switch specified
-            /wd4061  # warning C4061: enumerator 'identifier' in switch of enum 'enumeration' is not explicitly handled by a case label
-            /wd4868  # warning C4868: compiler may not enforce left-to-right evaluation order in braced initializer list
-            /wd4100
-            /wd4668 #没有将“_WIN32_WINNT_WIN10_RS1”定义为预处理器宏，用“0”替换“
-    )
+        # Disable specific warnings:
+        /wd4068  # warning C4068: unknown pragma
+        /wd4820  # warning C4820: 'xxx': 'x' bytes padding added after data member 'xxx'
+        /wd4191  # warning C4191: 'reinterpret_cast': unsafe conversion from 'x' to 'x'
+        /wd4625  # copy constructor was implicitly defined as deleted
+        /wd5026  # move constructor was implicitly defined as deleted
+        /wd4626  # assignment operator was implicitly defined as deleted
+        /wd5027  # move assignment operator was implicitly defined as deleted
+        /wd4514  # warning C4514: 'x': unreferenced inline function has been removed
+        /wd4711  # warning C4711: function 'x' selected for automatic inline expansion (informational)
+        /wd4710  # warning C4710: 'x': function not inlined (informational)
+        /wd4996  # warning C4996: 'getenv': This function or variable may be unsafe.
+        /wd5045  # warning C5045: Compiler will insert Spectre mitigation for memory load if /Qspectre switch specified
+        /wd4061  # warning C4061: enumerator 'identifier' in switch of enum 'enumeration' is not explicitly handled by a case label
+        /wd4868  # warning C4868: compiler may not enforce left-to-right evaluation order in braced initializer list
+        /wd4100
+        /wd4668 #没有将“_WIN32_WINNT_WIN10_RS1”定义为预处理器宏，用“0”替换“
+        )
 endif()
 
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)

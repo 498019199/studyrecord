@@ -91,7 +91,7 @@ namespace MathWorker
     template float Dot(const float2 & lhs, const float2 & rhs) noexcept;
     template float Dot(const float3 & lhs, const float3 & rhs) noexcept;
     template float Dot(const float4 & lhs, const float4 & rhs) noexcept;
-	template float Dot(const quat & lhs, const quat & rhs) noexcept;
+	template float Dot(const quater & lhs, const quater & rhs) noexcept;
     template<typename T>
     typename T::value_type Dot(const T & lhs, const T & rhs) noexcept
     {
@@ -108,7 +108,7 @@ namespace MathWorker
     template float LengthSq(const float2 & rhs) noexcept;
     template float LengthSq(const float3 & rhs) noexcept;
     template float LengthSq(const float4 & rhs) noexcept;
-	template float LengthSq(const quat & rhs) noexcept;
+	template float LengthSq(const quater & rhs) noexcept;
     template<typename T>
     typename T::value_type LengthSq(const T & rhs) noexcept
     {
@@ -118,7 +118,7 @@ namespace MathWorker
     template float Length(const float2 & rhs) noexcept;
     template float Length(const float3 & rhs) noexcept;
     template float Length(const float4 & rhs) noexcept;
-	template float Length(const quat & rhs) noexcept;
+	template float Length(const quater & rhs) noexcept;
     template<typename T>
     typename T::value_type Length(const T & rhs) noexcept
     {
@@ -128,7 +128,7 @@ namespace MathWorker
 	template float2 Normalize(const float2 & rhs) noexcept;
 	template float3 Normalize(const float3 & rhs) noexcept;
 	template float4 Normalize(const float4 & rhs) noexcept;
-	template quat Normalize(const quat & rhs) noexcept;
+	template quater Normalize(const quater & rhs) noexcept;
 	template<typename T>
 	T Normalize(const T & rhs) noexcept
 	{
@@ -435,7 +435,7 @@ namespace MathWorker
     }
 
 
-    template quat Mul(const quat& lhs, const quat& rhs) noexcept;
+    template quater Mul(const quater& lhs, const quater& rhs) noexcept;
     template<typename T>
 	Quaternion_T<T> Mul(const Quaternion_T<T>& lhs, const Quaternion_T<T>& rhs) noexcept
 	{
@@ -446,14 +446,14 @@ namespace MathWorker
 			lhs.w() * rhs.w() - lhs.x() * rhs.x() - lhs.y() * rhs.y() - lhs.z() * rhs.z());
 	}
 
-    template quat Conjugate(quat const & rhs) noexcept;
+    template quater Conjugate(quater const & rhs) noexcept;
 	template <typename T>
 	Quaternion_T<T> Conjugate(Quaternion_T<T> const & rhs) noexcept
 	{
 		return Quaternion_T<T>(-rhs.x(), -rhs.y(), -rhs.z(), rhs.w());
 	}
 
-	template quat Inverse(const quat& rhs) noexcept;
+	template quater Inverse(const quater& rhs) noexcept;
 	template <typename T>
 	Quaternion_T<T> Inverse(const Quaternion_T<T>& rhs) noexcept
 	{
@@ -461,24 +461,127 @@ namespace MathWorker
 		return Quaternion_T<T>(-rhs.x() * var, -rhs.y() * var, -rhs.z() * var, rhs.w() * var);
 	}
 
-    float4x4 ToMatrix(const quat &quat)
+    float4x4 ToMatrix(const quater &quat)
     {
-        return float4x4();
+        // calculate coefficients
+        const float x2(quat.x() + quat.x());
+        const float y2(quat.y() + quat.y());
+        const float z2(quat.z() + quat.z());
+
+        const float xx2(quat.x() * x2), xy2(quat.x() * y2), xz2(quat.x() * z2);
+        const float yy2(quat.y() * y2), yz2(quat.y() * z2), zz2(quat.z() * z2);
+        const float wx2(quat.w() * x2), wy2(quat.w() * y2), wz2(quat.w() * z2);
+
+        return float4x4(
+            1 - yy2 - zz2,	xy2 + wz2,		xz2 - wy2,		0,
+            xy2 - wz2,		1 - xx2 - zz2,	yz2 + wx2,		0,
+            xz2 + wy2,		yz2 - wx2,		1 - xx2 - yy2,	0,
+            0,				0,				0,				1);
     }
 
     float4x4 ToMatrix(const rotator &rot)
     {
-        return float4x4();
+        float4x4 rot_x = MatrixRotateX(rot.pitch());
+        float4x4 rot_y = MatrixRotateX(rot.yaw());
+        float4x4 rot_z = MatrixRotateX(rot.roll());
+        return rot_x * rot_y * rot_z;
     }
 
-    quat ToQuaternion(const float4x4 &mat)
+    quater ToQuaternion(const float4x4 &mat)
     {
-        return quat();
+        quater quat;
+        float s;
+        const float tr = mat(0, 0) + mat(1, 1) + mat(2, 2) + 1;
+
+        // check the diagonal
+        if (tr > 1)
+        {
+            s = sqrt(tr);
+            quat.w() = s * 0.5f;
+            s = 0.5f / s;
+            quat.x() = (mat(1, 2) - mat(2, 1)) * s;
+            quat.y() = (mat(2, 0) - mat(0, 2)) * s;
+            quat.z() = (mat(0, 1) - mat(1, 0)) * s;
+        }
+        else
+        {
+            size_t maxi = 0;
+            float maxdiag = mat(0, 0);
+            for (size_t i = 1; i < 3; ++ i)
+            {
+                if (mat(i, i) > maxdiag)
+                {
+                    maxi = i;
+                    maxdiag = mat(i, i);
+                }
+            }
+
+            switch (maxi)
+            {
+            case 0:
+                s = sqrt((mat(0, 0) - (mat(1, 1) + mat(2, 2))) + 1);
+
+                quat.x() = s * 0.5f;
+
+                if (!IsEqual(s, 0.f))
+                {
+                    s = 0.5f / s;
+                }
+
+                quat.w() = (mat(1, 2) - mat(2, 1)) * s;
+                quat.y() = (mat(1, 0) + mat(0, 1)) * s;
+                quat.z() = (mat(2, 0) + mat(0, 2)) * s;
+                break;
+
+            case 1:
+                s = sqrt((mat(1, 1) - (mat(2, 2) + mat(0, 0))) + 1);
+                quat.y() = s * 0.5f;
+
+                if (!IsEqual(s, 0.f))
+                {
+                    s = 0.5f / s;
+                }
+
+                quat.w() = (mat(2, 0) - mat(0, 2)) * s;
+                quat.z() = (mat(2, 1) + mat(1, 2)) * s;
+                quat.x() = (mat(0, 1) + mat(1, 0)) * s;
+                break;
+
+            case 2:
+            default:
+                s = sqrt((mat(2, 2) - (mat(0, 0) + mat(1, 1))) + 1);
+
+                quat.z() = s * 0.5f;
+
+                if (!IsEqual(s, 0.f))
+                {
+                    s = 0.5f / s;
+                }
+
+                quat.w() = (mat(0, 1) - mat(1, 0)) * s;
+                quat.x() = (mat(0, 2) + mat(2, 0)) * s;
+                quat.y() = (mat(1, 2) + mat(2, 1)) * s;
+                break;
+            }
+        }
+
+        return Normalize(quat);
     }
 
-    quat ToQuaternion(const rotator &rot)
+    quater ToQuaternion(const rotator &rot)
     {
-        return quat();
+        const float angX(rot.pitch() / 2), angY(rot.yaw() / 2), angZ(rot.roll() / 2);
+        float sx, sy, sz;
+        float cx, cy, cz;
+        SinCos(angX, sx, cx);
+        SinCos(angY, sy, cy);
+        SinCos(angZ, sz, cz);
+
+        return quater(
+            sx * cy * cz + cx * sy * sz,
+            cx * sy * cz - sx * cy * sz,
+            cx * cy * sz - sx * sy * cz,
+            sx * sy * sz + cx * cy * cz);
     }
 
     rotator ToRotator(const float4x4 &mat)
@@ -486,9 +589,40 @@ namespace MathWorker
         return rotator();
     }
 
-    rotator ToRotator(const quat &quat)
+    // From http://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToEuler/index.htm
+    rotator ToRotator(const quater &quat)
     {
-        return rotator();
+        float sqx = quat.x() * quat.x();
+        float sqy = quat.y() * quat.y();
+        float sqz = quat.z() * quat.z();
+        float sqw = quat.w() * quat.w();
+        float unit = sqx + sqy + sqz + sqw;
+        float test = quat.w() * quat.x() + quat.y() * quat.z();
+        rotator rot;
+        if (test > 0.499f * unit)
+        {
+            // singularity at north pole
+            rot.yaw() = 2 * atan2(quat.z(), quat.w());
+            rot.pitch() = PI / 2;
+            rot.roll() = 0;
+        }
+        else
+        {
+            if (test < -(0.499f) * unit)
+            {
+                // singularity at south pole
+                rot.yaw() = -2 * atan2(quat.z(), quat.w());
+                rot.pitch() = -PI / 2;
+                rot.roll() = 0;
+            }
+            else
+            {
+                rot.yaw() = atan2(2 * (quat.y() * quat.w() - quat.x() * quat.z()), -sqx - sqy + sqz + sqw);
+                rot.pitch() = asin(2 * test / unit);
+                rot.roll() = atan2(2 * (quat.z() * quat.w() - quat.x() * quat.y()), -sqx + sqy - sqz + sqw);
+            }
+        }
+        return rot;
     }
 
 }
