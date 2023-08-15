@@ -394,22 +394,25 @@ namespace MathWorker
         }
     }
 
-	float4x4 OrthoLH(float w, float h, float Near, float Far)
+	float4x4 OrthoLH(float w, float h, float nearPlane, float farPlane)
     {
-        return float4x4();        
+        const float w_2(w / 2);
+	    const float h_2(h / 2);
+        return OrthoOffCenterLH(-w_2, w_2, -h_2, h_2, nearPlane, farPlane);        
     }
 
-	float4x4 OrthoOffCenterLH(float l, float r, float b, float t, float n, float f)
+    // dx->[-1,1][-1,1][0,1]
+    // openGL->[-1,1][-1,1][-1,1]
+	float4x4 OrthoOffCenterLH(float left, float right, float bottom, float top, float farPlane, float nearPlane)
     {
-        float rsl = r - l;
-        float ral = r + l;
-        float nsf = n - f;
-        float tsb = t - b;
+        const float q(1.f / (farPlane - nearPlane));
+		const float invWidth(1.f / (right - left));
+		const float invHeight(1.f / (top - bottom));
         return float4x4(
-            2/rsl,      0,          0,              0,
-            0,          2/tsb,      0,              0,
-            0,          0,          2/nsf,          0,
-            -ral/rsl,   -(t+b)/tsb, (n + f)/nsf,    1);        
+            invWidth + invWidth,    0,                          0,              0,
+            0,                      invHeight + invHeight,      0,              0,
+            0,                      0,                          q,              0,
+            -(left + right)/invWidth,   -(top + bottom)/invHeight, (farPlane + nearPlane)/q,    1);        
     }
 
 	float4x4 LookAtLH(const float3& Eye, const float3& At, const float3& Up)
@@ -418,10 +421,10 @@ namespace MathWorker
         float3 xaxis = Normalize(Up ^ zaxis);
         float3 yaxis = zaxis ^ xaxis;
         return float4x4(
-            xaxis.x(), yaxis.x(), zaxis.x(), 0,
-            xaxis.y(), yaxis.y(), zaxis.y(), 0,
-            xaxis.z(), yaxis.z(), zaxis.z(), 0,
-            xaxis | Eye, yaxis | Eye, zaxis | Eye, 1);        
+            xaxis.x(),      yaxis.x(),      zaxis.x(),      0,
+            xaxis.y(),      yaxis.y(),      zaxis.y(),      0,
+            xaxis.z(),      yaxis.z(),      zaxis.z(),      0,
+            -xaxis | Eye,   -yaxis | Eye,   -zaxis | Eye,   1);        
     }
 
     float4x4 PerspectiveLH(float w, float h, float Near, float Far)
