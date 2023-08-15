@@ -394,11 +394,17 @@ namespace MathWorker
         }
     }
 
+    // 视口为中心的正交投影矩阵
 	float4x4 OrthoLH(float w, float h, float nearPlane, float farPlane)
     {
-        const float w_2(w / 2);
-	    const float h_2(h / 2);
-        return OrthoOffCenterLH(-w_2, w_2, -h_2, h_2, nearPlane, farPlane);        
+        const float q(1.f / (farPlane - nearPlane));
+        const float w_2(w / 2); // w = right - left ，left = -right
+	    const float h_2(h / 2); // h = top - bottom ，top = -bottom
+        return float4x4(
+            w_2 + w_2,    0,              0,              0,
+            0,            h_2 + h_2,      0,              0,
+            0,            0,              q,              0,
+            0,            0, (farPlane + nearPlane)/q,    1);            
     }
 
     // dx->[-1,1][-1,1][0,1]
