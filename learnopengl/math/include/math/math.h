@@ -156,8 +156,8 @@ namespace MathWorker
 	float4x4 LookAtLH(const float3& Eye, const float3& At, const float3& Up);
 
 	// 正交投影
-	float4x4 OrthoLH(float w, float h, float farPlane, float nearPlane);
-	float4x4 OrthoOffCenterLH(float left, float right, float bottom, float top, float farPlane, float nearPlane);
+	float4x4 OrthoLH(float w, float h, float Near, float Far);
+	float4x4 OrthoOffCenterLH(float l, float r, float b, float t, float n, float f);
 
 	// 透视投影
 	float4x4 PerspectiveLH(float w, float h, float Near, float Far);
