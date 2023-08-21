@@ -394,9 +394,17 @@ namespace MathWorker
         }
     }
 
-	float4x4 OrthoLH(float w, float h, float Near, float Far)
+    // 视口为中心的正交投影矩阵
+	float4x4 OrthoLH(float w, float h, float nearPlane, float farPlane)
     {
-        return float4x4();        
+        const float q(1.f / (farPlane - nearPlane));
+        const float w_2(w / 2); // w = right - left ，left = -right
+	    const float h_2(h / 2); // h = top - bottom ，top = -bottom
+        return float4x4(
+            w_2 + w_2,    0,              0,              0,
+            0,            h_2 + h_2,      0,              0,
+            0,            0,              q,              0,
+            0,            0, (farPlane + nearPlane)/q,    1);            
     }
 
 	float4x4 OrthoOffCenterLH(float l, float r, float b, float t, float n, float f)
