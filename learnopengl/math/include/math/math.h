@@ -57,7 +57,7 @@ namespace MathWorker
 
 	inline float Deg2Rad(const float x){ return x * DEG2RAD; }
 	inline float Rad2Deg(const float x){return x * RAD2DEG;}
-	
+
 	// 浮点相等
 	template<typename T>
 	bool IsEqual(T X, T Y);
@@ -120,20 +120,26 @@ namespace MathWorker
 
 
 	// 矩形平移
-	float4x4 MatrixMove(float X, float Y, float Z);
 	template<typename T>
-	float4x4 MatrixMove(const Vector_T<T, 3>& Move);
+	Matrix4_T<T> MatrixMove(T X, T Y, T Z);
+	template<typename T>
+	Matrix4_T<T> MatrixMove(const Vector_T<T, 3>& Move);
 
 	// 矩形缩放
-	float4x4 MatrixScale(float X, float Y, float Z);
 	template<typename T>
-	float4x4 MatrixScale(const Vector_T<T, 3>& Scale);
+	Matrix4_T<T> MatrixScale(T X, T Y, T Z);
+	template<typename T>
+	Matrix4_T<T> MatrixScale(const Vector_T<T, 3>& Scale);
 
 	// 矩阵旋转
-	float4x4 MatrixRotateX(float Angle);
-	float4x4 MatrixRotateY(float Angle);
-	float4x4 MatrixRotateZ(float Angle);
-	float4x4 MatrixRotate(const float3& Pos, float Angle);
+	template<typename T>
+	Matrix4_T<T> MatrixRotateX(T Angle);
+	template<typename T>
+	Matrix4_T<T> MatrixRotateY(T Angle);
+	template<typename T>
+	Matrix4_T<T> MatrixRotateZ(T Angle);
+	template<typename T>
+	Matrix4_T<T> MatrixRotate(const Vector_T<T, 3>& Pos, T Angle);
 
 	// 矩形乘法
 	template<typename T>
@@ -147,23 +153,37 @@ namespace MathWorker
 
 	// 矩阵的行列式
 	template<typename T>
-	float Determinant(const Matrix4_T<T>& m);
+	T Determinant(const Matrix4_T<T>& m);
 
 	// 矩阵的逆
 	template<typename T>
 	Matrix4_T<T> MatrixInverse(const Matrix4_T<T>& m);
 
-	float4x4 LookAtLH(const float3& Eye, const float3& At, const float3& Up);
+	template<typename T>
+	Matrix4_T<T> LookAtRH(const Vector_T<T, 3>& Eye, const Vector_T<T, 3>& At, const Vector_T<T, 3>& Up);
+	template<typename T>
+	Matrix4_T<T> LookAtLH(const Vector_T<T, 3>& Eye, const Vector_T<T, 3>& At, const Vector_T<T, 3>& Up);
 
 	// 正交投影
-	float4x4 OrthoLH(float w, float h, float Near, float Far);
-	float4x4 OrthoOffCenterLH(float l, float r, float b, float t, float n, float f);
+	template<typename T>
+	Matrix4_T<T> OrthoLH(T w, T h, T farPlane, T nearPlane);
+	template<typename T>
+	Matrix4_T<T> OrthoOffCenterLH(T left, T right, T bottom, T top, T farPlane, T nearPlane);
 
 	// 透视投影
-	float4x4 PerspectiveLH(float w, float h, float Near, float Far);
-	float4x4 PerspectiveFovLH(float Fov, float Aspect, float Near, float Far);
+	template<typename T>
+	Matrix4_T<T> PerspectiveLH(T w, T h, T Near, T Far);
+	template<typename T>
+	Matrix4_T<T> PerspectiveOffCenterLH(T left, T right, T bottom, T top, T farPlane, T nearPlane);
+	template<typename T>
+	Matrix4_T<T> PerspectiveFovLH(T Fov, T Aspect, T Near, T Far);
 
-
+	template<typename T>
+	Matrix4_T<T> PerspectiveRH(T w, T h, T Near, T Far);
+	template<typename T>
+	Matrix4_T<T> PerspectiveOffCenterRH(T left, T right, T bottom, T top, T farPlane, T nearPlane);
+	template<typename T>
+	Matrix4_T<T> PerspectiveFovRH(T Fov, T Aspect, T Near, T Far);
 
 	// 相互转换
 	float4x4 ToMatrix(const quater& quat);
