@@ -144,6 +144,7 @@ namespace MathWorker
 	// 矩形乘法
 	template<typename T>
 	Matrix4_T<T> Mul(const Matrix4_T<T>&lhs, const Matrix4_T<T>& rhs);
+	// 行向量X矩形
 	template<typename T>
 	Vector_T<T, 4> Mul(const Vector_T<T, 4>&lhs, const Matrix4_T<T>& rhs);
 

@@ -20,5 +20,6 @@ stb_image-> 图像解码库
 2023年8月4日 -》矩阵旋转和缩放，求逆
 投影
 2023年8月11日-》花费2天移植自己以前模板数学库
+2023年8月25日-》Game101 1-4 DirectX,OpenGL,Game101 MVP 学习。还是无法理解view matrix at-eye 和 eye-at
 Delegate 委托 
 

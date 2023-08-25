@@ -437,6 +437,7 @@ namespace MathWorker
             -(left + right)/invWidth,   -(top + bottom)/invHeight, (farPlane + nearPlane)/q,    1);        
     }
 
+    // https://learn.microsoft.com/en-us/previous-versions/windows/desktop/bb281711(v=vs.85)
 	float4x4 LookAtRH(const float3& Eye, const float3& At, const float3& Up);
     template<typename T>
 	Matrix4_T<T> LookAtRH(const Vector_T<T, 3>& Eye, const Vector_T<T, 3>& At, const Vector_T<T, 3>& Up)
@@ -451,6 +452,7 @@ namespace MathWorker
             -XAxis | Eye,   -YAxis | Eye,   -ZAxis | Eye,   1);        
     }
 
+    // https://learn.microsoft.com/en-us/previous-versions/windows/desktop/bb281710(v=vs.85)
     // Eye 是摄像机位置，At 是摄像机朝向方向，Up 摄像机向上方向
 	float4x4 LookAtLH(const float3& Eye, const float3& At, const float3& Up);
     template<typename T>
@@ -469,13 +471,28 @@ namespace MathWorker
     template<typename T>
     Matrix4_T<T> PerspectiveLH(T w, T h, T Near, T Far)
     {
-        return Matrix4_T<T>();        
+        const T  q(Far / (Far - Near));
+        const T  near2(Near + Near);
+
+        return Matrix4_T<T>(
+            near2 / w,	0,				0,				0,
+            0,				near2 / h,	0,				0,
+            0,				0,			q,			    1,
+            0,				0,			-Near * q,      0);    
     }
 
     template<typename T>
 	Matrix4_T<T> PerspectiveFovLH(T Fov, T Aspect, T Near, T Far)
     {
-        return Matrix4_T<T>();        
+        const T  h(T(1) / tan(Fov / 2));
+        const T  w(h / Aspect);
+        const T  q(Far / (Far - Near));
+
+        return Matrix4_T<T>(
+            w,		0,		0,				0,
+            0,		h,		0,				0,
+            0,		0,		q,				1
+            0,		0,		-Near * q,      0);      
     }
 
     template float4x4 PerspectiveOffCenterLH(float left, float right, float bottom, float top, float farPlane, float nearPlane);
