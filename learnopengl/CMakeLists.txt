@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS ON)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_C_STANDARD 17)
+
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     message("gcc compiler")
     add_definitions(-DPLATFORM_LINUX)
@@ -19,12 +20,13 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     message("MSVC compiler")
     set(CMAKE_GENERATOR_PLATFORM x64)
-    set(CMAKE_CXX_FLAGS "-Wall /O2  /EHsc")
-    set(CMAKE_CXX_FLAGS_RELEASE "/OX  /EHsc")
+    set(CMAKE_CXX_FLAGS "/W4 /WX /MP /bigobj /O2  /EHsc /Zc:strictStrings /Zc:rvalueCast  /Gw")
+    SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /DKLAYGE_SHIP /fp:fast /Ob2 /GL /Qpar")
 
     add_compile_options("$<$<C_COMPILER_ID:MSVC>:/utf-8>")
     add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
     add_definitions(-DPLATFORM_WINDOS)
+
     add_compile_options(
         # Treat angle bracket headers as external headers.
         #/external:anglebrackets
@@ -79,3 +81,17 @@ add_subdirectory(render)
 file(COPY ${PROJECT_SOURCE_DIR}/render/include DESTINATION "${LIBRARY_OUTPUT_PATH}")
 # add_subdirectory(common)
 file(COPY ${PROJECT_SOURCE_DIR}/common/include DESTINATION "${LIBRARY_OUTPUT_PATH}")
+
+IF(MSVC)
+    # create vcproj.user file for Visual Studio to set debug working directory
+    FUNCTION(CREATE_VCPROJ_USERFILE TARGETNAME)
+        SET(SYSTEM_NAME $ENV{USERDOMAIN})
+        SET(USER_NAME $ENV{USERNAME})
+
+        CONFIGURE_FILE(
+            ${KLAYGE_ROOT_DIR}/cmake/VisualStudio2010UserFile.vcxproj.user.in
+            ${CMAKE_CURRENT_BINARY_DIR}/${TARGETNAME}.vcxproj.user
+            @ONLY
+        )
+    ENDFUNCTION()
+ENDIF()

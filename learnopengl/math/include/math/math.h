@@ -57,7 +57,7 @@ namespace MathWorker
 
 	inline float Deg2Rad(const float x){ return x * DEG2RAD; }
 	inline float Rad2Deg(const float x){return x * RAD2DEG;}
-
+    
 	// 浮点相等
 	template<typename T>
 	bool IsEqual(T X, T Y);
@@ -159,6 +159,9 @@ namespace MathWorker
 	// 矩阵的逆
 	template<typename T>
 	Matrix4_T<T> MatrixInverse(const Matrix4_T<T>& m);
+
+    template <typename T>
+    Matrix4_T<T> LHToRH(Matrix4_T<T> const & rhs) noexcept;
 
 	template<typename T>
 	Matrix4_T<T> LookAtRH(const Vector_T<T, 3>& Eye, const Vector_T<T, 3>& At, const Vector_T<T, 3>& Up);

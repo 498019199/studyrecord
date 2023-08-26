@@ -139,9 +139,10 @@ void checkmatrix()
 	assert(Transpose(m1) == m2);
 
 	// move 1,0,0,0,  0,1,0,0,  0,0,1,0,  0,0,0,1
-	assert(float4x4(1,0,0,0,  0,1,0,0,  0,0,1,0,  1,2,3,1) == MatrixMove(1, 2, 3));
+    auto _1 = float4x4(1,0,0,0,  0,1,0,0,  0,0,1,0,  1,2,3,1);
+	assert(_1 == MatrixMove(1.f, 2.f, 3.f));
 	// Scale
-	assert(float4x4(2,0,0,0,  0,0.5,0,0,  0,0,2,0,  0,0,0,1) == MatrixScale(2, 0.5, 2));
+	assert(float4x4(2,0,0,0,  0,0.5,0,0,  0,0,2,0,  0,0,0,1) == MatrixScale(2.f, 0.5f, 2.f));
 
 	// test rotation matrix
     // rotation matrix
@@ -160,11 +161,11 @@ void checkquaternion()
 {
     //std::cout << "checkquaternion sucess" << std::endl;
 	// test contruct
-	auto q1 = quat();
-	auto q2 = quat(1,2,3, 4);
+	auto q1 = quater();
+	auto q2 = quater(1,2,3, 4);
 	auto v1 = float3(1.f, 2.f, 3.f);
-	auto q3 = quat(v1, 4.f);
-	auto q4 = quat(q2);
+	auto q3 = quater(v1, 4.f);
+	auto q4 = quater(q2);
 	assert(q4 == q3);
 	std::cout << "test quaternion  contruct success " << q2 << std::endl;
 }

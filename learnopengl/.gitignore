@@ -2,3 +2,5 @@
 /lib
 /bin
 /math/test/output
+/cmake-build-debug-visual-studio
+/.idea
