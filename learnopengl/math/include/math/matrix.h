@@ -71,6 +71,15 @@ public:
     {
         return *(begin() + off);
     }
+    constexpr pointer data() noexcept
+    {
+        return &m_[0][0];
+    }
+    constexpr const_pointer data() const noexcept
+    {
+        return &m_[0][0];
+    }
+
     static const Matrix4_T & Zero() noexcept;
     static const Matrix4_T & Identity() noexcept;
     void Row(size_type index, const Vector_T<T, 4>& rhs) noexcept;

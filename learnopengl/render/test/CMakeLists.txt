@@ -7,4 +7,5 @@ add_executable(test_opengl
 target_link_libraries(test_opengl PRIVATE 
     opengl32.lib
     ${PROJECT_3RD_DIR}/glfw/lib/glfw3.lib
+    ${LIB_DIR_PATH}/math_lib.lib
     ${LIB_DIR_PATH}/render_lib.lib)

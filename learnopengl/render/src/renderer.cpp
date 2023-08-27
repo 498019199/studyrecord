@@ -1,5 +1,8 @@
 #include <render/renderer.h>
 #include <filesystem>
+#include <math/matrix.h>
+#include <math/math.h>
+using namespace MathWorker;
 
 namespace RenderWorker
 {
@@ -59,6 +62,11 @@ void Renderer::Render(float time)
     // ------
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
+    
+    float4x4 mv = MatrixMove(float3(0.5f, -0.5f, 0.0f));
+    float4x4 rm = MatrixRotate(float3(0.0f, 0.0f, 1.0f), (float)glfwGetTime());
+    float4x4 transform = mv * rm;
+    shaderobj_->UniformMatrix4fv("transform", transform);
     
     // draw our first triangle
     shaderobj_->UseShader(); // 激活shaderProgram，怎么画

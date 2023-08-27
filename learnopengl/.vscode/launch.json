@@ -8,7 +8,7 @@
             "name": "C/C++",
             "type": "cppvsdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/bin/Debug/test_math.exe",
+            "program": "${workspaceFolder}/bin/Debug/test_opengl.exe",
             "args": [
                 "/Zi",
                 "/EHsc",

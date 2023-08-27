@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include <string_view>
+#include <math/math.h>
 namespace RenderWorker
 {
 class IShader;
@@ -44,9 +45,10 @@ public:
     void LoadShader(const std::string_view& vertexPath, const std::string_view& fragmentPath);
 
     // uniform工具函数
-    void SetBool(const char*name,  bool value) const;  
-    void SetInt(const char*name, int value) const;   
-    void SetFloat(const char*name, float value) const;
+    void Uniform1i(const char*name, int value) const;   
+    void Uniform1f(const char*name, float value) const;
+    void Uniform3fv(const char*name, const MathWorker::float3& vec) const;
+    void UniformMatrix4fv(const char*name, const MathWorker::float4x4& mat) const;
 
     void AttachShader();
     void UseShader();
@@ -57,6 +59,7 @@ private:
     PtrIShader pixel_;
     PtrIShader fragment_;
 };
+
 
 
 

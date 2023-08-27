@@ -1,4 +1,6 @@
 #include <common/file.h>
+#include <math/vectorxd.h>
+#include <math/matrix.h>
 
 #include <render/shader.h>
 #include <glad/glad.h>
@@ -70,18 +72,25 @@ void ShaderObject::DetachShader()
     glDeleteProgram(obj_id_);
 }
 
-void ShaderObject::SetBool(const char*name,  bool value) const
-{
-    glUniform1i(glGetUniformLocation(obj_id_, name), (int)value); 
-}
 
-void ShaderObject::SetInt(const char*name, int value) const
+void ShaderObject::Uniform1i(const char*name, int value) const
 {
     glUniform1i(glGetUniformLocation(obj_id_, name), value); 
 }
 
-void ShaderObject::SetFloat(const char*name, float value) const
+void ShaderObject::Uniform1f(const char*name, float value) const
 {
     glUniform1f(glGetUniformLocation(obj_id_, name), value); 
 }
+
+void ShaderObject::Uniform3fv(const char*name, const MathWorker::float3& vec) const
+{
+    glUniform3fv(glGetUniformLocation(obj_id_, name), 1, vec.data()); 
+}
+
+void ShaderObject::UniformMatrix4fv(const char*name, const MathWorker::float4x4& mat) const
+{
+    glUniformMatrix4fv(glGetUniformLocation(obj_id_, name), 1, GL_FALSE, mat.data());  
+}
+
 }
