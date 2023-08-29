@@ -5,6 +5,11 @@
 #include "math_helper.h"
 #include "math/math.h"
 
+#ifdef PLATFORM_COMPILER_MSVC
+#pragma warning(push)
+#pragma warning(disable : 4244) // Conversion from doubel to int64
+#endif//PLATFORM_COMPILER_MSVC
+
 namespace MathWorker
 {
 

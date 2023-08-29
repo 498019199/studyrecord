@@ -20,13 +20,12 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     message("MSVC compiler")
     set(CMAKE_GENERATOR_PLATFORM x64)
-    set(CMAKE_CXX_FLAGS "/W4 /WX /MP /bigobj /O2  /EHsc /Zc:strictStrings /Zc:rvalueCast  /Gw")
+    set(CMAKE_CXX_FLAGS "/Wall /W4 /MP /bigobj /O2  /EHsc /Zc:strictStrings /Zc:rvalueCast  /Gw")
     SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /DKLAYGE_SHIP /fp:fast /Ob2 /GL /Qpar")
 
     add_compile_options("$<$<C_COMPILER_ID:MSVC>:/utf-8>")
     add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
-    add_definitions(-DPLATFORM_WINDOS)
-
+    add_definitions(-DPLATFORM_WINDOS=1 -DPLATFORM_COMPILER_MSVC=1)
     add_compile_options(
         # Treat angle bracket headers as external headers.
         #/external:anglebrackets
