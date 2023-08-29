@@ -199,7 +199,7 @@ public:
 	template <typename U>
 	const Vector_T& operator-=(const Vector_T<U, N>& rhs) noexcept
 	{
-		MathHelper::vector_helper<U, N>::DoSub(data(), data(), rhs.data());
+		MathHelper::vector_helper<T, N>::DoSub(data(), data(), rhs.data());
 		return *this;
 	}
 

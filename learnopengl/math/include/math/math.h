@@ -30,6 +30,10 @@ namespace MathWorker
     template <typename T>
 	class Rotator_T;
     using rotator = Rotator_T<float>;
+
+	template <typename T>
+	class Color_T;
+    using color = Color_T<float>;
 }
 
 namespace MathWorker

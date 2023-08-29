@@ -19,12 +19,15 @@ using PtrTexture2D = std::shared_ptr<Texture2D>;
 class Renderer
 {
 public:
-    void Init();
+    void Init(int width, int height);
     void BeforeRender();
     void Render(float time);
     void AfterRender();
 
 private:
+    int width_ = 0;
+    int height_ = 0;
+
     PtrShaderobject shaderobj_;
     PtrVertexs vertexs_;
     PtrVertexBuf vertex_buf_;

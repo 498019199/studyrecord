@@ -7,7 +7,7 @@ using namespace MathWorker;
 namespace RenderWorker
 {
 
-void Renderer::Init()
+void Renderer::Init(int width, int height)
 {
     shaderobj_ = std::make_shared<ShaderObject>();
     if (!shaderobj_)

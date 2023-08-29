@@ -23,7 +23,7 @@ int main()
     }
     gMainApp->CreateWindows(SCR_WIDTH, SCR_HEIGHT, "OpenGLLearn");
     gMainApp->Init();
-    gRender->Init();
+    gRender->Init(SCR_WIDTH, SCR_HEIGHT);
     
     gRender->BeforeRender();
     gMainApp->Run();
