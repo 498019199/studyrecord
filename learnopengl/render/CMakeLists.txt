@@ -12,8 +12,11 @@ list(APPEND SRC_LIST
 
 add_library(render_lib STATIC ${SRC_LIST})
 
+
 target_link_libraries(render_lib PRIVATE 
     ${PROJECT_3RD_DIR}/glfw/lib/glfw3.lib
     opengl32.lib)
 
+
 add_subdirectory(test)
+#https://zhuanlan.zhihu.com/p/653054286

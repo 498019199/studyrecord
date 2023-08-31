@@ -91,7 +91,10 @@ Color_T<T>& Color_T<T>::operator/=(T rhs) noexcept
 template<typename T>
 Color_T<T>& Color_T<T>::operator*=(Color_T<T> const & rhs) noexcept
 {
-    col_ *= rhs.col_;
+    *this = Color_T<T>(r() * rhs.r(), 
+        g() * rhs.g(),
+        b() * rhs.b(),
+        a() * rhs.a());
     return *this; 		
 }
 
@@ -119,13 +122,13 @@ Color_T<T>& Color_T<T>::operator+=(Color_T<T> const & rhs) noexcept
 template<typename T>
 bool Color_T<T>::operator==(Color_T<T> const & rhs) const noexcept
 {
-	return this->col_ == rhs.col_;
+	return col_ == rhs.col_;
 }
 
 template<typename T>
 bool Color_T<T>::operator!=(Color_T<T> const & rhs) const noexcept
 {
-	return this->col_ != rhs.col_;	
+	return col_ != rhs.col_;	
 }
 
 

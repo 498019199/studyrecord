@@ -26,6 +26,7 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     add_compile_options("$<$<C_COMPILER_ID:MSVC>:/utf-8>")
     add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
     add_definitions(-DPLATFORM_WINDOS=1 -DPLATFORM_COMPILER_MSVC=1)
+    set(PLATFORM_COMPILER_MSVC = true)
     add_compile_options(
         # Treat angle bracket headers as external headers.
         #/external:anglebrackets
