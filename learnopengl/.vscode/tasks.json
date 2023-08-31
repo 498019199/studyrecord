@@ -1,26 +1,24 @@
 {
-    "tasks": [
-        {
-            //使用本地默认编译器编译cmake
-            "type": "shell",
-            "label": "cmake",
-            "command": "cmake -B ./build ."
-        },
-        {
-			//使用本地默认编译器编译cmake生成的工程
-			"type": "shell",
-			"label": "make",
-			"command": "cmake --build ./build --config=Debug"
-		},
-		{
-			//依次执行前面两个步骤
-			"label": "build",
-			"dependsOrder": "sequence",
-			"dependsOn": [
-				"cmake",
-				"make"
-			]
-		}
-    ],
-    "version": "2.0.0"
-}
+	"tasks": [
+		   {
+				"type": "shell", //注意这个type，因为这是在terminal 中执行的命令，所以type要写作shell
+				"label": "build cmake",
+				"command": "C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/bin/cmake.exe", 
+				"args": [
+							"--build", "${workspaceFolder}/build",  //在这里一定要注意将 关键字与关键字对应的值分开写，如果写作"--build ${fileDirname}/build"，报错不识别 "-build ${fileDirname}/build"
+							"--config",  "Debug", // config 可以写作Debug 或者是 Release
+							"--target",  "test_opengl", //生成对应目标，这是跟CMakeLists.txt 文件中 add_excutable() 命令中所对应的。
+							"-j",  "6", // 编译采用多少个核
+							"--"
+						],
+	
+				"options": 
+				{
+					"cwd": "${fileDirname}", // 这一步非常重要，需要将cwd设置到对应的CMakeLists.txt 的目录项，否则会找不到该文件，或者用其他目录下的该文件
+				},
+				"dependsOn":["configure cmake"] //也就是运行上述的cmake -B ./build命令
+		   },
+
+	   ],
+	"version": "2.0.0"
+   }
