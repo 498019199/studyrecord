@@ -6,6 +6,8 @@ namespace RenderWorker
 
 VertexBuffer::VertexBuffer()
 {
+    //创建VBO对象
+    glGenBuffers(1, &vbo_id_);
 }
 
 VertexBuffer::~VertexBuffer()
@@ -15,21 +17,19 @@ VertexBuffer::~VertexBuffer()
 
 void VertexBuffer::Bind(void* data, int size)
 {
-    //创建VBO对象
-    glGenBuffers(1, &vbo_id_);
     // 0. 复制顶点数组到缓冲中供OpenGL使用
     glBindBuffer(GL_ARRAY_BUFFER, vbo_id_);
     glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
     // 1. 设置顶点属性指针
     // position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
-    // color attribute
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
+    // // color attribute
+    // glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    // glEnableVertexAttribArray(1);
     // texture coord attribute
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
 }
 
 void VertexBuffer::UnBind()

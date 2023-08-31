@@ -11,10 +11,12 @@ public:
     ~Texture2D();
 
     void LoadImage(const std::string_view& filename);
-
+    void BindTexture();
 private:
     uint32_t id_;
     int width_;
     int height_;
 };
+
+
 }

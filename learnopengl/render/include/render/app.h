@@ -14,8 +14,6 @@ public:
 
     void Run();
 
-    void Render();
-
     int GetWidth() const { return width_; }
     int GetHeight() const { return height_; }
 private:

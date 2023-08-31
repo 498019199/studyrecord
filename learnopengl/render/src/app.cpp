@@ -108,6 +108,7 @@ void App::CreateWindows(int width, int height, const char* title_name)
 
 void App::Run()
 {
+    gRender->BeforeRender();
     // render loop
     // -----------
     while (!glfwWindowShouldClose(window_))
@@ -117,7 +118,8 @@ void App::Run()
         //processInput(window_);
  
         // render
-        Render();
+        float time = (float)glfwGetTime();
+        gRender->Render(time);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
@@ -125,15 +127,7 @@ void App::Run()
         glfwPollEvents();
     }
 
+    gRender->AfterRender();
     glfwTerminate();
 }
-
-void App::Render()
-{
-    if (gRender)
-    {
-        gRender->Render(0.f);
-    }
-}
-
 }

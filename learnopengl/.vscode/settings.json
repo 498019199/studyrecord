@@ -81,7 +81,8 @@
         "xloctime": "cpp",
         "fstream": "cpp",
         "cassert": "cpp",
-        "regex": "cpp"
+        "regex": "cpp",
+        "xhash": "cpp"
     },
     //terminal
     "terminal.integrated.profiles.windows": {

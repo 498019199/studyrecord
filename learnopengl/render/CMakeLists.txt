@@ -1,6 +1,7 @@
 include_directories(${PROJECT_3RD_DIR}/glad/include
                     ${PROJECT_3RD_DIR}/glfw/include
                     ${PROJECT_3RD_DIR}/stb/include
+                    ${PROJECT_3RD_DIR}/glm-0.9.9.8
                     ${PROJECT_SOURCE_DIR}/render/include
                     ${PROJECT_SOURCE_DIR}/common/include
                     ${PROJECT_SOURCE_DIR}/math/include)

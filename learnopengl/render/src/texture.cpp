@@ -35,5 +35,10 @@ void Texture2D::LoadImage(const std::string_view& filename)
     stbi_image_free(data);
 }
 
-
+void Texture2D::BindTexture()
+{
+    // bind textures on corresponding texture units
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, id_);
+}
 }

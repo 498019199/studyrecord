@@ -13,13 +13,13 @@ namespace MathWorker
 
     float cos(float x) noexcept
     {
-        return sin(x + PI / 2);
+        return std::cos(x);
     }
 
     void SinCos(float fAnglel, float& X, float&Y)
 	{
-        X = sin(fAnglel);
-        Y = cos(fAnglel);
+        X = std::sin(fAnglel);
+        Y = std::cos(fAnglel);
 	}
 
     template bool IsEqual(float X, float Y);
@@ -269,10 +269,10 @@ namespace MathWorker
         Vector_T<T, 4> v(n.x(), n.y(), n.z(), 1.0f);
         v = Normalize(v);
 
-        float a = 1.0f - fc;
-        float ax = a * v.x();
-        float ay = a * v.y();
-        float az = a * v.z();
+        T a = 1.0f - fc;
+        T ax = a * v.x();
+        T ay = a * v.y();
+        T az = a * v.z();
 
         Matrix4_T<T> matrix(Matrix4_T<T>::Zero());
         matrix(0, 0) = v.x() * ax + fc;
