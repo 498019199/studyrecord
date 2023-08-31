@@ -130,7 +130,7 @@ void Renderer::Render(float time)
     shaderobj_->UniformMatrix4fv("model", model);
     shaderobj_->UniformMatrix4fv("view", float4x4::Identity());
     shaderobj_->UniformMatrix4fv("projection", float4x4::Identity());
-    glUniformMatrix4fv(glGetUniformLocation(shaderobj_->GetId(), name), 1, GL_FALSE, mat.data());  
+    //glUniformMatrix4fv(glGetUniformLocation(shaderobj_->GetId(), name), 1, GL_FALSE, mat.data());
 
     // draw our first triangle
     shaderobj_->UseShader(); // 激活shaderProgram，怎么画

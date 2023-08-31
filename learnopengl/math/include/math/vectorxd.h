@@ -8,6 +8,7 @@
 #ifdef PLATFORM_COMPILER_MSVC
 #pragma warning(push)
 #pragma warning(disable : 4244) // Conversion from doubel to int64
+#pragma warning(pop)
 #endif//PLATFORM_COMPILER_MSVC
 
 namespace MathWorker
@@ -18,6 +19,7 @@ class Vector_T
 {
     template<typename T, int N>
     friend class Vector_T;
+
 	using DetailType = std::array<T, N>;
 public:
     typedef typename DetailType::value_type value_type;
