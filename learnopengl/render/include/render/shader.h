@@ -53,6 +53,8 @@ public:
     void AttachShader();
     void UseShader();
     void DetachShader();
+
+    uint32_t GetId() const { return obj_id_; }
 private:
     uint32_t obj_id_;
     uint32_t ___;

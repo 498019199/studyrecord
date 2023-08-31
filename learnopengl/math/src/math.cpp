@@ -266,7 +266,7 @@ namespace MathWorker
     {
         T fs = 0.0f, fc = 0.0f;
         SinCos(Angle, fs, fc);
-        Vector_T<T, 4> v(n.x(), n.y(), n.z(), 1.0f);
+        Vector_T<T, 3> v(n.x(), n.y(), n.z());
         v = Normalize(v);
 
         T a = 1.0f - fc;
@@ -274,7 +274,7 @@ namespace MathWorker
         T ay = a * v.y();
         T az = a * v.z();
 
-        Matrix4_T<T> matrix(Matrix4_T<T>::Zero());
+        Matrix4_T<T> matrix(Matrix4_T<T>::Identity());
         matrix(0, 0) = v.x() * ax + fc;
         matrix(0, 1) = v.x() * ay + v.z() * fs;
         matrix(0, 2) = v.x() * az - v.y() * fs;

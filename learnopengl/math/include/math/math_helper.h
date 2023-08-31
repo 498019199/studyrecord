@@ -70,6 +70,7 @@ namespace MathHelper
 
 		static void DoScale(T out[N], T const lhs[N], const T& rhs) noexcept
 		{
+			out[0] = lhs[0] * rhs;
 			vector_helper<T, N - 1>::DoScale(out + 1, lhs + 1, rhs);
 		}
 
