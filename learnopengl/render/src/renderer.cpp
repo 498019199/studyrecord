@@ -3,9 +3,6 @@
 #include <math/matrix.h>
 #include <math/math.h>
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 using namespace MathWorker;
 
 namespace RenderWorker
@@ -118,21 +115,9 @@ void Renderer::Render(float time)
     float4x4 projection = PerspectiveFovRH(Deg2Rad(45.f), float(width_)/float(height_), 0.1f, 100.f);
     float4x4 mvp = projection * view * model;
 
-    glm::mat4 projection2    = glm::mat4(1.0f);
-    projection2 = glm::perspective(glm::radians(45.0f), float(width_)/float(height_), 0.1f, 100.0f);
-    std::cout << projection2[0][0] << " " << projection2[0][1] << " " << projection2[0][2] << " " << projection2[0][3] << std::endl;
-    std::cout << projection2[1][0] << " " << projection2[1][1] << " " << projection2[1][2] << " " << projection2[1][3] << std::endl;
-    std::cout << projection2[2][0] << " " << projection2[2][1] << " " << projection2[2][2] << " " << projection2[2][3] << std::endl;
-    std::cout << projection2[3][0] << " " << projection2[3][1] << " " << projection2[3][2] << " " << projection2[3][3] << std::endl;
-
-
     shaderobj_->UniformMatrix4fv("model", model);
     shaderobj_->UniformMatrix4fv("view", view);
     shaderobj_->UniformMatrix4fv("projection", projection);
-    //glUniformMatrix4fv(glGetUniformLocation(shaderobj_->GetId(), "model"), 1, GL_FALSE, glm::value_ptr(model2));
-    //glUniformMatrix4fv(glGetUniformLocation(shaderobj_->GetId(), "view"), 1, GL_FALSE, glm::value_ptr(view2));
-    //glUniformMatrix4fv(glGetUniformLocation(shaderobj_->GetId(), "projection"), 1, GL_FALSE, glm::value_ptr(projection2));
-
 
     // draw our first triangle
     shaderobj_->UseShader(); // 激活shaderProgram，怎么画
