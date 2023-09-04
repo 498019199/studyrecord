@@ -90,7 +90,12 @@ void ShaderObject::Uniform3fv(const char*name, const MathWorker::float3& vec) co
 
 void ShaderObject::UniformMatrix4fv(const char*name, const MathWorker::float4x4& mat) const
 {
-    glUniformMatrix4fv(glGetUniformLocation(obj_id_, name), 1, GL_FALSE, mat.data());  
+    GLfloat value[16];
+    memcpy(&value[4 * 0], mat.Row(0).data(), sizeof(float) * 4);
+    memcpy(&value[4 * 1], mat.Row(1).data(), sizeof(float) * 4);
+    memcpy(&value[4 * 2], mat.Row(2).data(), sizeof(float) * 4);
+    memcpy(&value[4 * 3], mat.Row(3).data(), sizeof(float) * 4);
+    glUniformMatrix4fv(glGetUniformLocation(obj_id_, name), 1, GL_FALSE, value);  
 }
 
 }

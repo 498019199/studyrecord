@@ -61,7 +61,7 @@ namespace MathWorker
 
 	inline float Deg2Rad(const float x){ return x * DEG2RAD; }
 	inline float Rad2Deg(const float x){return x * RAD2DEG;}
-    
+	
 	// 浮点相等
 	template<typename T>
 	bool IsEqual(T X, T Y);
@@ -173,12 +173,20 @@ namespace MathWorker
 	Matrix4_T<T> LookAtLH(const Vector_T<T, 3>& Eye, const Vector_T<T, 3>& At, const Vector_T<T, 3>& Up);
 
 	// 正交投影
+	//left hand , z axis = zero.->directX
 	template<typename T>
 	Matrix4_T<T> OrthoLH(T w, T h, T farPlane, T nearPlane);
 	template<typename T>
 	Matrix4_T<T> OrthoOffCenterLH(T left, T right, T bottom, T top, T farPlane, T nearPlane);
-
+	
+	// right hand , z axis = negative one ->openGL
+	template<typename T>
+	Matrix4_T<T> OrthoRH(T w, T h, T farPlane, T nearPlane);
+	template<typename T>
+	Matrix4_T<T> OrthoOffCenterRH(T left, T right, T bottom, T top, T farPlane, T nearPlane);
+	
 	// 透视投影
+	//left hand , z axis = zero.->directX
 	template<typename T>
 	Matrix4_T<T> PerspectiveLH(T w, T h, T Near, T Far);
 	template<typename T>
@@ -186,6 +194,7 @@ namespace MathWorker
 	template<typename T>
 	Matrix4_T<T> PerspectiveFovLH(T Fov, T Aspect, T Near, T Far);
 
+	// right hand , z axis = negative one ->openGL
 	template<typename T>
 	Matrix4_T<T> PerspectiveRH(T w, T h, T Near, T Far);
 	template<typename T>

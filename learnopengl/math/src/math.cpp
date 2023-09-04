@@ -423,14 +423,9 @@ namespace MathWorker
     template<typename T>
 	Matrix4_T<T> OrthoLH(T w, T h, T nearPlane, T farPlane)
     {
-        const T q(1.f / (farPlane - nearPlane));
         const T w_2(w / 2); // w = right - left ，left = -right
 	    const T h_2(h / 2); // h = top - bottom ，top = -bottom
-        return Matrix4_T<T>(
-            w_2 + w_2,    0,              0,              0,
-            0,            h_2 + h_2,      0,              0,
-            0,            0,              q,              0,
-            0,            0, (farPlane + nearPlane)/q,    1);            
+        return OrthoOffCenterLH(-w_2, w_2, -h_2, h_2, farPlane, nearPlane);            
     }
 
     // dx->[-1,1][-1,1][0,1]，selected
@@ -446,8 +441,31 @@ namespace MathWorker
             invWidth + invWidth,    0,                          0,              0,
             0,                      invHeight + invHeight,      0,              0,
             0,                      0,                          q,              0,
-            -(left + right)/invWidth,   -(top + bottom)/invHeight, (farPlane + nearPlane)/q,    1);        
+            -(left + right)/invWidth,   -(top + bottom)/invHeight, -nearPlane/q,    1);        
     }
+
+    template<typename T>
+	Matrix4_T<T> OrthoRH(T w, T h, T farPlane, T nearPlane)
+	{
+		const T w_2(w / 2); // w = right - left ，left = -right
+	    const T h_2(h / 2); // h = top - bottom ，top = -bottom
+        return OrthoOffCenterRH(-w_2, w_2, -h_2, h_2, farPlane, nearPlane);            
+
+	}
+
+    template<typename T>
+	Matrix4_T<T> OrthoOffCenterRH(T left, T right, T bottom, T top, T farPlane, T nearPlane)
+	{
+		const T q(1.f / (farPlane - nearPlane));
+		const T invWidth(1.f / (right - left));
+		const T invHeight(1.f / (top - bottom));
+        return Matrix4_T<T>(
+            invWidth + invWidth,    0,                          0,              0,
+            0,                      invHeight + invHeight,      0,              0,
+            0,                      0,                          q,              0,
+            -(left + right)/invWidth,   -(top + bottom)/invHeight, -(farPlane + nearPlane)/q,    1);        
+  
+	}
 
     // https://learn.microsoft.com/en-us/previous-versions/windows/desktop/bb281711(v=vs.85)
 	float4x4 LookAtRH(const float3& Eye, const float3& At, const float3& Up);
@@ -543,7 +561,15 @@ namespace MathWorker
 	template<typename T>
 	Matrix4_T<T> PerspectiveFovRH(T Fov, T Aspect, T Near, T Far)
     {
-        return LHToRH(PerspectiveFovLH(Fov, Aspect, Near, Far));
+        const T  h(T(1) / std::tan(Fov / 2));
+        const T  w(h / Aspect);
+        const T  q(Far - Near);
+
+        return Matrix4_T<T>(
+            w,		0,		0,		                    0,
+            0,		h,		0,		                    0,
+            0,		0,		-(Far + Near) / q,		   -1,
+            0,		0,		-(2 * Far * Near) / q,      0); 
     }
 
     template quater Mul(const quater& lhs, const quater& rhs) noexcept;

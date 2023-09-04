@@ -100,6 +100,10 @@ void Renderer::BeforeRender()
     vertex_buf_->Bind(vertices, sizeof(vertices));
     //indexs_->Bind(indices, sizeof(indices));
     texture2d_->BindTexture();
+
+    // configure global opengl state
+    // -----------------------------
+    glEnable(GL_DEPTH_TEST);
 }
 
 void Renderer::Render(float time)
@@ -107,30 +111,28 @@ void Renderer::Render(float time)
     // render
     // ------
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
-    float4x4 model = MatrixRotate(float3(0.5f, 1.0f, 0.0f), time);
+    float4x4 model = MatrixRotate(float3(1.0f, 0.3f, 0.5f), time);
     float4x4 view = MatrixMove(0.0f, 0.0f, -3.0f);
     float4x4 projection = PerspectiveFovRH(Deg2Rad(45.f), float(width_)/float(height_), 0.1f, 100.f);
     float4x4 mvp = projection * view * model;
 
-    glm::mat4 model2         = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
-    glm::mat4 view2          = glm::mat4(1.0f);
     glm::mat4 projection2    = glm::mat4(1.0f);
-    model2 = glm::rotate(model2, time, glm::vec3(0.5f, 1.0f, 0.0f));
-    view2  = glm::translate(view2, glm::vec3(0.0f, 0.0f, -3.0f));
     projection2 = glm::perspective(glm::radians(45.0f), float(width_)/float(height_), 0.1f, 100.0f);
-    glm::mat4 mvp2  = projection2 * view2 * model2;
-    std::cout << mvp2[0][0] << " " << mvp2[0][1] << " " << mvp2[0][2] << " " << mvp2[0][3] << std::endl;
-    std::cout << mvp2[1][0] << " " << mvp2[1][1] << " " << mvp2[1][2] << " " << mvp2[1][3] << std::endl;
-    std::cout << mvp2[2][0] << " " << mvp2[2][1] << " " << mvp2[2][2] << " " << mvp2[2][3] << std::endl;
-    std::cout << mvp2[3][0] << " " << mvp2[3][1] << " " << mvp2[3][2] << " " << mvp2[3][3] << std::endl;
+    std::cout << projection2[0][0] << " " << projection2[0][1] << " " << projection2[0][2] << " " << projection2[0][3] << std::endl;
+    std::cout << projection2[1][0] << " " << projection2[1][1] << " " << projection2[1][2] << " " << projection2[1][3] << std::endl;
+    std::cout << projection2[2][0] << " " << projection2[2][1] << " " << projection2[2][2] << " " << projection2[2][3] << std::endl;
+    std::cout << projection2[3][0] << " " << projection2[3][1] << " " << projection2[3][2] << " " << projection2[3][3] << std::endl;
 
 
     shaderobj_->UniformMatrix4fv("model", model);
-    shaderobj_->UniformMatrix4fv("view", float4x4::Identity());
-    shaderobj_->UniformMatrix4fv("projection", float4x4::Identity());
-    //glUniformMatrix4fv(glGetUniformLocation(shaderobj_->GetId(), name), 1, GL_FALSE, mat.data());
+    shaderobj_->UniformMatrix4fv("view", view);
+    shaderobj_->UniformMatrix4fv("projection", projection);
+    //glUniformMatrix4fv(glGetUniformLocation(shaderobj_->GetId(), "model"), 1, GL_FALSE, glm::value_ptr(model2));
+    //glUniformMatrix4fv(glGetUniformLocation(shaderobj_->GetId(), "view"), 1, GL_FALSE, glm::value_ptr(view2));
+    //glUniformMatrix4fv(glGetUniformLocation(shaderobj_->GetId(), "projection"), 1, GL_FALSE, glm::value_ptr(projection2));
+
 
     // draw our first triangle
     shaderobj_->UseShader(); // 激活shaderProgram，怎么画
