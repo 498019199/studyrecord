@@ -6,7 +6,7 @@ include_directories(${PROJECT_3RD_DIR}/glad/include
                     ${PROJECT_SOURCE_DIR}/common/include
                     ${PROJECT_SOURCE_DIR}/math/include)
 
-aux_source_directory(${PROJECT_SOURCE_DIR}/render/src SRC_LIST)
+aux_source_directory(${PROJECT_SOURCE_DIR}/render/src/render SRC_LIST)
 list(APPEND SRC_LIST 
     ${PROJECT_3RD_DIR}/glad/src/glad.c
     ${PROJECT_3RD_DIR}/stb/src/stb_image.cpp)
