@@ -21,5 +21,7 @@ stb_image-> 图像解码库
 投影
 2023年8月11日-》花费2天移植自己以前模板数学库
 2023年8月25日-》Game101 1-4 DirectX,OpenGL,Game101 MVP 学习。还是无法理解view matrix at-eye 和 eye-at
+2023年9月8日 opengl 光照章节
+
 Delegate 委托 
 
