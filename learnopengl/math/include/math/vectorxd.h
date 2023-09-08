@@ -2,8 +2,8 @@
 #include <array>
 #include <string>
 #include <sstream>
-#include "math_helper.h"
 #include "math/math.h"
+#include "math_helper.h"
 
 #ifdef PLATFORM_COMPILER_MSVC
 #pragma warning(push)

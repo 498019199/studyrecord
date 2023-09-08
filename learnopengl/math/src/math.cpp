@@ -1,8 +1,4 @@
 #include <math/math.h>
-#include <math/vectorxd.h>
-#include <math/matrix.h>
-#include <math/quaternion.h>
-#include <math/rotator.h>
 
 namespace MathWorker
 {
