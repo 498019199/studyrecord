@@ -3,6 +3,9 @@
 #include <eigen3/Eigen/Eigen>
 #include <iostream>
 #include <opencv2/opencv.hpp>
+#pragma warning(push)
+#pragma warning(disable : 4244) // Conversion from doubel to int64
+#pragma warning(pop)
 
 constexpr double MY_PI = 3.1415926;
 
@@ -26,7 +29,12 @@ Eigen::Matrix4f get_model_matrix(float rotation_angle)
     // TODO: Implement this function
     // Create the model matrix for rotating the triangle around the Z axis.
     // Then return it.
-
+    float fs = std::sin(rotation_angle);
+    float fc = std::cos(rotation_angle);
+    model(0, 0) = fc;
+    model(0, 1) = fs;
+    model(1, 0) = -fs;
+    model(1, 1) = fc;
     return model;
 }
 
@@ -40,8 +48,17 @@ Eigen::Matrix4f get_projection_matrix(float eye_fov, float aspect_ratio,
     // TODO: Implement this function
     // Create the projection matrix for the given parameters.
     // Then return it.
+    const float  h(1.f / std::tan(eye_fov / 2));
+    const float  w(h / aspect_ratio);
+    const float  q(zFar - zNear);
 
-    return projection;
+    projection(0, 0) = w;
+    projection(1, 1) = h;
+    projection(2, 2) = -(zFar + zNear) / q;
+    projection(2, 3) = -1.f;
+    projection(3, 2) = -(2 * zFar * zNear) / q;
+    projection(3, 3) = 0.f;
+    return projection; 
 }
 
 int main(int argc, const char** argv)
