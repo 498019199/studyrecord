@@ -102,6 +102,29 @@ void rst::rasterizer::draw(pos_buf_id pos_buffer, ind_buf_id ind_buffer, col_buf
     }
 }
 
+void rst::rasterizer::bresenham_line(Eigen::Vector3f begin, Eigen::Vector3f end)
+{
+    auto x0 = begin.x();
+    auto y0 = begin.y();
+    auto x1 = end.x();
+    auto y1 = end.y();
+    Eigen::Vector3f line_color = {255, 255, 255};
+    
+    int dx =  abs(x1-x0), sx = x0<x1 ? 1 : -1;
+    int dy = -abs(y1-y0), sy = y0<y1 ? 1 : -1; 
+    int err = dx+dy, e2; /* error value e_xy */
+    
+    for(;;){  /* loop */
+        Eigen::Vector3f point = Eigen::Vector3f(x0, y0, 1.0f);
+        set_pixel(point, line_color);
+
+        if (x0==x1 && y0==y1) break;
+        e2 = 2*err;
+        if (e2 >= dy) { err += dy; x0 += sx; } /* e_xy+e_x > 0 */
+        if (e2 <= dx) { err += dx; y0 += sy; } /* e_xy+e_y < 0 */
+    }
+}
+
 //Screen space rasterization
 void rst::rasterizer::rasterize_triangle(const Triangle& t) {
     auto v = t.toVector4();
@@ -116,6 +139,11 @@ void rst::rasterizer::rasterize_triangle(const Triangle& t) {
     //z_interpolated *= w_reciprocal;
 
     // TODO : set the current pixel (use the set_pixel function) to the color of the triangle (use getColor function) if it should be painted.
+
+    // sweep line method
+    bresenham_line(v[0], v[1]);
+    bresenham_line(v[1], v[2]);
+    bresenham_line(v[2], v[0]);
 }
 
 void rst::rasterizer::set_model(const Eigen::Matrix4f& m)

@@ -9,4 +9,5 @@ include_directories(
     ${OpenCV_INCLUDE_DIRS} )
 link_directories( ${OpenCV_LIB_DIR} )
 
-add_subdirectory(PA02)
+add_subdirectory(PA01)
+#add_subdirectory(PA02)
