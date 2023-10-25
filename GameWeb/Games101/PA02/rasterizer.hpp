@@ -77,7 +77,7 @@ namespace rst
     private:
         void draw_line(Eigen::Vector3f begin, Eigen::Vector3f end);
 
-        void bresenham_line(Eigen::Vector3f begin, Eigen::Vector3f end);
+        void bresenham_line(Eigen::Vector3f begin, Eigen::Vector3f end, Eigen::Vector3f color);
         
         void rasterize_triangle(const Triangle& t);
 

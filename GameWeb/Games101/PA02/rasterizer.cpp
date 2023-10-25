@@ -102,13 +102,12 @@ void rst::rasterizer::draw(pos_buf_id pos_buffer, ind_buf_id ind_buffer, col_buf
     }
 }
 
-void rst::rasterizer::bresenham_line(Eigen::Vector3f begin, Eigen::Vector3f end)
-{
+ void bresenham_line(Eigen::Vector3f begin, Eigen::Vector3f end, Eigen::Vector3f color)
+ {
     auto x0 = begin.x();
     auto y0 = begin.y();
     auto x1 = end.x();
     auto y1 = end.y();
-    Eigen::Vector3f line_color = {255, 255, 255};
     
     int dx =  abs(x1-x0), sx = x0<x1 ? 1 : -1;
     int dy = -abs(y1-y0), sy = y0<y1 ? 1 : -1; 
@@ -140,10 +139,11 @@ void rst::rasterizer::rasterize_triangle(const Triangle& t) {
 
     // TODO : set the current pixel (use the set_pixel function) to the color of the triangle (use getColor function) if it should be painted.
 
-    // sweep line method
-    bresenham_line(v[0], v[1]);
-    bresenham_line(v[1], v[2]);
-    bresenham_line(v[2], v[0]);
+    // sweep line method 
+    Eigen::Vector3f line_color = {255, 255, 255};
+    bresenham_line(v[0], v[1], line_color);
+    bresenham_line(v[1], v[2], line_color);
+    bresenham_line(v[2], v[0], line_color);
 }
 
 void rst::rasterizer::set_model(const Eigen::Matrix4f& m)

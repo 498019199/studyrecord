@@ -53,6 +53,15 @@ void mouseWheel(GLFWwindow* window, double xoffset, double yoffset)
 {
 
 }
+
+// process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
+// ---------------------------------------------------------------------------------------------------------
+void processInput(GLFWwindow *window)
+{
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
+}
+
 #ifdef __cplusplus
 }
 #endif
@@ -94,6 +103,8 @@ void App::CreateWindows(int width, int height, const char* title_name)
         return ;
     }
     glfwMakeContextCurrent(window_);
+
+    glfwSetFramebufferSizeCallback(window_, framebuffer_size_callback);
     glfwSetKeyCallback(window_, keyInput);
     glfwSetMouseButtonCallback(window_, mouseInput);
     glfwSetScrollCallback(window_, mouseWheel);
@@ -115,7 +126,7 @@ void App::Run()
     {
         // input
         // -----
-        //processInput(window_);
+        processInput(window_);
  
         // render
         float time = (float)glfwGetTime();

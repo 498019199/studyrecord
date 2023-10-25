@@ -5,7 +5,7 @@
 
 namespace CommonWorker
 {
-std::vector<std::string_view> stringSplit(const std::string& str, char delim) 
+std::vector<std::string_view> stringSplit(const std::string& str, char delim = ',') 
 {
     std::string s;
     s.append(1, delim);
