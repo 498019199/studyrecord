@@ -101,21 +101,15 @@ void rst::rasterizer::draw(pos_buf_id pos_buffer, ind_buf_id ind_buffer, col_buf
         rasterize_triangle(t);
     }
 }
-
- void bresenham_line(Eigen::Vector3f begin, Eigen::Vector3f end, Eigen::Vector3f color)
- {
-    auto x0 = begin.x();
-    auto y0 = begin.y();
-    auto x1 = end.x();
-    auto y1 = end.y();
-    
+void rst::rasterizer::bresenham_line(int x0, int y0, int x1, int y1, Eigen::Vector3f color)
+{
     int dx =  abs(x1-x0), sx = x0<x1 ? 1 : -1;
     int dy = -abs(y1-y0), sy = y0<y1 ? 1 : -1; 
-    int err = dx+dy, e2; /* error value e_xy */
+    int err = dx + dy, e2; /* error value e_xy */
     
     for(;;){  /* loop */
         Eigen::Vector3f point = Eigen::Vector3f(x0, y0, 1.0f);
-        set_pixel(point, line_color);
+        set_pixel(point, color);
 
         if (x0==x1 && y0==y1) break;
         e2 = 2*err;
@@ -141,9 +135,9 @@ void rst::rasterizer::rasterize_triangle(const Triangle& t) {
 
     // sweep line method 
     Eigen::Vector3f line_color = {255, 255, 255};
-    bresenham_line(v[0], v[1], line_color);
-    bresenham_line(v[1], v[2], line_color);
-    bresenham_line(v[2], v[0], line_color);
+    bresenham_line(v[2].x(), v[2].y(), v[0].x(), v[0].y(), line_color);
+    bresenham_line(v[2].x(), v[2].y(), v[1].x(), v[1].y(), line_color);
+    bresenham_line(v[1].x(), v[1].y(), v[0].x(), v[0].y(), line_color);
 }
 
 void rst::rasterizer::set_model(const Eigen::Matrix4f& m)
@@ -193,3 +187,7 @@ void rst::rasterizer::set_pixel(const Eigen::Vector3f& point, const Eigen::Vecto
 }
 
 // clang-format on
+namespace rst
+{
+
+}
