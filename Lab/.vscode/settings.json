@@ -3,6 +3,8 @@
     "files.associations": {
         "coroutine": "cc",
         "algorithm": "cc",
-        "memory_resource": "cc"
+        "memory_resource": "cc",
+        "any": "cpp",
+        "string_view": "cpp"
     }
 }
