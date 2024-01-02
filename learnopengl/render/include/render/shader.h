@@ -1,45 +1,71 @@
 #pragma once
 #include <memory>
+#include <string_view>
+#include <math/math.h>
+namespace RenderWorker
+{
+class IShader;
+using PtrIShader = std::shared_ptr<IShader>;
+class ShaderObject;
+using PtrShaderobject = std::shared_ptr<ShaderObject>;
 
-class i_shader;
-using ptr_shader = std::shared_ptr<i_shader>;
-
-class i_shader
+class IShader
 {
 public:   
-    ~i_shader();
+    ~IShader();
 
-    void init_shader(int type);
-    void bind_shader(const char* shader_script);
-    void link_shader();
+    void InitShader(uint32_t type);
+    void BindShader(const char* shader_script);
+    void LinkShader();
+
+    uint32_t GetShaderId() { return shader_id_; }
 private:
-    const char* get_shader_type();
+    const char* GetShaderType();
 
 private:
-    int shader_type_ = 0;
-    int shader_id_ = 0;
+    uint32_t shader_type_ = 0;
+    uint32_t shader_id_ = 0;
 };
 
 // 像素着色器
-class pixel_shader:public i_shader
+class PixelShader:public IShader
 {};
 
 // 片元着色器
-class fragment_shader:public i_shader
+class FragmentShader:public IShader
 {};
 
 // 着色器程序对象(Shader Program Object)
-class shader_object
+class ShaderObject
 {
 public:
-    shader_object();
-    ~shader_object();
+    ShaderObject();
+    ~ShaderObject();
 
-    void attach_shader();
+    void LoadShader(const std::string_view& vertexPath, const std::string_view& fragmentPath);
+
+    // uniform工具函数
+    void Uniform1i(const char*name, int value) const;   
+    void Uniform1f(const char*name, float value) const;
+    void Uniform3fv(const char*name, const MathWorker::float3& vec) const;
+    void UniformMatrix4fv(const char*name, const MathWorker::float4x4& mat) const;
+
+    void AttachShader();
+    void UseShader();
+    void DetachShader();
+
+    uint32_t GetId() const { return obj_id_; }
 private:
     uint32_t obj_id_;
-    ptr_shader pixel_;
-    ptr_shader fragment_;
+    uint32_t ___;
+    PtrIShader pixel_;
+    PtrIShader fragment_;
+};
+
+
+
+
+
 }
 
 

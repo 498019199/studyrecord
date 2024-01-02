@@ -2,3 +2,6 @@
 /lib
 /bin
 /math/test/output
+/cmake-build-debug-visual-studio
+/.idea
+/3rd/glm-0.9.9.8

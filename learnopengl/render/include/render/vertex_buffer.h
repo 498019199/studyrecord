@@ -1,12 +1,20 @@
 #pragma once
 #include <cstdint>
-
-class vertex_buffer
+namespace RenderWorker
+{
+//VBO对象
+class VertexBuffer
 {
 public:  
-    vertex_buffer(void* data, int size);
-    ~vertex_buffer();
+    VertexBuffer();
+    ~VertexBuffer();
+
+    void Bind(void* data, int size);
+    void UnBind();
+
+    uint32_t GetId() const { return vbo_id_; }
 private:
-    uint32_t id_;
+    uint32_t vbo_id_ = 0;
 };
 
+}
