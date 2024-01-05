@@ -63,12 +63,14 @@ public:
         {
             head_->right = new_node;
         }
-
-        for ()
+        
+        // 父节点为黑直接插入子节点
+        for (node_ptr node = new_node; node_type::node_red == new_node->parent->color)
         {
             /* code */
         }
         
+        // 根节点必须为黑色
         head_->type = node_type::node_black;
         return ;
     }
