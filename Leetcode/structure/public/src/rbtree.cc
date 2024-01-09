@@ -1,9 +1,10 @@
 #include <public/rbtree.h>
 namespace DataBase{
 
-void rbtree::InsertNode(bool add_left, node_ptr where_node, const T& value)
+template<typename T>
+void rbtree<T>::InsertNode(bool add_left, node_ptr where_node, const T& value)
 {
-    node_ptr new_node = add_node(value, node_type::node_red);
+    node_ptr new_node = NewNode(value, node_type::node_red);
     size_++;
 
     if (where_node == head_)
@@ -21,7 +22,7 @@ void rbtree::InsertNode(bool add_left, node_ptr where_node, const T& value)
     }
     
     // 父节点为黑直接插入子节点
-    for (node_ptr node = new_node; node_type::node_red == Color(Parent(new_node)))
+    for (node_ptr node = new_node; node_type::node_red == Color(Parent(new_node)); )
     {
         //叔节点不存在 
         if (Parent(node) == Left(Parent(Parent(node))))
@@ -36,18 +37,6 @@ void rbtree::InsertNode(bool add_left, node_ptr where_node, const T& value)
     
     // 根节点必须为黑色
     Color(head_) = node_type::node_black;
-    return ;
-}
-
-node_ptr rbtree::NewNode(const T& value, char crg)
-{
-    node_ptr tmp = new rbtree_node();    
-    tmp->type = crg;
-    tmp->nil = false;
-    tmp->value = std::move(value);
-    tmp->left = nullptr;
-    tmp->parent = nullptr;
-    tmp->right = nullptr;
-    return tmp;
+    //return ;
 }
 };
