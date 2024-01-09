@@ -39,9 +39,9 @@ void rbtree::InsertNode(bool add_left, node_ptr where_node, const T& value)
     return ;
 }
 
-rbtree_node* rbtree::NewNode(const T& value, char crg)
+node_ptr rbtree::NewNode(const T& value, char crg)
 {
-    rbtree_node* tmp = new rbtree_node;    
+    node_ptr tmp = new rbtree_node();    
     tmp->type = crg;
     tmp->nil = false;
     tmp->value = std::move(value);
