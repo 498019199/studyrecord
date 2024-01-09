@@ -9,7 +9,7 @@
       "stopAtEntry": false,
       "externalConsole": false,
       "cwd": "/home/z/projects/studyrecord/Leetcode/structure",
-      "program": "/home/z/projects/studyrecord/Leetcode/structure/build/Debug/outDebug",
+      "program": "/home/z/projects/studyrecord/Leetcode/structure/bin/test_public",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
