@@ -16,7 +16,12 @@ struct rbtree_node
     char color; 
     char nil;
 
-    //rbtree_node() = delete;
+    rbtree_node(NodePtr Larg, NodePtr Parg, NodePtr Rarg, 
+        const T& value, char crg)
+        :left(Larg),right(Parg),value(value),color(crg),nil(false)
+    {
+
+    }
     //rbtree_node(const rbtree_node& node) = delete;
     //rbtree_node& operator=(const rbtree_node& node) = delete;
 };
@@ -26,7 +31,7 @@ class rbtree
 {
 protected:
     enum node_type { node_red, node_black};  
-    using NodePtr = rbtree_node<T>*;
+    typedef typename rbtree_node<T>::NodePtr NodePtr;
 
     static char& Color(NodePtr node) { return node->color; }
     static char& IsNil(NodePtr node) { return node->nil; }
@@ -60,42 +65,30 @@ private:
     void RLeft(NodePtr WhereNode);
     void RRight(NodePtr WhereNode);
 
-    NodePtr NewNode(const T& value, char crg)
-    {
-        NodePtr tmp = new rbtree_node<T>;
-        tmp->color = crg;
-        tmp->nil = false;
-        tmp->value = value;
-        tmp->left = nullptr;
-        tmp->parent = nullptr;
-        tmp->right = nullptr;
-        return tmp;
-    }
-
     void InsertNode(bool bAddLeft, NodePtr pWherenode, const T& value)
     {
-        NodePtr new_node = NewNode(value, node_type::node_red);
+        NodePtr Newnode = BuyNode(Head_, pWherenode, Head_, value, node_type::node_red);
         Size_++;
 
         if (pWherenode == Head_)
         {
-            Root() = new_node;
-            Left(Head_) = new_node, Right(Head_) = new_node;
+            Root() = Newnode;
+            Left(Head_) = Newnode, Right(Head_) = Newnode;
         }
         else if (bAddLeft)
         {
-            Left(pWherenode) = new_node;
+            Left(pWherenode) = Newnode;
         }
         else
         {
-            Right(pWherenode) = new_node;
+            Right(pWherenode) = Newnode;
         }
         
         // 父节点为黑直接插入子节点
-        for (NodePtr node = new_node; node_type::node_red == Color(Parent(new_node)); )
+        for (NodePtr pNode = Newnode; node_type::node_red == Color(Parent(pNode)); )
         {
             //叔节点不存在 
-            if (Parent(node) == Left(Parent(Parent(node))))
+            if (Parent(pNode) == Left(Parent(Parent(pNode))))
             {
                 // 右旋
             }
@@ -110,9 +103,24 @@ private:
         //return ;
     }
 
+    NodePtr BuyNode(NodePtr Larg, NodePtr Parg, NodePtr Rarg, 
+        const T& value, char crg)
+    {
+        NodePtr Wherenode = new rbtree_node<T>(Larg, Parg, Rarg, value, value, crg);
+        return Wherenode;
+    }
+
+    NodePtr BuyNode()
+    {
+        NodePtr Wherenode = new rbtree_node<T>(
+            nullptr, nullptr, nullptr, T(), node_type::node_black
+        );
+        return Wherenode;
+    }
+
     void Init()
     {
-        Head_ = NewNode(T(), node_black);
+        Head_ = BuyNode();
         IsNil(Head_) = true;
         Root() = Head_;
         Left(Head_) = Head_, Right(Head_) = Head_;
