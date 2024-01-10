@@ -120,7 +120,7 @@ private:
 
     void Init()
     {
-        Head_ = BuyNode();
+        Head_ = nullptr;//BuyNode();
         IsNil(Head_) = true;
         Root() = Head_;
         Left(Head_) = Head_, Right(Head_) = Head_;
