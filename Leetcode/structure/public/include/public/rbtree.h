@@ -106,7 +106,7 @@ private:
     NodePtr BuyNode(NodePtr Larg, NodePtr Parg, NodePtr Rarg, 
         const T& value, char crg)
     {
-        NodePtr Wherenode = new rbtree_node<T>(Larg, Parg, Rarg, value, value, crg);
+        NodePtr Wherenode = new rbtree_node<T>(Larg, Parg, Rarg, value, crg);
         return Wherenode;
     }
 
