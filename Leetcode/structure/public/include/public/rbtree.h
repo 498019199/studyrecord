@@ -9,16 +9,16 @@ struct rbtree_node
     using NodePtr = rbtree_node*;
     using value_type = T;
 
-    rbtree_node* left;
-    rbtree_node* parent;
-    rbtree_node* right;
-    T value;
-    char color; 
-    char nil;
+    rbtree_node* Left_;
+    rbtree_node* Parent_;
+    rbtree_node* Right_;
+    T Value_;
+    char Color_; 
+    char Nil_;
 
     rbtree_node(NodePtr Larg, NodePtr Parg, NodePtr Rarg, 
         const T& value, char crg)
-        :left(Larg),right(Parg),value(value),color(crg),nil(false)
+        :Left_(Larg), Parent_(Parg), Right_(Rarg), Value_(value), Color_(crg), Nil_(false)
     {
 
     }
@@ -33,11 +33,12 @@ protected:
     enum node_type { node_red, node_black};  
     typedef typename rbtree_node<T>::NodePtr NodePtr;
 
-    static char& Color(NodePtr node) { return node->color; }
-    static char& IsNil(NodePtr node) { return node->nil; }
-    static NodePtr& Left(NodePtr node) { return node->left; }
-    static NodePtr& Parent(NodePtr node) { return node->parent; }
-    static NodePtr& Right(NodePtr node) { return node->right; }
+    static char& Color(NodePtr node) { return node->Color_; }
+    static char& IsNil(NodePtr node) { return node->Nil_; }
+    static T& MyVal(NodePtr node) { return node->Value_; }
+    static NodePtr& Left(NodePtr node) { return node->Left_; }
+    static NodePtr& Parent(NodePtr node) { return node->Parent_; }
+    static NodePtr& Right(NodePtr node) { return node->Right_; }
     NodePtr& Root() { return Parent(Head_);}
 public:
     rbtree()
@@ -45,7 +46,12 @@ public:
         Init();
     }
 
-    void Add(const T& value)
+    ~rbtree()
+    {
+
+    }
+
+    void Add(const T& Val)
     {
         NodePtr pNode = Root();
         NodePtr pWherenode = Head_;
@@ -53,11 +59,11 @@ public:
         while (!IsNil(pNode))
         {
             pWherenode = pNode;
-            bAddLeft = value <= pNode->value;
-            pNode = bAddLeft ? pNode->left : pNode->right;
+            bAddLeft = Val < MyVal(pNode);
+            pNode = bAddLeft ? Left(pNode) : Right(pNode);
         }
         
-        InsertNode(bAddLeft, pWherenode, value);
+        InsertNode(bAddLeft, pWherenode, Val);
     }
 
 private:
@@ -90,6 +96,12 @@ private:
             //叔节点不存在 
             if (Parent(pNode) == Left(Parent(Parent(pNode))))
             {
+                pWherenode = Right(Parent(Parent(pNode)));
+                if (Color(pWherenode) == node_type::node_red)
+                {
+                    /* code */
+                }
+                
                 // 右旋
             }
             //叔节点存在
@@ -99,7 +111,7 @@ private:
         }
         
         // 根节点必须为黑色
-        Color(Head_) = node_type::node_black;
+        Color(Root()) = node_type::node_black;
         //return ;
     }
 
@@ -107,6 +119,9 @@ private:
         const T& value, char crg)
     {
         NodePtr Wherenode = new rbtree_node<T>(Larg, Parg, Rarg, value, crg);
+#ifdef _DEBUG
+    printf("new node address: %p   %d\n", Wherenode, value);
+#endif//_DEBUG
         return Wherenode;
     }
 
@@ -115,12 +130,15 @@ private:
         NodePtr Wherenode = new rbtree_node<T>(
             nullptr, nullptr, nullptr, T(), node_type::node_black
         );
+#ifdef _DEBUG
+    printf("head node address: %p\n", Wherenode);
+#endif//_DEBUG
         return Wherenode;
     }
 
     void Init()
     {
-        Head_ = nullptr;//BuyNode();
+        Head_ = BuyNode();
         IsNil(Head_) = true;
         Root() = Head_;
         Left(Head_) = Head_, Right(Head_) = Head_;
