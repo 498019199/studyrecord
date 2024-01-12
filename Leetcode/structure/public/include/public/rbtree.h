@@ -49,7 +49,7 @@ public:
 
     ~rbtree()
     {
-
+        Tidy();
     }
 
     void Add(const T& Val)
@@ -68,9 +68,6 @@ public:
     }
 
 private:
-
-    void RLeft(NodePtr WhereNode);
-    void RRight(NodePtr WhereNode);
 
     void InsertNode(bool bAddLeft, NodePtr pWherenode, const T& Val)
     {
@@ -94,30 +91,55 @@ private:
         // 父节点为黑直接插入子节点
         for (NodePtr pNode = Newnode; node_type::node_red == Color(Parent(pNode)); )
         {
-            //父节点 祖父节点的左节点
-            if (Parent(pNode) == Left(Parent(Parent(pNode))))
+            if (Parent(pNode) == Left(Parent(Parent(pNode)))) // 查看是否存在节点的叔父节点
             {
-                pWherenode = Right(Parent(Parent(pNode)));
-                // 父节点为红
-                if (Color(pWherenode) == node_type::node_red)
+                //叔节点不存在
+                pWherenode/*祖父节点*/ = Right(Parent(Parent(pNode)));
+                if (Color(pWherenode) == node_type::node_red) // *祖父父节点为红
                 {
+                    // wiki/红黑树#插入##情形3
+                    Color(pNode) = node_type::node_black;
+                    Color(pWherenode) = node_type::node_black;
+                    Color(Parent(pNode)) = node_type::node_red;
                 }
-                // 父节点为黑
-                else
+                else // *祖父父节点为黑
                 {
                     // 右旋
                 }
             }
-            //叔节点存在
             else
             {
+                //叔节点存在
+                pWherenode/*叔父节点*/ = Left(Parent(Parent(pNode)));
+                if (Color(pWherenode) == node_type::node_red) // *叔父父节点为红
+                {}
+                else
+                {
+                    Color(Parent(pNode)) = node_type::node_black;
+                    Color(Parent(Parent(pNode))) = node_type::node_red;
+                    Lrotate(Parent(Parent(pNode)));
+                }
             }
         }
         
         // 根节点必须为黑色
         Color(Root()) = node_type::node_black;
-        //return ;
     }
+
+    void Lrotate(NodePtr pWhereNode)
+    {
+        NodePtr pNode = Right(pWhereNode);
+        Right(pWhereNode) = Left(pNode);
+        Left(pNode) = pWhereNode;
+
+        if (Root() == pWhereNode)
+        {
+            Root() = pNode;
+        } 
+    }
+
+    void Rrotate(NodePtr WhereNode)
+    {}
 
     NodePtr BuyNode(NodePtr Larg, NodePtr Parg, NodePtr Rarg, 
         const T& value, char crg)
@@ -148,8 +170,15 @@ private:
         Left(Head_) = Head_, Right(Head_) = Head_;
         Size_ = 0;
     }
+
+    void Tidy()
+    {
+
+    }
 private:
     NodePtr Head_ = nullptr;
     uint32_t Size_ = 0;
 };
+
+
 };
