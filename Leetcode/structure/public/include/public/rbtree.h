@@ -39,6 +39,7 @@ protected:
     static NodePtr& Left(NodePtr node) { return node->Left_; }
     static NodePtr& Parent(NodePtr node) { return node->Parent_; }
     static NodePtr& Right(NodePtr node) { return node->Right_; }
+
     NodePtr& Root() { return Parent(Head_);}
 public:
     rbtree()
@@ -71,9 +72,9 @@ private:
     void RLeft(NodePtr WhereNode);
     void RRight(NodePtr WhereNode);
 
-    void InsertNode(bool bAddLeft, NodePtr pWherenode, const T& value)
+    void InsertNode(bool bAddLeft, NodePtr pWherenode, const T& Val)
     {
-        NodePtr Newnode = BuyNode(Head_, pWherenode, Head_, value, node_type::node_red);
+        NodePtr Newnode = BuyNode(Head_, pWherenode, Head_, Val, node_type::node_red);
         Size_++;
 
         if (pWherenode == Head_)
@@ -93,16 +94,19 @@ private:
         // 父节点为黑直接插入子节点
         for (NodePtr pNode = Newnode; node_type::node_red == Color(Parent(pNode)); )
         {
-            //叔节点不存在 
+            //父节点 祖父节点的左节点
             if (Parent(pNode) == Left(Parent(Parent(pNode))))
             {
                 pWherenode = Right(Parent(Parent(pNode)));
+                // 父节点为红
                 if (Color(pWherenode) == node_type::node_red)
                 {
-                    /* code */
                 }
-                
-                // 右旋
+                // 父节点为黑
+                else
+                {
+                    // 右旋
+                }
             }
             //叔节点存在
             else
