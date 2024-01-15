@@ -76,24 +76,29 @@ private:
 
         if (pWherenode == Head_)
         {
+            // 新节点N位于树的根上，没有父节点。
             Root() = Newnode;
             Left(Head_) = Newnode, Right(Head_) = Newnode;
         }
         else if (bAddLeft)
         {
             Left(pWherenode) = Newnode;
+            // maintain leftmost pointing to min node
+            if (pWherenode == Head_->Left_) Head_->Left_ = pWherenode;
         }
         else
         {
             Right(pWherenode) = Newnode;
+            // maintain rightmost pointing to max node
+            if (pWherenode == Head_->Right_) Head_->Right_ = pWherenode;
         }
         
-        // 父节点为黑直接插入子节点
+        // rebalance
         for (NodePtr pNode = Newnode; node_type::node_red == Color(Parent(pNode)); )
         {
             if (Parent(pNode) == Left(Parent(Parent(pNode)))) // 查看是否存在节点的叔父节点
             {
-                //叔节点不存在
+                //叔节点存在
                 pWherenode/*祖父节点*/ = Right(Parent(Parent(pNode)));
                 if (Color(pWherenode) == node_type::node_red) // *祖父父节点为红
                 {
@@ -109,12 +114,17 @@ private:
             }
             else
             {
-                //叔节点存在
+                // wiki/红黑树#插入##情形4:父节点P是红色而叔父节点U是黑色或缺少
                 pWherenode/*叔父节点*/ = Left(Parent(Parent(pNode)));
                 if (Color(pWherenode) == node_type::node_red) // *叔父父节点为红
                 {}
                 else
                 {
+                    if (pWherenode == Left(Parent(pWherenode)))
+                    {
+                        /* code */
+                    }
+                    
                     Color(Parent(pNode)) = node_type::node_black;
                     Color(Parent(Parent(pNode))) = node_type::node_red;
                     Lrotate(Parent(Parent(pNode)));
