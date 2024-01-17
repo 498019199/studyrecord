@@ -22,8 +22,6 @@ struct rbtree_node
     {
 
     }
-    //rbtree_node(const rbtree_node& node) = delete;
-    //rbtree_node& operator=(const rbtree_node& node) = delete;
 };
 
 template<typename T>
@@ -147,30 +145,46 @@ private:
         Color(Root()) = RBNodeType::_Black;
     }
 
+    // 旋转pWhereNode，pNode(pWhereNode的右孩子)
     void Lrotate(NodePtr pWhereNode)
     {
         NodePtr pNode = Right(pWhereNode);
+        // pNode替换pWhereNode的位置，pNode右孩子是pWhereNode。
         Right(pWhereNode) = Left(pNode);
-        Left(pNode) = pWhereNode;
+        // 需要修改pNode右孩子
+        if (!IsNil(Left(pNode)))
+            Parent(Left(pNode)) = pWhereNode;
+        Parent(pNode) = Parent(pWhereNode);
 
-        if (Root() == pWhereNode)
-        {
+        if (Root() == pWhereNode) //pWhereNode is root
             Root() = pNode;
-        } 
+        else if (pWhereNode == Left(Parent(pWhereNode))) // pWhereNode is left child
+            Left(Parent(pWhereNode)) = pWhereNode;
+        else 
+            Left(Parent(pWhereNode)) = pWhereNode;
+        
+        // pWhereNode成为pNode右孩子，pWhereNode右孩子是原来pWhereNode左孩子
+        Left(pNode) = pWhereNode;
+        Parent(pWhereNode) = pNode;
     }
 
+    // 旋转pWhereNode，pWhereNode的左孩子
     void Rrotate(NodePtr pWhereNode)
     {
-        // 将节点 pWhereNode 的左孩子引用指向节点 pNode 的右孩子
         NodePtr pNode = Left(pWhereNode);
         Left(pWhereNode) = Right(pNode);
 
+        if (!IsNil(Right(pNode)))
+            Parent(Right(pNode)) = pWhereNode;
         Parent(pNode) = Parent(pWhereNode);
 
-        if (Root() == pWhereNode)
+        if (Root() == pWhereNode) 
             Root() = pNode;
+        else if (pWhereNode == Right(Parent(pWhereNode)))
+            Right(Parent(pWhereNode)) = pWhereNode;
+        else 
+            Left(Parent(pWhereNode)) = pWhereNode;
         
-        // 将节点 pNode 的右孩子引用指向节点 pWhereNode，完成旋转
         Right(pNode) = pWhereNode;
         Parent(pWhereNode) = pNode;
     }
