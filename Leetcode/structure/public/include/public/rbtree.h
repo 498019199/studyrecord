@@ -145,9 +145,9 @@ private:
         Color(Root()) = RBNodeType::_Black;
     }
 
-    // 旋转pWhereNode，pNode(pWhereNode的右孩子)
     void Lrotate(NodePtr pWhereNode)
     {
+        // 旋转pWhereNode，pNode(pWhereNode的右孩子)
         NodePtr pNode = Right(pWhereNode);
         // pNode替换pWhereNode的位置，pNode右孩子是pWhereNode。
         Right(pWhereNode) = Left(pNode);
@@ -168,22 +168,26 @@ private:
         Parent(pWhereNode) = pNode;
     }
 
-    // 旋转pWhereNode，pWhereNode的左孩子
+    // pWhereNode节点P, pWhereNode的左孩子节点N
     void Rrotate(NodePtr pWhereNode)
     {
+        // 获取pWhereNode的左孩子N
         NodePtr pNode = Left(pWhereNode);
-        Left(pWhereNode) = Right(pNode);
 
-        if (!IsNil(Right(pNode)))
-            Parent(Right(pNode)) = pWhereNode;
-        Parent(pNode) = Parent(pWhereNode);
+        // p.Left 互指 N.Rihgt
+        Left(pWhereNode) = Right(pNode);        // P左子树改为N的右子树
+        if (!IsNil(Right(pNode)))               
+            Parent(Right(pNode)) = pWhereNode;  // 改N的右子树父节点为P
 
+        // 修改P的父节点
+        Parent(pNode) = Parent(pWhereNode);     // P父节点改为N父节点
         if (Root() == pWhereNode) 
-            Root() = pNode;
+            Root() = pNode;// 情况1：如果P的父亲根节点，则将N设为根节点
+        // 修改N的父节点
         else if (pWhereNode == Right(Parent(pWhereNode)))
-            Right(Parent(pWhereNode)) = pWhereNode;
+            Right(Parent(pWhereNode)) = pNode;//情况2：如果P是它父节点的左孩子，则将N设为P的父节点的左孩子
         else 
-            Left(Parent(pWhereNode)) = pWhereNode;
+            Left(Parent(pWhereNode)) = pNode;
         
         Right(pNode) = pWhereNode;
         Parent(pWhereNode) = pNode;
