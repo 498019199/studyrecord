@@ -1,5 +1,6 @@
 #pragma once
 #include <cstdint>
+#include <initializer_list>
 
 namespace DataBase{
 
@@ -65,7 +66,46 @@ public:
         InsertNode(bAddLeft, pWherenode, Val);
     }
 
+    void Remove(const T& Val)
+    {
+        NodePtr pNode = Root();
+        NodePtr pWherenode = Head_;
+        bool bAddLeft = true;
+        while (!IsNil(pNode))
+        {
+            if (Val == MyVal(pNode))
+            {
+                break;
+            }
+            
+            if (Val < MyVal(pNode))
+            {
+                pNode = Left(pNode);
+            }
+            else
+            {
+                pNode = Right(pNode);
+            }
+        }
+
+        RemoveNode(pNode);
+    }
+
+    void Add(const std::initializer_list<T>& list)
+    {
+        for (auto it : list) Add(it);
+    }
+
+    void Remove(const std::initializer_list<T>& list)
+    {
+        for (auto it : list) Remove(it);
+    }
 private:
+
+    void RemoveNode(NodePtr pWhereNode)
+    {
+
+    }
 
     void InsertNode(bool bAddLeft, NodePtr pWherenode, const T& Val)
     {
@@ -97,43 +137,57 @@ private:
         // rebalance                  // 情形2:新节点的父节点P是黑色,直接插入
         for (NodePtr pNode = Newnode; RBNodeType::_Red == Color(Parent(pNode)); ) 
         {
-            if (Parent(pNode) == Left(Parent(Parent(pNode)))) // 查看是否存在节点的叔父节点
+            // 这里判断pNode在祖父节点的左边，还是右边
+            if (Parent(pNode) == Left(Parent(Parent(pNode)))) 
             {
-                //叔节点存在
-                pWherenode/*祖父节点*/ = Right(Parent(Parent(pNode)));
-                // if (Color(pWherenode) == RBNodeType::_Red) // *祖父父节点为红
-                // {
-                //     // 情形3：父节点为红色，叔父节点为红色
-                //     Color(pNode) = RBNodeType::_Black;
-                //     Color(pWherenode) = RBNodeType::_Black;
-                //     Color(Parent(pNode)) = RBNodeType::_Red;
-                //     pNode = Parent(Parent(pNode));
-                // }
-                // else // *祖父父节点为黑
-                // {
-                //     // 右旋
-                // }
+                // 修正祖父节左子树
+                pWherenode/*叔节点存在*/ = Right(Parent(Parent(pNode)));
+                if (Color(pWherenode) == RBNodeType::_Red) 
+                {
+                    // 情形3：
+                    Color(Parent(pNode)) = RBNodeType::_Black;
+                    Color(pWherenode) = RBNodeType::_Black;
+                    Color(Parent(Parent(pNode))) = RBNodeType::_Red;
+                    pNode = Parent(Parent(pNode));
+                }
+                else 
+                {
+                    if (pNode == Right(Parent(pNode)))
+                    {
+                        // 情形4
+                        pNode = Parent(pNode);
+                        Lrotate(pNode);
+                    }
+                    // 情形5
+                    Color(Parent(pNode)) = RBNodeType::_Black;
+                    Color(Parent(Parent(pNode))) = RBNodeType::_Red;
+                    Rrotate(Parent(Parent(pNode)));
+                }
             }
             else
             {
+                // 修正祖父节右子树
                 pWherenode/*叔父节点*/ = Left(Parent(Parent(pNode)));
-                if (Color(pWherenode) == RBNodeType::_Red) // *叔父父节点为红
+                if (Color(pWherenode) == RBNodeType::_Red) 
                 {
                     // 情形3：父节点为红色，叔父节点为红色
-                    Color(pNode) = RBNodeType::_Black;
+                    // 叔父节，父节点为黑色色，祖父节点为红色
+                    Color(Parent(pNode)) = RBNodeType::_Black;
                     Color(pWherenode) = RBNodeType::_Black;
-                    Color(Parent(pNode)) = RBNodeType::_Red;
+                    Color(Parent(Parent(pNode))) = RBNodeType::_Red;
                     pNode = Parent(Parent(pNode));
                 }
                 else
                 {
-                    if (pWherenode == Left(Parent(pWherenode)))
+                    if (pNode == Left(Parent(pNode)))
                     {
-                        // 情形4 父节点P是红色而叔父节点U是黑色
+                        // 情形4 父节点是红色，叔父节点是黑色或缺失，且新节点pNode在其父节点右侧
+                        // 进行父节点左旋转
                         pNode = Parent(pNode);
                         Rrotate(pNode);
                     }
-                    // 情形5
+                    // 情形5 父节点是红色，叔父节点是黑色或缺失，且新节点pNode在其父节点左侧
+                    // 父节点为黑色色，祖父节点为红色，进行祖父节右旋转
                     Color(Parent(pNode)) = RBNodeType::_Black;
                     Color(Parent(Parent(pNode))) = RBNodeType::_Red;
                     Lrotate(Parent(Parent(pNode)));

@@ -86,6 +86,21 @@
     "streambuf": "cpp",
     "system_error": "cpp",
     "tuple": "cpp",
-    "typeinfo": "cpp"
+    "typeinfo": "cpp",
+    "initializer_list": "cpp",
+    "cctype": "cpp",
+    "clocale": "cpp",
+    "cstdarg": "cpp",
+    "cstddef": "cpp",
+    "cstdio": "cpp",
+    "cstdlib": "cpp",
+    "cwchar": "cpp",
+    "cwctype": "cpp",
+    "deque": "cpp",
+    "map": "cpp",
+    "vector": "cpp",
+    "iterator": "cpp",
+    "numbers": "cpp",
+    "stdexcept": "cpp"
   }
 }
