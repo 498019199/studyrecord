@@ -9,4 +9,6 @@ set(PROJECT_3RD_DIR ${PROJECT_SOURCE_DIR}/3rd)
 
 add_subdirectory(math)
 file(COPY ${PROJECT_SOURCE_DIR}/math/include DESTINATION "${LIBRARY_OUTPUT_PATH}")
+add_subdirectory(common)
+file(COPY ${PROJECT_SOURCE_DIR}/common/include DESTINATION "${LIBRARY_OUTPUT_PATH}")
 add_subdirectory(Chapter4)
