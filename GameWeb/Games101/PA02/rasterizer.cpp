@@ -118,6 +118,31 @@ void rst::rasterizer::bresenham_line(int x0, int y0, int x1, int y1, Eigen::Vect
     }
 }
 
+void bresenham_drawline(Screen &s, unsigned x1, unsigned y1, unsigned x2, unsigned y2, unsigned char colour)
+{
+    int dx  = std::abs(x2 - x1); 
+    int dy  = std::abs(y2 - y1); 
+    int eps = 0;
+
+    if()
+    {
+        for (int x = x1; x < x2; x++)
+        {
+            
+            Eigen::Vector3f point = Eigen::Vector3f(x0, y0, 1.0f);
+            set_pixel(point, color);
+        }   
+    }
+    else
+    {
+        for (int y = y1; y < y2; y++)
+        {
+            Eigen::Vector3f point = Eigen::Vector3f(x0, y0, 1.0f);
+            set_pixel(point, color);
+        }   
+    }	
+}
+
 //Screen space rasterization
 void rst::rasterizer::rasterize_triangle(const Triangle& t) {
     auto v = t.toVector4();
