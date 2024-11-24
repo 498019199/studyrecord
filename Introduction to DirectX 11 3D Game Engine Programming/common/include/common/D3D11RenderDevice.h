@@ -1,12 +1,11 @@
 #pragma once
-
-#include <d3d11_4.h>
-#include <dxgi1_6.h>
+#include <common/WinApp.h>
+#include <common/D3D11Util.h>
 
 class D3D11RenderDevice
 {
 public:
-    bool CreateDevice();
+    D3D11RenderDevice(HWND hwnd, const RenderSettings& settings);
 
 private:
 

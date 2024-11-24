@@ -1,7 +1,8 @@
-#include <WinApp.h>
-#include <Windows.h>
+#include <common/WinApp.h>
 
-LRESULT CALLBACK WinAPP::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept
+#include <string>
+
+LRESULT WinAPP::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept
 {
     //if()
     //else
@@ -14,35 +15,44 @@ bool WinAPP::CreateAppWindow(const RenderSettings& settings)
 {
     HINSTANCE hInst = ::GetModuleHandle(nullptr);
 
-    WNDCLASS wc;
+    std::wstring  wname = L"D3DWndClassName";
+    WNDCLASSEXW wc;
+    wc.cbSize = sizeof(wc);
 	wc.style         = CS_HREDRAW | CS_VREDRAW;
 	wc.lpfnWndProc   = WndProc; 
 	wc.cbClsExtra    = 0;
-	wc.cbWndExtra    = 0;
+	wc.cbWndExtra    = sizeof(this);
 	wc.hInstance     = hInst;
-	wc.hIcon         = LoadIcon(0, IDI_APPLICATION);
+	wc.hIcon         = nullptr;
 	wc.hCursor       = LoadCursor(0, IDC_ARROW);
-	wc.hbrBackground = (HBRUSH)GetStockObject(NULL_BRUSH);
+	wc.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
 	wc.lpszMenuName  = 0;
-	wc.lpszClassName = L"D3DWndClassName";
+	wc.lpszClassName = wname.c_str();
 
-	if( !RegisterClass(&wc) )
+	if( !::RegisterClassExW(&wc) )
 	{
-		MessageBox(0, L"RegisterClass Failed.", 0, 0);
+		::MessageBoxW(0, L"RegisterClass Failed.", 0, 0);
 		return false;
 	}
 
-	// Compute window rectangle dimensions based on requested client area dimensions.
-	RECT R = { 0, 0, settings.width, settings.height };
-    AdjustWindowRect(&R, WS_OVERLAPPEDWINDOW, false);
-	int width  = R.right - R.left;
-	int height = R.bottom - R.top;
+    if (settings.full_screen)
+    {
+        win_style_ = WS_POPUP;
+    }
+    else
+    {
+        win_style_ = WS_OVERLAPPEDWINDOW;
+    }
 
-	hwnd_ = CreateWindowW(L"D3DWndClassName", mMainWndCaption.c_str(), 
-		WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, width, height, 0, 0, mhAppInst, 0); 
+	// Compute window rectangle dimensions based on requested client area dimensions.
+	RECT rc = { 0, 0, static_cast<LONG>(settings.width * dpi_scale_ + 0.5f), static_cast<LONG>(settings.height * dpi_scale_ + 0.5f) };
+	::AdjustWindowRect(&rc, win_style_, false);
+
+	hwnd_ = ::CreateWindowW(wname.c_str(), wname.c_str(),  win_style_, settings.left, settings.top,
+		rc.right - rc.left, rc.bottom - rc.top, nullptr, nullptr, hInst, nullptr);
 	if( !hwnd_ )
 	{
-		MessageBox(0, L"CreateWindow Failed.", 0, 0);
+		::MessageBoxW(0, L"CreateWindow Failed.", 0, 0);
 		return false;
 	}
 

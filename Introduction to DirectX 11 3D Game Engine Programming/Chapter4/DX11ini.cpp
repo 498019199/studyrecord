@@ -1,7 +1,9 @@
 #include <d3d11.h>
+#include <common/WinApp.h>
 
 int main() {
-    ID3D11Device* device;
-    // 初始化 DirectX 11 设备等操作
+    WinAPP app;
+    RenderSettings settings{false, 0, 0, 1920, 1080};
+    app.CreateAppWindow(settings);
     return 0;
 }
