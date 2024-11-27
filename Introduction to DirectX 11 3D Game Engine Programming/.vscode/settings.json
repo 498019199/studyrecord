@@ -4,6 +4,9 @@
         "xstring": "cpp",
         "xiosbase": "cpp",
         "string": "cpp",
-        "sstream": "cpp"
+        "sstream": "cpp",
+        "vector": "cpp",
+        "map": "cpp",
+        "xtr1common": "cpp"
     }
 }

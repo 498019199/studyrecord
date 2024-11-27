@@ -1,7 +1,13 @@
 #include <common/D3D11RenderDevice.h>
 
+D3D11RenderDevice::D3D11RenderDevice()
+{
+    
+}
 
-D3D11RenderDevice::D3D11RenderDevice(HWND hwnd, const RenderSettings& settings)
+D3D11RenderDevice::~D3D11RenderDevice() noexcept = default;
+
+bool D3D11RenderDevice::CreateRenderWindow(HWND hwnd, const RenderSettings& settings)
 {
     // Create the device and device context.
     D3D_DRIVER_TYPE dev_type = D3D_DRIVER_TYPE::D3D_DRIVER_TYPE_UNKNOWN;
@@ -25,13 +31,13 @@ D3D11RenderDevice::D3D11RenderDevice(HWND hwnd, const RenderSettings& settings)
 	if( FAILED(hr) )
 	{
 		::MessageBoxW(0, L"D3D11CreateDevice Failed.", 0, 0);
-		return ;
+		return false;
 	}
 
 	if( featureLevel != D3D_FEATURE_LEVEL_11_0 )
 	{
 		::MessageBoxW(0, L"Direct3D Feature Level 11 unsupported.", 0, 0);
-		return ;
+		return false;
 	}
 
 	// Check 4X MSAA quality support for our back buffer format.
@@ -87,4 +93,5 @@ D3D11RenderDevice::D3D11RenderDevice(HWND hwnd, const RenderSettings& settings)
 	// just call the OnResize method here to avoid code duplication.
 	
 	//OnResize();
+	return true;
 }

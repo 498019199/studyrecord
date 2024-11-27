@@ -1,5 +1,5 @@
 #include <common/WinApp.h>
-
+#include <common/D3D11RenderDevice.h>
 #include <string>
 
 LRESULT WinAPP::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept
@@ -61,6 +61,19 @@ bool WinAPP::CreateAppWindow(const RenderSettings& settings)
 
 	return true;
 }
+
+bool WinAPP::InitDevice(HWND hwnd, const RenderSettings& settings)
+{
+    device_ = new D3D11RenderDevice;
+	if(device_)
+	{
+		device_->CreateRenderWindow(hwnd, settings);
+		return true;    
+	}
+    
+	return false;
+}
+
 
 int WinAPP::Run()
 {

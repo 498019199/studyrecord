@@ -5,7 +5,10 @@
 class D3D11RenderDevice
 {
 public:
-    D3D11RenderDevice(HWND hwnd, const RenderSettings& settings);
+    D3D11RenderDevice();
+    ~D3D11RenderDevice();
+    
+    bool CreateRenderWindow(HWND hwnd, const RenderSettings& settings);
 
 private:
 
@@ -20,3 +23,4 @@ private:
     
     D3D11_VIEWPORT screen_viewport_;
 };
+
