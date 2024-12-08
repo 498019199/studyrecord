@@ -21,6 +21,26 @@
 #include <fstream>
 #include <vector>
 
+struct RenderSettings
+{
+    bool    full_screen = false;
+    int		left = 0;
+	int		top = 0;
+
+    int		width;
+    int		height;
+
+    uint32_t sample_count = 1;
+	uint32_t sample_quality = 0;
+};
+
+#ifdef _DEBUG
+	#define COMMON_ASSERT(val) assert(val)
+#else
+	#define COMMON_ASSERT(val) 
+#endif//_DEBUG
+
+
 
 //---------------------------------------------------------------------------------------
 // Simple d3d error checker for book demos.

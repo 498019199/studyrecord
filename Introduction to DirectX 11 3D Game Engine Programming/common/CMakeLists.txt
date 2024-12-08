@@ -7,5 +7,3 @@ set(SRC_LIST
     ${PROJECT_SOURCE_DIR}/common/src/Timer.cpp
     ${PROJECT_SOURCE_DIR}/common/src/WinApp.cpp)
 add_library(common STATIC ${SRC_LIST})
-
-add_subdirectory(test)

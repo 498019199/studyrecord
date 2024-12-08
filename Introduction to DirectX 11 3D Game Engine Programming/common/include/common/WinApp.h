@@ -1,26 +1,17 @@
 #pragma once
-
+#include <common/macro.h>
 #include <Windows.h>
 #include <cstdint>
-
-struct RenderSettings
-{
-    bool    full_screen = false;
-    int		left = 0;
-	int		top = 0;
-
-    int		width;
-    int		height;
-
-    uint32_t sample_count = 1;
-	uint32_t sample_quality = 0;
-};
-
+class Timer;
 class D3D11RenderDevice;
+struct RenderSettings;
 
 class WinAPP
 {
 public:
+    WinAPP();
+    ~WinAPP();
+    
     bool CreateAppWindow(const RenderSettings& settings);
     bool InitDevice(HWND hwnd, const RenderSettings& settings);
     
@@ -31,11 +22,17 @@ private:
     static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept;
     
 private:
+    uint32_t	left_;
+    uint32_t	top_;
+    uint32_t	width_;
+    uint32_t	height_;
     HWND hwnd_;
     uint32_t win_style_;
     float dpi_scale_ = 1.f;
 
     D3D11RenderDevice *device_;
+    Timer* timer_;
 };
+
 
 

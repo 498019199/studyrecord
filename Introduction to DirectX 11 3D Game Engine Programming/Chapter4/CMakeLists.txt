@@ -1,8 +1,9 @@
 include_directories( 
     ${PROJECT_SOURCE_DIR}/common/include
+    ${PROJECT_SOURCE_DIR}/math/include
     ${PROJECT_SOURCE_DIR}/3rd/dxsdk/dxsdk/Include)
     
-add_executable(Chapter4 DX11ini.cpp)
+add_executable(Chapter4 DX11_win_ini.cpp)
 
 target_link_libraries(Chapter4 PRIVATE 
     ${LIB_DIR_PATH}/common.lib
