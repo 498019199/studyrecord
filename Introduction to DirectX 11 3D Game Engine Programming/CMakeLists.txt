@@ -11,6 +11,7 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     # windows debug or release
     if(NOT CMAKE_BUILD_TYPE OR CMAKE_BUILD_TYPE STREQUAL "Debug")
         set(LIB_DIR_PATH ${LIBRARY_OUTPUT_PATH}/Debug)
+        set(3RD_DEBUG_POSTFIX "d" CACHE STRING "")
     elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
         set(LIB_DIR_PATH ${LIBRARY_OUTPUT_PATH}/Release)
     endif()

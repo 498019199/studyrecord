@@ -78,3 +78,5 @@ std::string CombineFileLine(std::string_view file, uint32_t line);
 //---------------------------------------------------------------------------------------
 
 #define SafeDelete(x) { delete x; x = 0; }
+
+#define GET_FUNCTION(mod, func_type, func_name) reinterpret_cast<func_type>(GetProcAddress(static_cast<HMODULE>(mod), func_name));

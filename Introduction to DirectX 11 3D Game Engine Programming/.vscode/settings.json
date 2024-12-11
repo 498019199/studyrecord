@@ -10,6 +10,7 @@
         "xtr1common": "cpp",
         "type_traits": "cpp",
         "xutility": "cpp",
-        "utility": "cpp"
+        "utility": "cpp",
+        "d3d11renderenginecpp": "cpp"
     }
 }

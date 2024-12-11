@@ -3,7 +3,7 @@
 #include <Windows.h>
 #include <cstdint>
 class Timer;
-class D3D11RenderDevice;
+class D3D11RenderEngine;
 struct RenderSettings;
 
 class WinAPP
@@ -30,7 +30,7 @@ private:
     uint32_t win_style_;
     float dpi_scale_ = 1.f;
 
-    D3D11RenderDevice *device_;
+    D3D11RenderEngine *device_;
     Timer* timer_;
 };
 

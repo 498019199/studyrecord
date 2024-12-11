@@ -1,5 +1,5 @@
 #include <common/WinApp.h>
-#include <common/D3D11RenderDevice.h>
+#include <common/D3D11RenderEngine.h>
 #include <common/Timer.h>
 
 #include <string>
@@ -93,7 +93,7 @@ bool WinAPP::CreateAppWindow(const RenderSettings& settings)
 
 bool WinAPP::InitDevice(HWND hwnd, const RenderSettings& settings)
 {
-    device_ = new D3D11RenderDevice(hwnd, settings);
+    device_ = new D3D11RenderEngine(hwnd, settings);
 	if(device_)
 	{
 		return true;    

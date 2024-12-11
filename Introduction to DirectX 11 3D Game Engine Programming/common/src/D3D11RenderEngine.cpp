@@ -1,6 +1,6 @@
-#include <common/D3D11RenderDevice.h>
+#include <common/D3D11RenderEngine.h>
 
-D3D11RenderDevice::D3D11RenderDevice(HWND hwnd, const RenderSettings& settings)
+D3D11RenderEngine::D3D11RenderEngine(HWND hwnd, const RenderSettings& settings)
 {
     // Create the device and device context.
     D3D_DRIVER_TYPE dev_type = D3D_DRIVER_TYPE::D3D_DRIVER_TYPE_UNKNOWN;
@@ -89,6 +89,6 @@ D3D11RenderDevice::D3D11RenderDevice(HWND hwnd, const RenderSettings& settings)
 	return ;
 }
 
-D3D11RenderDevice::~D3D11RenderDevice() noexcept = default;
+D3D11RenderEngine::~D3D11RenderEngine() noexcept = default;
 
 
