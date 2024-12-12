@@ -9,3 +9,7 @@
 ---
 解决方案：
 **dx11用书中的方法链接**, 下载官方库，重新连接，没有报错。
+
+xnamath.h(2716,52): warning C4838: 从“unsigned int”转换到“INT”需要收缩转换
+warning C4005: “DXGI_ERROR_REMOTE_CLIENT_DISCONNECTED”: DXGI_ERROR_NOT_CURRENTLY_AVAILABLE 宏重定义 
+winerror.h  dxgitype.h

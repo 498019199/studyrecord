@@ -85,10 +85,86 @@ D3D11RenderEngine::D3D11RenderEngine(HWND hwnd, const RenderSettings& settings)
 	// also need to be executed every time the window is resized.  So
 	// just call the OnResize method here to avoid code duplication.
 	
-	//OnResize();
+	weight_ = settings.width;
+    height_ = settings.height;
+    sample_count_ = settings.sample_count;
+    sample_quality_ = settings.sample_quality;
+	OnResize();
 	return ;
 }
 
-D3D11RenderEngine::~D3D11RenderEngine() noexcept = default;
+D3D11RenderEngine::~D3D11RenderEngine()
+{
+	ReleaseCOM(render_target_view_);
+	ReleaseCOM(depth_stencil_view_);
+	ReleaseCOM(swap_chain_);
+	ReleaseCOM(depth_stencil_buff_);
 
+	if( d3d_imm_ctx_ )
+		d3d_imm_ctx_->ClearState();
 
+	ReleaseCOM(d3d_imm_ctx_);
+	ReleaseCOM(d3d_device_);
+}
+
+void D3D11RenderEngine::OnResize()
+{
+	assert(d3d_imm_ctx_);
+	assert(d3d_device_);
+	assert(swap_chain_);
+
+	// Release the old views, as they hold references to the buffers we
+	// will be destroying.  Also release the old depth/stencil buffer.
+	ReleaseCOM(render_target_view_);
+	ReleaseCOM(depth_stencil_view_);
+	ReleaseCOM(depth_stencil_buff_);
+
+	// Resize the swap chain and recreate the render target view.
+	HR(swap_chain_->ResizeBuffers(1, weight_, height_, DXGI_FORMAT_R8G8B8A8_UNORM, 0));
+	ID3D11Texture2D* backBuffer;
+	HR(swap_chain_->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&backBuffer)));
+	HR(d3d_device_->CreateRenderTargetView(backBuffer, 0, &render_target_view_));
+	ReleaseCOM(backBuffer);
+
+	// Create the depth/stencil buffer and view.
+	D3D11_TEXTURE2D_DESC depthStencilDesc;
+	depthStencilDesc.Width     = weight_;
+	depthStencilDesc.Height    = height_;
+	depthStencilDesc.MipLevels = 1;
+	depthStencilDesc.ArraySize = 1;
+	depthStencilDesc.Format    = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	// Use 4X MSAA? --must match swap chain MSAA values.
+	depthStencilDesc.SampleDesc.Count   = sample_count_;
+	depthStencilDesc.SampleDesc.Quality = sample_quality_;
+
+	depthStencilDesc.Usage          = D3D11_USAGE_DEFAULT;
+	depthStencilDesc.BindFlags      = D3D11_BIND_DEPTH_STENCIL;
+	depthStencilDesc.CPUAccessFlags = 0; 
+	depthStencilDesc.MiscFlags      = 0;
+
+	HR(d3d_device_->CreateTexture2D(&depthStencilDesc, 0, &depth_stencil_buff_));
+	HR(d3d_device_->CreateDepthStencilView(depth_stencil_buff_, 0, &depth_stencil_view_));
+
+	// Bind the render target view and depth/stencil view to the pipeline.
+	d3d_imm_ctx_->OMSetRenderTargets(1, &render_target_view_, depth_stencil_view_);
+
+	// Set the viewport transform.
+	screen_viewport_.TopLeftX = 0;
+	screen_viewport_.TopLeftY = 0;
+	screen_viewport_.Width    = static_cast<float>(weight_);
+	screen_viewport_.Height   = static_cast<float>(height_);
+	screen_viewport_.MinDepth = 0.0f;
+	screen_viewport_.MaxDepth = 1.0f;
+	d3d_imm_ctx_->RSSetViewports(1, &screen_viewport_);
+}
+
+void D3D11RenderEngine::OnRender()
+{
+	assert(d3d_imm_ctx_);
+	assert(swap_chain_);
+
+	d3d_imm_ctx_->ClearRenderTargetView(render_target_view_, reinterpret_cast<const float*>(&Colors::Blue));
+	d3d_imm_ctx_->ClearDepthStencilView(depth_stencil_view_, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.0f, 0);
+
+	HR(swap_chain_->Present(0, 0));
+}

@@ -124,7 +124,7 @@ int WinAPP::Run()
 			{
 				//CalculateFrameStats();
 				//UpdateScene(mTimer.DeltaTime());	
-				//DrawScene();
+				device_->OnRender();
 			}
 			//else
 			{

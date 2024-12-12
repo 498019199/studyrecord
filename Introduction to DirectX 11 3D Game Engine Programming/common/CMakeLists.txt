@@ -1,5 +1,6 @@
-include_directories(${PROJECT_SOURCE_DIR}/math/include)
-include_directories(${PROJECT_SOURCE_DIR}/common/include)
+include_directories(${PROJECT_SOURCE_DIR}/math/include
+                    ${PROJECT_SOURCE_DIR}/common/include
+                    ${PROJECT_SOURCE_DIR}/3rd/dxsdk/dxsdk/Include)
 
 set(SRC_LIST
     ${PROJECT_SOURCE_DIR}/common/src/D3D11Util.cpp

@@ -1,5 +1,6 @@
-#include <common/D3D11Util.h>
 #include <common/WinApp.h>
+#include <common/D3D11Util.h>
+
 #include <common/macro.h>
 #include <math/math.h>
 

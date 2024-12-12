@@ -7,10 +7,11 @@
 #endif
 
 
-#include <d3d11_4.h>
-#include <dxgi1_6.h>
+#include <d3dx11.h>
 //#include <xnamath.h>
+#include <xnamath.h>
 //#include <dxerr.h>
+
 #include <cassert>
 #include <ctime>
 #include <algorithm>
@@ -53,13 +54,13 @@ std::string CombineFileLine(std::string_view file, uint32_t line);
 	#ifndef HR
 	#define HR(x)                                              \
 	{                                                          \
+		HRESULT hr = (x);                                      \
 		if ((hr) < 0)                                          \
 		{                                                      \
 			TMSG(CombineFileLine(__FILE__, __LINE__)); \
 		}                                                      \
 	}
 	#endif
-
 #else
 	#ifndef HR
 	#define HR(x) (x)
@@ -80,3 +81,25 @@ std::string CombineFileLine(std::string_view file, uint32_t line);
 #define SafeDelete(x) { delete x; x = 0; }
 
 #define GET_FUNCTION(mod, func_type, func_name) reinterpret_cast<func_type>(GetProcAddress(static_cast<HMODULE>(mod), func_name));
+
+// #define XMGLOBALCONST extern CONST __declspec(selectany)
+//   1. extern so there is only one copy of the variable, and not a separate
+//      private copy in each .obj.
+//   2. __declspec(selectany) so that the compiler does not complain about
+//      multiple definitions in a .cpp file (it can pick anyone and discard 
+//      the rest because they are constant--all the same).
+
+namespace Colors
+{
+	XMGLOBALCONST XMVECTORF32 White     = {1.0f, 1.0f, 1.0f, 1.0f};
+	XMGLOBALCONST XMVECTORF32 Black     = {0.0f, 0.0f, 0.0f, 1.0f};
+	XMGLOBALCONST XMVECTORF32 Red       = {1.0f, 0.0f, 0.0f, 1.0f};
+	XMGLOBALCONST XMVECTORF32 Green     = {0.0f, 1.0f, 0.0f, 1.0f};
+	XMGLOBALCONST XMVECTORF32 Blue      = {0.0f, 0.0f, 1.0f, 1.0f};
+	XMGLOBALCONST XMVECTORF32 Yellow    = {1.0f, 1.0f, 0.0f, 1.0f};
+	XMGLOBALCONST XMVECTORF32 Cyan      = {0.0f, 1.0f, 1.0f, 1.0f};
+	XMGLOBALCONST XMVECTORF32 Magenta   = {1.0f, 0.0f, 1.0f, 1.0f};
+
+	XMGLOBALCONST XMVECTORF32 Silver    = {0.75f, 0.75f, 0.75f, 1.0f};
+	XMGLOBALCONST XMVECTORF32 LightSteelBlue = {0.69f, 0.77f, 0.87f, 1.0f};
+}
