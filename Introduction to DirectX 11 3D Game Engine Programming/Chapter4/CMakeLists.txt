@@ -15,5 +15,3 @@ target_link_libraries(Chapter4 PRIVATE
     ${PROJECT_SOURCE_DIR}/3rd/dxsdk/Lib/x64/dxerr.lib
     ${PROJECT_SOURCE_DIR}/3rd/dxsdk/Lib/x64/dxgi.lib
     ${PROJECT_SOURCE_DIR}/3rd/dxsdk/Lib/x64/dxguid.lib) 
-
-#    D:\Project\498019199\studyrecord\Introduction to DirectX 11 3D Game Engine Programming\3rd\dxsdk\lib\x64\d3dcompiler.lib
