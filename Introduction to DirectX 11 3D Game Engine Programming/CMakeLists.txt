@@ -20,4 +20,6 @@ add_subdirectory(math)
 file(COPY ${PROJECT_SOURCE_DIR}/math/include DESTINATION "${LIBRARY_OUTPUT_PATH}")
 add_subdirectory(common)
 file(COPY ${PROJECT_SOURCE_DIR}/common/include DESTINATION "${LIBRARY_OUTPUT_PATH}")
-add_subdirectory(Chapter4)
+
+#add_subdirectory(Chapter4)
+add_subdirectory(Chapter6)
