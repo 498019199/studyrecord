@@ -13,3 +13,17 @@
 xnamath.h(2716,52): warning C4838: 从“unsigned int”转换到“INT”需要收缩转换
 warning C4005: “DXGI_ERROR_REMOTE_CLIENT_DISCONNECTED”: DXGI_ERROR_NOT_CURRENTLY_AVAILABLE 宏重定义 
 winerror.h  dxgitype.h
+临时用屏蔽警告
+```
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4061")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4005")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4820")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd5246")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4838")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4668")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4365")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd5219")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd5029")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd5267")
+```
+

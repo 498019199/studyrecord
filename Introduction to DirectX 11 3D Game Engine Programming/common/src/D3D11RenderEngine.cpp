@@ -168,3 +168,8 @@ void D3D11RenderEngine::OnRender()
 
 	HR(swap_chain_->Present(0, 0));
 }
+
+ID3D11Device* D3D11RenderEngine::D3DDevice() const
+{
+	return d3d_device_;
+}

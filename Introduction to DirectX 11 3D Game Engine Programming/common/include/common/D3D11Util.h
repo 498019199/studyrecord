@@ -54,8 +54,8 @@ std::string CombineFileLine(std::string_view file, uint32_t line);
 	#ifndef HR
 	#define HR(x)                                              \
 	{                                                          \
-		HRESULT hr = (x);                                      \
-		if ((hr) < 0)                                          \
+		HRESULT hr_debug = (x);                                      \
+		if ((hr_debug) < 0)                                          \
 		{                                                      \
 			TMSG(CombineFileLine(__FILE__, __LINE__)); \
 		}                                                      \

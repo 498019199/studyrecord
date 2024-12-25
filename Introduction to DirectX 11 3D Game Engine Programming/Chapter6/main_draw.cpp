@@ -1,9 +1,11 @@
 #include <common/WinApp.h>
 #include <common/D3D11Util.h>
+#include <common/D3D11RenderMesh.h>
 
 #include <common/macro.h>
 #include <math/math.h>
 
+#include <filesystem>
 struct Vertex
 {
 	XMFLOAT3 Pos;
@@ -52,10 +54,15 @@ void Box()
 		4, 0, 3, 
 		4, 3, 7
 	};
-    D3D11RenderMesh Mesh;
-    Mesh.CreateVertexBuffer(D3D11_BIND_VERTEX_BUFFER, &vertices, sizeof(Vertex) * 8);
-    Mesh.CreateIndecxBuffer(D3D11_BIND_INDEX_BUFFER, &indices, sizeof(UINT) * 36);
-    Mesh.LoadShaderFile("");
+    
+	D3D11RenderMesh Mesh;
+    Mesh.CreateVertexBuffer(&vertices, sizeof(Vertex) * 8);
+    Mesh.CreateIndecxBuffer(&indices, sizeof(UINT) * 36);
+
+	std::filesystem::path currentPath = std::filesystem::current_path();
+	std::string filename = "example.txt";
+	std::filesystem::path filePath = currentPath / filename;
+    Mesh.LoadShaderFile(filePath.string().c_str());
 }
 
 void Hills()

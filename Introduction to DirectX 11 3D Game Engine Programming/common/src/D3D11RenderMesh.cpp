@@ -1,5 +1,15 @@
 #include <common/D3D11RenderMesh.h>
+#include <common/Context.h>
 
+D3D11RenderMesh::D3D11RenderMesh()
+{
+    
+}
+
+D3D11RenderMesh::~D3D11RenderMesh()
+{
+    
+}
 
 void D3D11RenderMesh::CreateVertexBuffer(void const * init_data, int size_in_byte)
 {
@@ -13,7 +23,8 @@ void D3D11RenderMesh::CreateVertexBuffer(void const * init_data, int size_in_byt
 
     D3D11_SUBRESOURCE_DATA vinitData;
     vinitData.pSysMem = init_data;
-    HR(md3dDevice->CreateBuffer(&vbd, &vinitData, &vbs_));
+    auto const& re = Context::Instance().RenderEngineInstance();
+    HR(re.D3DDevice()->CreateBuffer(&vbd, &vinitData, &vbs_));
 }
 
 void D3D11RenderMesh::CreateIndecxBuffer(void const * init_data, int size_in_byte)
@@ -28,10 +39,11 @@ void D3D11RenderMesh::CreateIndecxBuffer(void const * init_data, int size_in_byt
 
     D3D11_SUBRESOURCE_DATA vinitData;
     vinitData.pSysMem = init_data;
-    HR(md3dDevice->CreateBuffer(&vbd, &vinitData, &vbs_));
+    auto const& re = Context::Instance().RenderEngineInstance();
+    HR(re.D3DDevice()->CreateBuffer(&vbd, &vinitData, &vbs_));
 }
 
-void D3D11RenderMesh::LoadShaderFile(const wchar_t* filename)
+void D3D11RenderMesh::LoadShaderFile(const char* filename)
 {
 	DWORD shaderFlags = 0;
 #if defined( DEBUG ) || defined( _DEBUG )
@@ -55,8 +67,9 @@ void D3D11RenderMesh::LoadShaderFile(const wchar_t* filename)
 		//DXTrace(__FILE__, (DWORD)__LINE__, hr, L"D3DX11CompileFromFile", true);
 	}
 
+    auto const& re = Context::Instance().RenderEngineInstance();
     HR(D3DX11CreateEffectFromMemory(compiledShader->GetBufferPointer(), compiledShader->GetBufferSize(), 
-		0, md3dDevice, &fx_));
+		0, re.D3DDevice(), &fx_));
     	// 编译完成释放资源
 	ReleaseCOM(compiledShader);
 

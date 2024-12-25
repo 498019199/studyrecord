@@ -10,6 +10,8 @@ public:
 
     void OnResize();
     void OnRender();
+
+    ID3D11Device* D3DDevice() const;
 private:
     int weight_ = 0;
     int height_ = 0;
@@ -27,4 +29,5 @@ private:
     
     D3D11_VIEWPORT screen_viewport_;
 };
+
 

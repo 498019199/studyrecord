@@ -1,6 +1,6 @@
 #pragma once
 #include <common/D3D11RenderEngine.h>
-
+#include <d3dx11Effect.h>
 class D3D11RenderMesh
 {
 public:
@@ -10,7 +10,7 @@ public:
     void CreateVertexBuffer(void const * init_data, int size_in_byte);
     void CreateIndecxBuffer(void const * init_data, int size_in_byte);
 
-    void LoadShaderFile(const wchar_t* filename);
+    void LoadShaderFile(const char* filename);
 private:
     ID3D11Buffer* vbs_;
 	ID3D11Buffer* ibs_;
