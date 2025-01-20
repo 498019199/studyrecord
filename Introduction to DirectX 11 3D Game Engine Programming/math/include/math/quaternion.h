@@ -27,7 +27,7 @@ public:
 	Quaternion_T(Quaternion_T&& rhs) noexcept;
 	constexpr Quaternion_T(T x, T y, T z, T w) noexcept;
 
-	// å–å‘é‡
+	// È¡ÏòÁ¿
 	iterator begin() noexcept
 	{
 		return quat_.begin();
@@ -86,7 +86,7 @@ public:
 		return quat_[3];
 	}
 
-	// èµ‹å€¼æ“ä½œç¬¦
+	// ¸³Öµ²Ù×÷·û
 	const Quaternion_T& operator+=(const Quaternion_T & rhs) noexcept;
 	const Quaternion_T& operator-=(const Quaternion_T & rhs) noexcept;
 	const Quaternion_T& operator*=(const Quaternion_T & rhs) noexcept;
@@ -101,11 +101,11 @@ public:
 	Quaternion_T operator*(T rhs) const noexcept;
 	Quaternion_T operator/(T rhs) const noexcept;
 
-	// ä¸€å…ƒæ“ä½œç¬¦
+	// Ò»Ôª²Ù×÷·û
 	Quaternion_T const operator+() const noexcept;
 	Quaternion_T const operator-() const noexcept;
 
-	// å–æ–¹å‘å‘é‡
+	// È¡·½ÏòÏòÁ¿
 	const Vector_T<T, 3> GetV() const noexcept;
 	void SetV(Vector_T<T, 3> const & rhs) noexcept;
 

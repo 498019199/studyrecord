@@ -10,8 +10,9 @@ public:
     void CreateVertexBuffer(void const * init_data, int size_in_byte);
     void CreateIndecxBuffer(void const * init_data, int size_in_byte);
 
-    void LoadShaderFile(const char* filename);
+    void LoadShaderFile(const std::string& filename);
 private:
+    std::wstring filename_;
     ID3D11Buffer* vbs_;
 	ID3D11Buffer* ibs_;
 

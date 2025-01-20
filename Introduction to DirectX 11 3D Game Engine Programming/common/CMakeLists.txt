@@ -11,3 +11,13 @@ set(SRC_LIST
     ${PROJECT_SOURCE_DIR}/common/src/WinApp.cpp)
 
 add_library(common STATIC ${SRC_LIST})
+
+target_link_libraries(common PRIVATE 
+    ${LIB_DIR_PATH}/math.lib
+    ${PROJECT_SOURCE_DIR}/3rd/dxsdk/Lib/x64/d3dx11d.lib
+    ${PROJECT_SOURCE_DIR}/3rd/dxsdk/Lib/x64/d3d11.lib
+    ${PROJECT_SOURCE_DIR}/3rd/dxsdk/Lib/x64/d3dcompiler.lib
+    ${LIB_DIR_PATH}/Effects11d.lib
+    ${PROJECT_SOURCE_DIR}/3rd/dxsdk/Lib/x64/dxerr.lib
+    ${PROJECT_SOURCE_DIR}/3rd/dxsdk/Lib/x64/dxgi.lib
+    ${PROJECT_SOURCE_DIR}/3rd/dxsdk/Lib/x64/dxguid.lib) 

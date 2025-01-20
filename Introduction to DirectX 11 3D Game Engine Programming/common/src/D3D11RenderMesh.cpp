@@ -43,7 +43,7 @@ void D3D11RenderMesh::CreateIndecxBuffer(void const * init_data, int size_in_byt
     HR(re.D3DDevice()->CreateBuffer(&vbd, &vinitData, &vbs_));
 }
 
-void D3D11RenderMesh::LoadShaderFile(const char* filename)
+void D3D11RenderMesh::LoadShaderFile(const std::string& filename)
 {
 	DWORD shaderFlags = 0;
 #if defined( DEBUG ) || defined( _DEBUG )
@@ -53,7 +53,8 @@ void D3D11RenderMesh::LoadShaderFile(const char* filename)
 
 	ID3D10Blob* compiledShader = 0;
 	ID3D10Blob* compilationMsgs = 0;
-	HRESULT hr = D3DX11CompileFromFile(filename, 0, 0, 0, "fx_5_0", shaderFlags, 
+    Convert(filename_, filename);
+	HRESULT hr = D3DX11CompileFromFileW(filename_.c_str(), 0, 0, 0, "fx_5_0", shaderFlags, 
 		0, 0, &compiledShader, &compilationMsgs, 0);
     // compilationMsgs中包含错误或警告信息
 	if( compilationMsgs != 0 )

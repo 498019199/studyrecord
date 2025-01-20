@@ -27,3 +27,12 @@ winerror.h  dxgitype.h
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd5267")
 ```
 
+## 2.怎么连接 Effects11d
+- 1.从官方书里库是用vs 2010 编译的，我现在用的vs 2022....。
+
+放弃自己编译一个新的 Effects11d库
+
+- 2.从官方git 重新编译，连接时候缺d3dcompiler_47.lib。这个在那啊。。。。
+
+可以按照win8 SDK，找找看看有没有对应的库，[win8 SDK](https://developer.microsoft.com/zh-cn/windows/downloads/sdk-archive/)
+自己从git下来了的没有问题，差dll库，[D3DX11d_43.dll](https://www.dllme.com/dll/files/d3dx11d_43/688b1c137f53d1c0b88fdda2942402ed/download) 

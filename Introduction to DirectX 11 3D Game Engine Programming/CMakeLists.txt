@@ -31,6 +31,12 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd5029")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd5267")
 endif()
+
+# 3rd effects
+#add_subdirectory(${PROJECT_3RD_DIR}/d3dcompiler)
+include(${PROJECT_3RD_DIR}/FX11-main/build/CompilerAndLinker.cmake)
+add_subdirectory(${PROJECT_3RD_DIR}/FX11-main)
+
 add_subdirectory(math)
 file(COPY ${PROJECT_SOURCE_DIR}/math/include DESTINATION "${LIBRARY_OUTPUT_PATH}")
 add_subdirectory(common)

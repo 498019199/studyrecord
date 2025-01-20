@@ -10,7 +10,6 @@ public:
 
     void OnResize();
     void OnRender();
-
     ID3D11Device* D3DDevice() const;
 private:
     int weight_ = 0;

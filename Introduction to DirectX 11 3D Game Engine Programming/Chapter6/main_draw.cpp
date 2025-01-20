@@ -92,6 +92,9 @@ int main() {
     settings.height = 1080;
     app.CreateAppWindow(settings);
     app.InitDevice(app.GetHWND(), settings);
+
+	Box();
+	
     app.Run();
     return 0;
 }

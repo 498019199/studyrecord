@@ -1,6 +1,7 @@
 #include <common/WinApp.h>
 #include <common/D3D11RenderEngine.h>
 #include <common/Timer.h>
+#include <common/Context.h>
 
 #include <string>
 
@@ -96,9 +97,10 @@ bool WinAPP::InitDevice(HWND hwnd, const RenderSettings& settings)
     device_ = new D3D11RenderEngine(hwnd, settings);
 	if(device_)
 	{
+		Context::Instance().RenderEngineInstance(*device_);
 		return true;    
 	}
-    
+
 	return false;
 }
 

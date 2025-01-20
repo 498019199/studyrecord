@@ -109,7 +109,7 @@ public:
 		return elem_num;
 	}
 
-	// é›¶å‘é‡
+	// ÁãÏòÁ¿
 	static Vector_T const Zero() noexcept
 	{
 		static Vector_T<T, N> const zero(value_type(0));
@@ -217,19 +217,19 @@ public:
     	return *this;
 	}
 
-	// operator å‰ç§¯
+	// operator ²æ»ı
 	Vector_T operator^(const Vector_T& rhs) const noexcept
 	{
 		return Cross(*this, rhs);
 	}
 
-	// operator ç‚¹ç§¯
+	// operator µã»ı
 	T operator|(const Vector_T& rhs) const noexcept
 	{
 		return Dot(*this, rhs);
 	}
 
-	// operator * æ•°ä¹˜
+	// operator * Êı³Ë
 	template <typename U>
 	const Vector_T& operator*=(const U& rhs) noexcept
 	{
@@ -252,7 +252,7 @@ public:
     	return *this;
 	}
 
-	// å¤åˆ¶æ„é€ 
+	// ¸´ÖÆ¹¹Ôì
 	Vector_T& operator=(const Vector_T& rhs) noexcept
 	{
     	if (this != &rhs)
@@ -275,13 +275,13 @@ public:
 		return *this;
 	}
 
-	// æ­£
+	// Õı
 	const Vector_T operator+() const  noexcept
 	{
     	return *this;
 	}
 
-	// è´Ÿ
+	// ¸º
 	const Vector_T operator-() const noexcept
 	{
 		Vector_T tmp(*this);
