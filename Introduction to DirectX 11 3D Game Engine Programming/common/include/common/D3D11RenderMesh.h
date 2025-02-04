@@ -11,8 +11,8 @@ public:
     void CreateVertexBuffer(void const * init_data, int size_in_byte);
     void CreateIndecxBuffer(void const * init_data, int size_in_byte);
 
-    void CreateVertexShader(const std::wstring& filename);
-    void CreatePixelShader(const std::wstring& filename);
+    void CreateVertexShader(const std::string& filename);
+    void CreatePixelShader(const std::string& filename);
 
     void BindShader();
 

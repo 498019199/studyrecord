@@ -2,14 +2,13 @@
 #include <common/D3D11Util.h>
 #include <common/D3D11RenderMesh.h>
 
-#include <common/macro.h>
 #include <math/math.h>
 
 #include <filesystem>
 struct Vertex
 {
-	XMFLOAT3 Pos;
-	XMFLOAT4 Color;
+	float3 pos;
+	Color color;
 };
 
 
@@ -18,14 +17,14 @@ void Box()
 	// 创建顶点缓冲
     Vertex vertices[] =
     {
-		{ XMFLOAT3(-1.0f, -1.0f, -1.0f), (const float*)&Colors::White   },
-		{ XMFLOAT3(-1.0f, +1.0f, -1.0f), (const float*)&Colors::Black   },
-		{ XMFLOAT3(+1.0f, +1.0f, -1.0f), (const float*)&Colors::Red     },
-		{ XMFLOAT3(+1.0f, -1.0f, -1.0f), (const float*)&Colors::Green   },
-		{ XMFLOAT3(-1.0f, -1.0f, +1.0f), (const float*)&Colors::Blue    },
-		{ XMFLOAT3(-1.0f, +1.0f, +1.0f), (const float*)&Colors::Yellow  },
-		{ XMFLOAT3(+1.0f, +1.0f, +1.0f), (const float*)&Colors::Cyan    },
-		{ XMFLOAT3(+1.0f, -1.0f, +1.0f), (const float*)&Colors::Magenta }
+		{ float3(-1.0f, -1.0f, -1.0f), Colors::White   },
+		{ float3(-1.0f, +1.0f, -1.0f), Colors::Black   },
+		{ float3(+1.0f, +1.0f, -1.0f), Colors::Red     },
+		{ float3(+1.0f, -1.0f, -1.0f), Colors::Green   },
+		{ float3(-1.0f, -1.0f, +1.0f), Colors::Blue    },
+		{ float3(-1.0f, +1.0f, +1.0f), Colors::Yellow  },
+		{ float3(+1.0f, +1.0f, +1.0f), Colors::Cyan    },
+		{ float3(+1.0f, -1.0f, +1.0f), Colors::Magenta }
     };
 
     // 创建索引缓冲

@@ -26,7 +26,7 @@ public:
 	constexpr Color_T(T r, T g, T b, T a) noexcept;
 	Color_T(uint32_t dw) noexcept;
 
-	// ȡ��ɫ
+	// 取颜色
 	constexpr iterator begin() noexcept
 	{
 		return col_.begin();

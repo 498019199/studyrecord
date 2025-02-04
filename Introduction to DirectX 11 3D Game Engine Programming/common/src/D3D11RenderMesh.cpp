@@ -62,7 +62,7 @@ void D3D11RenderMesh::CreateIndecxBuffer(void const * init_data, int size_in_byt
     re.D3DDeviceImmContext()->IASetIndexBuffer(vbs_.get(), DXGI_FORMAT_R32_UINT, 0);
 }
 
-void D3D11RenderMesh::CreateVertexShader(const std::wstring& filename)
+void D3D11RenderMesh::CreateVertexShader(const std::string& filename)
 {
     com_ptr<ID3DBlob> blob;
 
@@ -72,7 +72,7 @@ void D3D11RenderMesh::CreateVertexShader(const std::wstring& filename)
     HR(re.D3DDevice()->CreateVertexShader(blob->GetBufferPointer(), blob->GetBufferSize(), nullptr, vertex_shader_.put()));
 }
 
-void D3D11RenderMesh::CreatePixelShader(const std::wstring& filename)
+void D3D11RenderMesh::CreatePixelShader(const std::string& filename)
 {
     com_ptr<ID3DBlob> blob;
     auto const& re = Context::Instance().RenderEngineInstance();

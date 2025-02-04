@@ -7,9 +7,8 @@
 
 
 #include <d3dx11.h>
-//#include <xnamath.h>
-#include <xnamath.h>
-//#include <dxerr.h>
+#include <common/macro.h>
+#include <math/math.h>
 #include <d3dcompiler.h>
 #include <cassert>
 #include <ctime>
@@ -20,6 +19,7 @@
 #include <sstream>
 #include <fstream>
 #include <vector>
+using namespace MathWorker;
 
 struct RenderSettings
 {
@@ -90,17 +90,16 @@ std::string CombineFileLine(std::string_view file, uint32_t line);
 
 namespace Colors
 {
-	XMGLOBALCONST XMVECTORF32 White     = {1.0f, 1.0f, 1.0f, 1.0f};
-	XMGLOBALCONST XMVECTORF32 Black     = {0.0f, 0.0f, 0.0f, 1.0f};
-	XMGLOBALCONST XMVECTORF32 Red       = {1.0f, 0.0f, 0.0f, 1.0f};
-	XMGLOBALCONST XMVECTORF32 Green     = {0.0f, 1.0f, 0.0f, 1.0f};
-	XMGLOBALCONST XMVECTORF32 Blue      = {0.0f, 0.0f, 1.0f, 1.0f};
-	XMGLOBALCONST XMVECTORF32 Yellow    = {1.0f, 1.0f, 0.0f, 1.0f};
-	XMGLOBALCONST XMVECTORF32 Cyan      = {0.0f, 1.0f, 1.0f, 1.0f};
-	XMGLOBALCONST XMVECTORF32 Magenta   = {1.0f, 0.0f, 1.0f, 1.0f};
-
-	XMGLOBALCONST XMVECTORF32 Silver    = {0.75f, 0.75f, 0.75f, 1.0f};
-	XMGLOBALCONST XMVECTORF32 LightSteelBlue = {0.69f, 0.77f, 0.87f, 1.0f};
+	Color White     = Color(1.0f, 1.0f, 1.0f, 1.0f);
+	Color Black     = Color(0.0f, 0.0f, 0.0f, 1.0f);
+	Color Red       = Color(1.0f, 0.0f, 0.0f, 1.0f);
+	Color Green     = Color(0.0f, 1.0f, 0.0f, 1.0f);
+	Color Blue      = Color(0.0f, 0.0f, 1.0f, 1.0f);
+	Color Yellow    = Color(1.0f, 1.0f, 0.0f, 1.0f);
+	Color Cyan      = Color(0.0f, 1.0f, 1.0f, 1.0f);
+	Color Magenta   = Color(1.0f, 0.0f, 1.0f, 1.0f);
+	Color Silver    = Color(0.75f, 0.75f, 0.75f, 1.0f);
+	Color LightSteelBlue = Color(0.69f, 0.77f, 0.87f, 1.0f);
 }
 
 std::string& Convert(std::string& dest, std::wstring_view src);
@@ -128,3 +127,4 @@ HRESULT CreateShaderFromFile(
     LPCSTR entryPoint,
     LPCSTR shaderModel,
     ID3DBlob** ppBlobOut);
+

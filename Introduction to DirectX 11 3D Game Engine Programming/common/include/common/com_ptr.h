@@ -33,7 +33,7 @@
 
 #pragma once
 #include <utility>
-
+#include <common/common.h>
 
 
 	template <typename T>
@@ -160,7 +160,7 @@
 
 		T** put() noexcept
 		{
-			BOOST_ASSERT(ptr_ == nullptr);
+			COMMON_ASSERT(ptr_ == nullptr);
 			return &ptr_;
 		}
 

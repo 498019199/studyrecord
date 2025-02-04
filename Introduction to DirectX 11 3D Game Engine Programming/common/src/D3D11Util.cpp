@@ -27,13 +27,15 @@ std::wstring& Convert(std::wstring& dest, std::string_view src)
 	return dest;
 }
 
-HRESULT CreateShaderFromFile(const std::wstring& filename,
+HRESULT CreateShaderFromFile(const std::string& filename,
 	LPCSTR entryPoint,
 	LPCSTR shaderModel,
 	ID3DBlob** ppBlobOut)
 {
-	std::wstring strOutFile = filename + L".cso";
-    std::wstring InputFile = filename + L".hlsl";
+    std::wstring swcFileName;
+    Convert(swcFileName, filename);
+	std::wstring strOutFile = swcFileName + L".cso";
+    std::wstring InputFile = swcFileName + L".hlsl";
     return CreateShaderFromFile(strOutFile.c_str(), InputFile.c_str(), entryPoint, shaderModel, ppBlobOut);
 }
 

@@ -43,34 +43,34 @@ namespace MathWorker
 	const float PI2 = 6.283185f;
 	const float PIdiv2 = 1.570796f;
 
-	const float DEG90 = 1.570796f;			// 90 ¶È
-	const float DEG270 = -1.570796f;		// 270 ¶È
-	const float DEG45 = 0.7853981f;			// 45 ¶È
-	const float DEG5 = 0.0872664f;			// 5 ¶È
-	const float DEG10 = 0.1745329f;			// 10 ¶È
-	const float DEG20 = 0.3490658f;			// 20 ¶È
-	const float DEG30 = 0.5235987f;			// 30 ¶È
-	const float DEG60 = 1.047197f;			// 60 ¶È
-	const float DEG120 = 2.094395f;			// 120 ¶È
-	const float DEG40 = 0.6981317f;			// 40 ¶È
-	const float DEG80 = 1.396263f;			// 80 ¶È
-	const float DEG140 = 2.443460f;			// 140 ¶È
-	const float DEG160 = 2.792526f;			// 160 ¶È
+	const float DEG90 = 1.570796f;			// 90 åº¦   
+	const float DEG270 = -1.570796f;		// 270 åº¦   
+	const float DEG45 = 0.7853981f;			// 45 åº¦  
+	const float DEG5 = 0.0872664f;			// 5 åº¦  
+	const float DEG10 = 0.1745329f;			// 10 åº¦  
+	const float DEG20 = 0.3490658f;			// 20 åº¦  
+	const float DEG30 = 0.5235987f;			// 30 åº¦  
+	const float DEG60 = 1.047197f;			// 60  åº¦ 
+	const float DEG120 = 2.094395f;			// 120 åº¦  
+	const float DEG40 = 0.6981317f;			// 40  åº¦ 
+	const float DEG80 = 1.396263f;			// 80 åº¦   
+	const float DEG140 = 2.443460f;			// 140 åº¦  
+	const float DEG160 = 2.792526f;			// 160 åº¦  
 
-	const float DEG2RAD = 0.01745329f;			// ½Ç¶È»¯»¡¶ÈÒòÊı
-	const float RAD2DEG = 57.29577f;			// »¡¶È»¯½Ç¶ÈÒòÊı
+	const float DEG2RAD = 0.01745329f;			//è§’åº¦åŒ–å¼§åº¦å› æ•°
+	const float RAD2DEG = 57.29577f;			//å¼§åº¦åŒ–è§’åº¦å› æ•°
 
-	inline float Deg2Rad(const float x){ return x * DEG2RAD; }
-	inline float Rad2Deg(const float x){return x * RAD2DEG;}
+	inline float Deg2Rad(const float x) { return x * DEG2RAD; }
+	inline float Rad2Deg(const float x) {return x * RAD2DEG;}
 	
-	// ¸¡µãÏàµÈ
+	//æµ®ç‚¹ç›¸ç­‰        
 	template<typename T>
 	bool IsEqual(T X, T Y);
 
-	//  Æ½·½¸ùµ¹ÊıËÙËã·¨
+	//å¹³æ–¹æ ¹å€’æ•°é€Ÿç®—æ³•
 	float RecipSqrt(float number) noexcept;
     
-    // ÏŞÖÆ val ÔÚ low ºÍ high Ö®¼ä
+    //é™åˆ¶ val åœ¨ low å’Œ high ä¹‹é—´ 
     template <typename T>
     inline T const &
     clamp(T const & val, T const & low, T const & high) noexcept
@@ -78,7 +78,7 @@ namespace MathWorker
         return std::max(low, std::min(high, val));
     }
 
-	// ²æ»ı
+	//å‰ç§¯    
 	template<typename T>
 	T Cross(const Vector_T<T, 2> & lhs, const Vector_T<T, 2> & rhs) noexcept;
 	template<typename T>
@@ -86,33 +86,33 @@ namespace MathWorker
 	template<typename T>
 	Vector_T<T, 4> Cross(const Vector_T<T, 4> & lhs, const Vector_T<T, 4> & rhs) noexcept;
 
-	// µã»ı
+	//ç‚¹ç§¯    
 	template<typename T>
 	typename T::value_type Dot(const T & lhs, const T & rhs) noexcept;
 
-	// ³¤¶ÈµÄÆ½·½
+	//é•¿åº¦çš„å¹³æ–¹
 	template<typename T>
 	typename T::value_type LengthSq(const T & rhs) noexcept;
 
-	// ÇóÄ££¬ÏòÁ¿µÄ³¤
+	//æ±‚æ¨¡ï¼Œå‘é‡çš„é•¿
 	template<typename T>
 	typename T::value_type Length(const T & rhs) noexcept;
 
-	// ÏòÁ¿±ê×¼»¯
+	//å‘é‡æ ‡å‡†åŒ–
 	template<typename T>
 	T Normalize(const T & rhs) noexcept;
 
-	// ¾àÀë
+	//è·ç¦»     
 	template<typename T>
 	T Distance(const Vector_T<T, 2> & lhs, const Vector_T<T, 2> & rhs) noexcept;
 	template<typename T>
 	T Distance(const Vector_T<T, 3> & lhs, const Vector_T<T, 3> & rhs) noexcept;
     
-    // ·µ»Ø from Óë to Ö®¼äµÄ½Ç¶È
+    //è¿”å› from ä¸ to ä¹‹é—´çš„è§’åº¦
     template<typename T>
     typename T::value_type Angle(const T& from, const T& to);
 	
-	// ÏßĞÔ²åÖµ
+	//çº¿æ€§æ’å€¼
 	template <typename T>
 	T Lerp(const T& lhs, const T& rhs, float s) noexcept;
 
@@ -122,33 +122,33 @@ namespace MathWorker
 	float linear_to_srgb(float linear) noexcept;
 	float srgb_to_linear(float srgb) noexcept;
 	
-	// ËÄÔªÊı³Ë·¨
+	//å››å…ƒæ•°ä¹˜æ³•
 	template <typename T>
 	Quaternion_T<T> Mul(Quaternion_T<T> const & lhs, Quaternion_T<T> const & rhs) noexcept;
 
-	// ËÄÔªÊı¹²éî
+	//å››å…ƒæ•°å…±è½­
 	template <typename T>
 	Quaternion_T<T> Conjugate(Quaternion_T<T> const & rhs) noexcept;
 
-	// ËÄÔªÊıµÄÄæ
+	//å››å…ƒæ•°çš„é€†
 	template <typename T>
 	Quaternion_T<T> Inverse(const Quaternion_T<T>& rhs) noexcept;
 
 
 
-	// ¾ØĞÎÆ½ÒÆ
+	//çŸ©å½¢å¹³ç§»
 	template<typename T>
 	Matrix4_T<T> MatrixMove(T X, T Y, T Z);
 	template<typename T>
 	Matrix4_T<T> MatrixMove(const Vector_T<T, 3>& Move);
 
-	// ¾ØĞÎËõ·Å
+	// çŸ©å½¢ç¼©æ”¾
 	template<typename T>
 	Matrix4_T<T> MatrixScale(T X, T Y, T Z);
 	template<typename T>
 	Matrix4_T<T> MatrixScale(const Vector_T<T, 3>& Scale);
 
-	// ¾ØÕóĞı×ª
+	//çŸ©é˜µæ—‹è½¬
 	template<typename T>
 	Matrix4_T<T> MatrixRotateX(T Angle);
 	template<typename T>
@@ -158,22 +158,22 @@ namespace MathWorker
 	template<typename T>
 	Matrix4_T<T> MatrixRotate(const Vector_T<T, 3>& Pos, T Angle);
 
-	// ¾ØĞÎ³Ë·¨
+	//çŸ©å½¢ä¹˜æ³•
 	template<typename T>
 	Matrix4_T<T> Mul(const Matrix4_T<T>&lhs, const Matrix4_T<T>& rhs);
-	// ĞĞÏòÁ¿X¾ØĞÎ
+	//è¡Œå‘é‡XçŸ©å½¢
 	template<typename T>
 	Vector_T<T, 4> Mul(const Vector_T<T, 4>&lhs, const Matrix4_T<T>& rhs);
 
-	// ¾ØÕó×ªÖÃ
+	//çŸ©é˜µè½¬ç½®
 	template<typename T>
 	Matrix4_T<T> Transpose(const Matrix4_T<T>& m);
 
-	// ¾ØÕóµÄĞĞÁĞÊ½
+	//çŸ©é˜µçš„è¡Œåˆ—å¼
 	template<typename T>
 	T Determinant(const Matrix4_T<T>& m);
 
-	// ¾ØÕóµÄÄæ
+	//çŸ©é˜µçš„é€†
 	template<typename T>
 	Matrix4_T<T> MatrixInverse(const Matrix4_T<T>& m);
 
@@ -185,7 +185,7 @@ namespace MathWorker
 	template<typename T>
 	Matrix4_T<T> LookAtLH(const Vector_T<T, 3>& Eye, const Vector_T<T, 3>& At, const Vector_T<T, 3>& Up);
 
-	// Õı½»Í¶Ó°
+	// æ­£äº¤æŠ•å½±
 	//left hand , z axis = zero.->directX
 	template<typename T>
 	Matrix4_T<T> OrthoLH(T w, T h, T farPlane, T nearPlane);
@@ -198,7 +198,7 @@ namespace MathWorker
 	template<typename T>
 	Matrix4_T<T> OrthoOffCenterRH(T left, T right, T bottom, T top, T farPlane, T nearPlane);
 	
-	// Í¸ÊÓÍ¶Ó°
+	//é€è§†æŠ•å½±
 	//left hand , z axis = zero.->directX
 	template<typename T>
 	Matrix4_T<T> PerspectiveLH(T w, T h, T Near, T Far);
@@ -215,7 +215,7 @@ namespace MathWorker
 	template<typename T>
 	Matrix4_T<T> PerspectiveFovRH(T Fov, T Aspect, T Near, T Far);
 
-	// Ïà»¥×ª»»
+	//ç›¸äº’è½¬æ¢
 	float4x4 ToMatrix(const quater& quat);
 	float4x4 ToMatrix(const rotator& rot);
 
