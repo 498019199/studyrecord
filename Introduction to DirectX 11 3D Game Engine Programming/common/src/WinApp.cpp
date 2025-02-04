@@ -1,5 +1,6 @@
 #include <common/WinApp.h>
 #include <common/D3D11RenderEngine.h>
+#include <common/D3D11RenderMesh.h>
 #include <common/Timer.h>
 #include <common/Context.h>
 
@@ -7,11 +8,6 @@
 
 WinAPP::WinAPP()
 {
-    timer_ = new Timer;
-	if(timer_)
-	{
-		timer_->Start();
-	}
 }
 
 WinAPP::~WinAPP()
@@ -104,6 +100,37 @@ bool WinAPP::InitDevice(HWND hwnd, const RenderSettings& settings)
 	return false;
 }
 
+// 更新状态
+void WinAPP::CalculateFrameStats()
+{
+	++ total_num_frames_;
+
+	// measure statistics
+	frame_time_ = static_cast<float>(timer_.elapsed());
+	++ num_frames_;
+	accumulate_time_ += frame_time_;
+	app_time_ += frame_time_;
+
+	// check if new second
+	if (accumulate_time_ > 1)
+	{
+		// new second - not 100% precise
+		fps_ = num_frames_ / accumulate_time_;
+
+		accumulate_time_ = 0;
+		num_frames_  = 0;
+	}
+
+	timer_.restart();
+}
+
+void WinAPP::UpdateScene(float dt)
+{
+    for(auto obj : obj_mgr)
+	{
+		obj->Updata(dt);
+	}
+}
 
 int WinAPP::Run()
 {
@@ -120,15 +147,14 @@ int WinAPP::Run()
 		// Otherwise, do animation/game stuff.
 		else
         {	
-			timer_->Tick();
 
-			//if( !mAppPaused )
+			if( !is_paused )
 			{
-				//CalculateFrameStats();
-				//UpdateScene(mTimer.DeltaTime());	
+				CalculateFrameStats();
+				UpdateScene(frame_time_);	
 				device_->OnRender();
 			}
-			//else
+			else
 			{
 				Sleep(100);
 			}
@@ -138,3 +164,7 @@ int WinAPP::Run()
 	return (int)msg.wParam;
 }
 
+void WinAPP::AddActor(D3D11RenderMesh* obj)
+{
+    obj_mgr.emplace_back(obj);
+}

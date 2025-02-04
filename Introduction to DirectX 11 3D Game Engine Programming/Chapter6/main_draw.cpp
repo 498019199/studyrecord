@@ -59,10 +59,10 @@ void Box()
     Mesh.CreateVertexBuffer(&vertices, sizeof(Vertex) * 8);
     Mesh.CreateIndecxBuffer(&indices, sizeof(UINT) * 36);
 
-	std::filesystem::path currentPath = std::filesystem::current_path();
-	std::string filename = "example.txt";
-	std::filesystem::path filePath = currentPath / filename;
-    Mesh.LoadShaderFile(filePath.string().c_str());
+	std::filesystem::path currentPath = std::filesystem::current_path().parent_path().parent_path();
+	Mesh.CreateVertexShader(currentPath.string() + L"\\Triangle_VS");
+	Mesh.CreateVertexShader(currentPath.string() + L"\\Triangle_PS");
+	Mesh.BindShader();
 }
 
 void Hills()

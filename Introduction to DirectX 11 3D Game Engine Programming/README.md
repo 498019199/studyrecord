@@ -30,7 +30,7 @@ winerror.h  dxgitype.h
 ## 2.怎么连接 Effects11d
 - 1.从官方书里库是用vs 2010 编译的，我现在用的vs 2022....。
 
-放弃自己编译一个新的 Effects11d库
+放弃自己编译一个新的 Effects11d库.select
 
 - 2.从官方git 重新编译，连接时候缺d3dcompiler_47.lib。这个在那啊。。。。
 

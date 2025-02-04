@@ -10,7 +10,9 @@ public:
 
     void OnResize();
     void OnRender();
+
     ID3D11Device* D3DDevice() const;
+    ID3D11DeviceContext* D3DDeviceImmContext() const;
 private:
     int weight_ = 0;
     int height_ = 0;
@@ -21,6 +23,7 @@ private:
 	ID3D11DeviceContext* d3d_imm_ctx_ = nullptr;
 	IDXGISwapChain* swap_chain_ = nullptr;
 
+    int index_count_ = 0;
     ID3D11Texture2D* depth_stencil_buff_ = nullptr;
     ID3D11DepthStencilView* depth_stencil_view_ = nullptr;
 
@@ -28,5 +31,6 @@ private:
     
     D3D11_VIEWPORT screen_viewport_;
 };
+
 
 
