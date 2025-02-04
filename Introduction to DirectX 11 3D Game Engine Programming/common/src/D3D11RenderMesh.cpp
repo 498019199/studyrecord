@@ -39,6 +39,11 @@ void D3D11RenderMesh::CreateVertexBuffer(void const * init_data, int size_in_byt
     vinitData.pSysMem = init_data;
     auto const& re = Context::Instance().RenderEngineInstance();
     HR(re.D3DDevice()->CreateBuffer(&vbd, &vinitData, vbs_.put()));
+
+    // // 创建顶点布局
+	// com_ptr<ID3DBlob> blob;
+    // HR(re.D3DDevice()->->CreateInputLayout(VertexPosColor::inputLayout, ARRAYSIZE(VertexPosColor::inputLayout),
+    //     blob->GetBufferPointer(), blob->GetBufferSize(), m_pVertexLayout.GetAddressOf()));
 }
 
 void D3D11RenderMesh::CreateIndecxBuffer(void const * init_data, int size_in_byte)
@@ -56,10 +61,10 @@ void D3D11RenderMesh::CreateIndecxBuffer(void const * init_data, int size_in_byt
     D3D11_SUBRESOURCE_DATA vinitData;
     vinitData.pSysMem = init_data;
     auto const& re = Context::Instance().RenderEngineInstance();
-    HR(re.D3DDevice()->CreateBuffer(&vbd, &vinitData, vbs_.put()));
+    HR(re.D3DDevice()->CreateBuffer(&vbd, &vinitData, ibs_.put()));
 
     // 输入装配阶段的索引缓冲区设置
-    re.D3DDeviceImmContext()->IASetIndexBuffer(vbs_.get(), DXGI_FORMAT_R32_UINT, 0);
+    re.D3DDeviceImmContext()->IASetIndexBuffer(ibs_.get(), DXGI_FORMAT_R32_UINT, 0);
 }
 
 void D3D11RenderMesh::CreateVertexShader(const std::string& filename)
@@ -83,6 +88,7 @@ void D3D11RenderMesh::CreatePixelShader(const std::string& filename)
 void D3D11RenderMesh::BindShader()
 {
     auto const& re = Context::Instance().RenderEngineInstance();
+
     // 将更新好的常量缓冲区绑定到顶点着色器
     re.D3DDeviceImmContext()->VSSetConstantBuffers(0, 1, cbs_.put());
     // 将着色器绑定到渲染管线

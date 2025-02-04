@@ -88,19 +88,19 @@ std::string CombineFileLine(std::string_view file, uint32_t line);
 //      multiple definitions in a .cpp file (it can pick anyone and discard 
 //      the rest because they are constant--all the same).
 
-namespace Colors
-{
-	Color White     = Color(1.0f, 1.0f, 1.0f, 1.0f);
-	Color Black     = Color(0.0f, 0.0f, 0.0f, 1.0f);
-	Color Red       = Color(1.0f, 0.0f, 0.0f, 1.0f);
-	Color Green     = Color(0.0f, 1.0f, 0.0f, 1.0f);
-	Color Blue      = Color(0.0f, 0.0f, 1.0f, 1.0f);
-	Color Yellow    = Color(1.0f, 1.0f, 0.0f, 1.0f);
-	Color Cyan      = Color(0.0f, 1.0f, 1.0f, 1.0f);
-	Color Magenta   = Color(1.0f, 0.0f, 1.0f, 1.0f);
-	Color Silver    = Color(0.75f, 0.75f, 0.75f, 1.0f);
-	Color LightSteelBlue = Color(0.69f, 0.77f, 0.87f, 1.0f);
-}
+// namespace Colors
+// {
+// 	Color White     = Color(1.0f, 1.0f, 1.0f, 1.0f);
+// 	Color Black     = Color(0.0f, 0.0f, 0.0f, 1.0f);
+// 	Color Red       = Color(1.0f, 0.0f, 0.0f, 1.0f);
+// 	Color Green     = Color(0.0f, 1.0f, 0.0f, 1.0f);
+// 	Color Blue      = Color(0.0f, 0.0f, 1.0f, 1.0f);
+// 	Color Yellow    = Color(1.0f, 1.0f, 0.0f, 1.0f);
+// 	Color Cyan      = Color(0.0f, 1.0f, 1.0f, 1.0f);
+// 	Color Magenta   = Color(1.0f, 0.0f, 1.0f, 1.0f);
+// 	Color Silver    = Color(0.75f, 0.75f, 0.75f, 1.0f);
+// 	Color LightSteelBlue = Color(0.69f, 0.77f, 0.87f, 1.0f);
+// }
 
 std::string& Convert(std::string& dest, std::wstring_view src);
 std::wstring& Convert(std::wstring& dest, std::string_view src);
@@ -109,7 +109,7 @@ std::wstring& Convert(std::wstring& dest, std::string_view src);
 // 着色器编译相关函数
 //
 HRESULT CreateShaderFromFile(
-	const std::wstring& filename,
+	const std::string& filename,
     LPCSTR entryPoint,
     LPCSTR shaderModel,
     ID3DBlob** ppBlobOut);

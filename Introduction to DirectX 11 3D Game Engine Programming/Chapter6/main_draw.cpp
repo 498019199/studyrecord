@@ -1,7 +1,7 @@
 #include <common/WinApp.h>
 #include <common/D3D11Util.h>
 #include <common/D3D11RenderMesh.h>
-
+#include <common/Context.h>
 #include <math/math.h>
 
 #include <filesystem>
@@ -10,6 +10,11 @@ struct Vertex
 	float3 pos;
 	Color color;
 };
+const D3D11_INPUT_ELEMENT_DESC inputLayout[2] = 
+{
+    { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+    { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+};
 
 
 void Box()
@@ -17,14 +22,14 @@ void Box()
 	// 创建顶点缓冲
     Vertex vertices[] =
     {
-		{ float3(-1.0f, -1.0f, -1.0f), Colors::White   },
-		{ float3(-1.0f, +1.0f, -1.0f), Colors::Black   },
-		{ float3(+1.0f, +1.0f, -1.0f), Colors::Red     },
-		{ float3(+1.0f, -1.0f, -1.0f), Colors::Green   },
-		{ float3(-1.0f, -1.0f, +1.0f), Colors::Blue    },
-		{ float3(-1.0f, +1.0f, +1.0f), Colors::Yellow  },
-		{ float3(+1.0f, +1.0f, +1.0f), Colors::Cyan    },
-		{ float3(+1.0f, -1.0f, +1.0f), Colors::Magenta }
+		{ float3(-1.0f, -1.0f, -1.0f), Color(1.0f, 1.0f, 1.0f, 1.0f)   },
+		{ float3(-1.0f, +1.0f, -1.0f), Color(0.0f, 0.0f, 0.0f, 1.0f)   },
+		{ float3(+1.0f, +1.0f, -1.0f), Color(1.0f, 0.0f, 0.0f, 1.0f)     },
+		{ float3(+1.0f, -1.0f, -1.0f), Color(0.0f, 1.0f, 0.0f, 1.0f)  },
+		{ float3(-1.0f, -1.0f, +1.0f), Color(0.0f, 0.0f, 1.0f, 1.0f)    },
+		{ float3(-1.0f, +1.0f, +1.0f), Color(1.0f, 1.0f, 0.0f, 1.0f)  },
+		{ float3(+1.0f, +1.0f, +1.0f), Color(0.0f, 1.0f, 1.0f, 1.0f)    },
+		{ float3(+1.0f, -1.0f, +1.0f), Color(1.0f, 0.0f, 1.0f, 1.0f) }
     };
 
     // 创建索引缓冲
@@ -58,9 +63,11 @@ void Box()
     Mesh.CreateVertexBuffer(&vertices, sizeof(Vertex) * 8);
     Mesh.CreateIndecxBuffer(&indices, sizeof(UINT) * 36);
 
-	std::filesystem::path currentPath = std::filesystem::current_path().parent_path().parent_path();
-	Mesh.CreateVertexShader(currentPath.string() + L"\\Triangle_VS");
-	Mesh.CreateVertexShader(currentPath.string() + L"\\Triangle_PS");
+	auto currentPath = std::filesystem::current_path().parent_path().parent_path().string();
+	currentPath += "\\Chapter6\\HLSL\\";
+	Mesh.CreateVertexShader(currentPath + "Cube_VS");
+	Mesh.CreatePixelShader(currentPath + "Cube_PS");
+	
 	Mesh.BindShader();
 }
 

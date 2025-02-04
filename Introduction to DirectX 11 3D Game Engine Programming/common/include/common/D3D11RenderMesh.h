@@ -20,9 +20,9 @@ public:
 private:
     std::wstring filename_;
     
-    com_ptr<ID3D11Buffer> vbs_;
-	com_ptr<ID3D11Buffer> ibs_;
-    com_ptr<ID3D11Buffer> cbs_;
+    com_ptr<ID3D11Buffer> vbs_; // 顶点缓冲区
+	com_ptr<ID3D11Buffer> ibs_; // 索引缓冲区
+    com_ptr<ID3D11Buffer> cbs_; // 常量缓冲区
 
     com_ptr<ID3D11VertexShader>  vertex_shader_;	// 顶点着色器
     com_ptr<ID3D11PixelShader> pixel_shader_;	    // 像素着色器

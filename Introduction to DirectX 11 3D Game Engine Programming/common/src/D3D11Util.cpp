@@ -45,7 +45,7 @@ HRESULT CreateShaderFromFile(const WCHAR* csoFileNameInOut,
 	LPCSTR shaderModel,
 	ID3DBlob** ppBlobOut)
 {
-	    HRESULT hr = S_OK;
+    HRESULT hr = S_OK;
 
     // 寻找是否有已经编译好的顶点着色器
     if (csoFileNameInOut && D3DReadFileToBlob(csoFileNameInOut, ppBlobOut) == S_OK)

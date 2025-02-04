@@ -163,7 +163,8 @@ void D3D11RenderEngine::OnRender()
 	assert(d3d_imm_ctx_);
 	assert(swap_chain_);
 
-	d3d_imm_ctx_->ClearRenderTargetView(render_target_view_, reinterpret_cast<const float*>(&Colors::Blue));
+	Color blueColor(0.0f, 0.0f, 1.0f, 1.0f);
+	d3d_imm_ctx_->ClearRenderTargetView(render_target_view_, &blueColor.r());
 	d3d_imm_ctx_->ClearDepthStencilView(depth_stencil_view_, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.0f, 0);
 
 	// 绘制几何模型

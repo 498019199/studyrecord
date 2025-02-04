@@ -14,5 +14,4 @@ target_link_libraries(Chapter6 PRIVATE
     ${PROJECT_SOURCE_DIR}/3rd/dxsdk/Lib/x64/dxerr.lib
     ${PROJECT_SOURCE_DIR}/3rd/dxsdk/Lib/x64/dxgi.lib
     ${PROJECT_SOURCE_DIR}/3rd/dxsdk/Lib/x64/dxguid.lib
-    ${LIB_DIR_PATH}/Effects11.lib
     d3dcompiler.lib) 
