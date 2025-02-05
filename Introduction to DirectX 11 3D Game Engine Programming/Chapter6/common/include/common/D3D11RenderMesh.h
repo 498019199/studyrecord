@@ -3,6 +3,12 @@
 #include <common/com_ptr.h>
 class D3D11RenderMesh
 {
+    struct ConstantBuffer
+    {
+        float4x4 world;
+        float4x4 view;
+        float4x4 proj;
+    };
 public:
     D3D11RenderMesh();
     ~D3D11RenderMesh();
@@ -30,6 +36,8 @@ private:
     com_ptr<ID3D11PixelShader> pixel_shader_;	    // 像素着色器
 
     com_ptr<ID3D11InputLayout> input_layout_;
+
+    ConstantBuffer cb_;
 };
 
 

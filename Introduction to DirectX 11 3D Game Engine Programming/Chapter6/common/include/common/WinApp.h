@@ -25,6 +25,8 @@ public:
 
     void AddActor(D3D11RenderMesh* obj);
     bool RemoveActor(D3D11RenderMesh* obj);
+
+    float AspectRatio() const { return static_cast<float>(width_) / height_; }
 private:
     static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept;
     

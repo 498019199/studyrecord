@@ -1,5 +1,6 @@
 #include <common/D3D11RenderMesh.h>
 #include <common/Context.h>
+#include <common/WinApp.h>
 
 D3D11RenderMesh::D3D11RenderMesh()
 {
@@ -113,12 +114,30 @@ void D3D11RenderMesh::D3D11SetDebug_Cube()
     // 设置调试对象名
     //
     D3D11SetDebugObjectName(input_layout_.get(), "VertexPosColorLayout");
-    D3D11SetDebugObjectName(cbs_.get(), "VertexBuffer");
+    D3D11SetDebugObjectName(vbs_.get(), "VertexBuffer");
+    D3D11SetDebugObjectName(ibs_.get(), "IndexBuffer");
+    D3D11SetDebugObjectName(cbs_.get(), "ConstantBuffer");
     D3D11SetDebugObjectName(vertex_shader_.get(), "Cube_VS");
     D3D11SetDebugObjectName(pixel_shader_.get(), "Cube_PS");
+
+    cb_.world = float4x4::Identity();
+    cb_.view = Transpose(LookAtLH(
+        float3(0.0f, 0.0f, -5.0f),
+        float3(0.0f, 0.0f, 0.0f),
+        float3(0.0f, 1.0f, 0.0f)));
+    cb_.proj = Transpose(PerspectiveFovLH(1.570796327f, Context::Instance().AppInstance().AspectRatio(), 1.f, 1000.f));
 }
 
 void D3D11RenderMesh::Updata(float dt)
 {
-    
+    static float phi = 0.0f, theta = 0.0f;
+    phi += 0.3f * dt, theta += 0.37f * dt;
+
+    cb_.world = Transpose(MatrixRotateX(phi) * MatrixRotateY(theta));
+    // 更新常量缓冲区，让立方体转起来
+    auto const& re = Context::Instance().RenderEngineInstance();
+    D3D11_MAPPED_SUBRESOURCE mappedData;
+    HR(re.D3DDeviceImmContext()->Map(cbs_.get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedData));
+    memcpy_s(mappedData.pData, sizeof(cb_), &cb_, sizeof(cb_));
+    re.D3DDeviceImmContext()->Unmap(cbs_.get(), 0);
 }

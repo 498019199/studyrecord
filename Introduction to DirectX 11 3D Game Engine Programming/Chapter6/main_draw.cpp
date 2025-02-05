@@ -5,6 +5,7 @@
 #include <math/math.h>
 
 #include <filesystem>
+extern int g_IndexCount = 0;
 struct Vertex
 {
 	float3 pos;
@@ -37,6 +38,7 @@ void Triangle()
 	
 	uint32_t stride = sizeof(Vertex);	// 跨越字节数
 	Mesh.BindShader(stride);
+	g_IndexCount = 3;
 }
 
 void Box()
@@ -84,6 +86,7 @@ void Box()
 	D3D11RenderMesh Mesh;
     Mesh.CreateVertexBuffer(&vertices, sizeof(Vertex) * 8);
     Mesh.CreateIndecxBuffer(&indices, sizeof(UINT) * 36);
+	Mesh.CreateConstant();
 
 	auto currentPath = std::filesystem::current_path().parent_path().parent_path().string();
 	currentPath += "\\Chapter6\\HLSL\\";
@@ -92,6 +95,8 @@ void Box()
 	
 	uint32_t stride = sizeof(Vertex);	// 跨越字节数
 	Mesh.BindShader(stride);
+	Mesh.D3D11SetDebug_Cube();
+	g_IndexCount = 36;
 }
 
 void Hills()
@@ -122,7 +127,7 @@ int main() {
     app.CreateAppWindow(settings);
     app.InitDevice(app.GetHWND(), settings);
 
-	Triangle();
+	Box();
 	
     app.Run();
     return 0;
