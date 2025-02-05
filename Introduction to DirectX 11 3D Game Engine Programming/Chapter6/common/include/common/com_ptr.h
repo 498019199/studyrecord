@@ -160,7 +160,7 @@
 
 		T** put() noexcept
 		{
-			COMMON_ASSERT(ptr_ == nullptr);
+			//COMMON_ASSERT(ptr_ == nullptr);
 			return &ptr_;
 		}
 

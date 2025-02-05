@@ -100,18 +100,22 @@ void D3D11RenderMesh::BindShader(uint32_t stride)
     re.D3DDeviceImmContext()->IASetInputLayout(input_layout_.get());
 
     // 将更新好的常量缓冲区绑定到顶点着色器
-    re.D3DDeviceImmContext()->VSSetConstantBuffers(0, 1, cbs_.put());
+    if(nullptr != cbs_)
+        re.D3DDeviceImmContext()->VSSetConstantBuffers(0, 1, cbs_.put());
     // 将着色器绑定到渲染管线
     re.D3DDeviceImmContext()->VSSetShader(vertex_shader_.get(), nullptr, 0);
     re.D3DDeviceImmContext()->PSSetShader(pixel_shader_.get(), nullptr, 0);
+}
 
+void D3D11RenderMesh::D3D11SetDebug_Cube()
+{
     // ******************
     // 设置调试对象名
     //
     D3D11SetDebugObjectName(input_layout_.get(), "VertexPosColorLayout");
     D3D11SetDebugObjectName(cbs_.get(), "VertexBuffer");
-    D3D11SetDebugObjectName(vertex_shader_.get(), "Trangle_VS");
-    D3D11SetDebugObjectName(pixel_shader_.get(), "Trangle_PS");
+    D3D11SetDebugObjectName(vertex_shader_.get(), "Cube_VS");
+    D3D11SetDebugObjectName(pixel_shader_.get(), "Cube_PS");
 }
 
 void D3D11RenderMesh::Updata(float dt)

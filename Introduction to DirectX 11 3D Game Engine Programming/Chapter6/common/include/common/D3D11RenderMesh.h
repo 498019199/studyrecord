@@ -17,6 +17,8 @@ public:
     void BindShader(uint32_t stride);
 
     void Updata(float dt);
+
+    void D3D11SetDebug_Cube();
 private:
     std::wstring filename_;
     
@@ -29,5 +31,8 @@ private:
 
     com_ptr<ID3D11InputLayout> input_layout_;
 };
+
+
+
 
 
