@@ -6,7 +6,7 @@
 #endif
 
 
-#include <d3dx11.h>
+#include <d3d11_1.h>
 #include <common/macro.h>
 #include <math/math.h>
 #include <d3dcompiler.h>
@@ -87,20 +87,6 @@ std::string CombineFileLine(std::string_view file, uint32_t line);
 //   2. __declspec(selectany) so that the compiler does not complain about
 //      multiple definitions in a .cpp file (it can pick anyone and discard 
 //      the rest because they are constant--all the same).
-
-// namespace Colors
-// {
-// 	Color White     = Color(1.0f, 1.0f, 1.0f, 1.0f);
-// 	Color Black     = Color(0.0f, 0.0f, 0.0f, 1.0f);
-// 	Color Red       = Color(1.0f, 0.0f, 0.0f, 1.0f);
-// 	Color Green     = Color(0.0f, 1.0f, 0.0f, 1.0f);
-// 	Color Blue      = Color(0.0f, 0.0f, 1.0f, 1.0f);
-// 	Color Yellow    = Color(1.0f, 1.0f, 0.0f, 1.0f);
-// 	Color Cyan      = Color(0.0f, 1.0f, 1.0f, 1.0f);
-// 	Color Magenta   = Color(1.0f, 0.0f, 1.0f, 1.0f);
-// 	Color Silver    = Color(0.75f, 0.75f, 0.75f, 1.0f);
-// 	Color LightSteelBlue = Color(0.69f, 0.77f, 0.87f, 1.0f);
-// }
 
 std::string& Convert(std::string& dest, std::wstring_view src);
 std::wstring& Convert(std::wstring& dest, std::string_view src);

@@ -10,8 +10,9 @@ set(SRC_LIST
     ${PROJECT_SOURCE_DIR}/math/src/half.cpp)
 
 add_library(math STATIC ${SRC_LIST})
-#set_target_properties(math PROPERTIES
-	#DEBUG_POSTFIX ${CMAKE_DEBUG_POSTFIX}
-	#OUTPUT_NAME math${DEMOENGINE_OUTPUT_SUFFIX})
-    
+set_target_properties(math PROPERTIES
+	DEBUG_POSTFIX ${CMAKE_DEBUG_POSTFIX}
+	OUTPUT_NAME math${ZENGINE_OUTPUT_SUFFIX}
+	ARCHIVE_OUTPUT_NAME math${ZENGINE_OUTPUT_SUFFIX}
+)
 #add_subdirectory(test)

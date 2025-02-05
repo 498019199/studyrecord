@@ -9,6 +9,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 set(PROJECT_3RD_DIR ${PROJECT_SOURCE_DIR}/3rd)
+set(ZENGINE_ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     # # 编译器设置 UTF-8 编码
@@ -27,13 +28,9 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     string(REPLACE "/W3 " "/Wall " CMAKE_CXX_FLAGS_RELEASE ${CMAKE_CXX_FLAGS_RELEASE})
 endif()
 
-
-#add_subdirectory(${PROJECT_3RD_DIR}/d3dcompiler)
-
+add_subdirectory(${ZENGINE_ROOT_DIR}/3rd/CMake ${CMAKE_CURRENT_BINARY_DIR}/3rd EXCLUDE_FROM_ALL)
 add_subdirectory(math)
 file(COPY ${PROJECT_SOURCE_DIR}/math/include DESTINATION "${LIBRARY_OUTPUT_PATH}")
-add_subdirectory(common)
-file(COPY ${PROJECT_SOURCE_DIR}/common/include DESTINATION "${LIBRARY_OUTPUT_PATH}")
 
-#add_subdirectory(Chapter4)
+add_subdirectory(Chapter4)
 add_subdirectory(Chapter6) 

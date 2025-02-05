@@ -1,7 +1,7 @@
 include_directories( 
     ${PROJECT_SOURCE_DIR}/common/include
     ${PROJECT_SOURCE_DIR}/math/include
-    ${PROJECT_SOURCE_DIR}/3rd/dxsdk/dxsdk/Include)
+    ${PROJECT_SOURCE_DIR}/3rd/dxsdk/Include)
 
 add_executable(Chapter6 main_draw.cpp)
 
