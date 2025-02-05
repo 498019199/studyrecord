@@ -72,7 +72,7 @@ HRESULT CreateShaderFromFile(const WCHAR* csoFileNameInOut,
             {
                 OutputDebugStringA(reinterpret_cast<const char*>(errorBlob->GetBufferPointer()));
             }
-            SafeDelete(errorBlob);
+            ReleaseCOM(errorBlob);
             return hr;
         }
 

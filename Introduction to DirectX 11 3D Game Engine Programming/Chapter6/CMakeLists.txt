@@ -9,6 +9,7 @@ set(SRC_LIST
     ${PROJECT_SOURCE_DIR}/Chapter6/common/src/D3D11RenderEngine.cpp
     ${PROJECT_SOURCE_DIR}/Chapter6/common/src/D3D11RenderMesh.cpp
     ${PROJECT_SOURCE_DIR}/Chapter6/common/src/Context.cpp
+    ${PROJECT_SOURCE_DIR}/Chapter6/common/src/Timer.cpp
     ${PROJECT_SOURCE_DIR}/Chapter6/common/src/WinApp.cpp)
 add_executable(Chapter6 ${SRC_LIST})
 

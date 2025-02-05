@@ -68,5 +68,8 @@
         "forward_list": "cpp",
         "ratio": "cpp",
         "list": "cpp"
+    },
+    "search.exclude": {
+        "Chapter4/common": true,
     }
 }
