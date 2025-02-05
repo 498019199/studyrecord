@@ -1,4 +1,13 @@
 /build
 /lib
 /bin
+<<<<<<< HEAD
 /3rd/dxsdk/dxsdk/*
+=======
+/cmake-build-debug-visual-studio
+/.idea
+/vcpkg.json
+/vcpkg-configuration.json
+/vcpkg_
+*.cso
+>>>>>>> bf5d866ed5bf37aa79c4cdbea890a3dedad501c7

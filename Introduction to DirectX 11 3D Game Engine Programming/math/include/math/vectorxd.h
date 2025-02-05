@@ -109,7 +109,7 @@ public:
 		return elem_num;
 	}
 
-	// 零向量
+	//       
 	static Vector_T const Zero() noexcept
 	{
 		static Vector_T<T, N> const zero(value_type(0));
@@ -217,19 +217,19 @@ public:
     	return *this;
 	}
 
-	// operator 叉积
+	// operator 
 	Vector_T operator^(const Vector_T& rhs) const noexcept
 	{
 		return Cross(*this, rhs);
 	}
 
-	// operator 点积
+	// operator 
 	T operator|(const Vector_T& rhs) const noexcept
 	{
 		return Dot(*this, rhs);
 	}
 
-	// operator * 数乘
+	// operator *     
 	template <typename U>
 	const Vector_T& operator*=(const U& rhs) noexcept
 	{
@@ -252,7 +252,7 @@ public:
     	return *this;
 	}
 
-	// 复制构造
+	//    ƹ   
 	Vector_T& operator=(const Vector_T& rhs) noexcept
 	{
     	if (this != &rhs)
@@ -275,13 +275,13 @@ public:
 		return *this;
 	}
 
-	// 正
+	//   
 	const Vector_T operator+() const  noexcept
 	{
     	return *this;
 	}
 
-	// 负
+	//   
 	const Vector_T operator-() const noexcept
 	{
 		Vector_T tmp(*this);
