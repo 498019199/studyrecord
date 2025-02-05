@@ -1,7 +1,6 @@
 #include <common/WinApp.h>
 #include <common/D3D11RenderEngine.h>
 #include <common/D3D11RenderMesh.h>
-#include <common/Timer.h>
 #include <common/Context.h>
 
 #include <string>

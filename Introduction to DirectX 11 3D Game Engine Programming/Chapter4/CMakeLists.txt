@@ -14,8 +14,7 @@ add_executable(Chapter4 ${SRC_LIST})
 
 target_link_libraries(Chapter4 PRIVATE 
     ${LIB_DIR_PATH}/math${ZENGINE_OUTPUT_SUFFIX}${CMAKE_DEBUG_POSTFIX}.lib
-    ${PROJECT_SOURCE_DIR}/3rd/dxsdk/Lib/x64/d3dx11${CMAKE_DEBUG_POSTFIX}.lib)
-    #${PROJECT_SOURCE_DIR}/3rd/dxsdk/Lib/x64/d3dcompiler.lib
-    #${PROJECT_SOURCE_DIR}/3rd/dxsdk/Lib/x64/dxerr.lib
-    #${PROJECT_SOURCE_DIR}/3rd/dxsdk/Lib/x64/DxErr.lib)
-    #${PROJECT_SOURCE_DIR}/3rd/dxsdk/Lib/x64/dxguid.lib) 
+    ${PROJECT_SOURCE_DIR}/3rd/dxsdk/Lib/x64/d3dx11${CMAKE_DEBUG_POSTFIX}.lib
+    ${PROJECT_SOURCE_DIR}/3rd/dxsdk/Lib/x64/d3dcompiler.lib
+    ${PROJECT_SOURCE_DIR}/3rd/dxsdk/Lib/x64/DxErr.lib
+    ${PROJECT_SOURCE_DIR}/3rd/dxsdk/Lib/x64/dxguid.lib) 
