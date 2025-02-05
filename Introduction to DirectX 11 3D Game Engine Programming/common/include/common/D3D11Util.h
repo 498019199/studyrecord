@@ -128,3 +128,19 @@ HRESULT CreateShaderFromFile(
     LPCSTR shaderModel,
     ID3DBlob** ppBlobOut);
 
+// ------------------------------
+// D3D11SetDebugObjectName函数
+// ------------------------------
+// 为D3D设备创建出来的对象在图形调试器中设置对象名
+// [In]resource				D3D11设备创建出的对象
+// [In]name					对象名
+template<UINT TNameLength>
+inline void D3D11SetDebugObjectName(_In_ ID3D11DeviceChild* resource, _In_ const char(&name)[TNameLength])
+{
+#if (defined(DEBUG) || defined(_DEBUG)) && (GRAPHICS_DEBUGGER_OBJECT_NAME)
+    resource->SetPrivateData(WKPDID_D3DDebugObjectName, TNameLength - 1, name);
+#else
+    UNREFERENCED_PARAMETER(resource);
+    UNREFERENCED_PARAMETER(name);
+#endif
+}

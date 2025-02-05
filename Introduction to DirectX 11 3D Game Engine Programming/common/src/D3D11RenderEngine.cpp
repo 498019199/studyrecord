@@ -168,7 +168,7 @@ void D3D11RenderEngine::OnRender()
 	d3d_imm_ctx_->ClearDepthStencilView(depth_stencil_view_, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.0f, 0);
 
 	// 绘制几何模型
-    d3d_imm_ctx_->DrawIndexed(index_count_, 0, 0);
+    d3d_imm_ctx_->DrawIndexed(3, 0, 0);
 
 	HR(swap_chain_->Present(0, 0));
 }

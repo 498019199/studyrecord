@@ -11,10 +11,10 @@ public:
     void CreateVertexBuffer(void const * init_data, int size_in_byte);
     void CreateIndecxBuffer(void const * init_data, int size_in_byte);
 
-    void CreateVertexShader(const std::string& filename);
+    void CreateVertexShader(const std::string& filename, const D3D11_INPUT_ELEMENT_DESC* inputLayouts, int size);
     void CreatePixelShader(const std::string& filename);
 
-    void BindShader();
+    void BindShader(uint32_t stride);
 
     void Updata(float dt);
 private:
@@ -26,6 +26,8 @@ private:
 
     com_ptr<ID3D11VertexShader>  vertex_shader_;	// 顶点着色器
     com_ptr<ID3D11PixelShader> pixel_shader_;	    // 像素着色器
+
+    com_ptr<ID3D11InputLayout> input_layout_;
 };
 
 

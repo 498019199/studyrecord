@@ -30,8 +30,6 @@ private:
     ID3D11RenderTargetView* render_target_view_ = nullptr;
     
     D3D11_VIEWPORT screen_viewport_;
-
-    ID3D11InputLayout* input_layout_cache_{nullptr};
 };
 
 

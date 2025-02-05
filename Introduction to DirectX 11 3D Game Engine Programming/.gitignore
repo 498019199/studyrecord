@@ -1,9 +1,9 @@
 /build
 /lib
 /bin
-/3rd
 /cmake-build-debug-visual-studio
 /.idea
 /vcpkg.json
 /vcpkg-configuration.json
 /vcpkg_
+*.cso

@@ -16,6 +16,28 @@ const D3D11_INPUT_ELEMENT_DESC inputLayout[2] =
     { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 }
 };
 
+void Triangle()
+{
+	// 设置三角形顶点
+    Vertex vertices[] =
+    {
+        { float3(0.0f, 0.5f, 0.5f), Color(0.0f, 1.0f, 0.0f, 1.0f) },
+        { float3(0.5f, -0.5f, 0.5f), Color(0.0f, 0.0f, 1.0f, 1.0f) },
+        { float3(-0.5f, -0.5f, 0.5f), Color(1.0f, 0.0f, 0.0f, 1.0f) }
+    };
+
+	D3D11RenderMesh Mesh;
+	Mesh.CreateVertexBuffer(&vertices, sizeof(Vertex) * 3);
+
+	auto currentPath = std::filesystem::current_path().parent_path().parent_path().string();
+	currentPath += "\\Chapter6\\HLSL\\";
+	Mesh.CreateVertexShader(currentPath + "Triangle_VS", inputLayout, ARRAYSIZE(inputLayout));
+
+	Mesh.CreatePixelShader(currentPath + "Triangle_PS");
+	
+	uint32_t stride = sizeof(Vertex);	// 跨越字节数
+	Mesh.BindShader(stride);
+}
 
 void Box()
 {
@@ -65,10 +87,11 @@ void Box()
 
 	auto currentPath = std::filesystem::current_path().parent_path().parent_path().string();
 	currentPath += "\\Chapter6\\HLSL\\";
-	Mesh.CreateVertexShader(currentPath + "Cube_VS");
+	Mesh.CreateVertexShader(currentPath + "Cube_VS", inputLayout, ARRAYSIZE(inputLayout));
 	Mesh.CreatePixelShader(currentPath + "Cube_PS");
 	
-	Mesh.BindShader();
+	uint32_t stride = sizeof(Vertex);	// 跨越字节数
+	Mesh.BindShader(stride);
 }
 
 void Hills()
@@ -99,7 +122,7 @@ int main() {
     app.CreateAppWindow(settings);
     app.InitDevice(app.GetHWND(), settings);
 
-	Box();
+	Triangle();
 	
     app.Run();
     return 0;
