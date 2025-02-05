@@ -6,7 +6,7 @@
 #endif
 
 
-#include <d3d11_1.h>
+#include <d3d11.h>
 #include <common/macro.h>
 #include <math/math.h>
 #include <d3dcompiler.h>
