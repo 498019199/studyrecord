@@ -167,35 +167,6 @@ void D3D11RenderEngine::OnRender()
 	d3d_imm_ctx_->ClearRenderTargetView(render_target_view_, &blueColor.r());
 	d3d_imm_ctx_->ClearDepthStencilView(depth_stencil_view_, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.0f, 0);
 
-	// 绘制几何模型
-    d3d_imm_ctx_->DrawIndexed(0, 0, 0);
-
-	HRESULT hr1 = d3d_device_->GetDeviceRemovedReason();
-	if (FAILED(hr1))
-	{
-		// 处理错误
-		switch (hr1)
-		{
-		case DXGI_ERROR_DEVICE_HUNG:
-			// GPU 设备挂起，可能需要重置设备
-			break;
-		case DXGI_ERROR_DEVICE_REMOVED:
-			// GPU 设备已移除，可能是硬件故障或驱动问题
-			break;
-		case DXGI_ERROR_DEVICE_RESET:
-			// GPU 设备已重置
-			break;
-		case DXGI_ERROR_DRIVER_INTERNAL_ERROR:
-			// 驱动程序内部错误
-			break;
-		case DXGI_ERROR_INVALID_CALL:
-			// 无效的调用
-			break;
-		default:
-			// 其他错误
-			break;
-		}
-	}
 	HR(swap_chain_->Present(0, 0));
 }
 
