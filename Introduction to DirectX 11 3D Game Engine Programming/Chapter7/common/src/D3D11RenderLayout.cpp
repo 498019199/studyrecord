@@ -1,4 +1,4 @@
-#include <common/D3D11RenderLayout.h>
+#include <core/D3D11RenderLayout.h>
 
 
 void D3D11RenderLayout::BindVertexStream(const GraphicsBufferPtr& buffer, VertexElement const& vet,

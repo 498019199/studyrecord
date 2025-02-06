@@ -1,4 +1,4 @@
-#include <common/SceneNode.h>
+#include <core/SceneNode.h>
 
 const float4x4& SceneNode::TransformToWorld() const
 {

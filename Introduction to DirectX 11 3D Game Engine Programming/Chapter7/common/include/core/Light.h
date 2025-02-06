@@ -1,6 +1,6 @@
 #pragma once
 
-#include <common/SceneNode.h>
+#include <core/SceneNode.h>
 
 class LightSource: public SceneNode
 {

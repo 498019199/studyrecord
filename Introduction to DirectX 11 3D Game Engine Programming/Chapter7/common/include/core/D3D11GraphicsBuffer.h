@@ -1,6 +1,6 @@
-#include <common/common.h>
-#include <common/ElementFormat.h>
-#include <common/D3D11RenderEngine.h>
+#include <core/common.h>
+#include <core/ElementFormat.h>
+#include <core/D3D11RenderEngine.h>
 
 enum BufferUsage
 {

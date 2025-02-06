@@ -91,7 +91,8 @@
         "thread": "cpp",
         "unordered_map": "cpp",
         "unordered_set": "cpp",
-        "xhash": "cpp"
+        "xhash": "cpp",
+        "cassert": "cpp"
     },
     "search.exclude": {
         "Chapter4": true,

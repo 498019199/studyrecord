@@ -1,6 +1,6 @@
-#include <common/D3D11Renderable.h>
-#include <common/RenderLayout.h>
-#include <common/Context.h>
+#include <core/D3D11Renderable.h>
+#include <core/RenderLayout.h>
+#include <core/Context.h>
 
 D3D11Renderable::D3D11Renderable()
     :rls_(1), active_lod_(-1)

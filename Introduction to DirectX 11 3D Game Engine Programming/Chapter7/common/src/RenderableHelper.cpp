@@ -1,4 +1,4 @@
-#include <common/RenderableHelper.h>
+#include <core/RenderableHelper.h>
 
 RenderableBox::RenderableBox(float width, float height, float depth, const Color & color)
 {

@@ -1,20 +1,22 @@
 include_directories( 
-    ${PROJECT_SOURCE_DIR}/Chapter7/common/include
+    ${PROJECT_SOURCE_DIR}/Chapter7/core/include
     ${PROJECT_SOURCE_DIR}/math/include
     ${PROJECT_SOURCE_DIR}/3rd/dxsdk/dxsdk/Include)
 
 set(SRC_LIST
     ${PROJECT_SOURCE_DIR}/Chapter7/main_light.cpp
-    ${PROJECT_SOURCE_DIR}/Chapter7/common/src/D3D11Util.cpp
-    ${PROJECT_SOURCE_DIR}/Chapter7/common/src/D3D11RenderEngine.cpp
-    ${PROJECT_SOURCE_DIR}/Chapter7/common/src/D3D11RenderMesh.cpp
-    ${PROJECT_SOURCE_DIR}/Chapter7/common/src/D3D11RenderLayout.cpp
-    ${PROJECT_SOURCE_DIR}/Chapter7/common/src/D3D11Renderable.cpp
-    ${PROJECT_SOURCE_DIR}/Chapter7/common/src/RenderableHelper.cpp
-    ${PROJECT_SOURCE_DIR}/Chapter7/common/src/Light.cpp
-    ${PROJECT_SOURCE_DIR}/Chapter7/common/src/Context.cpp
-    ${PROJECT_SOURCE_DIR}/Chapter7/common/src/Timer.cpp 
-    ${PROJECT_SOURCE_DIR}/Chapter7/common/src/WinApp.cpp)
+    ${PROJECT_SOURCE_DIR}/Chapter7/core/src/D3D11Util.cpp 
+    ${PROJECT_SOURCE_DIR}/Chapter7/core/src/D3D11RenderEngine.cpp
+    ${PROJECT_SOURCE_DIR}/Chapter7/core/src/D3D11RenderMesh.cpp
+    ${PROJECT_SOURCE_DIR}/Chapter7/core/src/D3D11GraphicsBuffer.cpp
+    ${PROJECT_SOURCE_DIR}/Chapter7/core/src/D3D11RenderLayout.cpp
+    ${PROJECT_SOURCE_DIR}/Chapter7/core/src/D3D11Renderable.cpp
+    ${PROJECT_SOURCE_DIR}/Chapter7/core/src/RenderableHelper.cpp
+    ${PROJECT_SOURCE_DIR}/Chapter7/core/src/SceneNode.cpp
+    ${PROJECT_SOURCE_DIR}/Chapter7/core/src/Light.cpp 
+    ${PROJECT_SOURCE_DIR}/Chapter7/core/src/Context.cpp
+    ${PROJECT_SOURCE_DIR}/Chapter7/core/src/Timer.cpp 
+    ${PROJECT_SOURCE_DIR}/Chapter7/core/src/WinApp.cpp)
 add_executable(Chapter7 ${SRC_LIST})
 
 target_link_libraries(Chapter7 PRIVATE 

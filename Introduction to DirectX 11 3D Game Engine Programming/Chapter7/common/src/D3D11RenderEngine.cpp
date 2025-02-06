@@ -1,5 +1,5 @@
-#include <common/D3D11RenderEngine.h>
-#include <common/common.h>
+#include <core/D3D11RenderEngine.h>
+#include <core/common.h>
 extern int g_IndexCount;
 
 D3D11RenderEngine::D3D11RenderEngine(HWND hwnd, const RenderSettings& settings)

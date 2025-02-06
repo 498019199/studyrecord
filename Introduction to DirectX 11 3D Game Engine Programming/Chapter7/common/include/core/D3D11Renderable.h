@@ -1,7 +1,7 @@
 //可渲染对象类 头文件
 #pragma once
-#include <common/common.h>
-#include <common/D3D11RenderEngine.h>
+#include <core/common.h>
+#include <core/D3D11RenderEngine.h>
 
 class D3D11Renderable
 {

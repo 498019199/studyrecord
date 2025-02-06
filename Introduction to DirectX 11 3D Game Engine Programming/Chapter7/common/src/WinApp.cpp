@@ -1,8 +1,8 @@
-#include <common/WinApp.h>
-#include <common/D3D11RenderEngine.h>
-#include <common/D3D11RenderMesh.h>
-#include <common/Timer.h>
-#include <common/Context.h>
+#include <core/WinApp.h>
+#include <core/D3D11RenderEngine.h>
+#include <core/D3D11RenderMesh.h>
+#include <core/Timer.h>
+#include <core/Context.h>
 
 #include <string>
 

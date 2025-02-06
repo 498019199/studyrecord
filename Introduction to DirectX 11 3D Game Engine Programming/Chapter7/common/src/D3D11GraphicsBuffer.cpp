@@ -1,4 +1,4 @@
-#include <common/D3D11GraphicsBuffer.h>
+#include <core/D3D11GraphicsBuffer.h>
 
 D3D11GraphicsBuffer::D3D11GraphicsBuffer(BufferUsage usage, uint32_t access_hint, uint32_t bind_flags,
             uint32_t size_in_byte, uint32_t structure_byte_stride)

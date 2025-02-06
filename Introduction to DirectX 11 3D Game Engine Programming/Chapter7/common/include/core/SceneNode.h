@@ -1,5 +1,5 @@
 #pragma once
-#include <common/common.h>
+#include <core/common.h>
 #include <vector>
 
 // 场景上对象位置描述

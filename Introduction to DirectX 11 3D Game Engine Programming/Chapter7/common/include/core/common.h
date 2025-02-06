@@ -1,6 +1,6 @@
 #pragma once
-#include <common/macro.h>
-#include <common/com_ptr.h>
+#include <core/macro.h>
+#include <core/com_ptr.h>
 #include <cassert>
 #include <cstdint>
 

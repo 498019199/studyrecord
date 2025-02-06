@@ -1,6 +1,6 @@
 #pragma once
-#include <common/macro.h>
-#include <common/Timer.h>
+#include <core/macro.h>
+#include <core/Timer.h>
 #include <Windows.h>
 #include <cstdint>
 #include <list>

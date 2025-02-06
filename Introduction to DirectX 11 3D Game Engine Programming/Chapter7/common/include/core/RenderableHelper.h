@@ -1,6 +1,6 @@
 #pragma once
 
-#include <common/Renderable.h>
+#include <core/Renderable.h>
 
 class RenderableTriangle : public Renderable
 {

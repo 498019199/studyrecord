@@ -1,6 +1,6 @@
 #pragma once
-#include <common/common.h>
-#include <common/ElementFormat.h>
+#include <core/common.h>
+#include <core/ElementFormat.h>
 
 // 顶点布局和顶点缓存
 enum VertexElementUsage

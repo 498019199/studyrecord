@@ -1,6 +1,6 @@
 #pragma once
-#include <common/D3D11RenderEngine.h>
-#include <common/com_ptr.h>
+#include <core/D3D11RenderEngine.h>
+#include <core/com_ptr.h>
 
 
 class D3D11RenderMesh
