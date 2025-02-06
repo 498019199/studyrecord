@@ -34,3 +34,4 @@ file(COPY ${PROJECT_SOURCE_DIR}/math/include DESTINATION "${LIBRARY_OUTPUT_PATH}
 
 add_subdirectory(Chapter4)
 add_subdirectory(Chapter6) 
+add_subdirectory(Chapter7)

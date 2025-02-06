@@ -95,5 +95,6 @@
     },
     "search.exclude": {
         "Chapter4": true,
+        "Chapter6": true,
     }
 }
