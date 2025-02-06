@@ -131,11 +131,12 @@ void D3D11RenderMesh::D3D11SetDebug_Cube()
     D3D11SetDebugObjectName(pixel_shader_.get(), "Cube_PS");
 
     cb_.world = float4x4::Identity();
-    cb_.view = Transpose(LookAtLH(
+    cb_.view = MathWorker::Transpose(MathWorker::LookAtLH(
         float3(0.0f, 0.0f, -5.0f),
         float3(0.0f, 0.0f, 0.0f),
         float3(0.0f, 1.0f, 0.0f)));
-    cb_.proj = Transpose(PerspectiveFovLH(1.570796327f, Context::Instance().AppInstance().AspectRatio(), 1.f, 1000.f));
+    cb_.proj = MathWorker::Transpose(
+        MathWorker::PerspectiveFovLH(1.570796327f, Context::Instance().AppInstance().AspectRatio(), 1.f, 1000.f));
 }
 
 void D3D11RenderMesh::Updata(float dt)
@@ -143,7 +144,7 @@ void D3D11RenderMesh::Updata(float dt)
     static float phi = 0.0f, theta = 0.0f;
     phi += 0.3f * dt, theta += 0.37f * dt;
 
-    cb_.world = Transpose(MatrixRotateX(phi) * MatrixRotateY(theta));
+    cb_.world = MathWorker::Transpose(MathWorker::MatrixRotateX(phi) * MathWorker::MatrixRotateY(theta));
     // 更新常量缓冲区，让立方体转起来
     auto const& re = Context::Instance().RenderEngineInstance();
     D3D11_MAPPED_SUBRESOURCE mappedData;

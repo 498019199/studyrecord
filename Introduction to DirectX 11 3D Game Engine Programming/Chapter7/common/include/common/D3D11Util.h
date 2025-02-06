@@ -8,7 +8,6 @@
 
 #include <d3d11_1.h>
 #include <common/macro.h>
-#include <math/math.h>
 #include <d3dcompiler.h>
 #include <cassert>
 #include <ctime>
@@ -19,7 +18,6 @@
 #include <sstream>
 #include <fstream>
 #include <vector>
-using namespace MathWorker;
 
 struct RenderSettings
 {

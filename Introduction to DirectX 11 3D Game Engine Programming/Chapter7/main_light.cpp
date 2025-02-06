@@ -19,8 +19,15 @@ const D3D11_INPUT_ELEMENT_DESC inputLayout[3] =
     { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 }
 };
 
+void CreateBox()
+{
+
+}
+
 void Light()
-{}
+{
+	
+}
 
 int main() {
     WinAPP app;

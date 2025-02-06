@@ -10,6 +10,7 @@ cbuffer ConstantBuffer : register(b0)
 struct VertexIn
 {
     float3 posL : POSITION;
+    float3 normal : NORMAL;
     float4 color : COLOR;
 };
 
