@@ -156,8 +156,8 @@ void Skull()
 	pMesh->CreateConstant();
 
 	currentPath += "\\Chapter6\\HLSL\\";
-	pMesh->CreateVertexShader(currentPath + "Skull_VS", inputLayout, ARRAYSIZE(inputLayout));
-	pMesh->CreatePixelShader(currentPath + "Skull_PS");
+	pMesh->CreateVertexShader(currentPath + "Cube_VS", inputLayout, ARRAYSIZE(inputLayout));
+	pMesh->CreatePixelShader(currentPath + "Cube_PS");
 
 	uint32_t stride = sizeof(Vertex);	// 跨越字节数
 	pMesh->BindShader(stride);
