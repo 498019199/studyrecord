@@ -6,6 +6,7 @@ set(SRC_LIST
     ${PROJECT_SOURCE_DIR}/common/src/D3D11Util.cpp
     ${PROJECT_SOURCE_DIR}/common/src/D3D11RenderEngine.cpp
     ${PROJECT_SOURCE_DIR}/common/src/D3D11RenderMesh.cpp
+    ${PROJECT_SOURCE_DIR}/common/src/Renderable.cpp
     ${PROJECT_SOURCE_DIR}/common/src/Light.cpp
     ${PROJECT_SOURCE_DIR}/common/src/RenderLayout.cpp
     ${PROJECT_SOURCE_DIR}/common/src/Context.cpp

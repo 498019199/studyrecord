@@ -1,6 +1,7 @@
 #include <common/D3D11RenderMesh.h>
 #include <common/Context.h>
 #include <common/WinApp.h>
+#include <common/common.h>
 
 D3D11RenderMesh::D3D11RenderMesh()
 {
@@ -10,65 +11,6 @@ D3D11RenderMesh::D3D11RenderMesh()
 D3D11RenderMesh::~D3D11RenderMesh()
 {
     
-}
-
-void D3D11RenderMesh::CreateConstant()
-{
-    // 设置常量缓冲区描述
-    D3D11_BUFFER_DESC cbd;
-    ZeroMemory(&cbd, sizeof(cbd));
-    cbd.Usage = D3D11_USAGE_DYNAMIC;
-    cbd.ByteWidth = sizeof(ConstantBuffer);
-    cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-    cbd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-    // 新建常量缓冲区，不使用初始数据
-    auto const& re = Context::Instance().RenderEngineInstance();
-    HR(re.D3DDevice()->CreateBuffer(&cbd, nullptr, cbs_.put()));
-}
-
-void D3D11RenderMesh::CreateVertexBuffer(void const * init_data, int size_in_byte)
-{
-    D3D11_BUFFER_DESC vbd;
-    vbd.Usage = D3D11_USAGE_IMMUTABLE;
-    vbd.ByteWidth = size_in_byte;
-    vbd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-    vbd.CPUAccessFlags = 0;
-    vbd.MiscFlags = 0;
-	vbd.StructureByteStride = 0;
-
-    D3D11_SUBRESOURCE_DATA vinitData;
-    vinitData.pSysMem = init_data;
-    auto const& re = Context::Instance().RenderEngineInstance();
-    HR(re.D3DDevice()->CreateBuffer(&vbd, &vinitData, vbs_.put()));
-
-    D3D11_RASTERIZER_DESC wireframeDesc;
-	ZeroMemory(&wireframeDesc, sizeof(D3D11_RASTERIZER_DESC));
-	wireframeDesc.FillMode = D3D11_FILL_WIREFRAME;
-	wireframeDesc.CullMode = D3D11_CULL_BACK;
-	wireframeDesc.FrontCounterClockwise = false;
-	wireframeDesc.DepthClipEnable = true;
-	HR(re.D3DDevice()->CreateRasterizerState(&wireframeDesc, rs_.put()));
-}
-
-void D3D11RenderMesh::CreateIndecxBuffer(void const * init_data, int size_in_byte)
-{
-    // 设置索引缓冲区描述
-    D3D11_BUFFER_DESC vbd;
-    vbd.Usage = D3D11_USAGE_IMMUTABLE;
-    vbd.ByteWidth = size_in_byte;
-    vbd.BindFlags = D3D11_BIND_INDEX_BUFFER;
-    vbd.CPUAccessFlags = 0;
-    vbd.MiscFlags = 0;
-	vbd.StructureByteStride = 0;
-
-    // 新建索引缓冲区
-    D3D11_SUBRESOURCE_DATA vinitData;
-    vinitData.pSysMem = init_data;
-    auto const& re = Context::Instance().RenderEngineInstance();
-    HR(re.D3DDevice()->CreateBuffer(&vbd, &vinitData, ibs_.put()));
-
-    // 输入装配阶段的索引缓冲区设置
-    re.D3DDeviceImmContext()->IASetIndexBuffer(ibs_.get(), DXGI_FORMAT_R32_UINT, 0);
 }
 
 void D3D11RenderMesh::CreateVertexShader(const std::string& filename, const D3D11_INPUT_ELEMENT_DESC* inputLayouts, int size)

@@ -50,8 +50,8 @@ std::string CombineFileLine(std::string_view file, uint32_t line);
 #define TMSG(msg) throw std::runtime_error(msg)
 
 #if defined(DEBUG) | defined(_DEBUG)
-	#ifndef HR
-	#define HR(x)                                              \
+	#ifndef TIFHR
+	#define TIFHR(x)                                              \
 	{                                                          \
 		HRESULT hr_debug = (x);                                      \
 		if ((hr_debug) < 0)                                          \
@@ -61,8 +61,8 @@ std::string CombineFileLine(std::string_view file, uint32_t line);
 	}
 	#endif
 #else
-	#ifndef HR
-	#define HR(x) (x)
+	#ifndef TIFHR
+	#define TIFHR(x) (x)
 	#endif
 #endif 
 

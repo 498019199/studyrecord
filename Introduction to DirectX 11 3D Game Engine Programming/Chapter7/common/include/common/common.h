@@ -1,6 +1,12 @@
 #pragma once
 #include <common/macro.h>
+#include <common/com_ptr.h>
 #include <cassert>
+#include <cstdint>
+
+#include <vector>
+#include <string>
+#include <map>
 
 #ifdef _DEBUG
 	#define COMMON_ASSERT(val) assert(val)
@@ -28,3 +34,10 @@ using Color = MathWorker::Color;
 
 class SceneNode;
 using SceneNodePtr = std::shared_ptr<SceneNode>;
+class Renderable;
+using RenderablePtr = std::shared_ptr<Renderable>;
+
+class ID3D11Buffer;
+using ID3D11BufferPtr = com_ptr<ID3D11Buffer>;
+class D3D11GraphicsBuffer;
+using GraphicsBufferPtr = std::shared_ptr<D3D11GraphicsBuffer>;

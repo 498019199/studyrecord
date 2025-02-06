@@ -1,4 +1,6 @@
 #pragma once
+#include <common/common.h>
+#include <common/ElementFormat.h>
 
 // 顶点布局和顶点缓存
 enum VertexElementUsage
@@ -23,7 +25,35 @@ enum VertexElementUsage
     VEU_Binormal
 };
 
-class RenderLayout
+struct VertexElement
+{
+    VertexElement()
+    {
+    }
+
+    VertexElement(VertexElementUsage u, uint8_t ui, ElementFormat f)
+        : usage(u), usage_index(ui), format(f)
+    {
+    }
+
+    friend bool operator==(VertexElement const & lhs, VertexElement const & rhs) noexcept
+    {
+        return (lhs.usage == rhs.usage)
+            && (lhs.usage_index == rhs.usage_index)
+            && (lhs.format == rhs.format);
+    }
+
+    uint16_t element_size() const
+    {
+        return NumFormatBytes(format);
+    }
+    
+    VertexElementUsage usage;
+	uint8_t usage_index;
+    ElementFormat format;
+};
+
+class D3D11RenderLayout
 {
 public:
     enum topology_type
@@ -71,6 +101,12 @@ public:
         TT_32_Ctrl_Pt_PatchList
     };
 
+    enum stream_type
+    {
+        ST_Geometry,
+        ST_Instance
+    };
+
     void TopologyType(topology_type type)
     {
         topo_type_ = type;
@@ -80,6 +116,17 @@ public:
         return topo_type_;
     }
 
+    void BindVertexStream(const GraphicsBufferPtr& buffer, const VertexElement& vet,
+		stream_type type = ST_Geometry, uint32_t freq = 1);
+	void BindVertexStream(const GraphicsBufferPtr& buffer, std::span<VertexElement const> vet,
+			stream_type type = ST_Geometry, uint32_t freq = 1);
+
+    void BindIndexStream(const GraphicsBufferPtr& index_stream, ElementFormat format);
 private:
     topology_type topo_type_;
+
+	GraphicsBufferPtr index_stream_;// 索引缓冲区
+	ElementFormat index_format_;
+
+    com_ptr<ID3D11Buffer> vbs_; // 顶点缓冲区
 };

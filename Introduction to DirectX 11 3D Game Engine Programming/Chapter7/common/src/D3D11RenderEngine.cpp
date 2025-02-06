@@ -1,4 +1,5 @@
 #include <common/D3D11RenderEngine.h>
+#include <common/common.h>
 extern int g_IndexCount;
 
 D3D11RenderEngine::D3D11RenderEngine(HWND hwnd, const RenderSettings& settings)
@@ -46,6 +47,7 @@ D3D11RenderEngine::D3D11RenderEngine(HWND hwnd, const RenderSettings& settings)
 
 	DXGI_SWAP_CHAIN_DESC sd;
 	sd.BufferDesc.Width  = settings.width;
+
 	sd.BufferDesc.Height = settings.height;
 	sd.BufferDesc.RefreshRate.Numerator = 60;
 	sd.BufferDesc.RefreshRate.Denominator = 1;
@@ -168,17 +170,7 @@ void D3D11RenderEngine::OnRender()
 	d3d_imm_ctx_->ClearRenderTargetView(render_target_view_, &blackColor.r());
 	d3d_imm_ctx_->ClearDepthStencilView(depth_stencil_view_, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.0f, 0);
 
-	// 绘制几何模型
-	if(3 == g_IndexCount)
-	{
-		d3d_imm_ctx_->Draw(g_IndexCount, 0);
-	}
-	else
-	{
-		d3d_imm_ctx_->DrawIndexed(g_IndexCount, 0, 0);
-	}
-    
-
+	d3d_imm_ctx_->DrawIndexed(g_IndexCount, 0, 0);
 	HR(swap_chain_->Present(0, 0));
 }
 
@@ -190,4 +182,25 @@ ID3D11Device* D3D11RenderEngine::D3DDevice() const
 ID3D11DeviceContext* D3D11RenderEngine::D3DDeviceImmContext() const
 {
     return d3d_imm_ctx_;
+}
+
+GraphicsBufferPtr D3D11RenderEngine::MakeVertexBuffer(BufferUsage usage, uint32_t access_hint, uint32_t size_in_byte, void const * init_data,
+        uint32_t structure_byte_stride)
+{
+	auto ret = std::make_shared<D3D11GraphicsBuffer>(usage, access_hint, size_in_byte, structure_byte_stride);
+    ret->CreateHWResource(init_data);
+}
+
+GraphicsBufferPtr D3D11RenderEngine::MakeIndexBuffer(BufferUsage usage, uint32_t access_hint, uint32_t size_in_byte, void const * init_data,
+        uint32_t structure_byte_stride)
+{
+	auto ret = std::make_shared<D3D11GraphicsBuffer>(usage, access_hint, size_in_byte, structure_byte_stride);
+    ret->CreateHWResource(init_data);
+}
+
+GraphicsBufferPtr D3D11RenderEngine::MakeConstantBuffer(BufferUsage usage, uint32_t access_hint, uint32_t size_in_byte, void const * init_data,
+        uint32_t structure_byte_stride)
+{
+	auto ret = std::make_shared<D3D11GraphicsBuffer>(usage, access_hint, size_in_byte, structure_byte_stride);
+    ret->CreateHWResource(init_data);
 }
