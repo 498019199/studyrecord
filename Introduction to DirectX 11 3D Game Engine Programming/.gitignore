@@ -9,7 +9,9 @@
 /3rd/assimp
 /3rd/d3dcompiler
 /3rd/DirectX-Headers
-/3rd/dxsdk/Include
-/3rd/dxsdk/Lib
+/3rd/dxsdk/dxsdk
 /3rd/zlib
 *.cso
+
+
+/Chapter4

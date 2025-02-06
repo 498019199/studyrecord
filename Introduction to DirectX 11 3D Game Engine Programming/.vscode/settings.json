@@ -4,6 +4,7 @@
     "cmake.generatorPlatform": "x64",
     
     "files.associations": {
+        "*.h": "cpp",
         "xlocinfo": "cpp",
         "xstring": "cpp",
         "xiosbase": "cpp",
@@ -68,9 +69,31 @@
         "forward_list": "cpp",
         "ratio": "cpp",
         "list": "cpp",
-        "variant": "cpp"
+        "variant": "cpp",
+        "any": "cpp",
+        "bitset": "cpp",
+        "cinttypes": "cpp",
+        "codecvt": "cpp",
+        "condition_variable": "cpp",
+        "cstdarg": "cpp",
+        "deque": "cpp",
+        "functional": "cpp",
+        "mutex": "cpp",
+        "numeric": "cpp",
+        "queue": "cpp",
+        "random": "cpp",
+        "ranges": "cpp",
+        "regex": "cpp",
+        "set": "cpp",
+        "span": "cpp",
+        "stack": "cpp",
+        "stop_token": "cpp",
+        "thread": "cpp",
+        "unordered_map": "cpp",
+        "unordered_set": "cpp",
+        "xhash": "cpp"
     },
     "search.exclude": {
-        "Chapter4/common": true,
+        "Chapter4": true,
     }
 }

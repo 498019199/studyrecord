@@ -493,7 +493,7 @@ namespace MathWorker
 	}
 
     // https://learn.microsoft.com/en-us/previous-versions/windows/desktop/bb281711(v=vs.85)
-	float4x4 LookAtRH(const float3& Eye, const float3& At, const float3& Up);
+	template float4x4 LookAtRH(const float3& Eye, const float3& At, const float3& Up);
     template<typename T>
 	Matrix4_T<T> LookAtRH(const Vector_T<T, 3>& Eye, const Vector_T<T, 3>& At, const Vector_T<T, 3>& Up)
     {
@@ -509,7 +509,7 @@ namespace MathWorker
 
     // https://learn.microsoft.com/en-us/previous-versions/windows/desktop/bb281710(v=vs.85)
     // Eye 是摄像机位置，At 是摄像机朝向方向，Up 摄像机向上方向
-	float4x4 LookAtLH(const float3& Eye, const float3& At, const float3& Up);
+	template float4x4 LookAtLH(const float3& Eye, const float3& At, const float3& Up);
     template<typename T>
 	Matrix4_T<T> LookAtLH(const Vector_T<T, 3>& Eye, const Vector_T<T, 3>& At, const Vector_T<T, 3>& Up)
     {
@@ -746,10 +746,10 @@ namespace MathWorker
             sx * sy * sz + cx * cy * cz);
     }
 
-    rotator ToRotator(const float4x4 &mat)
-    {
-        return rotator();
-    }
+    // rotator ToRotator(const float4x4 &mat)
+    // {
+    //     return rotator();
+    // }
 
     // From http://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToEuler/index.htm
     rotator ToRotator(const quater &quat)

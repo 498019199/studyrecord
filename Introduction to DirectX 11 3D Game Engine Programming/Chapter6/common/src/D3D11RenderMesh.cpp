@@ -18,7 +18,7 @@ void D3D11RenderMesh::CreateConstant()
     D3D11_BUFFER_DESC cbd;
     ZeroMemory(&cbd, sizeof(cbd));
     cbd.Usage = D3D11_USAGE_DYNAMIC;
-    cbd.ByteWidth = sizeof(cbs_);
+    cbd.ByteWidth = sizeof(ConstantBuffer);
     cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
     cbd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
     // 新建常量缓冲区，不使用初始数据

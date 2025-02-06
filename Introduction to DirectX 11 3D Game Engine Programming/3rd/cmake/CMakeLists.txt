@@ -116,6 +116,7 @@ ENDFOREACH()
 
 add_subdirectory(zlib)
 add_subdirectory(assimp)
+add_subdirectory(googletest)
 if(ZENGINE_PLATFORM_WINDOWS)
 	#add_subdirectory(dxsdk)
 	add_subdirectory(DirectX-Headers)

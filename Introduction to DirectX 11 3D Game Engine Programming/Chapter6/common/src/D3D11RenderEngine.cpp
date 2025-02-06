@@ -164,12 +164,20 @@ void D3D11RenderEngine::OnRender()
 	assert(d3d_imm_ctx_);
 	assert(swap_chain_);
 
-	Color blueColor(0.0f, 0.0f, 1.0f, 1.0f);
+	Color blueColor(0.0f, 0.0f, 0.0f, 1.0f);
 	d3d_imm_ctx_->ClearRenderTargetView(render_target_view_, &blueColor.r());
 	d3d_imm_ctx_->ClearDepthStencilView(depth_stencil_view_, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.0f, 0);
 
 	// 绘制几何模型
-    d3d_imm_ctx_->Draw(g_IndexCount, 0);
+	if(3 == g_IndexCount)
+	{
+		d3d_imm_ctx_->Draw(g_IndexCount, 0);
+	}
+	else
+	{
+		d3d_imm_ctx_->DrawIndexed(g_IndexCount, 0, 0);
+	}
+    
 
 	HR(swap_chain_->Present(0, 0));
 }

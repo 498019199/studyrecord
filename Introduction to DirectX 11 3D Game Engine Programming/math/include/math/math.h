@@ -222,7 +222,7 @@ namespace MathWorker
 	quater ToQuaternion(const float4x4& mat);
 	quater ToQuaternion(const rotator& rot);
 
-	rotator ToRotator(const float4x4& mat);
+	//rotator ToRotator(const float4x4& mat);
 	rotator ToRotator(const quater& quat);
 }
 

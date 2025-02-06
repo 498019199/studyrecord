@@ -58,45 +58,47 @@ void Box()
 
     // 创建索引缓冲
 	UINT indices[] = {
-		// 前表面
+		// front face
 		0, 1, 2,
 		0, 2, 3,
 
-		// 后表面
+		// back face
 		4, 6, 5,
 		4, 7, 6,
 
-		// 左表面
+		// left face
 		4, 5, 1,
 		4, 1, 0,
 
-		// 右表面
+		// right face
 		3, 2, 6,
 		3, 6, 7,
 
-		// 上表面
+		// top face
 		1, 5, 6,
 		1, 6, 2,
 
-		// 下表面
+		// bottom face
 		4, 0, 3, 
 		4, 3, 7
 	};
     
-	D3D11RenderMesh Mesh;
-    Mesh.CreateVertexBuffer(&vertices, sizeof(Vertex) * 8);
-    Mesh.CreateIndecxBuffer(&indices, sizeof(UINT) * 36);
-	Mesh.CreateConstant();
+	D3D11RenderMesh* pMesh = new D3D11RenderMesh();
+    pMesh->CreateVertexBuffer(&vertices, sizeof(Vertex) * 8);
+    pMesh->CreateIndecxBuffer(&indices, sizeof(UINT) * 36);
+	pMesh->CreateConstant();
 
 	auto currentPath = std::filesystem::current_path().parent_path().parent_path().string();
 	currentPath += "\\Chapter6\\HLSL\\";
-	Mesh.CreateVertexShader(currentPath + "Cube_VS", inputLayout, ARRAYSIZE(inputLayout));
-	Mesh.CreatePixelShader(currentPath + "Cube_PS");
+	pMesh->CreateVertexShader(currentPath + "Cube_VS", inputLayout, ARRAYSIZE(inputLayout));
+	pMesh->CreatePixelShader(currentPath + "Cube_PS");
 	
 	uint32_t stride = sizeof(Vertex);	// 跨越字节数
-	Mesh.BindShader(stride);
-	Mesh.D3D11SetDebug_Cube();
+	pMesh->BindShader(stride);
+	pMesh->D3D11SetDebug_Cube();
+	
 	g_IndexCount = 36;
+	Context::Instance().AppInstance().AddActor(pMesh);
 }
 
 void Hills()
@@ -122,11 +124,13 @@ void Waves()
 int main() {
     WinAPP app;
     RenderSettings settings;
-    settings.width = 1920;
-    settings.height = 1080;
+    settings.width = 1280;
+    settings.height = 720;
     app.CreateAppWindow(settings);
+	Context::Instance().AppInstance(app);
     app.InitDevice(app.GetHWND(), settings);
-
+	
+	//Triangle();
 	Box();
 	
     app.Run();

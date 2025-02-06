@@ -12,7 +12,14 @@ WinAPP::WinAPP()
 
 WinAPP::~WinAPP()
 {
-    
+    for(auto obj : obj_mgr)
+	{
+		if(obj)
+		{	
+			delete obj;
+			obj = nullptr;
+		}
+	}
 }
 
 LRESULT WinAPP::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept
