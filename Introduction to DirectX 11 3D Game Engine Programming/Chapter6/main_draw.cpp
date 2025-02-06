@@ -103,7 +103,8 @@ void Box()
 
 void Hills()
 {
-    
+
+	
 }
 
 void Shapes()
@@ -113,7 +114,57 @@ void Shapes()
 
 void Skull()
 {
+    auto currentPath = std::filesystem::current_path().parent_path().parent_path().string();
+	std::ifstream fin(currentPath + "\\Models\\skull.txt");
+	if(!fin)
+	{
+		return;
+	}
 
+	UINT vcount = 0;
+	UINT tcount = 0;
+	std::string ignore;
+	fin >> ignore >> vcount;
+	fin >> ignore >> tcount;
+	fin >> ignore >> ignore >> ignore >> ignore;
+	
+	float nx, ny, nz;
+	std::vector<Vertex> vertices(vcount);
+	Color blackColor(0.0f, 0.0f, 0.0f, 1.0f);
+	for(UINT i = 0; i < vcount; ++i)
+	{
+		fin >> vertices[i].pos.x() >> vertices[i].pos.y() >> vertices[i].pos.z();
+		vertices[i].color = blackColor;
+		// Normal not used in this demo.
+		fin >> nx >> ny >> nz;
+	}
+
+	fin >> ignore;
+	fin >> ignore;
+	fin >> ignore;
+	int SkullIndexCount = 3*tcount;
+	std::vector<UINT> indices(SkullIndexCount);
+	for(UINT i = 0; i < tcount; ++i)
+	{
+		fin >> indices[i*3+0] >> indices[i*3+1] >> indices[i*3+2];
+	}
+	fin.close();
+
+	D3D11RenderMesh* pMesh = new D3D11RenderMesh();
+    pMesh->CreateVertexBuffer(&vertices[0], sizeof(Vertex) * vcount);
+    pMesh->CreateIndecxBuffer(&indices[0], sizeof(UINT) * SkullIndexCount);
+	pMesh->CreateConstant();
+
+	currentPath += "\\Chapter6\\HLSL\\";
+	pMesh->CreateVertexShader(currentPath + "Skull_VS", inputLayout, ARRAYSIZE(inputLayout));
+	pMesh->CreatePixelShader(currentPath + "Skull_PS");
+
+	uint32_t stride = sizeof(Vertex);	// 跨越字节数
+	pMesh->BindShader(stride);
+	pMesh->D3D11SetDebug_Cube();
+	
+	g_IndexCount = SkullIndexCount;
+	Context::Instance().AppInstance().AddActor(pMesh);
 }
 
 void Waves()
@@ -131,8 +182,9 @@ int main() {
     app.InitDevice(app.GetHWND(), settings);
 	
 	//Triangle();
-	Box();
-	
+	//Box();
+	Skull();
+
     app.Run();
     return 0;
 }

@@ -36,6 +36,7 @@ private:
     com_ptr<ID3D11PixelShader> pixel_shader_;	    // 像素着色器
 
     com_ptr<ID3D11InputLayout> input_layout_;
+    com_ptr<ID3D11RasterizerState> rs_;
 
     ConstantBuffer cb_;
 };

@@ -40,6 +40,14 @@ void D3D11RenderMesh::CreateVertexBuffer(void const * init_data, int size_in_byt
     vinitData.pSysMem = init_data;
     auto const& re = Context::Instance().RenderEngineInstance();
     HR(re.D3DDevice()->CreateBuffer(&vbd, &vinitData, vbs_.put()));
+
+    D3D11_RASTERIZER_DESC wireframeDesc;
+	ZeroMemory(&wireframeDesc, sizeof(D3D11_RASTERIZER_DESC));
+	wireframeDesc.FillMode = D3D11_FILL_WIREFRAME;
+	wireframeDesc.CullMode = D3D11_CULL_BACK;
+	wireframeDesc.FrontCounterClockwise = false;
+	wireframeDesc.DepthClipEnable = true;
+	HR(re.D3DDevice()->CreateRasterizerState(&wireframeDesc, rs_.put()));
 }
 
 void D3D11RenderMesh::CreateIndecxBuffer(void const * init_data, int size_in_byte)
@@ -99,6 +107,8 @@ void D3D11RenderMesh::BindShader(uint32_t stride)
     // 设置图元类型，设定输入布局
     re.D3DDeviceImmContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
     re.D3DDeviceImmContext()->IASetInputLayout(input_layout_.get());
+
+    re.D3DDeviceImmContext()->RSSetState(rs_.get());
 
     // 将更新好的常量缓冲区绑定到顶点着色器
     if(nullptr != cbs_)
