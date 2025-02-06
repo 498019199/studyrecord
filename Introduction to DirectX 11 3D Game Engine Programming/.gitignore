@@ -11,6 +11,7 @@
 /3rd/DirectX-Headers
 /3rd/dxsdk/dxsdk
 /3rd/zlib
+/3rd/googletest
 *.cso
 
 
