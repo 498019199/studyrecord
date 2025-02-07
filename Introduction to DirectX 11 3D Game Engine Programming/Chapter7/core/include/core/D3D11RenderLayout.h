@@ -126,6 +126,21 @@ public:
         return topo_type_;
     }
 
+    uint32_t VertexStreamNum() const
+    {
+        return static_cast<uint32_t>(vertex_streams_.size());
+    }
+
+    const GraphicsBufferPtr& GetVertexStream(uint32_t index) const
+    {
+        return vertex_streams_[index].stream;
+    }
+
+    const GraphicsBufferPtr& GetIndexStream() const
+    {
+		return index_stream_;
+	}
+
     void BindVertexStream(const GraphicsBufferPtr& buffer, const VertexElement& vet,
 		stream_type type = ST_Geometry, uint32_t freq = 1);
 	void BindVertexStream(const GraphicsBufferPtr& buffer, std::span<VertexElement const> vet,

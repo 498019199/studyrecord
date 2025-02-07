@@ -4,11 +4,14 @@
 #include <cassert>
 #include <cstdint>
 
+#include <d3d11_1.h>
+
 #include <vector>
 #include <string>
 #include <map>
 #include <core/span.h>
-
+#include <string>
+#include <string_view>
 
 
 #ifdef _DEBUG
@@ -16,6 +19,8 @@
 #else
 	#define COMMON_ASSERT(val) 
 #endif//_DEBUG
+
+using ID3D11BufferPtr = com_ptr<ID3D11Buffer>;
 
 #include <math/math.h>
 using int1 = MathWorker::int1;
@@ -37,8 +42,8 @@ using Color = MathWorker::Color;
 
 class SceneNode;
 using SceneNodePtr = std::shared_ptr<SceneNode>;
-class Renderable;
-using RenderablePtr = std::shared_ptr<Renderable>;
+class D3D11Renderable;
+using RenderablePtr = std::shared_ptr<D3D11Renderable>;
 class RenderEffect;
 using RenderEffectPtr = std::shared_ptr<RenderEffect>;
 
@@ -53,5 +58,8 @@ class D3D11RenderEngine;
 using RenderEnginePtr = std::shared_ptr<D3D11RenderEngine>;
 class D3D11RenderEngine;
 using RenderEnginePtr = std::shared_ptr<D3D11RenderEngine>;
-struct ID3D11Buffer;
-using ID3D11BufferPtr = com_ptr<ID3D11Buffer>;
+class SceneManager;
+using SceneMgrPtr = std::shared_ptr<SceneManager>;
+
+std::string& Convert(std::string& dest, std::wstring_view src);
+std::wstring& Convert(std::wstring& dest, std::string_view src);

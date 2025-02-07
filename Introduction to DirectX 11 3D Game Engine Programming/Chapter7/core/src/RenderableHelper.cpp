@@ -114,9 +114,10 @@ RenderableBox::  RenderableBox(float width, float height, float depth, const Col
 
 	auto currentPath = std::filesystem::current_path().parent_path().parent_path().string();
 	currentPath += "\\Chapter7\\HLSL\\";
+    effect_ = std::make_shared<RenderEffect>();
     effect_->CreateConstant();
-    effect_->AttackVertexShader(currentPath + "Light__VS");
-    effect_->AttackPixelShader(currentPath + "Light__PS");
+    effect_->AttackVertexShader(currentPath + "Light_VS");
+    effect_->AttackPixelShader(currentPath + "Light_PS");
 }
 
 RenderableSphere::RenderableSphere(float radius, int levels, int slices, const Color & color)
@@ -229,9 +230,10 @@ RenderableSphere::RenderableSphere(float radius, int levels, int slices, const C
         static_cast<uint32_t>(indice_vec.size() * sizeof(indice_vec[0])), &indice_vec[0]);
     rls_[0]->BindIndexStream(ib, EF_R16UI);
 
-    auto currentPath = std::filesystem::current_path().parent_path().parent_path().string();
+	auto currentPath = std::filesystem::current_path().parent_path().parent_path().string();
 	currentPath += "\\Chapter7\\HLSL\\";
+    effect_ = std::make_shared<RenderEffect>();
     effect_->CreateConstant();
-    effect_->AttackVertexShader(currentPath + "Light__VS");
-    effect_->AttackPixelShader(currentPath + "Light__PS");
+    effect_->AttackVertexShader(currentPath + "Light_VS");
+    effect_->AttackPixelShader(currentPath + "Light_PS");
 }

@@ -5,19 +5,8 @@
     #include <crtdbg.h>
 #endif
 
-
-#include <d3d11_1.h>
 #include <core/macro.h>
-#include <d3dcompiler.h>
-#include <cassert>
-#include <ctime>
-#include <algorithm>
-#include <stdexcept>
-#include <string>
-#include <string_view>
-#include <sstream>
-#include <fstream>
-#include <vector>
+#include <core/common.h>
 
 struct RenderSettings
 {
@@ -86,8 +75,7 @@ std::string CombineFileLine(std::string_view file, uint32_t line);
 //      multiple definitions in a .cpp file (it can pick anyone and discard 
 //      the rest because they are constant--all the same).
 
-std::string& Convert(std::string& dest, std::wstring_view src);
-std::wstring& Convert(std::wstring& dest, std::string_view src);
+
 
 //
 // 着色器编译相关函数

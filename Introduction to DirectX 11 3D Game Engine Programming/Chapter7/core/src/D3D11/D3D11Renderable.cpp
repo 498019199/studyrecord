@@ -20,3 +20,18 @@ D3D11RenderLayout& D3D11Renderable::GetRenderLayout(uint32_t lod) const
 {
     return *rls_[lod];
 }
+
+RenderEffect* D3D11Renderable::GetRenderEffect()
+{
+    return effect_.get();
+}
+
+void D3D11Renderable::Render()
+{
+    int32_t lod = 0;
+    const auto& re = Context::Instance().RenderEngineInstance();
+    const auto& effect = *this->GetRenderEffect();
+    const D3D11RenderLayout& layout = this->GetRenderLayout(lod);
+
+    re.DoRender(effect, layout);
+}

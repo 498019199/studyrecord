@@ -3,8 +3,8 @@
 #include <core/D3D11RenderMesh.h>
 #include <core/Timer.h>
 #include <core/Context.h>
-
-#include <string>
+#include <core/D3D11Util.h>
+#include <core/SceneManager.h>
 
 WinAPP::WinAPP()
 {
@@ -12,14 +12,6 @@ WinAPP::WinAPP()
 
 WinAPP::~WinAPP()
 {
-    for(auto obj : obj_mgr)
-	{
-		if(obj)
-		{	
-			delete obj;
-			obj = nullptr;
-		}
-	}
 }
 
 LRESULT WinAPP::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept
@@ -131,14 +123,6 @@ void WinAPP::CalculateFrameStats()
 	timer_.restart();
 }
 
-void WinAPP::UpdateScene(float dt)
-{
-    for(auto obj : obj_mgr)
-	{
-		obj->Updata(dt);
-	}
-}
-
 int WinAPP::Run()
 {
     MSG msg = {0};
@@ -158,7 +142,7 @@ int WinAPP::Run()
 			if( !is_paused )
 			{
 				CalculateFrameStats();
-				UpdateScene(frame_time_);	
+				Context::Instance().SceneMgr().UpdateScene(frame_time_);	
 				device_->OnRender();
 			}
 			else
@@ -169,9 +153,4 @@ int WinAPP::Run()
     }
 
 	return (int)msg.wParam;
-}
-
-void WinAPP::AddActor(D3D11RenderMesh* obj)
-{
-    obj_mgr.emplace_back(obj);
 }

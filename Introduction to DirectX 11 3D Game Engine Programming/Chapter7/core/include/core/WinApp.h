@@ -23,16 +23,11 @@ public:
 
     HWND GetHWND() const { return hwnd_; }
 
-    void AddActor(D3D11RenderMesh* obj);
-    bool RemoveActor(D3D11RenderMesh* obj);
-
     float AspectRatio() const { return static_cast<float>(width_) / height_; }
 private:
     static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept;
     
     void CalculateFrameStats();
-
-    void UpdateScene(float dt);
 private:
     // Stats
     uint32_t total_num_frames_ = 0;
@@ -54,7 +49,6 @@ private:
     float dpi_scale_ = 1.f;
 
     D3D11RenderEngine *device_;
-    std::list<D3D11RenderMesh*> obj_mgr;
 };
 
 

@@ -26,12 +26,16 @@ public:
 
     void CreateHWResource(void const * init_data);
     void DeleteHWResource();
-private:
 
     void GetD3DFlags(D3D11_USAGE& usage, UINT& cpu_access_flags, UINT& bind_flags, UINT& misc_flags);
 
     void* Map(BufferAccess ba);
     void Unmap();
+
+    ID3D11Buffer* D3DBuffer() const
+    {
+        return d3d_buffer_.get();
+    }
 private:
     BufferUsage usage_;
     uint32_t access_hint_;

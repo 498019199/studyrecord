@@ -18,7 +18,8 @@ public:
     D3D11RenderEngine& RenderEngineInstance() const;
 
     D3D11RenderFactory& RenderFactoryInstance();
-
+    SceneManager& SceneMgr();
+    
     void LoadConfig(const char* file_name);
 private:
     static std::unique_ptr<Context> instance_;
@@ -26,7 +27,9 @@ private:
 
     D3D11RenderEngine* render_engine_;
     RenderFactoryPtr render_factory_;
+    SceneMgrPtr scene_mgr_;
 };
+
 
 
 

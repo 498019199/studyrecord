@@ -11,15 +11,16 @@ set(SRC_LIST
     ${PROJECT_SOURCE_DIR}/Chapter7/core/src/D3D11/D3D11RenderEngine.cpp
     ${PROJECT_SOURCE_DIR}/Chapter7/core/src/D3D11/D3D11RenderLayout.cpp
     ${PROJECT_SOURCE_DIR}/Chapter7/core/src/D3D11/D3D11Util.cpp 
-    ${PROJECT_SOURCE_DIR}/Chapter7/core/src/D3D11/D3D11RenderMesh.cpp
     ${PROJECT_SOURCE_DIR}/Chapter7/core/src/D3D11/D3D11RenderFactory.cpp
 
     ${PROJECT_SOURCE_DIR}/Chapter7/core/src/scene/SceneNode.cpp
     ${PROJECT_SOURCE_DIR}/Chapter7/core/src/scene/SceneManager.cpp
     
+    ${PROJECT_SOURCE_DIR}/Chapter7/core/src/common.cpp
     ${PROJECT_SOURCE_DIR}/Chapter7/core/src/Context.cpp
     ${PROJECT_SOURCE_DIR}/Chapter7/core/src/Light.cpp 
     ${PROJECT_SOURCE_DIR}/Chapter7/core/src/RenderableHelper.cpp
+    ${PROJECT_SOURCE_DIR}/Chapter7/core/src/RenderEffect.cpp
     ${PROJECT_SOURCE_DIR}/Chapter7/core/src/Timer.cpp 
     ${PROJECT_SOURCE_DIR}/Chapter7/core/src/WinApp.cpp)
 add_executable(Chapter7 ${SRC_LIST})

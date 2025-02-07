@@ -114,10 +114,43 @@ void D3D11GraphicsBuffer::DeleteHWResource()
 
 void* D3D11GraphicsBuffer::Map(BufferAccess ba)
 {
-    return nullptr;
+    COMMON_ASSERT(d3d_buffer_);
+
+    D3D11_MAP type;
+    switch (ba)
+    {
+    case BA_Read_Only:
+        type = D3D11_MAP_READ;
+        break;
+
+    case BA_Write_Only:
+        if ((EAH_CPU_Write == access_hint_) || ((EAH_CPU_Write | EAH_GPU_Read) == access_hint_))
+        {
+            type = D3D11_MAP_WRITE_DISCARD;
+        }
+        else
+        {
+            type = D3D11_MAP_WRITE;
+        }
+        break;
+
+    case BA_Read_Write:
+        type = D3D11_MAP_READ_WRITE;
+        break;
+
+    case BA_Write_No_Overwrite:
+        type = D3D11_MAP_WRITE_NO_OVERWRITE;
+        break;
+    }
+
+    D3D11_MAPPED_SUBRESOURCE mapped;
+    TIFHR(d3d_imm_ctx_->Map(d3d_buffer_.get(), 0, type, 0, &mapped));
+    return mapped.pData;
 }
 
 void D3D11GraphicsBuffer::Unmap()
 {
-    
+    COMMON_ASSERT(d3d_buffer_);
+
+    d3d_imm_ctx_->Unmap(d3d_buffer_.get(), 0);
 }

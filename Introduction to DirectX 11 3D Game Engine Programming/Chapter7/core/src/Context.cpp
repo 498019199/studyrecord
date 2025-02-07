@@ -1,6 +1,7 @@
 #include <core/Context.h>
 #include <cassert>
 #include <core/D3D11RenderFactory.h>
+#include <core/SceneManager.h>
 
 std::unique_ptr<Context> Context::instance_;
 
@@ -45,8 +46,18 @@ D3D11RenderFactory& Context::RenderFactoryInstance()
     return *render_factory_;
 }
 
+SceneManager& Context::SceneMgr()
+{
+    COMMON_ASSERT(scene_mgr_);
+    return *scene_mgr_;
+}
+
+
 void Context::LoadConfig(const char* file_name)
 {
     render_factory_ = std::make_shared<D3D11RenderFactory>();
     COMMON_ASSERT(render_factory_);
+
+    scene_mgr_ = std::make_shared<SceneManager>();
+    COMMON_ASSERT(scene_mgr_);
 }

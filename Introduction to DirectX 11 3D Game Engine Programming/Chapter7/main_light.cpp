@@ -3,6 +3,7 @@
 #include <core/RenderableHelper.h>
 #include <core/Context.h>
 #include <math/math.h>
+#include <core/SceneManager.h>
 
 #include <filesystem>
 extern int g_IndexCount = 0;
@@ -23,12 +24,14 @@ void CreateBox()
 {
     // 创建立方体网格数据
     auto box = new RenderableBox(2.0f, 2.0f, 2.0f, Color(1.f, 1.f, 1.f, 1.f));
+    Context::Instance().SceneMgr().AddRenderable(box);
 }
 
 void CreateShere()
 {
     // 创建球体网格数据，levels和slices越大，精度越高。
     auto sphere = new RenderableSphere(1.0f, 20, 20, Color(1.f, 1.f, 1.f, 1.f));
+    Context::Instance().SceneMgr().AddRenderable(sphere);
 }
 
 void Light()

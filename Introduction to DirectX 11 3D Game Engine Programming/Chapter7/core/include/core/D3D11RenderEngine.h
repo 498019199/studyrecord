@@ -1,5 +1,5 @@
 #pragma once
-#include <core/D3D11Util.h>
+#include <core/common.h>
 
 struct RenderSettings;
 class D3D11RenderEngine
@@ -9,10 +9,12 @@ public:
     ~D3D11RenderEngine();
 
     void OnResize();
-    void OnRender();
 
     ID3D11Device* D3DDevice() const;
     ID3D11DeviceContext* D3DDeviceImmContext() const;
+
+    void DoRender(const RenderEffect& effect, const D3D11RenderLayout& rl);
+    void EndRender();
 private:
     int weight_ = 0;
     int height_ = 0;
@@ -31,6 +33,7 @@ private:
     
     D3D11_VIEWPORT screen_viewport_;
 };
+
 
 
 
