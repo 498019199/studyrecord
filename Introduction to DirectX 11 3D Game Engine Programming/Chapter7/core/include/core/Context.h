@@ -1,8 +1,7 @@
 #pragma once
-#include <memory>
+#include <core/common.h>
 
-class WinAPP;
-class D3D11RenderEngine;
+
 
 class Context
 {
@@ -16,9 +15,19 @@ public:
     WinAPP& AppInstance();
 
     void RenderEngineInstance(D3D11RenderEngine& render_engine);
-    D3D11RenderEngine& RenderEngineInstance();
+    D3D11RenderEngine& RenderEngineInstance() const;
+
+    D3D11RenderFactory& RenderFactoryInstance();
+
+    void LoadConfig(const char* file_name);
 private:
     static std::unique_ptr<Context> instance_;
     WinAPP* app_;
+
     D3D11RenderEngine* render_engine_;
+    RenderFactoryPtr render_factory_;
 };
+
+
+
+

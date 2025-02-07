@@ -183,27 +183,3 @@ ID3D11DeviceContext* D3D11RenderEngine::D3DDeviceImmContext() const
 {
     return d3d_imm_ctx_;
 }
-
-GraphicsBufferPtr D3D11RenderEngine::MakeVertexBuffer(BufferUsage usage, uint32_t access_hint, uint32_t size_in_byte, void const * init_data,
-        uint32_t structure_byte_stride)
-{
-	auto ret = std::make_shared<D3D11GraphicsBuffer>(usage, access_hint, D3D11_BIND_VERTEX_BUFFER, size_in_byte, structure_byte_stride);
-    ret->CreateHWResource(init_data);
-	return ret;
-}
-
-GraphicsBufferPtr D3D11RenderEngine::MakeIndexBuffer(BufferUsage usage, uint32_t access_hint, uint32_t size_in_byte, void const * init_data,
-        uint32_t structure_byte_stride)
-{
-	auto ret = std::make_shared<D3D11GraphicsBuffer>(usage, access_hint, D3D11_BIND_INDEX_BUFFER, size_in_byte, structure_byte_stride);
-    ret->CreateHWResource(init_data);
-	return ret;
-}
-
-GraphicsBufferPtr D3D11RenderEngine::MakeConstantBuffer(BufferUsage usage, uint32_t access_hint, uint32_t size_in_byte, void const * init_data,
-        uint32_t structure_byte_stride)
-{
-	auto ret = std::make_shared<D3D11GraphicsBuffer>(usage, access_hint, D3D11_BIND_CONSTANT_BUFFER, size_in_byte, structure_byte_stride);
-    ret->CreateHWResource(init_data);
-	return ret;
-}

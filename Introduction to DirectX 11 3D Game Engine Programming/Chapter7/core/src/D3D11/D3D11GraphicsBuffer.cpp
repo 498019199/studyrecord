@@ -7,7 +7,7 @@ D3D11GraphicsBuffer::D3D11GraphicsBuffer(BufferUsage usage, uint32_t access_hint
             :usage_(usage), access_hint_(access_hint), size_in_byte_(size_in_byte), structure_byte_stride_(structure_byte_stride),
             bind_flags_(bind_flags)
 {
-    auto re = Context::Instance().RenderEngineInstance();
+    const auto& re = Context::Instance().RenderEngineInstance();
     d3d_device_ = re.D3DDevice();
     d3d_imm_ctx_ = re.D3DDeviceImmContext();
 }

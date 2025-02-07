@@ -1,5 +1,6 @@
 #include <core/Context.h>
 #include <cassert>
+#include <core/D3D11RenderFactory.h>
 
 std::unique_ptr<Context> Context::instance_;
 
@@ -32,9 +33,20 @@ void Context::RenderEngineInstance(D3D11RenderEngine& render_engine)
     render_engine_ = &render_engine;
 }
 
-D3D11RenderEngine& Context::RenderEngineInstance()
+D3D11RenderEngine& Context::RenderEngineInstance() const
 {
-    assert(render_engine_);
+    COMMON_ASSERT(render_engine_);
     return *render_engine_;
 }
 
+D3D11RenderFactory& Context::RenderFactoryInstance()
+{
+    COMMON_ASSERT(render_engine_);
+    return *render_factory_;
+}
+
+void Context::LoadConfig(const char* file_name)
+{
+    render_factory_ = std::make_shared<D3D11RenderFactory>();
+    COMMON_ASSERT(render_factory_);
+}

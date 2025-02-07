@@ -1,5 +1,5 @@
 #pragma once
-#include <core/D3D11GraphicsBuffer.h>
+#include <core/D3D11Util.h>
 
 struct RenderSettings;
 class D3D11RenderEngine
@@ -13,13 +13,6 @@ public:
 
     ID3D11Device* D3DDevice() const;
     ID3D11DeviceContext* D3DDeviceImmContext() const;
-
-    GraphicsBufferPtr MakeVertexBuffer(BufferUsage usage, uint32_t access_hint, uint32_t size_in_byte, void const * init_data,
-        uint32_t structure_byte_stride = 0);
-    GraphicsBufferPtr MakeIndexBuffer(BufferUsage usage, uint32_t access_hint, uint32_t size_in_byte, void const * init_data,
-        uint32_t structure_byte_stride = 0);
-    GraphicsBufferPtr MakeConstantBuffer(BufferUsage usage, uint32_t access_hint, uint32_t size_in_byte, void const * init_data,
-        uint32_t structure_byte_stride = 0);
 private:
     int weight_ = 0;
     int height_ = 0;

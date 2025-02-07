@@ -1,6 +1,10 @@
 #include <core/RenderableHelper.h>
 #include <core/D3D11RenderLayout.h>
+#include <core/D3D11RenderFactory.h>
+#include <core/RenderEffect.h>
 #include <core/Context.h>
+
+#include <filesystem>
 
 RenderableBox::  RenderableBox(float width, float height, float depth, const Color & color)
 {
@@ -86,14 +90,14 @@ RenderableBox::  RenderableBox(float width, float height, float depth, const Col
         texs[i * 4 + 2] = float2(1.0f, 0.0f);
         texs[i * 4 + 3] = float2(1.0f, 1.0f);
     }
-    auto re = Context::Instance().RenderEngineInstance();
-    rls_[0]->BindVertexStream(re.MakeVertexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable, 24, &positions[0]),
+    auto& rf = Context::Instance().RenderFactoryInstance();
+    rls_[0]->BindVertexStream(rf.MakeVertexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable, 24, &positions[0]),
         VertexElement(VEU_Position, 0, EF_BGR32F));
-    rls_[0]->BindVertexStream(re.MakeVertexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable, 24, &normals[0]),
+    rls_[0]->BindVertexStream(rf.MakeVertexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable, 24, &normals[0]),
 		VertexElement(VEU_Normal, 0, EF_BGR32F));
-    rls_[0]->BindVertexStream(re.MakeVertexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable, 24, &tangents[0]),
+    rls_[0]->BindVertexStream(rf.MakeVertexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable, 24, &tangents[0]),
 		VertexElement(VEU_Tangent, 0, EF_ABGR32F));
-    rls_[0]->BindVertexStream(re.MakeVertexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable, 24, &texs[0]),
+    rls_[0]->BindVertexStream(rf.MakeVertexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable, 24, &texs[0]),
         VertexElement(VEU_TextureCoord, 0, EF_R32F));
 
     uint16_t indices[] = 
@@ -105,8 +109,14 @@ RenderableBox::  RenderableBox(float width, float height, float depth, const Col
         16, 17, 18, 18, 19, 16, // 背面(+Z面)
         20, 21, 22, 22, 23, 20	// 正面(-Z面)
     };
-    auto ib = re.MakeIndexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable, sizeof(indices), indices);
+    auto ib = rf.MakeIndexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable, sizeof(indices), indices);
     rls_[0]->BindIndexStream(ib, EF_R16UI);
+
+	auto currentPath = std::filesystem::current_path().parent_path().parent_path().string();
+	currentPath += "\\Chapter7\\HLSL\\";
+    effect_->CreateConstant();
+    effect_->AttackVertexShader(currentPath + "Light__VS");
+    effect_->AttackPixelShader(currentPath + "Light__PS");
 }
 
 RenderableSphere::RenderableSphere(float radius, int levels, int slices, const Color & color)
@@ -168,17 +178,17 @@ RenderableSphere::RenderableSphere(float radius, int levels, int slices, const C
     tangent_vec.emplace_back(float4(-1.0f, 0.0f, 0.0f, 1.0f));
     texs_vec.emplace_back(float2(0.0f, 1.0f));
 
-    auto re = Context::Instance().RenderEngineInstance();
-    rls_[0]->BindVertexStream(re.MakeVertexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable, 
+    auto& rf = Context::Instance().RenderFactoryInstance();
+    rls_[0]->BindVertexStream(rf.MakeVertexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable, 
         static_cast<uint32_t>(position_vec.size() * sizeof(position_vec[0])), &position_vec[0]),
         VertexElement(VEU_Position, 0, EF_BGR32F));
-    rls_[0]->BindVertexStream(re.MakeVertexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable, 
+    rls_[0]->BindVertexStream(rf.MakeVertexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable, 
         static_cast<uint32_t>(normal_vec.size() * sizeof(normal_vec[0])), &normal_vec[0]),
 		VertexElement(VEU_Normal, 0, EF_BGR32F));
-    rls_[0]->BindVertexStream(re.MakeVertexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable, 
+    rls_[0]->BindVertexStream(rf.MakeVertexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable, 
         static_cast<uint32_t>(tangent_vec.size() * sizeof(tangent_vec[0])), &tangent_vec[0]),
 		VertexElement(VEU_Tangent, 0, EF_ABGR32F));
-    rls_[0]->BindVertexStream(re.MakeVertexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable, 
+    rls_[0]->BindVertexStream(rf.MakeVertexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable, 
         static_cast<uint32_t>(texs_vec.size() * sizeof(texs_vec[0])), &texs_vec[0]),
         VertexElement(VEU_TextureCoord, 0, EF_R32F));
 
@@ -215,7 +225,13 @@ RenderableSphere::RenderableSphere(float radius, int levels, int slices, const C
             indice_vec[iIndex++] = static_cast<uint16_t>((levels - 1) * (slices + 1) + 1);
         }
     }
-    auto ib = re.MakeIndexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable, 
+    auto ib = rf.MakeIndexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable, 
         static_cast<uint32_t>(indice_vec.size() * sizeof(indice_vec[0])), &indice_vec[0]);
     rls_[0]->BindIndexStream(ib, EF_R16UI);
+
+    auto currentPath = std::filesystem::current_path().parent_path().parent_path().string();
+	currentPath += "\\Chapter7\\HLSL\\";
+    effect_->CreateConstant();
+    effect_->AttackVertexShader(currentPath + "Light__VS");
+    effect_->AttackPixelShader(currentPath + "Light__PS");
 }

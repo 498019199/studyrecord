@@ -42,9 +42,16 @@ using RenderablePtr = std::shared_ptr<Renderable>;
 class RenderEffect;
 using RenderEffectPtr = std::shared_ptr<RenderEffect>;
 
-struct ID3D11Buffer;
-using ID3D11BufferPtr = com_ptr<ID3D11Buffer>;
 class D3D11GraphicsBuffer;
 using GraphicsBufferPtr = std::shared_ptr<D3D11GraphicsBuffer>;
 class D3D11RenderLayout;
 using RenderLayoutPtr = std::shared_ptr<D3D11RenderLayout>;
+class D3D11RenderFactory;
+using RenderFactoryPtr = std::shared_ptr<D3D11RenderFactory>;
+class WinAPP;
+class D3D11RenderEngine;
+using RenderEnginePtr = std::shared_ptr<D3D11RenderEngine>;
+class D3D11RenderEngine;
+using RenderEnginePtr = std::shared_ptr<D3D11RenderEngine>;
+struct ID3D11Buffer;
+using ID3D11BufferPtr = com_ptr<ID3D11Buffer>;

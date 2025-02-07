@@ -12,7 +12,8 @@ set(SRC_LIST
     ${PROJECT_SOURCE_DIR}/Chapter7/core/src/D3D11/D3D11RenderLayout.cpp
     ${PROJECT_SOURCE_DIR}/Chapter7/core/src/D3D11/D3D11Util.cpp 
     ${PROJECT_SOURCE_DIR}/Chapter7/core/src/D3D11/D3D11RenderMesh.cpp
-    
+    ${PROJECT_SOURCE_DIR}/Chapter7/core/src/D3D11/D3D11RenderFactory.cpp
+
     ${PROJECT_SOURCE_DIR}/Chapter7/core/src/scene/SceneNode.cpp
     ${PROJECT_SOURCE_DIR}/Chapter7/core/src/scene/SceneManager.cpp
     
