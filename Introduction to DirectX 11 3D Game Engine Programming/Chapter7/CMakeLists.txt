@@ -5,16 +5,20 @@ include_directories(
 
 set(SRC_LIST
     ${PROJECT_SOURCE_DIR}/Chapter7/main_light.cpp
-    ${PROJECT_SOURCE_DIR}/Chapter7/core/src/D3D11Util.cpp 
-    ${PROJECT_SOURCE_DIR}/Chapter7/core/src/D3D11RenderEngine.cpp
-    ${PROJECT_SOURCE_DIR}/Chapter7/core/src/D3D11RenderMesh.cpp
-    ${PROJECT_SOURCE_DIR}/Chapter7/core/src/D3D11GraphicsBuffer.cpp
-    ${PROJECT_SOURCE_DIR}/Chapter7/core/src/D3D11RenderLayout.cpp
-    ${PROJECT_SOURCE_DIR}/Chapter7/core/src/D3D11Renderable.cpp
-    ${PROJECT_SOURCE_DIR}/Chapter7/core/src/RenderableHelper.cpp
-    ${PROJECT_SOURCE_DIR}/Chapter7/core/src/SceneNode.cpp
-    ${PROJECT_SOURCE_DIR}/Chapter7/core/src/Light.cpp 
+
+    ${PROJECT_SOURCE_DIR}/Chapter7/core/src/D3D11/D3D11GraphicsBuffer.cpp
+    ${PROJECT_SOURCE_DIR}/Chapter7/core/src/D3D11/D3D11Renderable.cpp
+    ${PROJECT_SOURCE_DIR}/Chapter7/core/src/D3D11/D3D11RenderEngine.cpp
+    ${PROJECT_SOURCE_DIR}/Chapter7/core/src/D3D11/D3D11RenderLayout.cpp
+    ${PROJECT_SOURCE_DIR}/Chapter7/core/src/D3D11/D3D11Util.cpp 
+    ${PROJECT_SOURCE_DIR}/Chapter7/core/src/D3D11/D3D11RenderMesh.cpp
+    
+    ${PROJECT_SOURCE_DIR}/Chapter7/core/src/scene/SceneNode.cpp
+    ${PROJECT_SOURCE_DIR}/Chapter7/core/src/scene/SceneManager.cpp
+    
     ${PROJECT_SOURCE_DIR}/Chapter7/core/src/Context.cpp
+    ${PROJECT_SOURCE_DIR}/Chapter7/core/src/Light.cpp 
+    ${PROJECT_SOURCE_DIR}/Chapter7/core/src/RenderableHelper.cpp
     ${PROJECT_SOURCE_DIR}/Chapter7/core/src/Timer.cpp 
     ${PROJECT_SOURCE_DIR}/Chapter7/core/src/WinApp.cpp)
 add_executable(Chapter7 ${SRC_LIST})

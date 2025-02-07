@@ -18,8 +18,6 @@ public:
     void BindShader(uint32_t stride);
 
     void Updata(float dt);
-
-    void D3D11SetDebug_Cube();
 private:
     std::wstring filename_;
     
@@ -27,11 +25,7 @@ private:
 
     com_ptr<ID3D11VertexShader>  vertex_shader_;	// 顶点着色器
     com_ptr<ID3D11PixelShader> pixel_shader_;	    // 像素着色器
-
-    com_ptr<ID3D11InputLayout> input_layout_;
     com_ptr<ID3D11RasterizerState> rs_;
-
-    
 };
 
 

@@ -39,6 +39,8 @@ class SceneNode;
 using SceneNodePtr = std::shared_ptr<SceneNode>;
 class Renderable;
 using RenderablePtr = std::shared_ptr<Renderable>;
+class RenderEffect;
+using RenderEffectPtr = std::shared_ptr<RenderEffect>;
 
 struct ID3D11Buffer;
 using ID3D11BufferPtr = com_ptr<ID3D11Buffer>;

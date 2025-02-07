@@ -21,10 +21,6 @@ void D3D11RenderMesh::CreateVertexShader(const std::string& filename, const D3D1
     const auto& re = Context::Instance().RenderEngineInstance();
     TIFHR(CreateShaderFromFile(filename, "VS", "vs_5_0", blob.put()));
     TIFHR(re.D3DDevice()->CreateVertexShader(blob->GetBufferPointer(), blob->GetBufferSize(), nullptr, vertex_shader_.put()));
-
-    // 创建并绑定顶点布局
-    TIFHR(re.D3DDevice()->CreateInputLayout(inputLayouts, size,
-        blob->GetBufferPointer(), blob->GetBufferSize(), input_layout_.put()));
 }
 
 void D3D11RenderMesh::CreatePixelShader(const std::string& filename)
@@ -46,9 +42,6 @@ void D3D11RenderMesh::BindShader(uint32_t stride)
     // //UINT stride = sizeof(VertexPosColor);	// 跨越字节数
     // UINT offset = 0;						// 起始偏移量
     // re.D3DDeviceImmContext()->IASetVertexBuffers(0, 1, vbs_.put(), &stride, &offset);
-    // // 设置图元类型，设定输入布局
-    // re.D3DDeviceImmContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-    // re.D3DDeviceImmContext()->IASetInputLayout(input_layout_.get());
 
     // re.D3DDeviceImmContext()->RSSetState(rs_.get());
 
@@ -58,27 +51,6 @@ void D3D11RenderMesh::BindShader(uint32_t stride)
     // // 将着色器绑定到渲染管线
     // re.D3DDeviceImmContext()->VSSetShader(vertex_shader_.get(), nullptr, 0);
     // re.D3DDeviceImmContext()->PSSetShader(pixel_shader_.get(), nullptr, 0);
-}
-
-void D3D11RenderMesh::D3D11SetDebug_Cube()
-{
-    // ******************
-    // 设置调试对象名
-    //
-    // D3D11SetDebugObjectName(input_layout_.get(), "VertexPosColorLayout");
-    // D3D11SetDebugObjectName(vbs_.get(), "VertexBuffer");
-    // D3D11SetDebugObjectName(ibs_.get(), "IndexBuffer");
-    // D3D11SetDebugObjectName(cbs_.get(), "ConstantBuffer");
-    // D3D11SetDebugObjectName(vertex_shader_.get(), "Cube_VS");
-    // D3D11SetDebugObjectName(pixel_shader_.get(), "Cube_PS");
-
-    // cb_.world = float4x4::Identity();
-    // cb_.view = MathWorker::Transpose(MathWorker::LookAtLH(
-    //     float3(0.0f, 0.0f, -5.0f),
-    //     float3(0.0f, 0.0f, 0.0f),
-    //     float3(0.0f, 1.0f, 0.0f)));
-    // cb_.proj = MathWorker::Transpose(
-    //     MathWorker::PerspectiveFovLH(1.570796327f, Context::Instance().AppInstance().AspectRatio(), 1.f, 1000.f));
 }
 
 void D3D11RenderMesh::Updata(float dt)
