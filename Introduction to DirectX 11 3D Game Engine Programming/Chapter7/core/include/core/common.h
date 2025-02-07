@@ -7,6 +7,9 @@
 #include <vector>
 #include <string>
 #include <map>
+#include <core/span.h>
+
+
 
 #ifdef _DEBUG
 	#define COMMON_ASSERT(val) assert(val)
@@ -37,7 +40,9 @@ using SceneNodePtr = std::shared_ptr<SceneNode>;
 class Renderable;
 using RenderablePtr = std::shared_ptr<Renderable>;
 
-class ID3D11Buffer;
+struct ID3D11Buffer;
 using ID3D11BufferPtr = com_ptr<ID3D11Buffer>;
 class D3D11GraphicsBuffer;
 using GraphicsBufferPtr = std::shared_ptr<D3D11GraphicsBuffer>;
+class D3D11RenderLayout;
+using RenderLayoutPtr = std::shared_ptr<D3D11RenderLayout>;

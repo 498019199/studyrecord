@@ -1,6 +1,4 @@
 #pragma once
-#include <core/D3D11Util.h>
-#include <core/common.h>
 #include <core/D3D11GraphicsBuffer.h>
 
 struct RenderSettings;

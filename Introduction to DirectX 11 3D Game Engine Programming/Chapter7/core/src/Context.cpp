@@ -32,7 +32,7 @@ void Context::RenderEngineInstance(D3D11RenderEngine& render_engine)
     render_engine_ = &render_engine;
 }
 
-D3D11RenderEngine& Context::RenderEngineInstance() const
+D3D11RenderEngine& Context::RenderEngineInstance()
 {
     assert(render_engine_);
     return *render_engine_;

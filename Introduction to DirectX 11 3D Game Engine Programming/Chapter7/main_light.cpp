@@ -1,7 +1,7 @@
-#include <common/WinApp.h>
-#include <common/D3D11Util.h>
-#include <common/D3D11RenderMesh.h>
-#include <common/Context.h>
+#include <core/WinApp.h>
+#include <core/D3D11Util.h>
+#include <core/D3D11RenderMesh.h>
+#include <core/Context.h>
 #include <math/math.h>
 
 #include <filesystem>

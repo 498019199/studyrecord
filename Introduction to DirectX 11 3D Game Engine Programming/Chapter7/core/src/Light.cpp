@@ -21,11 +21,13 @@ const float3& LightSource::Position() const
 const float3& LightSource::Direction() const
 {
     auto mat = this->TransformToWorld();
+    return float3(0, 0, 0);
 }
 
 quater LightSource::Rotation() const
 {
     auto mat = this->TransformToWorld();
+    return quater(0, 0, 0, 0);
 }
 
 const float3& LightSource::Falloff() const

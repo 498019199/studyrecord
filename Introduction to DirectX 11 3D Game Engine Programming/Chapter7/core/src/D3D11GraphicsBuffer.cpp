@@ -1,11 +1,13 @@
 #include <core/D3D11GraphicsBuffer.h>
+#include <core/D3D11RenderEngine.h>
+#include <core/Context.h>
 
 D3D11GraphicsBuffer::D3D11GraphicsBuffer(BufferUsage usage, uint32_t access_hint, uint32_t bind_flags,
             uint32_t size_in_byte, uint32_t structure_byte_stride)
             :usage_(usage), access_hint_(access_hint), size_in_byte_(size_in_byte), structure_byte_stride_(structure_byte_stride),
             bind_flags_(bind_flags)
 {
-    auto const& re = Context::Instance().RenderEngineInstance();
+    auto re = Context::Instance().RenderEngineInstance();
     d3d_device_ = re.D3DDevice();
     d3d_imm_ctx_ = re.D3DDeviceImmContext();
 }
@@ -112,7 +114,7 @@ void D3D11GraphicsBuffer::DeleteHWResource()
 
 void* D3D11GraphicsBuffer::Map(BufferAccess ba)
 {
-    
+    return nullptr;
 }
 
 void D3D11GraphicsBuffer::Unmap()

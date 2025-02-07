@@ -16,10 +16,10 @@ void SceneNode::SetPosition(const float3& pos)
     }
 }
 
-float3 SceneNode::GetPosition() const
-{
+// float3 SceneNode::GetPosition() const
+// {
 
-}
+// }
 
 void SceneNode::SetRotation(const rotator& rot)
 {
@@ -29,7 +29,7 @@ void SceneNode::SetRotation(const rotator& rot)
     }
 }
 
-rotator SceneNode::GetRotation() const
-{
+// rotator SceneNode::GetRotation() const
+// {
 
-}
+// }

@@ -16,7 +16,7 @@ public:
     WinAPP& AppInstance();
 
     void RenderEngineInstance(D3D11RenderEngine& render_engine);
-    D3D11RenderEngine& RenderEngineInstance() const;
+    D3D11RenderEngine& RenderEngineInstance();
 private:
     static std::unique_ptr<Context> instance_;
     WinAPP* app_;

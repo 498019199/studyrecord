@@ -74,6 +74,8 @@ if(MSVC)
 			set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd5264") # Ignore unused const variable
 		endif()
 
+        # 临时处理
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4100") # 屏蔽不引用
 		SET(CMAKE_C_FLAGS ${CMAKE_CXX_FLAGS})
     endif()
 else()

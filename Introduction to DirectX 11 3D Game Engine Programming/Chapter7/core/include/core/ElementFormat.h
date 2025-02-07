@@ -31,7 +31,7 @@
 
 
 //namespace CoreWorker
-{
+//{
 	enum ElementChannel
 	{
 		EC_R = 0UL,
@@ -718,6 +718,6 @@
 		DOM_sRGB,
 		DOM_HDR10
 	};
-}
+//}
 
 #endif			// _ELEMENTFORMAT_HPP

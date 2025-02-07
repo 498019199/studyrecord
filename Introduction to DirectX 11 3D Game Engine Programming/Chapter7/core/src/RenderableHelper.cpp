@@ -1,4 +1,6 @@
 #include <core/RenderableHelper.h>
+#include <core/D3D11RenderLayout.h>
+#include <core/Context.h>
 
 RenderableBox::RenderableBox(float width, float height, float depth, const Color & color)
 {
@@ -78,18 +80,14 @@ RenderableBox::RenderableBox(float width, float height, float depth, const Color
         texs[i * 4 + 2] = float2(1.0f, 0.0f);
         texs[i * 4 + 3] = float2(1.0f, 1.0f);
     }
-    auto const& re = Context::Instance().RenderEngineInstance();
-    rls_[0]->BindVertexStream(re.MakeVertexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable,
-        static_cast<uint32_t>(positions.size() * sizeof(positions[0])), &positions[0]),
+    auto re = Context::Instance().RenderEngineInstance();
+    rls_[0]->BindVertexStream(re.MakeVertexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable, 24, &positions[0]),
         VertexElement(VEU_Position, 0, EF_BGR32F));
-    rls_[0]->BindVertexStream(re.MakeVertexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable,
-		static_cast<uint32_t>(normals.size() * sizeof(normals[0])), &normals[0]),
+    rls_[0]->BindVertexStream(re.MakeVertexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable, 24, &normals[0]),
 		VertexElement(VEU_Normal, 0, EF_BGR32F));
-    rls_[0]->BindVertexStream(re.MakeVertexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable,
-		static_cast<uint32_t>(tangents.size() * sizeof(tangents[0])), &tangents[0]),
+    rls_[0]->BindVertexStream(re.MakeVertexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable, 24, &tangents[0]),
 		VertexElement(VEU_Tangent, 0, EF_ABGR32F));
-    rls_[0]->BindVertexStream(re.MakeVertexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable,
-        static_cast<uint32_t>(axises.size() * sizeof(texs[0])), &texs[0]),
+    rls_[0]->BindVertexStream(re.MakeVertexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable, 24, &texs[0]),
         VertexElement(VEU_TextureCoord, 0, EF_R32F));
 
     uint16_t indices[] = 

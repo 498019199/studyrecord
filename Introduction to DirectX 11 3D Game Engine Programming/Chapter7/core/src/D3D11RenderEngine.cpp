@@ -39,7 +39,7 @@ D3D11RenderEngine::D3D11RenderEngine(HWND hwnd, const RenderSettings& settings)
 	// All Direct3D 11 capable devices support 4X MSAA for all render 
 	// target formats, so we only need to check quality support.
 
-	// HR(d3d_device_->CheckMultisampleQualityLevels(
+	// TIFHR(d3d_device_->CheckMultisampleQualityLevels(
 	// 	DXGI_FORMAT_R8G8B8A8_UNORM, 4, &m4xMsaaQuality));
 	// assert( m4xMsaaQuality > 0 );
 
@@ -71,15 +71,15 @@ D3D11RenderEngine::D3D11RenderEngine(HWND hwnd, const RenderSettings& settings)
 	// This function is being called with a device from a different IDXGIFactory."
 
 	IDXGIDevice* dxgiDevice = 0;
-	HR(d3d_device_->QueryInterface(__uuidof(IDXGIDevice), (void**)&dxgiDevice));
+	TIFHR(d3d_device_->QueryInterface(__uuidof(IDXGIDevice), (void**)&dxgiDevice));
 	      
 	IDXGIAdapter* dxgiAdapter = 0;
-	HR(dxgiDevice->GetParent(__uuidof(IDXGIAdapter), (void**)&dxgiAdapter));
+	TIFHR(dxgiDevice->GetParent(__uuidof(IDXGIAdapter), (void**)&dxgiAdapter));
 
 	IDXGIFactory* dxgiFactory = 0;
-	HR(dxgiAdapter->GetParent(__uuidof(IDXGIFactory), (void**)&dxgiFactory));
+	TIFHR(dxgiAdapter->GetParent(__uuidof(IDXGIFactory), (void**)&dxgiFactory));
 
-	HR(dxgiFactory->CreateSwapChain(d3d_device_, &sd, &swap_chain_));
+	TIFHR(dxgiFactory->CreateSwapChain(d3d_device_, &sd, &swap_chain_));
 	
     ReleaseCOM(dxgiDevice);
 	ReleaseCOM(dxgiAdapter);
@@ -123,10 +123,10 @@ void D3D11RenderEngine::OnResize()
 	ReleaseCOM(depth_stencil_buff_);
 
 	// Resize the swap chain and recreate the render target view.
-	HR(swap_chain_->ResizeBuffers(1, weight_, height_, DXGI_FORMAT_R8G8B8A8_UNORM, 0));
+	TIFHR(swap_chain_->ResizeBuffers(1, weight_, height_, DXGI_FORMAT_R8G8B8A8_UNORM, 0));
 	ID3D11Texture2D* backBuffer;
-	HR(swap_chain_->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&backBuffer)));
-	HR(d3d_device_->CreateRenderTargetView(backBuffer, 0, &render_target_view_));
+	TIFHR(swap_chain_->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&backBuffer)));
+	TIFHR(d3d_device_->CreateRenderTargetView(backBuffer, 0, &render_target_view_));
 	ReleaseCOM(backBuffer);
 
 	// Create the depth/stencil buffer and view.
@@ -145,8 +145,8 @@ void D3D11RenderEngine::OnResize()
 	depthStencilDesc.CPUAccessFlags = 0; 
 	depthStencilDesc.MiscFlags      = 0;
 
-	HR(d3d_device_->CreateTexture2D(&depthStencilDesc, 0, &depth_stencil_buff_));
-	HR(d3d_device_->CreateDepthStencilView(depth_stencil_buff_, 0, &depth_stencil_view_));
+	TIFHR(d3d_device_->CreateTexture2D(&depthStencilDesc, 0, &depth_stencil_buff_));
+	TIFHR(d3d_device_->CreateDepthStencilView(depth_stencil_buff_, 0, &depth_stencil_view_));
 
 	// Bind the render target view and depth/stencil view to the pipeline.
 	d3d_imm_ctx_->OMSetRenderTargets(1, &render_target_view_, depth_stencil_view_);
@@ -171,7 +171,7 @@ void D3D11RenderEngine::OnRender()
 	d3d_imm_ctx_->ClearDepthStencilView(depth_stencil_view_, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.0f, 0);
 
 	d3d_imm_ctx_->DrawIndexed(g_IndexCount, 0, 0);
-	HR(swap_chain_->Present(0, 0));
+	TIFHR(swap_chain_->Present(0, 0));
 }
 
 ID3D11Device* D3D11RenderEngine::D3DDevice() const
@@ -187,20 +187,23 @@ ID3D11DeviceContext* D3D11RenderEngine::D3DDeviceImmContext() const
 GraphicsBufferPtr D3D11RenderEngine::MakeVertexBuffer(BufferUsage usage, uint32_t access_hint, uint32_t size_in_byte, void const * init_data,
         uint32_t structure_byte_stride)
 {
-	auto ret = std::make_shared<D3D11GraphicsBuffer>(usage, access_hint, size_in_byte, structure_byte_stride);
+	auto ret = std::make_shared<D3D11GraphicsBuffer>(usage, access_hint, D3D11_BIND_VERTEX_BUFFER, size_in_byte, structure_byte_stride);
     ret->CreateHWResource(init_data);
+	return ret;
 }
 
 GraphicsBufferPtr D3D11RenderEngine::MakeIndexBuffer(BufferUsage usage, uint32_t access_hint, uint32_t size_in_byte, void const * init_data,
         uint32_t structure_byte_stride)
 {
-	auto ret = std::make_shared<D3D11GraphicsBuffer>(usage, access_hint, size_in_byte, structure_byte_stride);
+	auto ret = std::make_shared<D3D11GraphicsBuffer>(usage, access_hint, D3D11_BIND_INDEX_BUFFER, size_in_byte, structure_byte_stride);
     ret->CreateHWResource(init_data);
+	return ret;
 }
 
 GraphicsBufferPtr D3D11RenderEngine::MakeConstantBuffer(BufferUsage usage, uint32_t access_hint, uint32_t size_in_byte, void const * init_data,
         uint32_t structure_byte_stride)
 {
-	auto ret = std::make_shared<D3D11GraphicsBuffer>(usage, access_hint, size_in_byte, structure_byte_stride);
+	auto ret = std::make_shared<D3D11GraphicsBuffer>(usage, access_hint, D3D11_BIND_CONSTANT_BUFFER, size_in_byte, structure_byte_stride);
     ret->CreateHWResource(init_data);
+	return ret;
 }

@@ -2,13 +2,13 @@
 
 
 void D3D11RenderLayout::BindVertexStream(const GraphicsBufferPtr& buffer, VertexElement const& vet,
-    stream_type type = ST_Geometry, uint32_t freq = 1)
+    stream_type type /*= ST_Geometry*/, uint32_t freq/* = 1*/)
 {
-    BindVertexStream(buffer, std::span<const VertexElement, 1>(val, 1),type, freq);
+    BindVertexStream(buffer, MakeSpan<1>(vet), type, freq);
 }
 
 void D3D11RenderLayout::BindVertexStream(const GraphicsBufferPtr& buffer, std::span<const VertexElement> vet,
-			stream_type type = ST_Geometry, uint32_t freq = 1)
+			stream_type type /*= ST_Geometry*/, uint32_t freq/* = 1*/)
 {
     COMMON_ASSERT(buffer);
 
@@ -22,8 +22,7 @@ void D3D11RenderLayout::BindVertexStream(const GraphicsBufferPtr& buffer, std::s
     {
         for (size_t i = 0; i < vertex_streams_.size(); ++ i)
         {
-            std::span<ElementFormat> fvet(vertex_streams_[i].format);
-            if (fvet == vet)
+            if (MakeSpan(vertex_streams_[i].format) == vet)
             {
                 vertex_streams_[i].stream = buffer;
                 vertex_streams_[i].vertex_size = size;
@@ -44,7 +43,7 @@ void D3D11RenderLayout::BindVertexStream(const GraphicsBufferPtr& buffer, std::s
     }
 }
 
-void D3D11RenderLayout::BindIndexStream(const GraphicsBufferPtr& index_stream, ElementFormat format)
+void D3D11RenderLayout::BindIndexStream(const GraphicsBufferPtr& buffer, ElementFormat format)
 {
     COMMON_ASSERT((EF_R16UI == format) || (EF_R32UI == format));
 

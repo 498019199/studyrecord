@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 project(DX11Project)
 
+
 include(${PROJECT_SOURCE_DIR}/cmake/Compiler.cmake)
 include(${PROJECT_SOURCE_DIR}/cmake/Platform.cmake)
 

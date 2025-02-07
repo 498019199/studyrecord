@@ -10,8 +10,8 @@ public:
 	std::vector<SceneNodePtr> const & Children() const;
 
     const float4x4& TransformToWorld() const;
-    rotator GetRotation() const;
-    float3 GetPosition() const;
+    //rotator GetRotation() const;
+    //float3 GetPosition() const;
     
     void SetPosition(const float3& pos);
     void SetRotation(const rotator& rot);

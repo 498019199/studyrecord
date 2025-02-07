@@ -56,7 +56,7 @@ struct VertexElement
 class D3D11RenderLayout
 {
 public:
-    enum topology_type
+   enum topology_type
     {
         TT_PointList,
         TT_LineList,
@@ -106,7 +106,17 @@ public:
         ST_Geometry,
         ST_Instance
     };
+    
+    struct StreamUnit
+    {
+        GraphicsBufferPtr stream;
+        std::vector<VertexElement> format;
+        uint32_t vertex_size;
 
+        stream_type type;
+        uint32_t freq;
+    };
+public:
     void TopologyType(topology_type type)
     {
         topo_type_ = type;
@@ -121,12 +131,14 @@ public:
 	void BindVertexStream(const GraphicsBufferPtr& buffer, std::span<VertexElement const> vet,
 			stream_type type = ST_Geometry, uint32_t freq = 1);
 
-    void BindIndexStream(const GraphicsBufferPtr& index_stream, ElementFormat format);
+    void BindIndexStream(const GraphicsBufferPtr& buffer, ElementFormat format);
 private:
     topology_type topo_type_;
 
 	GraphicsBufferPtr index_stream_;// 索引缓冲区
-	ElementFormat index_format_;
+	ElementFormat index_format_; // 索引格式
 
-    com_ptr<ID3D11Buffer> vbs_; // 顶点缓冲区
+    std::vector<StreamUnit> vertex_streams_;; // 顶点缓冲区
+
+    mutable bool streams_dirty_;
 };
