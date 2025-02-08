@@ -141,12 +141,58 @@ public:
 		return index_stream_;
 	}
 
+    void VertexStreamFormat(uint32_t index, std::span<const VertexElement> vet)
+    {
+        vertex_streams_[index].format.assign(vet.begin(), vet.end());
+        uint32_t size = 0;
+        for (size_t i = 0; i < vet.size(); ++ i)
+        {
+            size += vet[i].element_size();
+        }
+        
+        vertex_streams_[index].vertex_size = size;
+        streams_dirty_ = true;
+    }
+    std::vector<VertexElement> const & VertexStreamFormat(uint32_t index) const
+    {
+        return vertex_streams_[index].format;
+    }
+    uint32_t VertexSize(uint32_t index) const
+    {
+        return vertex_streams_[index].vertex_size;
+    }
+    stream_type VertexStreamType(uint32_t index) const
+    {
+        return vertex_streams_[index].type;
+    }
+    uint32_t VertexStreamFrequency(uint32_t index) const
+    {
+        return vertex_streams_[index].freq;
+    }
+
     void BindVertexStream(const GraphicsBufferPtr& buffer, const VertexElement& vet,
 		stream_type type = ST_Geometry, uint32_t freq = 1);
 	void BindVertexStream(const GraphicsBufferPtr& buffer, std::span<VertexElement const> vet,
 			stream_type type = ST_Geometry, uint32_t freq = 1);
 
     void BindIndexStream(const GraphicsBufferPtr& buffer, ElementFormat format);
+
+    void Active() const;
+
+    ID3D11InputLayout* InputLayout(const RenderEffect& effect) const;
+
+    std::vector<ID3D11Buffer*> const & VBs() const
+    {
+        return vbs_;
+    }
+    std::vector<UINT> const & Strides() const
+    {
+        return strides_;
+    }
+    std::vector<UINT> const & Offsets() const
+    {
+        return offsets_;
+    }
 private:
     topology_type topo_type_;
 
@@ -156,4 +202,11 @@ private:
     std::vector<StreamUnit> vertex_streams_;; // 顶点缓冲区
 
     mutable bool streams_dirty_;
+
+
+    mutable std::vector<D3D11_INPUT_ELEMENT_DESC> vertex_elems_;
+    //mutable std::vector<std::pair<uint32_t, ID3D11InputLayoutPtr>> input_layouts_;
+    mutable std::vector<ID3D11Buffer*> vbs_;
+    mutable std::vector<UINT> strides_;
+    mutable std::vector<UINT> offsets_;
 };

@@ -46,7 +46,7 @@ D3D11RenderFactory& Context::RenderFactoryInstance()
     return *render_factory_;
 }
 
-SceneManager& Context::WorldInstance()
+World& Context::WorldInstance()
 {
     COMMON_ASSERT(world_);
     return *world_;

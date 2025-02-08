@@ -1,4 +1,4 @@
-#include <core/SceneManager.h>
+#include <core/World.h>
 #include <core/Context.h>
 #include <core/WinApp.h>
 #include <core/D3D11Renderable.h>
@@ -6,7 +6,11 @@
 #include <core/D3D11GraphicsBuffer.h>
 #include <core/D3D11RenderEngine.h>
 
-SceneManager::SceneManager()
+World::World()
+{
+}
+
+void World::BeginWorld()
 {
     cb_.world = float4x4::Identity();
     cb_.view = Transpose(LookAtLH(
@@ -16,12 +20,12 @@ SceneManager::SceneManager()
     cb_.proj = MathWorker::Transpose(MathWorker::PerspectiveFovLH(1.570796327f, Context::Instance().AppInstance().AspectRatio(), 1.f, 1000.f));    
 }
 
-void SceneManager::AddRenderable(D3D11Renderable* node)
+void World::AddRenderable(D3D11Renderable* node)
 {
     all_scene_nodes_.emplace_back(node);
 }
 
-void SceneManager::UpdateScene(float dt)
+void World::UpdateScene(float dt)
 {
     static float phi = 0.0f, theta = 0.0f;
     phi += 0.3f * dt, theta += 0.37f * dt;

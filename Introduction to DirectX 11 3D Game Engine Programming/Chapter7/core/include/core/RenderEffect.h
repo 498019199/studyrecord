@@ -28,11 +28,25 @@ public:
     {
         return pixel_shader_.get();
     }
+
+    ID3DBlob* VsCode() const
+    {
+        return vertex_blob_.get();
+    }
+
+    ID3DBlob* PsCode() const
+    {
+        return pixel_blob_.get();
+    }
 private:
     com_ptr<ID3D11VertexShader>  vertex_shader_;	// 顶点着色器
     com_ptr<ID3D11PixelShader> pixel_shader_;	    // 像素着色器
+    com_ptr<ID3DBlob> vertex_blob_;
+    com_ptr<ID3DBlob> pixel_blob_;
 
     GraphicsBufferPtr hw_buff_; // 常量缓冲区
 };
+
+
 
 

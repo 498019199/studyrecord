@@ -14,7 +14,7 @@ public:
     ID3D11DeviceContext* D3DDeviceImmContext() const;
 
     void DoRender(const RenderEffect& effect, const D3D11RenderLayout& rl) const;
-    void EndRender();
+    void EndRender() const; 
 private:
     int weight_ = 0;
     int height_ = 0;

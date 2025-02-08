@@ -14,18 +14,15 @@ void RenderEffect::CreateConstant()
 
 void RenderEffect::AttackVertexShader(const std::string& filename)
 {
-    com_ptr<ID3DBlob> blob;
-
     // 创建顶点着色器
     auto const& re = Context::Instance().RenderEngineInstance();
-    TIFHR(CreateShaderFromFile(filename, "VS", "vs_5_0", blob.put()));
-    TIFHR(re.D3DDevice()->CreateVertexShader(blob->GetBufferPointer(), blob->GetBufferSize(), nullptr, vertex_shader_.put()));
+    TIFHR(CreateShaderFromFile(filename, "VS", "vs_5_0", vertex_blob_.put()));
+    TIFHR(re.D3DDevice()->CreateVertexShader(vertex_blob_->GetBufferPointer(), vertex_blob_->GetBufferSize(), nullptr, vertex_shader_.put()));
 }
 
 void RenderEffect::AttackPixelShader(const std::string& filename)
 {
-    com_ptr<ID3DBlob> blob;
     auto const& re = Context::Instance().RenderEngineInstance();
-    TIFHR(CreateShaderFromFile(filename, "PS", "ps_5_0", blob.put()));
-    TIFHR(re.D3DDevice()->CreatePixelShader(blob->GetBufferPointer(), blob->GetBufferSize(), nullptr, pixel_shader_.put()));
+    TIFHR(CreateShaderFromFile(filename, "PS", "ps_5_0", pixel_blob_.put()));
+    TIFHR(re.D3DDevice()->CreatePixelShader(pixel_blob_->GetBufferPointer(), pixel_blob_->GetBufferSize(), nullptr, pixel_shader_.put()));
 }

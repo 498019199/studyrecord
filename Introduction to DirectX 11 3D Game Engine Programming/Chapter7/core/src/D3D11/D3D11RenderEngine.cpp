@@ -164,7 +164,7 @@ void D3D11RenderEngine::OnResize()
 	d3d_imm_ctx_->RSSetViewports(1, &screen_viewport_);
 }
 
-void D3D11RenderEngine::EndRender()
+void D3D11RenderEngine::EndRender() const
 {
 	assert(d3d_imm_ctx_);
 	assert(swap_chain_);
@@ -191,19 +191,20 @@ void D3D11RenderEngine::DoRender(const RenderEffect& effect, const D3D11RenderLa
 {
 	
 	uint32_t vertex_stream_num = rl.VertexStreamNum();
-	for(uint32_t uint32_t = 0, i < vertex_stream_num; i++)
+	rl.Active();
+
+	const auto& vbs = rl.VBs();
+	const auto& strides = rl.Strides();
+	const auto& offsets = rl.Offsets();
+	if(0 != vertex_stream_num)
 	{
-		// 输入装配阶段的顶点缓冲区设置
-		UINT stride = 0;
-    	//UINT stride = sizeof(VertexPosColor);	// 跨越字节数
-    	UINT offset = 0;						// 起始偏移量
-		ID3D11Buffer* d3dvb = rl.GetVertexStream(i)->D3DBuffer();
-    	d3d_imm_ctx_->IASetVertexBuffers(0, 1, d3dvb, &stride, &offset);
+		d3d_imm_ctx_->IASetVertexBuffers(0, vertex_stream_num, &vbs[0], &strides[0], &offsets[0]);
+		auto input_layout = rl.InputLayout(effect);
+    	d3d_imm_ctx_->IASetInputLayout(input_layout);
 	}
 
     // 设置图元类型，设定输入布局
     d3d_imm_ctx_->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-    //d3d_imm_ctx_->IASetInputLayout(input_layout_.get());
 
     // 将更新好的常量缓冲区绑定到顶点着色器
 	ID3D11Buffer* d3dib = rl.GetIndexStream()->D3DBuffer();

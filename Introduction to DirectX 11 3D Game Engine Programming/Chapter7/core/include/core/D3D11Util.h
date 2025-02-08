@@ -7,6 +7,8 @@
 
 #include <core/macro.h>
 #include <core/common.h>
+#include <core/ElementFormat.h>
+#include <core/D3D11RenderLayout.h>
 
 struct RenderSettings
 {
@@ -116,3 +118,14 @@ inline void D3D11SetDebugObjectName(_In_ ID3D11DeviceChild* resource, _In_ const
     UNREFERENCED_PARAMETER(name);
 #endif
 }
+
+
+class D3D11Mapping final
+{
+public:
+    static DXGI_FORMAT MappingFormat(ElementFormat format);
+    static ElementFormat MappingFormat(DXGI_FORMAT d3dfmt);
+
+    static void Mapping(std::vector<D3D11_INPUT_ELEMENT_DESC>& elements, uint32_t stream, std::span<const VertexElement> vet,
+        D3D11RenderLayout::stream_type type, uint32_t freq);
+};

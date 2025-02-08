@@ -14,6 +14,7 @@ public:
 
     World();
     
+    void BeginWorld();
     void UpdateScene(float dt);
 
     void AddRenderable(D3D11Renderable* node);
@@ -23,4 +24,6 @@ private:
     SceneNode scene_root_;
     std::vector<D3D11Renderable*> all_scene_nodes_;
 };
+
+
 

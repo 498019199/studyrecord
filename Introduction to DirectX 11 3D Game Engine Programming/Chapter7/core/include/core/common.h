@@ -21,6 +21,7 @@
 #endif//_DEBUG
 
 using ID3D11BufferPtr = com_ptr<ID3D11Buffer>;
+using ID3D11InputLayoutPtr = com_ptr<ID3D11InputLayout>;
 
 #include <math/math.h>
 using int1 = MathWorker::int1;

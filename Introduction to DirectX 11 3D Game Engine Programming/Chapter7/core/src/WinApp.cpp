@@ -1,10 +1,9 @@
 #include <core/WinApp.h>
 #include <core/D3D11RenderEngine.h>
-#include <core/D3D11RenderMesh.h>
 #include <core/Timer.h>
 #include <core/Context.h>
 #include <core/D3D11Util.h>
-#include <core/SceneManager.h>
+#include <core/World.h>
 
 WinAPP::WinAPP()
 {
@@ -45,7 +44,6 @@ bool WinAPP::CreateAppWindow(const RenderSettings& settings)
 		if( !::RegisterClassExW(&wc) )
 		{
 			// 获取错误码
-			DWORD errorCode = GetLastError();
 			::MessageBoxW(0, L"RegisterClass Failed.", 0, 0);
 			return false;
 		}
@@ -142,7 +140,7 @@ int WinAPP::Run()
 			if( !is_paused )
 			{
 				CalculateFrameStats();
-				Context::Instance().SceneMgr().UpdateScene(frame_time_);	
+				Context::Instance().WorldInstance().UpdateScene(frame_time_);	
 			}
 			else
 			{
