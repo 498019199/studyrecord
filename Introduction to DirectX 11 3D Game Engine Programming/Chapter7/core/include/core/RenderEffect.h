@@ -20,11 +20,11 @@ public:
         return hw_buff_;
     }
 
-    ID3D11VertexShader* GetVertexShader()
+    ID3D11VertexShader* GetVertexShader() const
     {
         return vertex_shader_.get();
     }
-    ID3D11PixelShader* GetPixelShader()
+    ID3D11PixelShader* GetPixelShader() const
     {
         return pixel_shader_.get();
     }

@@ -58,8 +58,8 @@ class D3D11RenderEngine;
 using RenderEnginePtr = std::shared_ptr<D3D11RenderEngine>;
 class D3D11RenderEngine;
 using RenderEnginePtr = std::shared_ptr<D3D11RenderEngine>;
-class SceneManager;
-using SceneMgrPtr = std::shared_ptr<SceneManager>;
+class World;
+using WorldPtr = std::shared_ptr<World>;
 
 std::string& Convert(std::string& dest, std::wstring_view src);
 std::wstring& Convert(std::wstring& dest, std::string_view src);

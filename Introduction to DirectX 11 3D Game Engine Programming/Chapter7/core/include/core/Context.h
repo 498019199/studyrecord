@@ -18,7 +18,7 @@ public:
     D3D11RenderEngine& RenderEngineInstance() const;
 
     D3D11RenderFactory& RenderFactoryInstance();
-    SceneManager& SceneMgr();
+    World& WorldInstance();
     
     void LoadConfig(const char* file_name);
 private:
@@ -27,7 +27,7 @@ private:
 
     D3D11RenderEngine* render_engine_;
     RenderFactoryPtr render_factory_;
-    SceneMgrPtr scene_mgr_;
+    WorldPtr world_;
 };
 
 

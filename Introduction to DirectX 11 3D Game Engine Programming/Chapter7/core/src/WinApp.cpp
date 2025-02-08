@@ -143,7 +143,6 @@ int WinAPP::Run()
 			{
 				CalculateFrameStats();
 				Context::Instance().SceneMgr().UpdateScene(frame_time_);	
-				device_->OnRender();
 			}
 			else
 			{

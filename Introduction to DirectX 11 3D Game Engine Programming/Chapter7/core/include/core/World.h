@@ -2,7 +2,7 @@
 #include <core/common.h>
 #include <core/SceneNode.h>
 
-class SceneManager
+class World
 {
 public:
     struct ConstantBuffer
@@ -12,7 +12,7 @@ public:
         float4x4 proj;
     };
 
-    SceneManager();
+    World();
     
     void UpdateScene(float dt);
 

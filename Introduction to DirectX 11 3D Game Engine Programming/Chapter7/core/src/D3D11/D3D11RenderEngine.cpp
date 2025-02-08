@@ -187,16 +187,20 @@ ID3D11DeviceContext* D3D11RenderEngine::D3DDeviceImmContext() const
     return d3d_imm_ctx_;
 }
 
-void D3D11RenderEngine::DoRender(const RenderEffect& effect, const D3D11RenderLayout& rl)
+void D3D11RenderEngine::DoRender(const RenderEffect& effect, const D3D11RenderLayout& rl) const
 {
-	ID3D11Buffer* d3dvb = rl.GetVertexStream(0)->D3DBuffer();
 	
+	uint32_t vertex_stream_num = rl.VertexStreamNum();
+	for(uint32_t uint32_t = 0, i < vertex_stream_num; i++)
+	{
+		// 输入装配阶段的顶点缓冲区设置
+		UINT stride = 0;
+    	//UINT stride = sizeof(VertexPosColor);	// 跨越字节数
+    	UINT offset = 0;						// 起始偏移量
+		ID3D11Buffer* d3dvb = rl.GetVertexStream(i)->D3DBuffer();
+    	d3d_imm_ctx_->IASetVertexBuffers(0, 1, d3dvb, &stride, &offset);
+	}
 
-	// 输入装配阶段的顶点缓冲区设置
-	UINT stride = 0;
-    //UINT stride = sizeof(VertexPosColor);	// 跨越字节数
-    UINT offset = 0;						// 起始偏移量
-    d3d_imm_ctx_->IASetVertexBuffers(0, 1, d3dvb, &stride, &offset);
     // 设置图元类型，设定输入布局
     d3d_imm_ctx_->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
     //d3d_imm_ctx_->IASetInputLayout(input_layout_.get());
