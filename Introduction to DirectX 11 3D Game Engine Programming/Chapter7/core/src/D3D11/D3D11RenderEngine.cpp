@@ -207,8 +207,8 @@ void D3D11RenderEngine::DoRender(const RenderEffect& effect, const D3D11RenderLa
     d3d_imm_ctx_->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
     // 将更新好的常量缓冲区绑定到顶点着色器
-	ID3D11Buffer* d3dib = rl.GetIndexStream()->D3DBuffer();
-    d3d_imm_ctx_->VSSetConstantBuffers(0, 1, &d3dib);
+	ID3D11Buffer* d3d11_cbuffs = effect.HWBuff().get()->D3DBuffer();
+    d3d_imm_ctx_->VSSetConstantBuffers(0, 1, &d3d11_cbuffs);
 
     // 将着色器绑定到渲染管线
     d3d_imm_ctx_->VSSetShader(effect.GetVertexShader(), nullptr, 0);
