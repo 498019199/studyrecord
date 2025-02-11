@@ -9,7 +9,7 @@ void RenderEffect::CreateConstant()
     // 设置常量缓冲区描述
     uint32_t size = sizeof(VSConstantBuffer);
     auto& rf = Context::Instance().RenderFactoryInstance();
-    hw_buff_ = rf.MakeConstantBuffer(BU_Dynamic, 0, size, nullptr);
+    hw_buff_ = rf.MakeConstantBuffer(BU_Dynamic, EAH_CPU_Write, size, nullptr);
 }
 
 void RenderEffect::AttackVertexShader(const std::string& filename)

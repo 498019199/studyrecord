@@ -84,9 +84,17 @@ void D3D11RenderLayout::Active() const
 
 ID3D11InputLayout* D3D11RenderLayout::InputLayout(const RenderEffect& effect) const
 {
-    auto blob = effect.VsCode();
-    const auto& re = Context::Instance().RenderEngineInstance().D3DDevice();
-    ID3D11InputLayoutPtr new_layout;
-    TIFHR(re->CreateInputLayout(&vertex_elems_[0], static_cast<UINT>(vertex_elems_.size()),
-        blob->GetBufferPointer(), blob->GetBufferSize(), new_layout.put()));
+    if (!vertex_elems_.empty())
+    {
+        auto blob = effect.VsCode();
+        const auto& re = Context::Instance().RenderEngineInstance().D3DDevice();
+        ID3D11InputLayoutPtr new_layout;
+        TIFHR(re->CreateInputLayout(&vertex_elems_[0], static_cast<UINT>(vertex_elems_.size()),
+            blob->GetBufferPointer(), blob->GetBufferSize(), new_layout.put()));
+
+        auto* new_layout_raw = new_layout.get();
+		return new_layout_raw;
+    }
+
+    return nullptr;
 }
