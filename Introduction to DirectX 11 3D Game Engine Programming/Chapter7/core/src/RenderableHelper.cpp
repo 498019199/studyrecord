@@ -6,6 +6,13 @@
 
 #include <filesystem>
 
+struct VertexPosNormalColor
+{
+    float3 pos;
+    float3 normal;
+    Color color;
+};
+
 RenderableBox::  RenderableBox(float width, float height, float depth, const Color & color)
 {
     float w2 = width / 2, h2 = height / 2, d2 = depth / 2;
@@ -13,91 +20,70 @@ RenderableBox::  RenderableBox(float width, float height, float depth, const Col
     rls_[0] = std::make_shared<D3D11RenderLayout>();
     rls_[0]->TopologyType(D3D11RenderLayout::TT_TriangleList);
 
-    std::vector<float3> positions;
-    std::vector<float3> normals;
-    std::vector<float4> tangents;
-    std::vector<Color>  colors;
-    std::vector<float2> texs;
-
-    positions.resize(24);
-    normals.resize(24);
-    tangents.resize(24);
-    colors.resize(24);
-    texs.resize(24);
+    std::vector<VertexElement> merged_ves;
+    VertexPosNormalColor vertex[24];
 
     // 右面(+X面)
-    positions[0] = float3(w2, -h2, -d2);
-    positions[1] = float3(w2, h2, -d2);
-    positions[2] = float3(w2, h2, d2);
-    positions[3] = float3(w2, -h2, d2);
+    vertex[0].pos = float3(w2, -h2, -d2);
+    vertex[1].pos = float3(w2, h2, -d2);
+    vertex[2].pos = float3(w2, h2, d2);
+    vertex[3].pos = float3(w2, -h2, d2);
     // 左面(-X面)
-    positions[4] = float3(-w2, -h2, d2);
-    positions[5] = float3(-w2, h2, d2);
-    positions[6] = float3(-w2, h2, -d2);
-    positions[7] = float3(-w2, -h2, -d2);
+    vertex[4].pos = float3(-w2, -h2, d2);
+    vertex[5].pos = float3(-w2, h2, d2);
+    vertex[6].pos = float3(-w2, h2, -d2);
+    vertex[7].pos = float3(-w2, -h2, -d2);
     // 顶面(+Y面)
-    positions[8] = float3(-w2, h2, -d2);
-    positions[9] = float3(-w2, h2, d2);
-    positions[10] = float3(w2, h2, d2);
-    positions[11] = float3(w2, h2, -d2);
+    vertex[8].pos = float3(-w2, h2, -d2);
+    vertex[9].pos = float3(-w2, h2, d2);
+    vertex[10].pos = float3(w2, h2, d2);
+    vertex[11].pos = float3(w2, h2, -d2);
     // 底面(-Y面)
-    positions[12] = float3(w2, -h2, -d2);
-    positions[13] = float3(w2, -h2, d2);
-    positions[14] = float3(-w2, -h2, d2);
-    positions[15] = float3(-w2, -h2, -d2);
+    vertex[12].pos = float3(w2, -h2, -d2);
+    vertex[13].pos = float3(w2, -h2, d2);
+    vertex[14].pos = float3(-w2, -h2, d2);
+    vertex[15].pos = float3(-w2, -h2, -d2);
     // 背面(+Z面)
-    positions[16] = float3(w2, -h2, d2);
-    positions[17] = float3(w2, h2, d2);
-    positions[18] = float3(-w2, h2, d2);
-    positions[19] = float3(-w2, -h2, d2);
+    vertex[16].pos = float3(w2, -h2, d2);
+    vertex[17].pos = float3(w2, h2, d2);
+    vertex[18].pos = float3(-w2, h2, d2);
+    vertex[19].pos = float3(-w2, -h2, d2);
     // 正面(-Z面)
-    positions[20] = float3(-w2, -h2, -d2);
-    positions[21] = float3(-w2, h2, -d2);
-    positions[22] = float3(w2, h2, -d2);
-    positions[23] = float3(w2, -h2, -d2);
-
+    vertex[20].pos = float3(-w2, -h2, -d2);
+    vertex[21].pos = float3(-w2, h2, -d2);
+    vertex[22].pos = float3(w2, h2, -d2);
+    vertex[23].pos = float3(w2, -h2, -d2);
+    
     for (UINT i = 0; i < 4; ++i)
     {
         // 右面(+X面)
-        normals[i] = float3(1.0f, 0.0f, 0.0f);
-        tangents[i] = float4(0.0f, 0.0f, 1.0f, 1.0f);
-        colors[i] = color;
-        // 左面(-X面)
-        normals[i + 4] = float3(-1.0f, 0.0f, 0.0f);
-        tangents[i + 4] = float4(0.0f, 0.0f, -1.0f, 1.0f);
-        colors[i + 4] = color;
-        // 顶面(+Y面)
-        normals[i + 8] = float3(0.0f, 1.0f, 0.0f);
-        tangents[i + 8] = float4(1.0f, 0.0f, 0.0f, 1.0f);
-        colors[i + 8] = color;
-        // 底面(-Y面)
-        normals[i + 12] = float3(0.0f, -1.0f, 0.0f);
-        tangents[i + 12] = float4(-1.0f, 0.0f, 0.0f, 1.0f);
-        colors[i + 12] = color;
-        // 背面(+Z面)
-        normals[i + 16] = float3(0.0f, 0.0f, 1.0f);
-        tangents[i + 16] = float4(-1.0f, 0.0f, 0.0f, 1.0f);
-        colors[i + 16] = color;
-        // 正面(-Z面)
-        normals[i + 20] = float3(0.0f, 0.0f, -1.0f);
-        tangents[i + 20] = float4(1.0f, 0.0f, 0.0f, 1.0f);
-        colors[i + 20] = color;
-    }
-    for (UINT i = 0; i < 6; ++i)
-    {
-        texs[i * 4] = float2(0.0f, 1.0f);
-        texs[i * 4 + 1] = float2(0.0f, 0.0f);
-        texs[i * 4 + 2] = float2(1.0f, 0.0f);
-        texs[i * 4 + 3] = float2(1.0f, 1.0f);
-    }
-    auto& rf = Context::Instance().RenderFactoryInstance();
-    rls_[0]->BindVertexStream(rf.MakeVertexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable, 24, &positions[0]),
-        VertexElement(VEU_Position, 0, EF_BGR32F));
-    rls_[0]->BindVertexStream(rf.MakeVertexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable, 24, &normals[0]),
-		VertexElement(VEU_Normal, 0, EF_BGR32F));
-    rls_[0]->BindVertexStream(rf.MakeVertexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable, 24, &colors[0]),
-		VertexElement(VEU_Diffuse, 0, EF_ABGR32F));
+        vertex[i].normal = float3(1.0f, 0.0f, 0.0f);
+        vertex[i].color = color;
 
+        // 左面(-X面)
+        vertex[i + 4].normal = float3(-1.0f, 0.0f, 0.0f);
+        vertex[i + 4].color = color;
+        // 顶面(+Y面)
+        vertex[i + 8].normal= float3(0.0f, 1.0f, 0.0f);
+        vertex[i + 8].color = color;
+        // 底面(-Y面)
+        vertex[i + 12].normal = float3(0.0f, -1.0f, 0.0f);
+        vertex[i + 12].color = color;
+        // 背面(+Z面)
+        vertex[i + 16].normal = float3(0.0f, 0.0f, 1.0f);
+        vertex[i + 16].color = color;
+        // 正面(-Z面)
+        vertex[i + 20].normal = float3(0.0f, 0.0f, -1.0f);
+        vertex[i + 20].color = color;
+    }
+
+    merged_ves.emplace_back(VertexElement(VEU_Position, 0, EF_SIGNED_ABGR16));
+    merged_ves.emplace_back(VertexElement(VEU_Normal, 0, EF_ABGR8));
+    merged_ves.emplace_back(VertexElement(VEU_Diffuse, 0, EF_ABGR8));
+    //merged_ves.emplace_back(VertexElement(VEU_Tangent, 0, EF_ABGR8));
+    //merged_ves.emplace_back(VertexElement(VEU_TextureCoord, 0, EF_SIGNED_GR16));
+    auto& rf = Context::Instance().RenderFactoryInstance();
+    rls_[0]->BindVertexStream(rf.MakeVertexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable, 24, &vertex[0]), merged_ves);
 
     uint16_t indices[] = 
     {
@@ -181,7 +167,7 @@ RenderableSphere::RenderableSphere(float radius, int levels, int slices, const C
     auto& rf = Context::Instance().RenderFactoryInstance();
     rls_[0]->BindVertexStream(rf.MakeVertexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable, 
         static_cast<uint32_t>(position_vec.size() * sizeof(position_vec[0])), &position_vec[0]),
-        VertexElement(VEU_Position, 0, EF_BGR32F));
+        VertexElement(VEU_Position, 0, EF_R32F));
 
     rls_[0]->BindVertexStream(rf.MakeVertexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable, 
         static_cast<uint32_t>(normal_vec.size() * sizeof(normal_vec[0])), &normal_vec[0]),
