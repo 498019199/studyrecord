@@ -126,10 +126,13 @@ public:
         return topo_type_;
     }
 
-    uint32_t VertexStreamNum() const
-    {
-        return static_cast<uint32_t>(vertex_streams_.size());
-    }
+    bool UseIndices() const;
+
+    uint32_t VertexStreamNum() const;
+
+    uint32_t IndicesNum() const;
+
+    uint32_t NumVertices() const;
 
     const GraphicsBufferPtr& GetVertexStream(uint32_t index) const
     {
@@ -141,18 +144,8 @@ public:
 		return index_stream_;
 	}
 
-    void VertexStreamFormat(uint32_t index, std::span<const VertexElement> vet)
-    {
-        vertex_streams_[index].format.assign(vet.begin(), vet.end());
-        uint32_t size = 0;
-        for (size_t i = 0; i < vet.size(); ++ i)
-        {
-            size += vet[i].element_size();
-        }
-        
-        vertex_streams_[index].vertex_size = size;
-        streams_dirty_ = true;
-    }
+    void VertexStreamFormat(uint32_t index, std::span<const VertexElement> vet);
+
     std::vector<VertexElement> const & VertexStreamFormat(uint32_t index) const
     {
         return vertex_streams_[index].format;
@@ -176,6 +169,10 @@ public:
 			stream_type type = ST_Geometry, uint32_t freq = 1);
 
     void BindIndexStream(const GraphicsBufferPtr& buffer, ElementFormat format);
+    ElementFormat IndexStreamFormat() const
+    {
+        return index_format_;
+    }
 
     void Active() const;
 
@@ -203,6 +200,8 @@ private:
 
     mutable bool streams_dirty_;
 
+    uint32_t force_num_vertices_{0xFFFFFFFF};
+	uint32_t force_num_indices_{0xFFFFFFFF};
 
     mutable std::vector<D3D11_INPUT_ELEMENT_DESC> vertex_elems_;
     //mutable std::vector<std::pair<uint32_t, ID3D11InputLayoutPtr>> input_layouts_;

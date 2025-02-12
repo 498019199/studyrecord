@@ -30,7 +30,7 @@ RenderEffect* D3D11Renderable::GetRenderEffect()
 void D3D11Renderable::Render()
 {
     int32_t lod = 0;
-    const auto& re = Context::Instance().RenderEngineInstance();
+    auto& re = Context::Instance().RenderEngineInstance();
     const auto& effect = *this->GetRenderEffect();
     const D3D11RenderLayout& layout = this->GetRenderLayout(lod);
 

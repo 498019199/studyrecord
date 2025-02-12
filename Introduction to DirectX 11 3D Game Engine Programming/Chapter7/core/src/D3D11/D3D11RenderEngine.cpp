@@ -187,7 +187,7 @@ ID3D11DeviceContext* D3D11RenderEngine::D3DDeviceImmContext() const
     return d3d_imm_ctx_;
 }
 
-void D3D11RenderEngine::DoRender(const RenderEffect& effect, const D3D11RenderLayout& rl) const
+void D3D11RenderEngine::DoRender(const RenderEffect& effect, const D3D11RenderLayout& rl)
 {
 	
 	uint32_t vertex_stream_num = rl.VertexStreamNum();
@@ -198,19 +198,111 @@ void D3D11RenderEngine::DoRender(const RenderEffect& effect, const D3D11RenderLa
 	const auto& offsets = rl.Offsets();
 	if(0 != vertex_stream_num)
 	{
-		d3d_imm_ctx_->IASetVertexBuffers(0, vertex_stream_num, &vbs[0], &strides[0], &offsets[0]);
-		auto input_layout = rl.InputLayout(effect);
-    	d3d_imm_ctx_->IASetInputLayout(input_layout);
+		if ((vb_cache_.size() != vertex_stream_num) || (vb_cache_ != vbs)
+			|| (vb_stride_cache_ != strides) || (vb_offset_cache_ != offsets))
+		{
+			d3d_imm_ctx_->IASetVertexBuffers(0, vertex_stream_num, &vbs[0], &strides[0], &offsets[0]);
+			vb_cache_ = vbs;
+			vb_stride_cache_ = strides;
+			vb_offset_cache_ = offsets;
+		}
+
+		auto layout = rl.InputLayout(effect);
+		if (layout != input_layout_cache_)
+		{
+			d3d_imm_ctx_->IASetInputLayout(layout);
+			input_layout_cache_ = layout;
+		}
+	}
+	else
+	{
+		if (!vb_cache_.empty())
+		{
+			vb_cache_.assign(vb_cache_.size(), nullptr);
+			vb_stride_cache_.assign(vb_stride_cache_.size(), 0);
+			vb_offset_cache_.assign(vb_offset_cache_.size(), 0);
+			d3d_imm_ctx_->IASetVertexBuffers(0, static_cast<UINT>(vb_cache_.size()),
+				&vb_cache_[0], &vb_stride_cache_[0], &vb_offset_cache_[0]);
+			vb_cache_.clear();
+			vb_stride_cache_.clear();
+			vb_offset_cache_.clear();
+		}
+		input_layout_cache_ = nullptr;
+		d3d_imm_ctx_->IASetInputLayout(input_layout_cache_);
 	}
 
     // 设置图元类型，设定输入布局
-    d3d_imm_ctx_->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	uint32_t const vertex_count = static_cast<uint32_t>(rl.UseIndices() ? rl.IndicesNum() : rl.NumVertices());
+	D3D11RenderLayout::topology_type tt = rl.TopologyType();
+	if (topology_type_cache_ != tt)
+	{
+		d3d_imm_ctx_->IASetPrimitiveTopology(D3D11Mapping::Mapping(tt));
+		topology_type_cache_ = tt;
+	}
+
+	uint32_t prim_count;
+	switch (tt)
+	{
+	case D3D11RenderLayout::TT_PointList:
+		prim_count = vertex_count;
+		break;
+
+	case D3D11RenderLayout::TT_LineList:
+	case D3D11RenderLayout::TT_LineList_Adj:
+		prim_count = vertex_count / 2;
+		break;
+
+	case D3D11RenderLayout::TT_LineStrip:
+	case D3D11RenderLayout::TT_LineStrip_Adj:
+		prim_count = vertex_count - 1;
+		break;
+
+	case D3D11RenderLayout::TT_TriangleList:
+	case D3D11RenderLayout::TT_TriangleList_Adj:
+		prim_count = vertex_count / 3;
+		break;
+
+	case D3D11RenderLayout::TT_TriangleStrip:
+	case D3D11RenderLayout::TT_TriangleStrip_Adj:
+		prim_count = vertex_count - 2;
+		break;
+
+	default:
+		if ((tt >= D3D11RenderLayout::TT_1_Ctrl_Pt_PatchList)
+			&& (tt <= D3D11RenderLayout::TT_32_Ctrl_Pt_PatchList))
+		{
+			prim_count = vertex_count / (tt - D3D11RenderLayout::TT_1_Ctrl_Pt_PatchList + 1);
+		}
+		else
+		{
+			//KFL_UNREACHABLE("Invalid topology type");
+		}
+		break;
+	}
 
     // 将更新好的常量缓冲区绑定到顶点着色器
-	ID3D11Buffer* d3d11_cbuffs = effect.HWBuff().get()->D3DBuffer();
-    d3d_imm_ctx_->VSSetConstantBuffers(0, 1, &d3d11_cbuffs);
+	if(rl.UseIndices())
+	{
+		ID3D11Buffer* d3dib = rl.GetIndexStream()->D3DBuffer();
+		if (ib_cache_ != d3dib)
+		{
+			ib_cache_ = d3dib;
+			d3d_imm_ctx_->IASetIndexBuffer(d3dib, D3D11Mapping::MappingFormat(rl.IndexStreamFormat()), 0);
+		}
+	}
+	else
+	{
+		if (ib_cache_)
+		{
+			d3d_imm_ctx_->IASetIndexBuffer(nullptr, DXGI_FORMAT_R16_UINT, 0);
+			ib_cache_ = nullptr;
+		}
+	}
 
     // 将着色器绑定到渲染管线
+	ID3D11Buffer* d3d11_cbuffs = effect.HWBuff()->D3DBuffer();
+    d3d_imm_ctx_->VSSetConstantBuffers(0, 1, &d3d11_cbuffs);
+
     d3d_imm_ctx_->VSSetShader(effect.GetVertexShader(), nullptr, 0);
     d3d_imm_ctx_->PSSetShader(effect.GetPixelShader(), nullptr, 0);
 }

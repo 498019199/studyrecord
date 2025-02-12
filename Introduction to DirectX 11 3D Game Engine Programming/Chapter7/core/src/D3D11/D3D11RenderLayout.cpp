@@ -82,6 +82,12 @@ void D3D11RenderLayout::Active() const
     }
 }
 
+const D3D11_INPUT_ELEMENT_DESC inputLayout[3] = {
+    { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+    { "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+    { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+};
+
 ID3D11InputLayout* D3D11RenderLayout::InputLayout(const RenderEffect& effect) const
 {
     if (!vertex_elems_.empty())
@@ -89,12 +95,67 @@ ID3D11InputLayout* D3D11RenderLayout::InputLayout(const RenderEffect& effect) co
         auto blob = effect.VsCode();
         const auto& re = Context::Instance().RenderEngineInstance().D3DDevice();
         ID3D11InputLayoutPtr new_layout;
-        TIFHR(re->CreateInputLayout(&vertex_elems_[0], static_cast<UINT>(vertex_elems_.size()),
+        // TIFHR(re->CreateInputLayout(&vertex_elems_[0], static_cast<UINT>(vertex_elems_.size()),
+        //     blob->GetBufferPointer(), blob->GetBufferSize(), new_layout.put()));
+        TIFHR(re->CreateInputLayout(inputLayout, ARRAYSIZE(inputLayout),
             blob->GetBufferPointer(), blob->GetBufferSize(), new_layout.put()));
-
         auto* new_layout_raw = new_layout.get();
 		return new_layout_raw;
     }
 
     return nullptr;
+}
+
+void D3D11RenderLayout::VertexStreamFormat(uint32_t index, std::span<const VertexElement> vet)
+{
+    vertex_streams_[index].format.assign(vet.begin(), vet.end());
+    uint32_t size = 0;
+    for (size_t i = 0; i < vet.size(); ++ i)
+    {
+        size += vet[i].element_size();
+    }
+    
+    vertex_streams_[index].vertex_size = size;
+    streams_dirty_ = true;
+}
+
+uint32_t D3D11RenderLayout::VertexStreamNum() const
+{
+    return static_cast<uint32_t>(vertex_streams_.size());
+}
+
+bool D3D11RenderLayout::UseIndices() const
+{
+    return this->IndicesNum() != 0;
+}
+
+uint32_t D3D11RenderLayout::IndicesNum() const
+{
+    uint32_t n = 0;
+    if (index_stream_)
+    {
+        if (0xFFFFFFFF == force_num_indices_)
+        {
+            n = index_stream_->Size() / NumFormatBytes(index_format_);
+        }
+        else
+        {
+            n = force_num_indices_;
+        }
+    }
+    return n;
+}
+
+uint32_t D3D11RenderLayout::NumVertices() const
+{
+	uint32_t n;
+    if (0xFFFFFFFF == force_num_vertices_)
+    {
+        n = vertex_streams_[0].stream->Size() / vertex_streams_[0].vertex_size;
+    }
+    else
+    {
+        n = force_num_vertices_;
+    }
+    return n;
 }

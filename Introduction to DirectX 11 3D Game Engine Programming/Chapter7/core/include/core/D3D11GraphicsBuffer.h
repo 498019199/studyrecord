@@ -36,6 +36,10 @@ public:
     {
         return d3d_buffer_.get();
     }
+    uint32_t Size() const noexcept
+    {
+        return size_in_byte_;
+    }
 private:
     BufferUsage usage_;
     uint32_t access_hint_;

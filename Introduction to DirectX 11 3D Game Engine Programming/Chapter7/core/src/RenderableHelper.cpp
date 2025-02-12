@@ -93,18 +93,11 @@ RenderableBox::  RenderableBox(float width, float height, float depth, const Col
     auto& rf = Context::Instance().RenderFactoryInstance();
     rls_[0]->BindVertexStream(rf.MakeVertexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable, 24, &positions[0]),
         VertexElement(VEU_Position, 0, EF_BGR32F));
-
     rls_[0]->BindVertexStream(rf.MakeVertexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable, 24, &normals[0]),
 		VertexElement(VEU_Normal, 0, EF_BGR32F));
-
     rls_[0]->BindVertexStream(rf.MakeVertexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable, 24, &colors[0]),
 		VertexElement(VEU_Diffuse, 0, EF_ABGR32F));
 
-    rls_[0]->BindVertexStream(rf.MakeVertexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable, 24, &tangents[0]),
-		VertexElement(VEU_Tangent, 0, EF_ABGR32F));
-        
-    rls_[0]->BindVertexStream(rf.MakeVertexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable, 24, &texs[0]),
-        VertexElement(VEU_TextureCoord, 0, EF_GR32F));
 
     uint16_t indices[] = 
     {

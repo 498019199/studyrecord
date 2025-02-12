@@ -1,5 +1,6 @@
 #pragma once
 #include <core/common.h>
+#include <core/D3D11RenderLayout.h>
 
 struct RenderSettings;
 class D3D11RenderEngine
@@ -13,7 +14,7 @@ public:
     ID3D11Device* D3DDevice() const;
     ID3D11DeviceContext* D3DDeviceImmContext() const;
 
-    void DoRender(const RenderEffect& effect, const D3D11RenderLayout& rl) const;
+    void DoRender(const RenderEffect& effect, const D3D11RenderLayout& rl);
     void EndRender() const; 
 private:
     int weight_ = 0;
@@ -32,6 +33,13 @@ private:
     ID3D11RenderTargetView* render_target_view_ = nullptr;
     
     D3D11_VIEWPORT screen_viewport_;
+
+    ID3D11InputLayout* input_layout_cache_{nullptr};
+    std::vector<ID3D11Buffer*> vb_cache_;
+    std::vector<UINT> vb_stride_cache_;
+    std::vector<UINT> vb_offset_cache_;
+    ID3D11Buffer* ib_cache_{nullptr};
+    D3D11RenderLayout::topology_type topology_type_cache_ {D3D11RenderLayout::TT_PointList};
 };
 
 

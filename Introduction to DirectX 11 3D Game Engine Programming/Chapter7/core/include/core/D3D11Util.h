@@ -126,6 +126,7 @@ public:
     static DXGI_FORMAT MappingFormat(ElementFormat format);
     static ElementFormat MappingFormat(DXGI_FORMAT d3dfmt);
 
+    static D3D11_PRIMITIVE_TOPOLOGY Mapping(D3D11RenderLayout::topology_type tt);
     static void Mapping(std::vector<D3D11_INPUT_ELEMENT_DESC>& elements, uint32_t stream, std::span<const VertexElement> vet,
         D3D11RenderLayout::stream_type type, uint32_t freq);
 };
