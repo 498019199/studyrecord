@@ -77,9 +77,9 @@ RenderableBox::  RenderableBox(float width, float height, float depth, const Col
         vertex[i + 20].color = color;
     }
 
-    merged_ves.emplace_back(VertexElement(VEU_Position, 0, EF_SIGNED_ABGR16));
-    merged_ves.emplace_back(VertexElement(VEU_Normal, 0, EF_ABGR8));
-    merged_ves.emplace_back(VertexElement(VEU_Diffuse, 0, EF_ABGR8));
+    merged_ves.emplace_back(VertexElement(VEU_Position, 0, EF_BGR32F));
+    merged_ves.emplace_back(VertexElement(VEU_Normal, 0, EF_BGR32F));
+    merged_ves.emplace_back(VertexElement(VEU_Diffuse, 0, EF_ABGR32F));
     //merged_ves.emplace_back(VertexElement(VEU_Tangent, 0, EF_ABGR8));
     //merged_ves.emplace_back(VertexElement(VEU_TextureCoord, 0, EF_SIGNED_GR16));
     auto& rf = Context::Instance().RenderFactoryInstance();
