@@ -83,7 +83,8 @@ RenderableBox::  RenderableBox(float width, float height, float depth, const Col
     //merged_ves.emplace_back(VertexElement(VEU_Tangent, 0, EF_ABGR8));
     //merged_ves.emplace_back(VertexElement(VEU_TextureCoord, 0, EF_SIGNED_GR16));
     auto& rf = Context::Instance().RenderFactoryInstance();
-    rls_[0]->BindVertexStream(rf.MakeVertexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable, 24, &vertex[0]), merged_ves);
+    auto vb = rf.MakeVertexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable, static_cast<uint32_t>(24 * sizeof(vertex[0])), &vertex[0]);
+    rls_[0]->BindVertexStream(vb, merged_ves);
 
     uint16_t indices[] = 
     {

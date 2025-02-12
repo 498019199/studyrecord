@@ -178,15 +178,15 @@ public:
 
     ID3D11InputLayout* InputLayout(const RenderEffect& effect) const;
 
-    std::vector<ID3D11Buffer*> const & VBs() const
+    const std::vector<ID3D11Buffer*> & VBs() const
     {
         return vbs_;
     }
-    std::vector<UINT> const & Strides() const
+    const std::vector<UINT> & Strides() const
     {
         return strides_;
     }
-    std::vector<UINT> const & Offsets() const
+    const std::vector<UINT> & Offsets() const
     {
         return offsets_;
     }
