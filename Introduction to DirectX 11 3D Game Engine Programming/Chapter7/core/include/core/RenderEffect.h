@@ -1,6 +1,18 @@
 #pragma once
 #include <core/common.h>
 
+enum class ShaderStage
+{
+    Vertex,
+    Pixel,
+    Geometry,
+    Compute,
+    Hull,
+    Domain,
+
+    NumStages,
+};
+
 class RenderEffect
 {
 public:

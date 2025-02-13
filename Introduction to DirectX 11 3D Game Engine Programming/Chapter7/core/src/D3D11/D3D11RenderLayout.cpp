@@ -5,6 +5,8 @@
 #include <core/RenderEffect.h>
 #include <core/Context.h>
 
+D3D11RenderLayout::D3D11RenderLayout() = default;
+
 void D3D11RenderLayout::BindVertexStream(const GraphicsBufferPtr& buffer, VertexElement const& vet,
     stream_type type /*= ST_Geometry*/, uint32_t freq/* = 1*/)
 {
@@ -79,6 +81,8 @@ void D3D11RenderLayout::Active() const
             strides_[i] = VertexSize(i);
             offsets_[i] = 0;
         }
+
+        streams_dirty_ = false;
     }
 }
 
@@ -87,11 +91,20 @@ ID3D11InputLayout* D3D11RenderLayout::InputLayout(const RenderEffect& effect) co
     if (!vertex_elems_.empty())
     {
         auto blob = effect.VsCode();
+        for (auto const & il : input_layouts_)
+        {
+            if (il.first == ShaderStage::Vertex)
+            {
+                return il.second.get();
+            }
+        }
+
         const auto& re = Context::Instance().RenderEngineInstance().D3DDevice();
         ID3D11InputLayoutPtr new_layout;
          TIFHR(re->CreateInputLayout(&vertex_elems_[0], static_cast<UINT>(vertex_elems_.size()),
              blob->GetBufferPointer(), blob->GetBufferSize(), new_layout.put()));
         auto* new_layout_raw = new_layout.get();
+        input_layouts_.emplace(std::make_pair(ShaderStage::Vertex, std::move(new_layout)));
 		return new_layout_raw;
     }
 

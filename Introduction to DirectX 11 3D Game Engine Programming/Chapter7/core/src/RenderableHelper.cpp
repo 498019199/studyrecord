@@ -114,14 +114,9 @@ RenderableSphere::RenderableSphere(float radius, int levels, int slices, const C
     rls_[0] = std::make_shared<D3D11RenderLayout>();
     rls_[0]->TopologyType(D3D11RenderLayout::TT_TriangleList);
 
-    std::vector<float3> position_vec;
-    position_vec.resize(vertexCount);
-    std::vector<float3>  normal_vec;
-    normal_vec.resize(vertexCount);
-    std::vector<float4>  tangent_vec;
-    tangent_vec.resize(vertexCount);
-    std::vector<float2>  texs_vec;
-    texs_vec.resize(vertexCount);
+    std::vector<VertexElement> merged_ves;
+    std::vector<VertexPosNormalColor> vertex;
+    vertex.resize(indexCount);
     std::vector<uint16_t> indice_vec;
     indice_vec.resize(indexCount);
 
@@ -132,10 +127,12 @@ RenderableSphere::RenderableSphere(float radius, int levels, int slices, const C
     int iIndex = 0;
 
     // 放入顶端点
-    position_vec.emplace_back(float3(0.0f, radius, 0.0f));
-    normal_vec.emplace_back(float3(0.0f, 1.0f, 0.0f));
-    tangent_vec.emplace_back(float4(1.0f, 0.0f, 0.0f, 1.0f));
-    texs_vec.emplace_back(float2(0.0f, 0.0f));
+    VertexPosNormalColor tmp;
+    tmp.pos = float3(0.0f, radius, 0.0f);
+    tmp.normal = float3(0.0f, 1.0f, 0.0f);
+    tmp.color = color;
+    vertex.emplace_back(tmp);
+
     for (int i = 1; i < levels; ++i)
     {
         phi = per_phi * i;
@@ -153,38 +150,24 @@ RenderableSphere::RenderableSphere(float radius, int levels, int slices, const C
             float4 tangent = float4(-sinf(theta), 0.0f, cosf(theta), 1.0f);
             float2 tex = float2(theta / MathWorker::PI2, phi / MathWorker::PI);
 
-            position_vec.emplace_back(pos);
-            normal_vec.emplace_back(normal);
-            tangent_vec.emplace_back(tangent);
-            texs_vec.emplace_back(tex);
+            tmp.pos = pos;
+            tmp.normal = normal;
+            tmp.color = color;
+            vertex.emplace_back(tmp);
         }
     }
     // 放入底端点
-    position_vec.emplace_back(float3(0.0f, -radius, 0.0f));
-    normal_vec.emplace_back(float3(0.0f, -1.0f, 0.0f));
-    tangent_vec.emplace_back(float4(-1.0f, 0.0f, 0.0f, 1.0f));
-    texs_vec.emplace_back(float2(0.0f, 1.0f));
+    tmp.pos = float3(0.0f, -radius, 0.0f);
+    tmp.normal = float3(0.0f, -1.0f, 0.0f);
+    tmp.color = color;
+    vertex.emplace_back(tmp);
 
     auto& rf = Context::Instance().RenderFactoryInstance();
-    rls_[0]->BindVertexStream(rf.MakeVertexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable, 
-        static_cast<uint32_t>(position_vec.size() * sizeof(position_vec[0])), &position_vec[0]),
-        VertexElement(VEU_Position, 0, EF_R32F));
-
-    rls_[0]->BindVertexStream(rf.MakeVertexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable, 
-        static_cast<uint32_t>(normal_vec.size() * sizeof(normal_vec[0])), &normal_vec[0]),
-		VertexElement(VEU_Normal, 0, EF_BGR32F));
-
-    rls_[0]->BindVertexStream(rf.MakeVertexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable, 
-        static_cast<uint32_t>(tangent_vec.size() * sizeof(tangent_vec[0])), &tangent_vec[0]),
-		VertexElement(VEU_Diffuse, 0, EF_ABGR32F));
-    
-    rls_[0]->BindVertexStream(rf.MakeVertexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable, 
-        static_cast<uint32_t>(tangent_vec.size() * sizeof(tangent_vec[0])), &tangent_vec[0]),
-		VertexElement(VEU_Tangent, 0, EF_ABGR32F));
-
-    rls_[0]->BindVertexStream(rf.MakeVertexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable, 
-        static_cast<uint32_t>(texs_vec.size() * sizeof(texs_vec[0])), &texs_vec[0]),
-        VertexElement(VEU_TextureCoord, 0, EF_R32F));
+    merged_ves.emplace_back(VertexElement(VEU_Position, 0, EF_BGR32F));
+    merged_ves.emplace_back(VertexElement(VEU_Normal, 0, EF_BGR32F));
+    merged_ves.emplace_back(VertexElement(VEU_Diffuse, 0, EF_ABGR32F));
+    auto vb = rf.MakeVertexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable, static_cast<uint32_t>(vertexCount * sizeof(vertex[0])), &vertex[0]);
+    rls_[0]->BindVertexStream(vb, merged_ves);
 
     // 放入索引
     if (levels > 1)

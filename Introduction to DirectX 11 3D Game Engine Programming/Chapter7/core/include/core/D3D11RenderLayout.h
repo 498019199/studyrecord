@@ -1,6 +1,7 @@
 #pragma once
 #include <core/common.h>
 #include <core/ElementFormat.h>
+#include <core/RenderEffect.h>
 
 // 顶点布局和顶点缓存
 enum VertexElementUsage
@@ -117,6 +118,8 @@ public:
         uint32_t freq;
     };
 public:
+    D3D11RenderLayout();
+
     void TopologyType(topology_type type)
     {
         topo_type_ = type;
@@ -204,7 +207,7 @@ private:
 	uint32_t force_num_indices_{0xFFFFFFFF};
 
     mutable std::vector<D3D11_INPUT_ELEMENT_DESC> vertex_elems_;
-    //mutable std::vector<std::pair<uint32_t, ID3D11InputLayoutPtr>> input_layouts_;
+    mutable std::map<ShaderStage, ID3D11InputLayoutPtr> input_layouts_;
     mutable std::vector<ID3D11Buffer*> vbs_;
     mutable std::vector<UINT> strides_;
     mutable std::vector<UINT> offsets_;

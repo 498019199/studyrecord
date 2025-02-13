@@ -169,7 +169,7 @@ void D3D11RenderEngine::EndRender() const
 	assert(d3d_imm_ctx_);
 	assert(swap_chain_);
 
-	Color blackColor(0.941f, 0.973f, 1.0f, 1.0f);
+	Color blackColor(0.0, 0.0, 0.0f, 1.0f);
 	d3d_imm_ctx_->ClearRenderTargetView(render_target_view_, &blackColor.r());
 	d3d_imm_ctx_->ClearDepthStencilView(depth_stencil_view_, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.0f, 0);
 
@@ -206,6 +206,12 @@ void D3D11RenderEngine::DoRender(const RenderEffect& effect, const D3D11RenderLa
 			vb_stride_cache_ = strides;
 			vb_offset_cache_ = offsets;
 		}
+
+		// auto blob = effect.VsCode();
+        // ID3D11InputLayoutPtr new_layout;
+        // TIFHR(d3d_device_->CreateInputLayout(&rl.vertex_elems_[0], static_cast<UINT>(rl.vertex_elems_.size()),
+        //      blob->GetBufferPointer(), blob->GetBufferSize(), new_layout.put()));
+        // auto layout = new_layout.get();
 
 		auto layout = rl.InputLayout(effect);
 		if (layout != input_layout_cache_)
