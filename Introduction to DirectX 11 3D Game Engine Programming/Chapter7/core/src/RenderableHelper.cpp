@@ -116,22 +116,22 @@ RenderableSphere::RenderableSphere(float radius, int levels, int slices, const C
 
     std::vector<VertexElement> merged_ves;
     std::vector<VertexPosNormalColor> vertex;
-    vertex.resize(indexCount);
+    vertex.resize(vertexCount);
     std::vector<uint16_t> indice_vec;
     indice_vec.resize(indexCount);
 
+    int vIndex = 0, iIndex = 0;
     float phi = 0.0f, theta = 0.0f;
     float per_phi = MathWorker::PI / levels;
     float per_theta = MathWorker::PI2 / slices;
     float x, y, z;
-    int iIndex = 0;
 
     // 放入顶端点
     VertexPosNormalColor tmp;
     tmp.pos = float3(0.0f, radius, 0.0f);
     tmp.normal = float3(0.0f, 1.0f, 0.0f);
     tmp.color = color;
-    vertex.emplace_back(tmp);
+    vertex[vIndex++] = tmp;
 
     for (int i = 1; i < levels; ++i)
     {
@@ -153,14 +153,14 @@ RenderableSphere::RenderableSphere(float radius, int levels, int slices, const C
             tmp.pos = pos;
             tmp.normal = normal;
             tmp.color = color;
-            vertex.emplace_back(tmp);
+            vertex[vIndex++] = tmp;
         }
     }
     // 放入底端点
     tmp.pos = float3(0.0f, -radius, 0.0f);
     tmp.normal = float3(0.0f, -1.0f, 0.0f);
     tmp.color = color;
-    vertex.emplace_back(tmp);
+    vertex[vIndex++] = tmp;
 
     auto& rf = Context::Instance().RenderFactoryInstance();
     merged_ves.emplace_back(VertexElement(VEU_Position, 0, EF_BGR32F));

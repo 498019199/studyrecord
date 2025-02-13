@@ -3,7 +3,6 @@
 #include <core/D3D11Util.h>
 #include <core/D3D11GraphicsBuffer.h>
 #include <core/RenderEffect.h>
-extern int g_IndexCount;
 
 D3D11RenderEngine::D3D11RenderEngine(HWND hwnd, const RenderSettings& settings)
 {
@@ -173,7 +172,7 @@ void D3D11RenderEngine::EndRender() const
 	d3d_imm_ctx_->ClearRenderTargetView(render_target_view_, &blackColor.r());
 	d3d_imm_ctx_->ClearDepthStencilView(depth_stencil_view_, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.0f, 0);
 
-	d3d_imm_ctx_->DrawIndexed(g_IndexCount, 0, 0);
+	d3d_imm_ctx_->DrawIndexed(num_vertices_just_rendered_, 0, 0);
 	TIFHR(swap_chain_->Present(0, 0));
 }
 
@@ -285,6 +284,8 @@ void D3D11RenderEngine::DoRender(const RenderEffect& effect, const D3D11RenderLa
 		}
 		break;
 	}
+	num_primitives_just_rendered_ = prim_count;
+	num_vertices_just_rendered_ = vertex_count;
 
     // 将更新好的常量缓冲区绑定到顶点着色器
 	if(rl.UseIndices())

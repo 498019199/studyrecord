@@ -6,14 +6,11 @@
 #include <core/World.h>
 
 #include <filesystem>
-extern int g_IndexCount = 0;
-
 void CreateBox()
 {
     // 创建立方体网格数据
     auto box = new RenderableBox(2.0f, 2.0f, 2.0f, Color(1.f, 1.f, 1.f, 1.f));
     Context::Instance().WorldInstance().AddRenderable(box);
-    g_IndexCount = 36;
 }
 
 void CreateShere()
@@ -41,8 +38,9 @@ int main() {
     Context::Instance().WorldInstance().BeginWorld();
     
 	//Light();
-    CreateBox();
-    
+    //CreateBox();
+    CreateShere();
+
     app.Run();
     return 0;
 }
