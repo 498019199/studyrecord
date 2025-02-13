@@ -18,7 +18,7 @@ void CreateShere()
     // 创建球体网格数据，levels和slices越大，精度越高。
     auto sphere = new RenderableSphere(1.0f, 20, 20, Color(1.f, 1.f, 1.f, 1.f));
     Context::Instance().WorldInstance().AddRenderable(sphere);
-
+  
 }
 
 void Light()

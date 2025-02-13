@@ -45,7 +45,7 @@ function(UpdateExternalLib name url rev)
 	set(external_folder "${ZENGINE_ROOT_DIR}/3rd")
 	set(external_lib_folder "${external_folder}/${name}")
 
-	if(EXISTS "${external_lib_folder}/.git")
+	if(EXISTS "${external_lib_folder}/.git")	
 		set(need_clone FALSE)
 
 		set(cached_rev_file_name "${CMAKE_CURRENT_BINARY_DIR}/3rd_${name}_REV")
@@ -116,7 +116,7 @@ ENDFOREACH()
 
 add_subdirectory(zlib)
 add_subdirectory(assimp)
-add_subdirectory(ImGui)
+add_subdirectory(imgui)
 add_subdirectory(googletest)
 if(ZENGINE_PLATFORM_WINDOWS)
 	#add_subdirectory(dxsdk)
