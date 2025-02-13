@@ -9,4 +9,3 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_MINSIZEREL ${IMGUI_OUTPUT_DIR})
 
 UpdateExternalLib("imgui" "https://github.com/ocornut/imgui.git" "dbb5eeaadffb6a3ba6a60de1290312e5802dba5a" "master" "1.91.8")
 
-#ADD_SUBDIRECTORY(${IMGUI_OUTPUT_DIR} "${CMAKE_CURRENT_BINARY_DIR}/imgui") 

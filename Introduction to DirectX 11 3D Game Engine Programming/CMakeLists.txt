@@ -13,6 +13,10 @@ set(PROJECT_3RD_DIR ${PROJECT_SOURCE_DIR}/3rd)
 set(ZENGINE_ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+    if(WIN7_SYSTEM_SUPPORT MATCHES ON)
+        add_compile_definitions(_WIN32_WINNT=0x601)
+    endif()
+    
     # # 编译器设置 UTF-8 编码
     add_compile_options("$<$<C_COMPILER_ID:MSVC>:/utf-8>")
     add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
