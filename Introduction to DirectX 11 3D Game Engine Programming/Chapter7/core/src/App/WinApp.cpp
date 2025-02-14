@@ -5,6 +5,10 @@
 #include <core/D3D11Util.h>
 #include <core/World.h>
 
+#include <imgui/imgui.h>
+#include <imgui/imgui_impl_dx11.h>
+#include <imgui/imgui_impl_win32.h>
+
 WinAPP::WinAPP()
 {
 }
@@ -15,6 +19,8 @@ WinAPP::~WinAPP()
 
 LRESULT WinAPP::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept
 {
+	if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam))
+        return true;
     //if()
     //else
 	{
@@ -140,7 +146,28 @@ int WinAPP::Run()
 			if( !is_paused )
 			{
 				CalculateFrameStats();
+
+				// 这里添加
+                ImGui_ImplDX11_NewFrame();     
+                ImGui_ImplWin32_NewFrame();
+                ImGui::NewFrame();
+                // --------
+				
+				// ImGui内部示例窗口
+				ImGui::ShowAboutWindow();
+				ImGui::ShowDemoWindow();
+				ImGui::ShowUserGuide();
+
+			    // 可以在这之前调用ImGui的UI部分
+				// Direct3D 绘制部分
 				Context::Instance().WorldInstance().UpdateScene(frame_time_);	
+				ImGui::Render();
+
+				// 下面这句话会触发ImGui在Direct3D的绘制
+    			// 因此需要在此之前将后备缓冲区绑定到渲染管线上
+    			ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+
+				Context::Instance().RenderEngineInstance().SwitchChain();
 			}
 			else
 			{

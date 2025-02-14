@@ -36,6 +36,7 @@ endif()
 add_subdirectory(${ZENGINE_ROOT_DIR}/3rd/CMake ${CMAKE_CURRENT_BINARY_DIR}/3rd EXCLUDE_FROM_ALL)
 add_subdirectory(math)
 file(COPY ${PROJECT_SOURCE_DIR}/math/include DESTINATION "${LIBRARY_OUTPUT_PATH}")
+add_subdirectory(${PROJECT_3RD_DIR}/imgui)
 
 add_subdirectory(Chapter4)
 add_subdirectory(Chapter6) 

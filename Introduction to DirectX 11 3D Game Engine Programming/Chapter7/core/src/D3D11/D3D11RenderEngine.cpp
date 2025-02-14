@@ -173,7 +173,11 @@ void D3D11RenderEngine::EndRender() const
 	d3d_imm_ctx_->ClearDepthStencilView(depth_stencil_view_, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.0f, 0);
 
 	d3d_imm_ctx_->DrawIndexed(num_vertices_just_rendered_, 0, 0);
-	TIFHR(swap_chain_->Present(0, 0));
+}
+
+void D3D11RenderEngine::SwitchChain() const
+{
+    TIFHR(swap_chain_->Present(0, 0));
 }
 
 ID3D11Device* D3D11RenderEngine::D3DDevice() const

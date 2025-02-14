@@ -1,5 +1,4 @@
 include_directories(${PROJECT_SOURCE_DIR}/math/include)
-include_directories(${PROJECT_SOURCE_DIR}/common/include)
 
 set(SRC_LIST
     ${PROJECT_SOURCE_DIR}/math/src/math.cpp

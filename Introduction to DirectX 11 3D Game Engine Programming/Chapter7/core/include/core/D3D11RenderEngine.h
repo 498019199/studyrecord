@@ -15,7 +15,8 @@ public:
     ID3D11DeviceContext* D3DDeviceImmContext() const;
 
     void DoRender(const RenderEffect& effect, const D3D11RenderLayout& rl);
-    void EndRender() const; 
+    void EndRender() const;
+    void SwitchChain() const; 
 private:
     int weight_{0};
     int height_{0};
@@ -44,6 +45,8 @@ private:
     ID3D11Buffer* ib_cache_{nullptr};
     D3D11RenderLayout::topology_type topology_type_cache_ {D3D11RenderLayout::TT_PointList};
 };
+
+
 
 
 

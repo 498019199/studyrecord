@@ -1,7 +1,8 @@
 include_directories( 
     ${PROJECT_SOURCE_DIR}/Chapter7/core/include
     ${PROJECT_SOURCE_DIR}/math/include
-    ${PROJECT_SOURCE_DIR}/3rd/dxsdk/dxsdk/Include)
+    ${PROJECT_SOURCE_DIR}/3rd/dxsdk/dxsdk/Include
+    ${PROJECT_SOURCE_DIR}/3rd/imgui)
 
 set(SRC_LIST
     ${PROJECT_SOURCE_DIR}/Chapter7/main_light.cpp
@@ -13,6 +14,8 @@ set(SRC_LIST
     ${PROJECT_SOURCE_DIR}/Chapter7/core/src/D3D11/D3D11Util.cpp 
     ${PROJECT_SOURCE_DIR}/Chapter7/core/src/D3D11/D3D11RenderFactory.cpp
 
+    ${PROJECT_SOURCE_DIR}/Chapter7/core/src/App/WinApp.cpp
+
     ${PROJECT_SOURCE_DIR}/Chapter7/core/src/scene/SceneNode.cpp
     ${PROJECT_SOURCE_DIR}/Chapter7/core/src/scene/World.cpp
     
@@ -22,12 +25,12 @@ set(SRC_LIST
     ${PROJECT_SOURCE_DIR}/Chapter7/core/src/Mesh.cpp 
     ${PROJECT_SOURCE_DIR}/Chapter7/core/src/RenderableHelper.cpp
     ${PROJECT_SOURCE_DIR}/Chapter7/core/src/RenderEffect.cpp
-    ${PROJECT_SOURCE_DIR}/Chapter7/core/src/Timer.cpp 
-    ${PROJECT_SOURCE_DIR}/Chapter7/core/src/WinApp.cpp)
+    ${PROJECT_SOURCE_DIR}/Chapter7/core/src/Timer.cpp)
 add_executable(Chapter7 ${SRC_LIST})
 
 target_link_libraries(Chapter7 PRIVATE 
     ${LIB_DIR_PATH}/math${ZENGINE_OUTPUT_SUFFIX}${CMAKE_DEBUG_POSTFIX}.lib
+    ${LIB_DIR_PATH}/imgui${ZENGINE_OUTPUT_SUFFIX}${CMAKE_DEBUG_POSTFIX}.lib
     ${PROJECT_SOURCE_DIR}/3rd/dxsdk/dxsdk/Lib/x64/d3d11.lib
     ${PROJECT_SOURCE_DIR}/3rd/dxsdk/dxsdk/Lib/x64/d3dx11d.lib
     ${PROJECT_SOURCE_DIR}/3rd/dxsdk/dxsdk/Lib/x64/d3dcompiler.lib
