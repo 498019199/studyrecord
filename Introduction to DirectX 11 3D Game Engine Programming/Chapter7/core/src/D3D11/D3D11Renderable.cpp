@@ -1,6 +1,7 @@
 #include <core/D3D11Renderable.h>
 #include <core/D3D11RenderLayout.h>
 #include <core/D3D11RenderEngine.h>
+#include <core/RenderEffect.h>
 #include <core/Context.h>
 
 D3D11Renderable::D3D11Renderable()

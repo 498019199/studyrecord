@@ -22,6 +22,9 @@
 
 using ID3D11BufferPtr = com_ptr<ID3D11Buffer>;
 using ID3D11InputLayoutPtr = com_ptr<ID3D11InputLayout>;
+using ID3D11RasterizerStatePtr = com_ptr<ID3D11RasterizerState>;
+using ID3D11VertexShaderPtr = com_ptr<ID3D11VertexShader>;
+using ID3D11PixelShaderPtr = com_ptr<ID3D11PixelShader>;
 
 #include <math/math.h>
 using int1 = MathWorker::int1;

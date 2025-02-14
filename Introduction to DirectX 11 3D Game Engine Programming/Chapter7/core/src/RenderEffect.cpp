@@ -6,6 +6,15 @@
 
 void RenderEffect::CreateConstant()
 {
+    auto const& re = Context::Instance().RenderEngineInstance();
+    D3D11_RASTERIZER_DESC wireframeDesc;
+	ZeroMemory(&wireframeDesc, sizeof(D3D11_RASTERIZER_DESC));
+	wireframeDesc.FillMode = D3D11_FILL_WIREFRAME;
+	wireframeDesc.CullMode = D3D11_CULL_BACK;
+	wireframeDesc.FrontCounterClockwise = false;
+	wireframeDesc.DepthClipEnable = true;
+    TIFHR(re.D3DDevice()->CreateRasterizerState(&wireframeDesc, rasterizer_state_.put()));
+
     // 设置常量缓冲区描述
     uint32_t size = sizeof(VSConstantBuffer);
     auto& rf = Context::Instance().RenderFactoryInstance();
@@ -25,4 +34,10 @@ void RenderEffect::AttackPixelShader(const std::string& filename)
     auto const& re = Context::Instance().RenderEngineInstance();
     TIFHR(CreateShaderFromFile(filename, "PS", "ps_5_0", pixel_blob_.put()));
     TIFHR(re.D3DDevice()->CreatePixelShader(pixel_blob_->GetBufferPointer(), pixel_blob_->GetBufferSize(), nullptr, pixel_shader_.put()));
+}
+
+void RenderEffect::Active() const
+{
+    auto& re = Context::Instance().RenderEngineInstance();
+    re.RSSetState(rasterizer_state_.get());
 }

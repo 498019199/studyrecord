@@ -317,3 +317,12 @@ void D3D11RenderEngine::DoRender(const RenderEffect& effect, const D3D11RenderLa
     d3d_imm_ctx_->VSSetShader(effect.GetVertexShader(), nullptr, 0);
     d3d_imm_ctx_->PSSetShader(effect.GetPixelShader(), nullptr, 0);
 }
+
+void D3D11RenderEngine::RSSetState(ID3D11RasterizerState* ras)
+{
+	if (rasterizer_state_cache_ != ras)
+	{
+		d3d_imm_ctx_->RSSetState(ras);
+		rasterizer_state_cache_ = ras;
+	}
+}

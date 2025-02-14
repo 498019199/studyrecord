@@ -24,6 +24,7 @@ private:
 
 public:
     ConstantBuffer cb_;
+    bool is_wireframe_mode_{false};
 };
 
 

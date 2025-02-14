@@ -49,7 +49,6 @@ private:
     uint32_t win_style_;
     float dpi_scale_ = 1.f;
 
-    D3D11RenderEngine *device_;
 };
 
 

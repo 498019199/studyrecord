@@ -4,7 +4,7 @@
 #include <core/Context.h>
 #include <core/D3D11Util.h>
 #include <core/World.h>
-
+#define CHPATER_USE_IMGUISE 1
 #include <imgui/imgui.h>
 #include <imgui/imgui_impl_dx11.h>
 #include <imgui/imgui_impl_win32.h>
@@ -93,10 +93,10 @@ bool WinAPP::CreateAppWindow(const RenderSettings& settings)
 
 bool WinAPP::InitDevice(HWND hwnd, const RenderSettings& settings)
 {
-    device_ = new D3D11RenderEngine(hwnd, settings);
-	if(device_)
+    auto re = new D3D11RenderEngine(hwnd, settings);
+	if(re)
 	{
-		Context::Instance().RenderEngineInstance(*device_);
+		Context::Instance().RenderEngineInstance(*re);
 		return true;    
 	}
 
@@ -193,7 +193,8 @@ void WinAPP::ImguiUpdate(float dt)
 
 	if (ImGui::Begin("Lighting"))
 	{
-		ImGui::Checkbox("wireframe mode", &animateCube);   // 复选框
+		ImGui::Checkbox("WireFrame Mode", &wd.is_wireframe_mode_);
+		
     	ImGui::SameLine(0.0f, 25.0f);                       // 下一个控件在同一行往右25像素单位
 
 		if (ImGui::Checkbox("Use Custom Color", &customColor))

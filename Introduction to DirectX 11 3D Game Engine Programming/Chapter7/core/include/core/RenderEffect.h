@@ -13,6 +13,13 @@ enum class ShaderStage
     NumStages,
 };
 
+enum PolygonMode
+{
+    PM_Point,
+    PM_Line,
+    PM_Fill
+};
+
 class RenderEffect
 {
 public:
@@ -50,14 +57,20 @@ public:
     {
         return pixel_blob_.get();
     }
+
+    void Active() const;
 private:
-    com_ptr<ID3D11VertexShader>  vertex_shader_;	// 顶点着色器
-    com_ptr<ID3D11PixelShader> pixel_shader_;	    // 像素着色器
+    ID3D11VertexShaderPtr  vertex_shader_;	// 顶点着色器
+    ID3D11PixelShaderPtr pixel_shader_;	    // 像素着色器
+    ID3D11RasterizerStatePtr rasterizer_state_;
     com_ptr<ID3DBlob> vertex_blob_;
     com_ptr<ID3DBlob> pixel_blob_;
 
     GraphicsBufferPtr hw_buff_; // 常量缓冲区
 };
+
+
+
 
 
 

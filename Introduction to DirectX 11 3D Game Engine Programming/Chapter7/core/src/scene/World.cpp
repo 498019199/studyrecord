@@ -42,11 +42,19 @@ void World::UpdateScene(float dt)
         }
     }
 
+    auto& re = Context::Instance().RenderEngineInstance();
     for(auto node : all_scene_nodes_)
     {
+        if(is_wireframe_mode_)
+        {
+            const auto& effect = node->GetRenderEffect();
+            effect->Active();
+        }
+        else
+        {
+            re.RSSetState(nullptr);
+        }
         node->Render();
     }
-
-    const auto& re = Context::Instance().RenderEngineInstance();
     re.EndRender();
 }

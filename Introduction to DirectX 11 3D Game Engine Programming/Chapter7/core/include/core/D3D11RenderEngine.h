@@ -17,6 +17,8 @@ public:
     void DoRender(const RenderEffect& effect, const D3D11RenderLayout& rl);
     void EndRender() const;
     void SwitchChain() const; 
+
+    void RSSetState(ID3D11RasterizerState* ras);
 private:
     int weight_{0};
     int height_{0};
@@ -38,6 +40,8 @@ private:
     
     D3D11_VIEWPORT screen_viewport_;
 
+    ID3D11RasterizerState* rasterizer_state_cache_{nullptr};
+
     ID3D11InputLayout* input_layout_cache_{nullptr};
     std::vector<ID3D11Buffer*> vb_cache_;
     std::vector<UINT> vb_stride_cache_;
@@ -45,6 +49,8 @@ private:
     ID3D11Buffer* ib_cache_{nullptr};
     D3D11RenderLayout::topology_type topology_type_cache_ {D3D11RenderLayout::TT_PointList};
 };
+
+
 
 
 
