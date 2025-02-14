@@ -20,6 +20,7 @@ public:
     bool InitDevice(HWND hwnd, const RenderSettings& settings);
     
     int Run();
+    void ImguiUpdate();
 
     HWND GetHWND() const { return hwnd_; }
 
@@ -50,6 +51,8 @@ private:
 
     D3D11RenderEngine *device_;
 };
+
+
 
 
 

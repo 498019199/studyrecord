@@ -62,8 +62,8 @@ int main() {
     Context::Instance().WorldInstance().BeginWorld();
     
 	//Light();
-    //CreateBox();
-    CreateShere();
+    CreateBox();
+    //CreateShere();
 
     app.Run();
     return 0;

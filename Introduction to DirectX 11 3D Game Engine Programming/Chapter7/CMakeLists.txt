@@ -16,8 +16,8 @@ set(SRC_LIST
 
     ${PROJECT_SOURCE_DIR}/Chapter7/core/src/App/WinApp.cpp
 
-    ${PROJECT_SOURCE_DIR}/Chapter7/core/src/scene/SceneNode.cpp
-    ${PROJECT_SOURCE_DIR}/Chapter7/core/src/scene/World.cpp
+    ${PROJECT_SOURCE_DIR}/Chapter7/core/src/Scene/SceneNode.cpp
+    ${PROJECT_SOURCE_DIR}/Chapter7/core/src/Scene/World.cpp
     
     ${PROJECT_SOURCE_DIR}/Chapter7/core/src/common.cpp
     ${PROJECT_SOURCE_DIR}/Chapter7/core/src/Context.cpp

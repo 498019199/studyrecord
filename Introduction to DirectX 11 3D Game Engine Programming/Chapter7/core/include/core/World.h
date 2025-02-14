@@ -19,10 +19,11 @@ public:
 
     void AddRenderable(D3D11Renderable* node);
 private:
-    ConstantBuffer cb_;
-
     SceneNode scene_root_;
     std::vector<D3D11Renderable*> all_scene_nodes_;
+
+public:
+    ConstantBuffer cb_;
 };
 
 

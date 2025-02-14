@@ -153,15 +153,11 @@ int WinAPP::Run()
                 ImGui::NewFrame();
                 // --------
 				
-				// ImGui内部示例窗口
-				ImGui::ShowAboutWindow();
-				ImGui::ShowDemoWindow();
-				ImGui::ShowUserGuide();
+				ImguiUpdate();
 
 			    // 可以在这之前调用ImGui的UI部分
 				// Direct3D 绘制部分
 				Context::Instance().WorldInstance().UpdateScene(frame_time_);	
-				ImGui::Render();
 
 				// 下面这句话会触发ImGui在Direct3D的绘制
     			// 因此需要在此之前将后备缓冲区绑定到渲染管线上
@@ -177,4 +173,58 @@ int WinAPP::Run()
     }
 
 	return (int)msg.wParam;
+}
+
+
+void WinAPP::ImguiUpdate()
+{
+	static bool animateCube = true, customColor = false;
+
+	// ImGui::ShowAboutWindow();
+	// ImGui::ShowDemoWindow();
+	// ImGui::ShowUserGuide();
+	// 获取IO事件
+    ImGuiIO& io = ImGui::GetIO();
+
+	if (ImGui::Begin("Lighting"))
+	{
+		ImGui::Checkbox("wireframe mode", &animateCube);   // 复选框
+    	ImGui::SameLine(0.0f, 25.0f);                       // 下一个控件在同一行往右25像素单位
+
+		if (ImGui::Checkbox("Use Custom Color", &customColor))
+		//m_CBuffer.useCustomColor = customColor;
+		// 下面的控件受上面的复选框影响
+		if (customColor)
+		{
+			//ImGui::ColorEdit3("Color", reinterpret_cast<float*>(&m_CBuffer.color));  // 编辑颜色
+		}
+
+		// 不允许在操作UI时操作物体
+    	if (!ImGui::IsAnyItemActive())
+		{
+			 // 鼠标左键拖动平移
+        	if (ImGui::IsMouseDragging(ImGuiMouseButton_Left))
+			{
+
+			}
+			// 鼠标右键拖动旋转
+        	else if (ImGui::IsMouseDragging(ImGuiMouseButton_Right))
+			{
+
+			}
+			// 鼠标滚轮缩放
+        	else if (io.MouseWheel != 0.0f)
+			{
+
+			}
+			// 是否刚按下W键
+			else if(ImGui::IsKeyPressed(ImGuiKey_W))
+			{
+
+			}
+		}
+	}
+
+    ImGui::End();
+    ImGui::Render();
 }
