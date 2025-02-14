@@ -20,7 +20,7 @@ public:
     bool InitDevice(HWND hwnd, const RenderSettings& settings);
     
     int Run();
-    void ImguiUpdate();
+    void ImguiUpdate(float dt);
 
     HWND GetHWND() const { return hwnd_; }
 

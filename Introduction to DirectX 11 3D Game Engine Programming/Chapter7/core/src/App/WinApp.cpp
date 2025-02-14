@@ -153,7 +153,7 @@ int WinAPP::Run()
                 ImGui::NewFrame();
                 // --------
 				
-				ImguiUpdate();
+				ImguiUpdate(frame_time_);
 
 			    // 可以在这之前调用ImGui的UI部分
 				// Direct3D 绘制部分
@@ -176,9 +176,14 @@ int WinAPP::Run()
 }
 
 
-void WinAPP::ImguiUpdate()
+void WinAPP::ImguiUpdate(float dt)
 {
 	static bool animateCube = true, customColor = false;
+    static float phi = 0.0f, theta = 0.0f;
+    phi += 0.3f * dt, theta += 0.37f * dt;
+
+	auto& wd = Context::Instance().WorldInstance();
+    wd.cb_.world = MathWorker::Transpose(MathWorker::MatrixRotateX(phi) * MathWorker::MatrixRotateY(theta));
 
 	// ImGui::ShowAboutWindow();
 	// ImGui::ShowDemoWindow();

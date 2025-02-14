@@ -27,10 +27,6 @@ void World::AddRenderable(D3D11Renderable* node)
 
 void World::UpdateScene(float dt)
 {
-    static float phi = 0.0f, theta = 0.0f;
-    phi += 0.3f * dt, theta += 0.37f * dt;
-    cb_.world = MathWorker::Transpose(MathWorker::MatrixRotateX(phi) * MathWorker::MatrixRotateY(theta));
-
     for(auto node : all_scene_nodes_)
     {
         auto buff = node->GetRenderEffect()->HWBuff();
