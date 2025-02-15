@@ -1,17 +1,11 @@
 #pragma once
 #include <core/common.h>
 #include <core/SceneNode.h>
+#include <core/RenderEffect.h>
 
 class World
 {
 public:
-    struct ConstantBuffer
-    {
-        float4x4 world;
-        float4x4 view;
-        float4x4 proj;
-    };
-
     World();
     
     void BeginWorld();

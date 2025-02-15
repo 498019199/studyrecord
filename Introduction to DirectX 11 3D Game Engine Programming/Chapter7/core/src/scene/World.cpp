@@ -18,6 +18,8 @@ void World::BeginWorld()
         float3(0.0f, 0.0f, 0.0f),
         float3(0.0f, 1.0f, 0.0f)));
     cb_.proj = MathWorker::Transpose(MathWorker::PerspectiveFovLH(1.570796327f, Context::Instance().AppInstance().AspectRatio(), 1.f, 1000.f));    
+    cb_.useCustomColor = 0;
+    cb_.color = Color(1.f, 1.f, 1.f, 1.f);
 }
 
 void World::AddRenderable(D3D11Renderable* node)

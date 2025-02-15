@@ -198,7 +198,14 @@ void WinAPP::ImguiUpdate(float dt)
     	ImGui::SameLine(0.0f, 25.0f);                       // 下一个控件在同一行往右25像素单位
 
 		if (ImGui::Checkbox("Use Custom Color", &customColor))
-		//m_CBuffer.useCustomColor = customColor;
+		{
+			wd.cb_.useCustomColor = customColor;
+		}
+		if (customColor)
+        {
+            ImGui::ColorEdit3("Color", reinterpret_cast<float*>(&wd.cb_.color));
+        }
+
 		// 下面的控件受上面的复选框影响
 		if (customColor)
 		{

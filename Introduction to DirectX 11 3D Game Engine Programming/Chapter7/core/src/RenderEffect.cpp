@@ -4,6 +4,10 @@
 #include <core/D3D11Util.h>
 #include <core/Context.h>
 
+// 计算最接近且不小于给定值的 16 的倍数
+UINT AlignTo16(UINT value) {
+    return (value + 15) & ~15;
+}
 void RenderEffect::CreateConstant()
 {
     auto const& re = Context::Instance().RenderEngineInstance();
@@ -16,7 +20,7 @@ void RenderEffect::CreateConstant()
     TIFHR(re.D3DDevice()->CreateRasterizerState(&wireframeDesc, rasterizer_state_.put()));
 
     // 设置常量缓冲区描述
-    uint32_t size = sizeof(VSConstantBuffer);
+    uint32_t size = AlignTo16(sizeof(ConstantBuffer));
     auto& rf = Context::Instance().RenderFactoryInstance();
     hw_buff_ = rf.MakeConstantBuffer(BU_Dynamic, EAH_CPU_Write, size, nullptr);
 }

@@ -115,7 +115,7 @@ void Shapes()
 void Skull()
 {
     auto currentPath = std::filesystem::current_path().parent_path().parent_path().string();
-	std::ifstream fin(currentPath + "\\Models\\skull.txt");
+	std::ifstream fin(currentPath + "\\Models\\Chapter6\\skull.txt");
 	if(!fin)
 	{
 		return;

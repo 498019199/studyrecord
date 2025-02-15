@@ -20,16 +20,19 @@ enum PolygonMode
     PM_Fill
 };
 
+struct ConstantBuffer
+{
+    float4x4 world;//16*4=64
+    float4x4 view;//128
+    float4x4 proj;//192
+
+    uint32_t useCustomColor;//198
+    Color color;//214
+};
+
 class RenderEffect
 {
 public:
-    struct VSConstantBuffer
-    {
-        float4x4 world;
-        float4x4 view;
-        float4x4 proj;
-    };
-
     void CreateConstant();
     void AttackVertexShader(const std::string& filename);
     void AttackPixelShader(const std::string& filename);
