@@ -79,7 +79,7 @@ void World::UpdateScene(float dt)
         auto ps_buff = node->GetRenderEffect()->HWBuff_PS();
         if(ps_buff)
         {
-            VSConstantBuffer* data = static_cast<VSConstantBuffer*>(ps_buff->Map(BufferAccess::BA_Write_Only));
+            PSConstantBuffer* data = static_cast<PSConstantBuffer*>(ps_buff->Map(BufferAccess::BA_Write_Only));
             if(nullptr == data)
             {
                 continue;
