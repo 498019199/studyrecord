@@ -1,7 +1,6 @@
 #pragma once
 #include <core/macro.h>
 #include <core/com_ptr.h>
-#include <core/ElementFormat.h>
 #include <cassert>
 #include <cstdint>
 
@@ -26,7 +25,6 @@ using ID3D11InputLayoutPtr = com_ptr<ID3D11InputLayout>;
 using ID3D11RasterizerStatePtr = com_ptr<ID3D11RasterizerState>;
 using ID3D11VertexShaderPtr = com_ptr<ID3D11VertexShader>;
 using ID3D11PixelShaderPtr = com_ptr<ID3D11PixelShader>;
-using ID3D11ResourcePtr = com_ptr<ID3D11Resource>;
 
 #include <math/math.h>
 using int1 = MathWorker::int1;
