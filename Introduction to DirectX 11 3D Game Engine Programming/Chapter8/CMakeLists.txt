@@ -20,7 +20,7 @@ set(SRC_LIST
     ${PROJECT_SOURCE_DIR}/Chapter8/core/src/Scene/SceneNode.cpp
     ${PROJECT_SOURCE_DIR}/Chapter8/core/src/Scene/World.cpp
     
-    ${PROJECT_SOURCE_DIR}/Chapter8/core/DevHelper/ImagePlane.cpp
+    ${PROJECT_SOURCE_DIR}/Chapter8/core/src/DevHelper/ImagePlane.cpp
 
     ${PROJECT_SOURCE_DIR}/Chapter8/core/src/common.cpp
     ${PROJECT_SOURCE_DIR}/Chapter8/core/src/Context.cpp

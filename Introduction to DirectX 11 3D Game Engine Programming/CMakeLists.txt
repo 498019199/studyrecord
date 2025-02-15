@@ -33,7 +33,7 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     string(REPLACE "/W3 " "/Wall " CMAKE_CXX_FLAGS_RELEASE ${CMAKE_CXX_FLAGS_RELEASE})
 endif()
 
-add_subdirectory(${ZENGINE_ROOT_DIR}/3rd/CMake ${CMAKE_CURRENT_BINARY_DIR}/3rd EXCLUDE_FROM_ALL)
+add_subdirectory(3rd)
 add_subdirectory(math)
 file(COPY ${PROJECT_SOURCE_DIR}/math/include DESTINATION "${LIBRARY_OUTPUT_PATH}")
 add_subdirectory(${PROJECT_3RD_DIR}/imgui)

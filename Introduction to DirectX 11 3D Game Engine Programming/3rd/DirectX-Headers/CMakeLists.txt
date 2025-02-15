@@ -1,5 +1,3 @@
-set(DIRECTX_HEADERS_PROJECT_DIR "${PROJECT_3RD_DIR}/DirectX-Headers")
-
 UpdateExternalLib("DirectX-Headers" "https://github.com/microsoft/DirectX-Headers.git" "980971e835876dc0cde415e8f9bc646e64667bf7")
 
 set(DXHEADERS_BUILD_TEST OFF CACHE BOOL "" FORCE)

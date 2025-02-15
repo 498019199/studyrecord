@@ -6,12 +6,11 @@
 /vcpkg.json
 /vcpkg-configuration.json
 /vcpkg_
-/3rd/assimp
-/3rd/d3dcompiler
-/3rd/DirectX-Headers
+/3rd/assimp/assimp
+/3rd/zlib/zlib
+/3rd/FreeImage/FreeImage
+/3rd/DirectX-Headers/DirectX-Headers
 /3rd/dxsdk/dxsdk
-/3rd/zlib
-/3rd/googletest
 *.cso
 
 
