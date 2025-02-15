@@ -47,7 +47,7 @@ SET_TARGET_PROPERTIES(assimp PROPERTIES
 	OUTPUT_NAME assimp${DEMOENGINE_OUTPUT_SUFFIX}
 )
 
-add_dependencies(assimp ${KLAYGE_ZLIB_NAME})
+add_dependencies(assimp ${ZENGINE_ZLIB_NAME})
 
 set_target_properties(assimp PROPERTIES FOLDER "3rd/assimp")
 if(TARGET UpdateAssimpLibsDebugSymbolsAndDLLs)
