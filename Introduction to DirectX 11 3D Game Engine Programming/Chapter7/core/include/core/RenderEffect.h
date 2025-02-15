@@ -1,5 +1,6 @@
 #pragma once
 #include <core/common.h>
+#include <core/Light.h>
 
 enum class ShaderStage
 {
@@ -20,14 +21,21 @@ enum PolygonMode
     PM_Fill
 };
 
-struct ConstantBuffer
+struct VSConstantBuffer
 {
     float4x4 world;//16*4=64
     float4x4 view;//128
     float4x4 proj;//192
+    float4x4 worldInvTranspose;
+};
 
-    uint32_t useCustomColor;//198
-    Color color;//214
+struct PSConstantBuffer
+{
+    DirectionalLightSource directional_light;				// 默认环境光
+    PointLightSource point_light;						// 默认点光
+    SpotLightSource spot_light;						    // 默认汇聚光
+    Material material;
+    float4 eyePos;
 };
 
 class RenderEffect
@@ -37,9 +45,14 @@ public:
     void AttackVertexShader(const std::string& filename);
     void AttackPixelShader(const std::string& filename);
 
-    const GraphicsBufferPtr& HWBuff() const noexcept
+    const GraphicsBufferPtr& HWBuff_VS() const noexcept
     {
-        return hw_buff_;
+        return vs_hw_buff_;
+    }
+
+    const GraphicsBufferPtr& HWBuff_PS() const noexcept
+    {
+        return ps_hw_buff_;
     }
 
     ID3D11VertexShader* GetVertexShader() const
@@ -69,7 +82,8 @@ private:
     com_ptr<ID3DBlob> vertex_blob_;
     com_ptr<ID3DBlob> pixel_blob_;
 
-    GraphicsBufferPtr hw_buff_; // 常量缓冲区
+    GraphicsBufferPtr vs_hw_buff_; // 常量缓冲区
+    GraphicsBufferPtr ps_hw_buff_; 
 };
 
 

@@ -183,7 +183,8 @@ void WinAPP::ImguiUpdate(float dt)
     phi += 0.3f * dt, theta += 0.37f * dt;
 
 	auto& wd = Context::Instance().WorldInstance();
-    wd.cb_.world = MathWorker::Transpose(MathWorker::MatrixRotateX(phi) * MathWorker::MatrixRotateY(theta));
+    wd.vs_cb_.world = MathWorker::Transpose(MathWorker::MatrixRotateX(phi) * MathWorker::MatrixRotateY(theta));
+	wd.vs_cb_.worldInvTranspose = MathWorker::Transpose(MathWorker::MatrixInverse(wd.vs_cb_.world));
 
 	// ImGui::ShowAboutWindow();
 	// ImGui::ShowDemoWindow();
@@ -193,25 +194,57 @@ void WinAPP::ImguiUpdate(float dt)
 
 	if (ImGui::Begin("Lighting"))
 	{
-		ImGui::Checkbox("WireFrame Mode", &wd.is_wireframe_mode_);
-		
     	ImGui::SameLine(0.0f, 25.0f);                       // 下一个控件在同一行往右25像素单位
 
-		if (ImGui::Checkbox("Use Custom Color", &customColor))
-		{
-			wd.cb_.useCustomColor = customColor;
-		}
-		if (customColor)
+        ImGui::Text("Material");
+        ImGui::PushID(3);
+        ImGui::ColorEdit3("Ambient", &wd.ps_cb_.material.ambient_[0]);
+        ImGui::ColorEdit3("Diffuse", &wd.ps_cb_.material.diffuse_[0]);
+        ImGui::ColorEdit3("Specular", &wd.ps_cb_.material.specular_[0]);
+        ImGui::PopID();
+		
+		static int curr_light_item = 0;
+        static const char* light_modes[] = {
+            "Directional Light",
+            "Point Light",
+            "Spot Light"
+        };
+        ImGui::Text("Light");
+        if (ImGui::Combo("Light Type", &curr_light_item, light_modes, ARRAYSIZE(light_modes)))
         {
-            ImGui::ColorEdit3("Color", reinterpret_cast<float*>(&wd.cb_.color));
+            wd.ps_cb_.directional_light = (curr_light_item == 0 ? wd.default_directional_light_ : DirectionalLightSource());
+            wd.ps_cb_.point_light = (curr_light_item == 1 ? wd.default_point_light_ : PointLightSource());
+            wd.ps_cb_.spot_light = (curr_light_item == 2 ? wd.default_spot_light_ : SpotLightSource());
         }
+		
+        // 添加ID区分同名控件
+        ImGui::PushID(curr_light_item);
+        if (curr_light_item == 0)
+        {
+            ImGui::ColorEdit3("Ambient", &wd.ps_cb_.directional_light.ambient_[0]);
+            ImGui::ColorEdit3("Diffuse", &wd.ps_cb_.directional_light.diffuse_[0]);
+            ImGui::ColorEdit3("Specular", &wd.ps_cb_.directional_light.specular_[0]);
+        }
+        else if (curr_light_item == 1)
+        {
+            ImGui::ColorEdit3("Ambient", &wd.ps_cb_.point_light.ambient_[0]);
+            ImGui::ColorEdit3("Diffuse", &wd.ps_cb_.point_light.diffuse_[0]);
+            ImGui::ColorEdit3("Specular", &wd.ps_cb_.point_light.specular_[0]);
+            ImGui::InputFloat("Range", &wd.ps_cb_.point_light.range_);
+            ImGui::InputFloat3("Attenutation", &wd.ps_cb_.point_light.att_[0]);
+        }
+        else
+        {
+            ImGui::ColorEdit3("Ambient", &wd.ps_cb_.spot_light.ambient_[0]);
+            ImGui::ColorEdit3("Diffuse", &wd.ps_cb_.spot_light.diffuse_[0]);
+            ImGui::ColorEdit3("Specular", &wd.ps_cb_.spot_light.specular_[0]);
+            ImGui::InputFloat("Spot", &wd.ps_cb_.spot_light.spot_);
+            ImGui::InputFloat("Range", &wd.ps_cb_.spot_light.range_);
+            ImGui::InputFloat3("Attenutation", &wd.ps_cb_.spot_light.att_[0]);
+        }
+        ImGui::PopID();
 
-		// 下面的控件受上面的复选框影响
-		if (customColor)
-		{
-			//ImGui::ColorEdit3("Color", reinterpret_cast<float*>(&m_CBuffer.color));  // 编辑颜色
-		}
-
+		ImGui::Checkbox("WireFrame Mode", &wd.is_wireframe_mode_);
 		// 不允许在操作UI时操作物体
     	if (!ImGui::IsAnyItemActive())
 		{

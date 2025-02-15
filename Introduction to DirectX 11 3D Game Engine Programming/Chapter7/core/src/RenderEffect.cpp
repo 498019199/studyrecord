@@ -20,9 +20,12 @@ void RenderEffect::CreateConstant()
     TIFHR(re.D3DDevice()->CreateRasterizerState(&wireframeDesc, rasterizer_state_.put()));
 
     // 设置常量缓冲区描述
-    uint32_t size = AlignTo16(sizeof(ConstantBuffer));
+    uint32_t size = AlignTo16(sizeof(VSConstantBuffer));
     auto& rf = Context::Instance().RenderFactoryInstance();
-    hw_buff_ = rf.MakeConstantBuffer(BU_Dynamic, EAH_CPU_Write, size, nullptr);
+    vs_hw_buff_ = rf.MakeConstantBuffer(BU_Dynamic, EAH_CPU_Write, size, nullptr);
+
+    size = AlignTo16(sizeof(PSConstantBuffer));
+    ps_hw_buff_ = rf.MakeConstantBuffer(BU_Dynamic, EAH_CPU_Write, size, nullptr);
 }
 
 void RenderEffect::AttackVertexShader(const std::string& filename)

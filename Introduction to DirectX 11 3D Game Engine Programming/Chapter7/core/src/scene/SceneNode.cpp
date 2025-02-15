@@ -1,12 +1,12 @@
 #include <core/SceneNode.h>
 
-const float4x4& SceneNode::TransformToWorld() const
-{
-    if(nullptr == parent_ )
-    {
-        return xform_to_parent_;
-    }
-}
+// const float4x4& SceneNode::TransformToWorld() const
+// {
+//     if(nullptr == parent_ )
+//     {
+//         return xform_to_parent_;
+//     }
+// }
 
 void SceneNode::SetPosition(const float3& pos)
 {

@@ -310,11 +310,11 @@ void D3D11RenderEngine::DoRender(const RenderEffect& effect, const D3D11RenderLa
 		}
 	}
 
-    
-	ID3D11Buffer* d3d11_cbuffs = effect.HWBuff()->D3DBuffer();
 	// 将更新好的常量缓冲区绑定到顶点着色器和像素着色器
-    d3d_imm_ctx_->VSSetConstantBuffers(0, 1, &d3d11_cbuffs);
-	d3d_imm_ctx_->PSSetConstantBuffers(0, 1, &d3d11_cbuffs);
+	ID3D11Buffer* d3d11_cbuff_vs = effect.HWBuff_VS()->D3DBuffer();
+    d3d_imm_ctx_->VSSetConstantBuffers(0, 1, &d3d11_cbuff_vs);
+	ID3D11Buffer* d3d11_cbuff_ps = effect.HWBuff_PS()->D3DBuffer();
+	d3d_imm_ctx_->PSSetConstantBuffers(0, 1, &d3d11_cbuff_ps);
 	// 将着色器绑定到渲染管线
     d3d_imm_ctx_->VSSetShader(effect.GetVertexShader(), nullptr, 0);
     d3d_imm_ctx_->PSSetShader(effect.GetPixelShader(), nullptr, 0);
