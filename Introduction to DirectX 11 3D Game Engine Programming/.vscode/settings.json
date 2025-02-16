@@ -92,10 +92,17 @@
         "unordered_map": "cpp",
         "unordered_set": "cpp",
         "xhash": "cpp",
-        "cassert": "cpp"
+        "cassert": "cpp",
+        "complex": "cpp"
     },
     "search.exclude": {
         "Chapter4": true,
         "Chapter6": true,
+        "Chapter7": true,
+    },
+    "files.exclude":{
+        "Chapter4": true,
+        "Chapter6": true,
+        "Chapter7": true,
     }
 }

@@ -28,7 +28,7 @@ protected:
     ID3D11DeviceContext*		d3d_imm_ctx_;
     DXGI_FORMAT dxgi_fmt_;
 
-    ID3D11ResourcePtr d3d_texture_;
+    //ID3D11ResourcePtr d3d_texture_;
 };
 
 

@@ -29,12 +29,12 @@ unset(ASSIMP_ARCHIVE_OUTPUT_DIRECTORY CACHE)
 
 add_subdirectory(assimp)
 
-if(DEMOENGINE_COMPILER_CLANGCL)
+if(ZENGINE_COMPILER_CLANGCL)
 	target_compile_options(assimp
 		PRIVATE
 			-Wno-unused-function
 	)
-	if (DEMOENGINE_COMPILER_VERSION GREATER_EQUAL 160)
+	if (ZENGINE_COMPILER_VERSION GREATER_EQUAL 160)
 		target_compile_options(assimp
 			PRIVATE
 				-Wno-deprecated-copy
@@ -44,7 +44,7 @@ endif()
 
 SET_TARGET_PROPERTIES(assimp PROPERTIES
 	DEBUG_POSTFIX ${CMAKE_DEBUG_POSTFIX}
-	OUTPUT_NAME assimp${DEMOENGINE_OUTPUT_SUFFIX}
+	OUTPUT_NAME assimp${ZENGINE_OUTPUT_SUFFIX}
 )
 
 add_dependencies(assimp ${ZENGINE_ZLIB_NAME})

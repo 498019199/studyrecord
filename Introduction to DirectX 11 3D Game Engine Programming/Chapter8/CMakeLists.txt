@@ -2,6 +2,7 @@ include_directories(
     ${PROJECT_SOURCE_DIR}/Chapter8/core/include
     ${PROJECT_SOURCE_DIR}/math/include
     ${PROJECT_SOURCE_DIR}/3rd/dxsdk/dxsdk/Include
+    ${PROJECT_SOURCE_DIR}/3rd/FreeImage/FreeImage/Source
     ${PROJECT_SOURCE_DIR}/3rd/imgui)
 
 set(SRC_LIST

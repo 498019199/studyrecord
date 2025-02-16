@@ -40,3 +40,16 @@ winerror.h  dxgitype.h
 
 可以按照win8 SDK，找找看看有没有对应的库，[win8 SDK](https://developer.microsoft.com/zh-cn/windows/downloads/sdk-archive/)
 自己从git下来了的没有问题，差dll库，[D3DX11d_43.dll](https://www.dllme.com/dll/files/d3dx11d_43/688b1c137f53d1c0b88fdda2942402ed/download) 
+
+
+# 隐藏目录
+vscode hide folder
+.vscode/settings.json/
+"search.exclude": {}
+"files.exclude":{}
+
+git hide folder
+.gitignore
+
+CMake 
+first cmake CMakeLists.txt content
