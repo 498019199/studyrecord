@@ -14,8 +14,7 @@ D3D11Texture::D3D11Texture(TextureType type, uint32_t sample_count, uint32_t sam
         COMMON_ASSERT(!(access_hint & EAH_CPU_Write));
     }
 
-    RenderFactory& rf = Context::Instance().RenderFactoryInstance();
-    const auto& d3d11_re = checked_cast<const D3D11RenderEngine&>(rf);
+    const auto& d3d11_re = checked_cast<const D3D11RenderEngine&>(Context::Instance().RenderEngineInstance());
     d3d_device_ = d3d11_re.D3DDevice();
     d3d_imm_ctx_ = d3d11_re.D3DDeviceImmContext();
 }

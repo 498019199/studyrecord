@@ -42,7 +42,7 @@ ID3D11InputLayout* D3D11RenderLayout::InputLayout(const ShaderObject* so) const
 {
     if (!vertex_elems_.empty())
     {
-        D3D11ShaderObject const& shader = checked_cast<D3D11ShaderObject const&>(*so);
+        const D3D11ShaderObject& shader = checked_cast<const D3D11ShaderObject&>(*so);
         auto const signature = shader.VsSignature();
 
         for (auto const & il : input_layouts_)

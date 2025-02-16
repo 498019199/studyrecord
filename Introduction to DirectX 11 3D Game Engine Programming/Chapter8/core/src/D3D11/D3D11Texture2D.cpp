@@ -135,8 +135,8 @@ void D3D11Texture2D::CreateHWResource(std::span<ElementInitData const> init_data
         }
     }
 
-    ID3D11Texture2DPtr d3d_tex;
-    TIFHR(d3d_device_->CreateTexture2D(&desc, subres_data.data(), d3d_tex.put()));
-    d3d_tex.as(d3d_texture_);
+    //ID3D11Texture2DPtr d3d_tex;
+    //TIFHR(d3d_device_->CreateTexture2D(&desc, subres_data.data(), d3d_tex.put()));
+    //d3d_tex.as(d3d_texture_);
 }
 }

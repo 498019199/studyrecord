@@ -287,12 +287,11 @@ DXGI_FORMAT D3D11Mapping::MappingFormat(ElementFormat format)
         KFL_UNREACHABLE("Invalid format");
     }
 
-    return DXGI_FORMAT_UNKNOWN;
 }
 
-ElementFormat D3D11Mapping::MappingFormat(DXGI_FORMAT d3dfmt)
+ElementFormat D3D11Mapping::MappingFormat(DXGI_FORMAT format)
 {
-    switch (d3dfmt)
+    switch (format)
     {
     case DXGI_FORMAT_A8_UNORM:
         return EF_A8;
@@ -501,8 +500,6 @@ ElementFormat D3D11Mapping::MappingFormat(DXGI_FORMAT d3dfmt)
     default:
         KFL_UNREACHABLE("Invalid format");
     }
-
-    return EF_Unknown;
 }
 
 void D3D11Mapping::Mapping(std::vector<D3D11_INPUT_ELEMENT_DESC>& elements, uint32_t stream, std::span<const VertexElement> vet,

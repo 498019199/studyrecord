@@ -15,7 +15,6 @@ ShaderStageObject::~ShaderStageObject() noexcept = default;
 
 
 
-
 ShaderObject::ShaderObject()
     : ShaderObject(MakeSharedPtr<ShaderObject::Immutable>())
 {

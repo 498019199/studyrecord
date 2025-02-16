@@ -52,7 +52,6 @@ class ShaderObject
 { 
 public:
     ShaderObject();
-    explicit ShaderObject(std::shared_ptr<Immutable> immutable) noexcept;
     virtual ~ShaderObject() noexcept;
 
     void AttachStage(ShaderStage stage, const ShaderStageObjectPtr&  shader_stage);
@@ -69,6 +68,10 @@ protected:
         std::array<ShaderStageObjectPtr, ShaderStageNum> shader_stages_;
         bool is_validate_;
     };
+
+    explicit ShaderObject(std::shared_ptr<Immutable> immutable) noexcept;
+
+protected:
     const std::shared_ptr<Immutable> immutable_;
     bool shader_stages_dirty_ = true;
     bool hw_res_ready_ = false;

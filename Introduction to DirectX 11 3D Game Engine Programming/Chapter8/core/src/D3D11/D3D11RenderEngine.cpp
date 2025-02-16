@@ -197,10 +197,11 @@ ID3D11DeviceContext* D3D11RenderEngine::D3DDeviceImmContext() const
 
 void D3D11RenderEngine::DoRender(const RenderEffect& effect, const RenderLayout& rl)
 {
-	D3D11RenderLayout const& d3d_rl = checked_cast<D3D11RenderLayout const&>(rl);
+	uint32_t vertex_stream_num = rl.VertexStreamNum();
+
+	const auto& d3d_rl = checked_cast<const D3D11RenderLayout&>(rl);
 	d3d_rl.Active();
 
-	uint32_t vertex_stream_num = d3d_rl.VertexStreamNum();
 	const auto& vbs = d3d_rl.VBs();
 	const auto& strides = d3d_rl.Strides();
 	const auto& offsets = d3d_rl.Offsets();

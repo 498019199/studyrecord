@@ -13,11 +13,13 @@ std::span<uint8_t const> D3D11ShaderStageObject::ShaderCodeBlob() const
 }
 
 D3D11VertexShaderStageObject::D3D11VertexShaderStageObject()
+    : D3D11ShaderStageObject(ShaderStage::Vertex)
 {
     is_available_ = true;
 }
 
 D3D11PixelShaderStageObject::D3D11PixelShaderStageObject()
+    : D3D11ShaderStageObject(ShaderStage::Pixel)
 {
     is_available_ = true;
 }

@@ -67,12 +67,17 @@ public:
  
     std::span<uint8_t const> VsCode() const;
     uint32_t VsSignature() const noexcept;
+    
 private:
     struct D3D11Immutable
     {
         std::array<std::vector<ID3D11SamplerState*>, ShaderStageNum> samplers_;
     };
 
+public:
+    D3D11ShaderObject(std::shared_ptr<Immutable> immutable, std::shared_ptr<D3D11Immutable> d3d_immutable) noexcept;
+
+private:
     const std::shared_ptr<D3D11Immutable> d3d_immutable_;
 };
 

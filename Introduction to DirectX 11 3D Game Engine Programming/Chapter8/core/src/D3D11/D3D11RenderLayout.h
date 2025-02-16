@@ -6,7 +6,7 @@
 
 namespace RenderWorker
 {
-class D3D11RenderLayout: public RenderLayout
+class D3D11RenderLayout final: public RenderLayout
 {
 public:
     D3D11RenderLayout();
