@@ -13,13 +13,6 @@
 #include <string>
 #include <string_view>
 
-
-#ifdef _DEBUG
-	#define COMMON_ASSERT(val) assert(val)
-#else
-	#define COMMON_ASSERT(val) 
-#endif//_DEBUG
-
 using ID3D11BufferPtr = com_ptr<ID3D11Buffer>;
 using ID3D11InputLayoutPtr = com_ptr<ID3D11InputLayout>;
 using ID3D11RasterizerStatePtr = com_ptr<ID3D11RasterizerState>;
@@ -65,5 +58,3 @@ using RenderEnginePtr = std::shared_ptr<D3D11RenderEngine>;
 class World;
 using WorldPtr = std::shared_ptr<World>;
 
-std::string& Convert(std::string& dest, std::wstring_view src);
-std::wstring& Convert(std::wstring& dest, std::string_view src);

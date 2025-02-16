@@ -1,4 +1,4 @@
-#include "Light.hlsli"
+#include "Basic.hlsli"
 
 VertexOut VS(VertexIn vIn)
 {

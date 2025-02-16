@@ -78,6 +78,29 @@ if(MSVC)
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4100") # 屏蔽不引用
 		SET(CMAKE_C_FLAGS ${CMAKE_CXX_FLAGS})
     endif()
+
+    IF(ZENGINE_ARCH_NAME MATCHES "x86")
+        FOREACH(flag_var
+            CMAKE_CXX_FLAGS_RELEASE CMAKE_CXX_FLAGS_RELWITHDEBINFO CMAKE_CXX_FLAGS_MINSIZEREL)
+            SET(${flag_var} "${${flag_var}} /arch:SSE")
+        ENDFOREACH()
+        FOREACH(flag_var
+            CMAKE_EXE_LINKER_FLAGS CMAKE_SHARED_LINKER_FLAGS)
+            SET(${flag_var} "${${flag_var}} /LARGEADDRESSAWARE")
+        ENDFOREACH()
+    ENDIF()
+
+    ADD_DEFINITIONS(-DWIN32 -D_WINDOWS)
+    IF(ZENGINE_ARCH_NAME MATCHES "arm")
+        ADD_DEFINITIONS(-D_ARM_WINAPI_PARTITION_DESKTOP_SDK_AVAILABLE=1)
+
+        IF(ZENGINE_PLATFORM_WINDOWS_DESKTOP)
+            FOREACH(flag_var
+                CMAKE_C_STANDARD_LIBRARIES CMAKE_CXX_STANDARD_LIBRARIES)
+                SET(${flag_var} "${${flag_var}} gdi32.lib ole32.lib oleaut32.lib comdlg32.lib advapi32.lib shell32.lib")
+            ENDFOREACH()
+        ENDIF()
+    ENDIF()
 else()
     if(CMAKE_C_COMPILER_ID MATCHES Clang)
         set(ZENGINE_COMPILER_NAME "clang")

@@ -23,18 +23,21 @@ set(SRC_LIST
     
     ${PROJECT_SOURCE_DIR}/Chapter8/core/src/DevHelper/ImagePlane.cpp
 
-    ${PROJECT_SOURCE_DIR}/Chapter8/core/src/common.cpp
     ${PROJECT_SOURCE_DIR}/Chapter8/core/src/Context.cpp
     ${PROJECT_SOURCE_DIR}/Chapter8/core/src/Light.cpp 
     ${PROJECT_SOURCE_DIR}/Chapter8/core/src/Mesh.cpp 
     ${PROJECT_SOURCE_DIR}/Chapter8/core/src/RenderableHelper.cpp
     ${PROJECT_SOURCE_DIR}/Chapter8/core/src/RenderEffect.cpp
-    ${PROJECT_SOURCE_DIR}/Chapter8/core/src/Timer.cpp)
+    ${PROJECT_SOURCE_DIR}/Chapter8/core/src/TexCompression.cpp
+    ${PROJECT_SOURCE_DIR}/Chapter8/core/src/Texture.cpp
+    ${PROJECT_SOURCE_DIR}/Chapter8/core/src/Timer.cpp
+    ${PROJECT_SOURCE_DIR}/Chapter8/core/src/Util.cpp)
 add_executable(Chapter8 ${SRC_LIST})
 
 target_link_libraries(Chapter8 PRIVATE 
     ${LIB_DIR_PATH}/math${ZENGINE_OUTPUT_SUFFIX}${CMAKE_DEBUG_POSTFIX}.lib
     ${LIB_DIR_PATH}/imgui${ZENGINE_OUTPUT_SUFFIX}${CMAKE_DEBUG_POSTFIX}.lib
+    ${LIB_DIR_PATH}/FreeImage${ZENGINE_OUTPUT_SUFFIX}${CMAKE_DEBUG_POSTFIX}.lib
     ${PROJECT_SOURCE_DIR}/3rd/dxsdk/dxsdk/Lib/x64/d3d11.lib
     ${PROJECT_SOURCE_DIR}/3rd/dxsdk/dxsdk/Lib/x64/d3dx11d.lib
     ${PROJECT_SOURCE_DIR}/3rd/dxsdk/dxsdk/Lib/x64/d3dcompiler.lib

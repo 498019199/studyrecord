@@ -93,7 +93,8 @@
         "unordered_set": "cpp",
         "xhash": "cpp",
         "cassert": "cpp",
-        "complex": "cpp"
+        "complex": "cpp",
+        "string_view": "cpp"
     },
     "search.exclude": {
         "Chapter4": true,

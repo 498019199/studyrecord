@@ -2,6 +2,7 @@
 #include <core/D3D11Util.h>
 #include <core/RenderableHelper.h>
 #include <core/Context.h>
+#include <core/Texture.h>
 #include <math/math.h>
 #include <core/World.h>
 
@@ -17,13 +18,6 @@ void CreateBox()
     Context::Instance().WorldInstance().AddRenderable(box);
 }
 
-void CreateShere()
-{
-    // 创建球体网格数据，levels和slices越大，精度越高。
-    auto sphere = new RenderableSphere(1.0f, 20, 20, Color(1.f, 1.f, 1.f, 1.f));
-    Context::Instance().WorldInstance().AddRenderable(sphere);
-  
-}
 
 bool InitImGui()
 {
@@ -44,6 +38,15 @@ bool InitImGui()
     return true;
 }
 
+void test_load_virtual_tex()
+{
+    auto currentPath = std::filesystem::current_path().parent_path().parent_path().string();
+    const std::string file_path = currentPath + "\\Models\\Chapter8\\WoodCrate.dds";
+    auto virtual_tex = LoadVirtualTexture(file_path);
+    if(virtual_tex->HWResourceReady())
+        virtual_tex->DeleteHWResource();
+}
+
 int main() {
     WinAPP app;
     RenderSettings settings;
@@ -56,8 +59,8 @@ int main() {
     InitImGui();
     Context::Instance().WorldInstance().BeginWorld();
     
+    test_load_virtual_tex();
     CreateBox();
-    //CreateShere();
 
     app.Run();
     return 0;

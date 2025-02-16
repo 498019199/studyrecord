@@ -2,6 +2,7 @@
 #include <cassert>
 #include <core/D3D11RenderFactory.h>
 #include <core/World.h>
+#include <core/Util.h>
 
 std::unique_ptr<Context> Context::instance_;
 
@@ -55,9 +56,9 @@ World& Context::WorldInstance()
 
 void Context::LoadConfig(const char* file_name)
 {
-    render_factory_ = std::make_shared<D3D11RenderFactory>();
+    render_factory_ = MakeSharedPtr<D3D11RenderFactory>();
     COMMON_ASSERT(render_factory_);
 
-    world_ = std::make_shared<World>();
+    world_ = MakeSharedPtr<World>();
     COMMON_ASSERT(world_);
 }

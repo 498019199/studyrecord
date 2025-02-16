@@ -3,7 +3,7 @@
 #include <core/D3D11RenderFactory.h>
 #include <core/RenderEffect.h>
 #include <core/Context.h>
-
+#include <core/Util.h>
 #include <filesystem>
 
 struct VertexPosNormalColor
@@ -17,7 +17,7 @@ RenderableBox::  RenderableBox(float width, float height, float depth, const Col
 {
     float w2 = width / 2, h2 = height / 2, d2 = depth / 2;
 
-    rls_[0] = std::make_shared<D3D11RenderLayout>();
+    rls_[0] = MakeSharedPtr<D3D11RenderLayout>();
     rls_[0]->TopologyType(D3D11RenderLayout::TT_TriangleList);
 
     std::vector<VertexElement> merged_ves;
@@ -100,7 +100,7 @@ RenderableBox::  RenderableBox(float width, float height, float depth, const Col
 
 	auto currentPath = std::filesystem::current_path().parent_path().parent_path().string();
 	currentPath += "\\Chapter8\\HLSL\\";
-    effect_ = std::make_shared<RenderEffect>();
+    effect_ = MakeSharedPtr<RenderEffect>();
     effect_->CreateConstant();
     effect_->AttackVertexShader(currentPath + "Basic_2D_VS");
     effect_->AttackPixelShader(currentPath + "Basic_2D_PS");
@@ -111,7 +111,7 @@ RenderableSphere::RenderableSphere(float radius, int levels, int slices, const C
     uint32_t vertexCount = 2 + (levels - 1) * (slices + 1);
     uint32_t indexCount = 6 * (levels - 1) * slices;
 
-    rls_[0] = std::make_shared<D3D11RenderLayout>();
+    rls_[0] = MakeSharedPtr<D3D11RenderLayout>();
     rls_[0]->TopologyType(D3D11RenderLayout::TT_TriangleList);
 
     std::vector<VertexElement> merged_ves;
@@ -208,7 +208,7 @@ RenderableSphere::RenderableSphere(float radius, int levels, int slices, const C
 
 	auto currentPath = std::filesystem::current_path().parent_path().parent_path().string();
 	currentPath += "\\Chapter7\\HLSL\\";
-    effect_ = std::make_shared<RenderEffect>();
+    effect_ = MakeSharedPtr<RenderEffect>();
     effect_->CreateConstant();
     effect_->AttackVertexShader(currentPath + "Light_VS");
     effect_->AttackPixelShader(currentPath + "Light_PS");

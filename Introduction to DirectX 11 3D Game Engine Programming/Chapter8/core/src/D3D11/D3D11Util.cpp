@@ -1,7 +1,10 @@
+#include <core/Util.h>
 #include <core/D3D11Util.h>
-#include <d3dcompiler.h>
+
 #include <format>
 #include <utility>
+#include <d3dcompiler.h>
+
 std::string CombineFileLine(std::string_view file, uint32_t line)
 {
     return std::format("{}: {}", std::move(file), line);
@@ -277,8 +280,8 @@ DXGI_FORMAT D3D11Mapping::MappingFormat(ElementFormat format)
     case EF_BC7_SRGB:
         return DXGI_FORMAT_BC7_UNORM_SRGB;
 
-    //default:
-        //LOGER_ERROR() << "Invalid format";
+    default:
+        KFL_UNREACHABLE("Invalid format");
     }
 
     return DXGI_FORMAT_UNKNOWN;
@@ -492,8 +495,8 @@ ElementFormat D3D11Mapping::MappingFormat(DXGI_FORMAT d3dfmt)
     case DXGI_FORMAT_BC7_UNORM_SRGB:
         return EF_BC7_SRGB;
 
-    //default:
-        //LOGER_ERROR() << "Invalid format";
+    default:
+        KFL_UNREACHABLE("Invalid format");
     }
 
     return EF_Unknown;
@@ -707,7 +710,7 @@ D3D11_PRIMITIVE_TOPOLOGY D3D11Mapping::Mapping(D3D11RenderLayout::topology_type 
     case D3D11RenderLayout::TT_32_Ctrl_Pt_PatchList:
         return D3D11_PRIMITIVE_TOPOLOGY_32_CONTROL_POINT_PATCHLIST;
 
-    //default:
-        //KFL_UNREACHABLE("Invalid topology type");
+    default:
+        KFL_UNREACHABLE("Invalid topology type");
     }
 }
