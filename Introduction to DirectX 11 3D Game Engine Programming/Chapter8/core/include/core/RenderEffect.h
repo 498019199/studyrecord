@@ -3,6 +3,7 @@
 #include <core/ShaderObject.h>
 #include <core/Light.h>
 
+#include <vector>
 namespace RenderWorker
 {
 
@@ -33,8 +34,18 @@ struct PSConstantBuffer
 
 class RenderEffect
 {
+    struct Immutable final
+    {
+        std::vector<ShaderDesc> shader_descs;
+    };
 public:
-    //void CreateConstant();
+    RenderEffect();
+    
+    uint32_t AddShaderDesc(ShaderDesc const & sd);
+    ShaderDesc& GetShaderDesc(uint32_t id) noexcept;
+    ShaderDesc const& GetShaderDesc(uint32_t id) const noexcept;
+
+    void Load(const std::string& file_path);
     //void AttackVertexShader(const std::string& filename);
     //void AttackPixelShader(const std::string& filename);
 
@@ -53,6 +64,18 @@ public:
 		COMMON_ASSERT(n < shader_objs_.size());
 		return shader_objs_[n];
 	}
+
+    ShaderObjectPtr const& GetShaderObject() const noexcept
+    {
+        return ShaderObjectByIndex(shader_obj_index_);
+    }
+
+    uint32_t AddShaderObject();
+
+    void AddShaderType(ShaderStage stage)
+    {
+        shader_desc_ids_.push_back(static_cast<uint32_t>(stage));
+    }
     // ID3D11VertexShader* GetVertexShader() const
     // {
     //     return vertex_shader_.get();
@@ -74,6 +97,9 @@ public:
 
     //void Active() const;
 private:
+    std::shared_ptr<Immutable> immutable_;
+    std::vector<uint32_t> shader_desc_ids_;
+    uint32_t shader_obj_index_;
     // ID3D11VertexShaderPtr  vertex_shader_;	// 顶点着色器
     // ID3D11PixelShaderPtr pixel_shader_;	    // 像素着色器
     // ID3D11RasterizerStatePtr rasterizer_state_;
@@ -85,6 +111,9 @@ private:
 
     std::vector<ShaderObjectPtr> shader_objs_;
 };
+
+
+
 
 using RenderEffectPtr = std::shared_ptr<RenderEffect>;
 }

@@ -1,9 +1,58 @@
 #include <core/Util.h>
 #include "D3D11GraphicsBuffer.h"
 #include "D3D11RenderFactory.h"
+#include "D3D11RenderLayout.h"
+#include "D3D11ShaderObject.h"
 
 namespace RenderWorker
 {
+D3D11RenderFactory::D3D11RenderFactory() = default;
+
+RenderLayoutPtr D3D11RenderFactory::MakeRenderLayout()
+{
+    return MakeSharedPtr<D3D11RenderLayout>();
+}
+
+ShaderObjectPtr D3D11RenderFactory::MakeShaderObject()
+{
+    return MakeSharedPtr<D3D11ShaderObject>();
+}
+
+ShaderStageObjectPtr D3D11RenderFactory::MakeShaderStageObject(ShaderStage stage)
+{
+    ShaderStageObjectPtr ret;
+    switch (stage)
+    {
+    case ShaderStage::Vertex:
+        ret = MakeSharedPtr<D3D11VertexShaderStageObject>();
+        break;
+
+    case ShaderStage::Pixel:
+        ret = MakeSharedPtr<D3D11PixelShaderStageObject>();
+        break;
+
+    case ShaderStage::Geometry:
+        //ret = MakeSharedPtr<D3D11GeometryShaderStageObject>();
+        break;
+
+    case ShaderStage::Compute:
+        //ret = MakeSharedPtr<D3D11ComputeShaderStageObject>();
+        break;
+
+    case ShaderStage::Hull:
+        //ret = MakeSharedPtr<D3D11HullShaderStageObject>();
+        break;
+
+    case ShaderStage::Domain:
+        //ret = MakeSharedPtr<D3D11DomainShaderStageObject>();
+        break;
+
+    default:
+        KFL_UNREACHABLE("Invalid shader stage");
+    }
+    return ret;
+}
+
 GraphicsBufferPtr D3D11RenderFactory::MakeVertexBuffer(BufferUsage usage, uint32_t access_hint, uint32_t size_in_byte, void const * init_data,
         uint32_t structure_byte_stride)
 {

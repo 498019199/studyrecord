@@ -8,6 +8,24 @@ namespace RenderWorker
 {
 class RenderEffect;
 
+struct ShaderDesc
+{
+    std::string profile;
+    std::string func_name;
+    uint64_t macros_hash;
+    uint32_t tech_pass_type;
+
+    friend bool operator==(ShaderDesc const& lhs, ShaderDesc const& rhs) noexcept
+    {
+        return (lhs.profile == rhs.profile) && (lhs.func_name == rhs.func_name)
+            && (lhs.macros_hash == rhs.macros_hash);
+    }
+    friend bool operator!=(ShaderDesc const& lhs, ShaderDesc const& rhs) noexcept
+    {
+        return !(lhs == rhs);
+    }
+};
+
 enum class ShaderStage
 {
     Vertex,
@@ -27,6 +45,8 @@ public:
     explicit ShaderStageObject(ShaderStage stage) noexcept;
     virtual ~ShaderStageObject() noexcept;
 
+    virtual void CreateHwShader(const RenderEffect& effect, std::array<uint32_t, ShaderStageNum> const& shader_desc_ids) = 0;
+
     bool Validate() const noexcept
     {
         return is_validate_;
@@ -42,6 +62,12 @@ public:
     {
         return hw_res_ready_;
     }
+protected:
+    virtual void StageSpecificCreateHwShader(
+        [[maybe_unused]] RenderEffect const& effect, [[maybe_unused]] const std::vector<uint32_t>&  shader_desc_ids)
+    {
+    }
+
 protected:
     const ShaderStage stage_;
 

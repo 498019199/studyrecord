@@ -9,6 +9,8 @@ class D3D11ShaderStageObject : public ShaderStageObject
 public:
     explicit D3D11ShaderStageObject(ShaderStage stage);
     
+    void CreateHwShader(const RenderEffect& effect, const std::vector<uint32_t>&  shader_desc_ids) override;
+
     std::span<uint8_t const> ShaderCodeBlob() const;
 
     virtual ID3D11VertexShader* HwVertexShader() const noexcept
@@ -19,6 +21,8 @@ public:
     {
         return nullptr;
     }
+private:
+    virtual void ClearHwShader() = 0;
 
 protected:
 	bool is_available_;
@@ -39,6 +43,11 @@ public:
     {
         return vertex_shader_.get();
     }
+
+private:
+    void ClearHwShader() override;
+    void StageSpecificCreateHwShader(const RenderEffect& effect, const std::vector<uint32_t>&  shader_desc_ids) override;
+
 private:
     ID3D11VertexShaderPtr vertex_shader_;
     uint32_t vs_signature_;
@@ -53,6 +62,11 @@ public:
     {
         return pixel_shader_.get();
     }
+
+private:
+    void ClearHwShader() override;
+    void StageSpecificCreateHwShader(const RenderEffect& effect, const std::vector<uint32_t>&  shader_desc_ids) override;
+
 private:
     ID3D11PixelShaderPtr pixel_shader_;
     bool has_discard_ = true;
@@ -70,7 +84,7 @@ public:
     
 private:
     void DoLinkShaders(RenderEffect& effect) override;
-    
+
 private:
     struct D3D11Immutable
     {

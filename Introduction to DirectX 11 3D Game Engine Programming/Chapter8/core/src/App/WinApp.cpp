@@ -14,6 +14,26 @@
 namespace RenderWorker
 {
 
+bool InitImGui()
+{
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO();
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // 允许键盘控制
+    io.ConfigWindowsMoveFromTitleBarOnly = true;              // 仅允许标题拖动
+
+    // 设置Dear ImGui风格
+    ImGui::StyleColorsDark();
+
+    // 设置平台/渲染器后端
+    ImGui_ImplWin32_Init(Context::Instance().AppInstance().GetHWND());
+	const auto& d3d11_re = checked_cast<const D3D11RenderEngine&>(Context::Instance().RenderEngineInstance());
+    auto re = d3d11_re.D3DDevice();
+    auto ctx = d3d11_re.D3DDeviceImmContext();
+    ImGui_ImplDX11_Init(re, ctx);
+    return true;
+}
+
 WinAPP::WinAPP()
 {
 }
@@ -105,6 +125,7 @@ bool WinAPP::InitDevice(HWND hwnd, const RenderSettings& settings)
 		return true;    
 	}
 
+	InitImGui();
 	return false;
 }
 
