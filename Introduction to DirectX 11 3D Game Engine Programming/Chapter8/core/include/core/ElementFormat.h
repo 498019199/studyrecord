@@ -30,8 +30,8 @@
 #include <core/common.h>
 #include <core/Util.h>
 
-//namespace CoreWorker
-//{
+namespace RenderWorker
+{
 	enum ElementChannel
 	{
 		EC_R = 0UL,
@@ -718,6 +718,6 @@
 		DOM_sRGB,
 		DOM_HDR10
 	};
-//}
+}
 
 #endif			// _ELEMENTFORMAT_HPP

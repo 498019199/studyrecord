@@ -2,6 +2,12 @@
 #include <core/common.h>
 #include <vector>
 
+namespace RenderWorker
+{
+
+class SceneNode;
+using SceneNodePtr = std::shared_ptr<SceneNode>;
+
 // 场景上对象位置描述
 class SceneNode
 {
@@ -21,6 +27,4 @@ private:
     SceneNode* parent_ = nullptr;
 	std::vector<SceneNodePtr> children_;
 };
-
-
-
+}

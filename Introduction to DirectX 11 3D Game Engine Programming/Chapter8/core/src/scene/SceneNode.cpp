@@ -1,5 +1,8 @@
 #include <core/SceneNode.h>
 
+namespace RenderWorker
+{
+
 // const float4x4& SceneNode::TransformToWorld() const
 // {
 //     if(nullptr == parent_ )
@@ -33,3 +36,4 @@ void SceneNode::SetRotation(const rotator& rot)
 // {
 
 // }
+}

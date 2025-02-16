@@ -1,5 +1,8 @@
 #pragma once
 
+namespace RenderWorker
+{
+
 class Timer
 {
 public:
@@ -19,7 +22,7 @@ private:
     double start_time_ = 0.f;
 };
 
-
+}
 
 
 

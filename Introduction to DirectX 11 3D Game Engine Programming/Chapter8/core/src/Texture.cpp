@@ -6,6 +6,7 @@
 #include <filesystem>
 namespace
 {
+	using namespace RenderWorker;
     enum
 	{
 		// The surface has alpha channel information in the pixel format.
@@ -1166,6 +1167,9 @@ namespace
     }
 }// namespace
 
+namespace RenderWorker
+{
+	
 Texture::Texture(TextureType type, uint32_t sample_count, uint32_t sample_quality, uint32_t access_hint)
     : type_(type), sample_count_(sample_count), sample_quality_(sample_quality), access_hint_(access_hint)
 {
@@ -1497,4 +1501,6 @@ TexturePtr LoadVirtualTexture(std::string_view tex_name)
     auto ret = MakeSharedPtr<VirtualTexture>(type, width, height, depth, num_mipmaps, array_size, format, false);
     ret->CreateHWResource(init_data, nullptr);
     return ret;
+}
+
 }

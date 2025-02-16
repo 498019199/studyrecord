@@ -1,24 +1,13 @@
 #pragma once
 
-#include <core/common.h>
+#include <core/GraphicsBuffer.h>
 #include <core/ElementFormat.h>
-#include <core/D3D11Util.h>
+#include "D3D11Util.h"
 
-enum BufferUsage
+namespace RenderWorker
 {
-    BU_Static,
-    BU_Dynamic
-};
 
-enum BufferAccess
-{
-    BA_Read_Only,
-    BA_Write_Only,
-    BA_Read_Write,
-    BA_Write_No_Overwrite
-};
-
-class D3D11GraphicsBuffer
+class D3D11GraphicsBuffer: public GraphicsBuffer
 {
 public:
 	D3D11GraphicsBuffer(BufferUsage usage, uint32_t access_hint, uint32_t bind_flags,
@@ -36,16 +25,8 @@ public:
     {
         return d3d_buffer_.get();
     }
-    uint32_t Size() const noexcept
-    {
-        return size_in_byte_;
-    }
 private:
-    BufferUsage usage_;
-    uint32_t access_hint_;
 
-    uint32_t size_in_byte_;
-    uint32_t structure_byte_stride_;
 
     ID3D11Device* d3d_device_;
     ID3D11DeviceContext* d3d_imm_ctx_;
@@ -53,5 +34,4 @@ private:
     ID3D11BufferPtr d3d_buffer_;
     uint32_t bind_flags_;
 };
-
-
+}

@@ -1,13 +1,18 @@
 #include <core/WinApp.h>
-#include <core/D3D11RenderEngine.h>
 #include <core/Timer.h>
 #include <core/Context.h>
-#include <core/D3D11Util.h>
 #include <core/World.h>
+
+#include "../D3D11/D3D11RenderEngine.h"
+#include "../D3D11/D3D11Util.h"
+
 #define CHPATER_USE_IMGUISE 1
 #include <imgui/imgui.h>
 #include <imgui/imgui_impl_dx11.h>
 #include <imgui/imgui_impl_win32.h>
+
+namespace RenderWorker
+{
 
 WinAPP::WinAPP()
 {
@@ -163,7 +168,8 @@ int WinAPP::Run()
     			// 因此需要在此之前将后备缓冲区绑定到渲染管线上
     			ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
-				Context::Instance().RenderEngineInstance().SwitchChain();
+				const auto& d3d11_re = checked_cast<const D3D11RenderEngine&>(Context::Instance().RenderEngineInstance());
+				d3d11_re.SwitchChain();
 			}
 			else
 			{
@@ -225,4 +231,6 @@ void WinAPP::ImguiUpdate(float dt)
 
     ImGui::End();
     ImGui::Render();
+}
+
 }

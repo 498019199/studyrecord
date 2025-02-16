@@ -1,5 +1,6 @@
+#include "D3D11Util.h"
+
 #include <core/Util.h>
-#include <core/D3D11Util.h>
 
 #include <format>
 #include <utility>
@@ -71,6 +72,8 @@ HRESULT CreateShaderFromFile(const WCHAR* csoFileNameInOut,
     return hr;
 }
 
+namespace RenderWorker
+{
 
 DXGI_FORMAT D3D11Mapping::MappingFormat(ElementFormat format)
 {
@@ -503,7 +506,7 @@ ElementFormat D3D11Mapping::MappingFormat(DXGI_FORMAT d3dfmt)
 }
 
 void D3D11Mapping::Mapping(std::vector<D3D11_INPUT_ELEMENT_DESC>& elements, uint32_t stream, std::span<const VertexElement> vet,
-    D3D11RenderLayout::stream_type type, uint32_t freq)
+    RenderLayout::stream_type type, uint32_t freq)
 {
     elements.resize(vet.size());
     uint16_t elem_offset = 0;
@@ -517,14 +520,14 @@ void D3D11Mapping::Mapping(std::vector<D3D11_INPUT_ELEMENT_DESC>& elements, uint
 			element.Format = D3D11Mapping::MappingFormat(vs_elem.format);
 			element.InputSlot = static_cast<WORD>(stream);
 			element.AlignedByteOffset = elem_offset;
-        if (D3D11RenderLayout::ST_Geometry == type)
+        if (RenderLayout::ST_Geometry == type)
         {
             element.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
             element.InstanceDataStepRate = 0;
         }
         else
         {
-            COMMON_ASSERT(D3D11RenderLayout::ST_Instance == type);
+            COMMON_ASSERT(RenderLayout::ST_Instance == type);
             element.InputSlotClass = D3D11_INPUT_PER_INSTANCE_DATA;
             element.InstanceDataStepRate = freq;
         }
@@ -583,134 +586,135 @@ void D3D11Mapping::Mapping(std::vector<D3D11_INPUT_ELEMENT_DESC>& elements, uint
     }
 }
 
-D3D11_PRIMITIVE_TOPOLOGY D3D11Mapping::Mapping(D3D11RenderLayout::topology_type tt)
+D3D11_PRIMITIVE_TOPOLOGY D3D11Mapping::Mapping(RenderLayout::topology_type tt)
 {
     switch (tt)
     {
-    case D3D11RenderLayout::TT_PointList:
+    case RenderLayout::TT_PointList:
         return D3D11_PRIMITIVE_TOPOLOGY_POINTLIST;
 
-    case D3D11RenderLayout::TT_LineList:
+    case RenderLayout::TT_LineList:
         return D3D11_PRIMITIVE_TOPOLOGY_LINELIST;
 
-    case D3D11RenderLayout::TT_LineStrip:
+    case RenderLayout::TT_LineStrip:
         return D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP;
 
-    case D3D11RenderLayout::TT_TriangleList:
+    case RenderLayout::TT_TriangleList:
         return D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 
-    case D3D11RenderLayout::TT_TriangleStrip:
+    case RenderLayout::TT_TriangleStrip:
         return D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
 
-    case D3D11RenderLayout::TT_LineList_Adj:
+    case RenderLayout::TT_LineList_Adj:
         return D3D11_PRIMITIVE_TOPOLOGY_LINELIST_ADJ;
 
-    case D3D11RenderLayout::TT_LineStrip_Adj:
+    case RenderLayout::TT_LineStrip_Adj:
         return D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP_ADJ;
 
-    case D3D11RenderLayout::TT_TriangleList_Adj:
+    case RenderLayout::TT_TriangleList_Adj:
         return D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST_ADJ;
 
-    case D3D11RenderLayout::TT_TriangleStrip_Adj:
+    case RenderLayout::TT_TriangleStrip_Adj:
         return D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP_ADJ;
 
-    case D3D11RenderLayout::TT_1_Ctrl_Pt_PatchList:
+    case RenderLayout::TT_1_Ctrl_Pt_PatchList:
         return D3D11_PRIMITIVE_TOPOLOGY_1_CONTROL_POINT_PATCHLIST;
 
-    case D3D11RenderLayout::TT_2_Ctrl_Pt_PatchList:
+    case RenderLayout::TT_2_Ctrl_Pt_PatchList:
         return D3D11_PRIMITIVE_TOPOLOGY_2_CONTROL_POINT_PATCHLIST;
 
-    case D3D11RenderLayout::TT_3_Ctrl_Pt_PatchList:
+    case RenderLayout::TT_3_Ctrl_Pt_PatchList:
         return D3D11_PRIMITIVE_TOPOLOGY_3_CONTROL_POINT_PATCHLIST;
 
-    case D3D11RenderLayout::TT_4_Ctrl_Pt_PatchList:
+    case RenderLayout::TT_4_Ctrl_Pt_PatchList:
         return D3D11_PRIMITIVE_TOPOLOGY_4_CONTROL_POINT_PATCHLIST;
 
-    case D3D11RenderLayout::TT_5_Ctrl_Pt_PatchList:
+    case RenderLayout::TT_5_Ctrl_Pt_PatchList:
         return D3D11_PRIMITIVE_TOPOLOGY_5_CONTROL_POINT_PATCHLIST;
 
-    case D3D11RenderLayout::TT_6_Ctrl_Pt_PatchList:
+    case RenderLayout::TT_6_Ctrl_Pt_PatchList:
         return D3D11_PRIMITIVE_TOPOLOGY_6_CONTROL_POINT_PATCHLIST;
 
-    case D3D11RenderLayout::TT_7_Ctrl_Pt_PatchList:
+    case RenderLayout::TT_7_Ctrl_Pt_PatchList:
         return D3D11_PRIMITIVE_TOPOLOGY_7_CONTROL_POINT_PATCHLIST;
 
-    case D3D11RenderLayout::TT_8_Ctrl_Pt_PatchList:
+    case RenderLayout::TT_8_Ctrl_Pt_PatchList:
         return D3D11_PRIMITIVE_TOPOLOGY_8_CONTROL_POINT_PATCHLIST;
 
-    case D3D11RenderLayout::TT_9_Ctrl_Pt_PatchList:
+    case RenderLayout::TT_9_Ctrl_Pt_PatchList:
         return D3D11_PRIMITIVE_TOPOLOGY_9_CONTROL_POINT_PATCHLIST;
 
-    case D3D11RenderLayout::TT_10_Ctrl_Pt_PatchList:
+    case RenderLayout::TT_10_Ctrl_Pt_PatchList:
         return D3D11_PRIMITIVE_TOPOLOGY_10_CONTROL_POINT_PATCHLIST;
 
-    case D3D11RenderLayout::TT_11_Ctrl_Pt_PatchList:
+    case RenderLayout::TT_11_Ctrl_Pt_PatchList:
         return D3D11_PRIMITIVE_TOPOLOGY_11_CONTROL_POINT_PATCHLIST;
 
-    case D3D11RenderLayout::TT_12_Ctrl_Pt_PatchList:
+    case RenderLayout::TT_12_Ctrl_Pt_PatchList:
         return D3D11_PRIMITIVE_TOPOLOGY_12_CONTROL_POINT_PATCHLIST;
 
-    case D3D11RenderLayout::TT_13_Ctrl_Pt_PatchList:
+    case RenderLayout::TT_13_Ctrl_Pt_PatchList:
         return D3D11_PRIMITIVE_TOPOLOGY_13_CONTROL_POINT_PATCHLIST;
 
-    case D3D11RenderLayout::TT_14_Ctrl_Pt_PatchList:
+    case RenderLayout::TT_14_Ctrl_Pt_PatchList:
         return D3D11_PRIMITIVE_TOPOLOGY_14_CONTROL_POINT_PATCHLIST;
 
-    case D3D11RenderLayout::TT_15_Ctrl_Pt_PatchList:
+    case RenderLayout::TT_15_Ctrl_Pt_PatchList:
         return D3D11_PRIMITIVE_TOPOLOGY_15_CONTROL_POINT_PATCHLIST;
 
-    case D3D11RenderLayout::TT_16_Ctrl_Pt_PatchList:
+    case RenderLayout::TT_16_Ctrl_Pt_PatchList:
         return D3D11_PRIMITIVE_TOPOLOGY_16_CONTROL_POINT_PATCHLIST;
 
-    case D3D11RenderLayout::TT_17_Ctrl_Pt_PatchList:
+    case RenderLayout::TT_17_Ctrl_Pt_PatchList:
         return D3D11_PRIMITIVE_TOPOLOGY_17_CONTROL_POINT_PATCHLIST;
 
-    case D3D11RenderLayout::TT_18_Ctrl_Pt_PatchList:
+    case RenderLayout::TT_18_Ctrl_Pt_PatchList:
         return D3D11_PRIMITIVE_TOPOLOGY_18_CONTROL_POINT_PATCHLIST;
 
-    case D3D11RenderLayout::TT_19_Ctrl_Pt_PatchList:
+    case RenderLayout::TT_19_Ctrl_Pt_PatchList:
         return D3D11_PRIMITIVE_TOPOLOGY_19_CONTROL_POINT_PATCHLIST;
 
-    case D3D11RenderLayout::TT_20_Ctrl_Pt_PatchList:
+    case RenderLayout::TT_20_Ctrl_Pt_PatchList:
         return D3D11_PRIMITIVE_TOPOLOGY_20_CONTROL_POINT_PATCHLIST;
 
-    case D3D11RenderLayout::TT_21_Ctrl_Pt_PatchList:
+    case RenderLayout::TT_21_Ctrl_Pt_PatchList:
         return D3D11_PRIMITIVE_TOPOLOGY_21_CONTROL_POINT_PATCHLIST;
 
-    case D3D11RenderLayout::TT_22_Ctrl_Pt_PatchList:
+    case RenderLayout::TT_22_Ctrl_Pt_PatchList:
         return D3D11_PRIMITIVE_TOPOLOGY_22_CONTROL_POINT_PATCHLIST;
 
-    case D3D11RenderLayout::TT_23_Ctrl_Pt_PatchList:
+    case RenderLayout::TT_23_Ctrl_Pt_PatchList:
         return D3D11_PRIMITIVE_TOPOLOGY_23_CONTROL_POINT_PATCHLIST;
 
-    case D3D11RenderLayout::TT_24_Ctrl_Pt_PatchList:
+    case RenderLayout::TT_24_Ctrl_Pt_PatchList:
         return D3D11_PRIMITIVE_TOPOLOGY_24_CONTROL_POINT_PATCHLIST;
 
-    case D3D11RenderLayout::TT_25_Ctrl_Pt_PatchList:
+    case RenderLayout::TT_25_Ctrl_Pt_PatchList:
         return D3D11_PRIMITIVE_TOPOLOGY_25_CONTROL_POINT_PATCHLIST;
 
-    case D3D11RenderLayout::TT_26_Ctrl_Pt_PatchList:
+    case RenderLayout::TT_26_Ctrl_Pt_PatchList:
         return D3D11_PRIMITIVE_TOPOLOGY_26_CONTROL_POINT_PATCHLIST;
 
-    case D3D11RenderLayout::TT_27_Ctrl_Pt_PatchList:
+    case RenderLayout::TT_27_Ctrl_Pt_PatchList:
         return D3D11_PRIMITIVE_TOPOLOGY_27_CONTROL_POINT_PATCHLIST;
 
-    case D3D11RenderLayout::TT_28_Ctrl_Pt_PatchList:
+    case RenderLayout::TT_28_Ctrl_Pt_PatchList:
         return D3D11_PRIMITIVE_TOPOLOGY_28_CONTROL_POINT_PATCHLIST;
 
-    case D3D11RenderLayout::TT_29_Ctrl_Pt_PatchList:
+    case RenderLayout::TT_29_Ctrl_Pt_PatchList:
         return D3D11_PRIMITIVE_TOPOLOGY_29_CONTROL_POINT_PATCHLIST;
 
-    case D3D11RenderLayout::TT_30_Ctrl_Pt_PatchList:
+    case RenderLayout::TT_30_Ctrl_Pt_PatchList:
         return D3D11_PRIMITIVE_TOPOLOGY_30_CONTROL_POINT_PATCHLIST;
 
-    case D3D11RenderLayout::TT_31_Ctrl_Pt_PatchList:
+    case RenderLayout::TT_31_Ctrl_Pt_PatchList:
         return D3D11_PRIMITIVE_TOPOLOGY_31_CONTROL_POINT_PATCHLIST;
 
-    case D3D11RenderLayout::TT_32_Ctrl_Pt_PatchList:
+    case RenderLayout::TT_32_Ctrl_Pt_PatchList:
         return D3D11_PRIMITIVE_TOPOLOGY_32_CONTROL_POINT_PATCHLIST;
 
     default:
         KFL_UNREACHABLE("Invalid topology type");
     }
+}
 }

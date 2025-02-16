@@ -7,6 +7,27 @@
 #include <memory>
 #include <core/macro.h>
 
+#ifdef _DEBUG
+	#define COMMON_ASSERT(val) assert(val)
+#else
+	#define COMMON_ASSERT(val) 
+#endif//_DEBUG
+
+#if defined(ZENGINE_CXX23_LIBRARY_TO_UNDERLYING_SUPPORT)
+#include <utility>
+#else
+#include <type_traits>
+
+namespace std
+{
+	template <typename T>
+	constexpr std::underlying_type_t<T> to_underlying(T e) noexcept
+	{
+		return static_cast<std::underlying_type_t<T>>(e);
+	}
+} // namespace std
+#endif
+
 #if defined(ZENGINE_CXX23_LIBRARY_UNREACHABLE_SUPPORT)
     #include <utility>
 #else
@@ -23,11 +44,12 @@
     } // namespace std
 #endif
 
-#ifdef _DEBUG
-	#define COMMON_ASSERT(val) assert(val)
-#else
-	#define COMMON_ASSERT(val) 
-#endif//_DEBUG
+
+#if defined(DEBUG) || defined(_DEBUG)
+    #define _CRTDBG_MAP_ALLOC
+    #include <crtdbg.h>
+#endif
+
 
 #define KFL_UNREACHABLE(msg) std::unreachable()
 
@@ -100,4 +122,43 @@ template <typename T, typename... Args>
 inline std::unique_ptr<T> MakeUniquePtr(Args&&... args)
 {
     return MakeUniquePtrHelper<T>(std::is_array<T>(), std::forward<Args>(args)...);
+}
+
+
+template <typename To, typename From>
+inline To checked_cast(From* p) noexcept
+{
+    COMMON_ASSERT(dynamic_cast<To>(p) == static_cast<To>(p));
+    return static_cast<To>(p);
+}
+
+template <typename To, typename From>
+inline To checked_cast(From const* p) noexcept
+{
+    COMMON_ASSERT(dynamic_cast<To>(p) == static_cast<To>(p));
+    return static_cast<To>(p);
+}
+
+template <typename To, typename From>
+inline typename std::add_lvalue_reference<To>::type checked_cast(From& p) noexcept
+{
+    typedef typename std::remove_reference<To>::type RawToType;
+    COMMON_ASSERT(dynamic_cast<RawToType*>(&p) == static_cast<RawToType*>(&p));
+    return static_cast<RawToType&>(p);
+}
+
+template <typename To, typename From>
+inline typename std::add_lvalue_reference<To const>::type checked_cast(From const& p) noexcept
+{
+    typedef typename std::remove_reference<To const>::type RawToType;
+    COMMON_ASSERT(dynamic_cast<RawToType const*>(&p) == static_cast<RawToType const*>(&p));
+    return static_cast<RawToType const&>(p);
+}
+
+template <typename To, typename From>
+inline std::shared_ptr<To>
+checked_pointer_cast(std::shared_ptr<From> const & p) noexcept
+{
+    COMMON_ASSERT(dynamic_cast<To*>(p.get()) == static_cast<To*>(p.get()));
+    return std::static_pointer_cast<To>(p);
 }

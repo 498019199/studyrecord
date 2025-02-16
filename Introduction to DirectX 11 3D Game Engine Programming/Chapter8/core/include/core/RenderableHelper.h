@@ -1,25 +1,28 @@
 #pragma once
 
-#include <core/D3D11Renderable.h>
+#include <core/Renderable.h>
 
-class RenderableTriangle : public D3D11Renderable
+namespace RenderWorker
+{
+
+class RenderableTriangle : public Renderable
 {
 
 };
 
-class RenderableBox : public D3D11Renderable
+class RenderableBox : public Renderable
 {
 public:
     RenderableBox(float width, float height, float depth, const Color & color);
 };
 
-class RenderableSphere : public D3D11Renderable
+class RenderableSphere : public Renderable
 {
 public:
     RenderableSphere(float radius, int levels, int slices, const Color & color);
 };
 
-class RenderablePlane : public D3D11Renderable
+class RenderablePlane : public Renderable
 {
 public:
     RenderablePlane(float width, float depth, float texU, float texV, const Color & color);
@@ -27,8 +30,10 @@ public:
 
 
 
-class RenderDecal : public D3D11Renderable
+class RenderDecal : public Renderable
 {
 public:
     
 };
+
+}

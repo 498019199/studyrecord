@@ -2,6 +2,9 @@
 #include <core/common.h>
 #include <core/Texture.h>
 
+namespace RenderWorker
+{
+
 class ImagePlane
 {
 public:
@@ -15,3 +18,4 @@ static void GetImageInfo(std::string_view input_name, Texture::TextureType& type
     uint32_t& depth, uint32_t& num_mipmaps, uint32_t& array_size, ElementFormat& format, uint32_t& row_pitch,
     uint32_t& slice_pitch);
 };
+}

@@ -27,6 +27,7 @@ using ID3D11RasterizerStatePtr = com_ptr<ID3D11RasterizerState>;
 using ID3D11VertexShaderPtr = com_ptr<ID3D11VertexShader>;
 using ID3D11PixelShaderPtr = com_ptr<ID3D11PixelShader>;
 using ID3D11ResourcePtr = com_ptr<ID3D11Resource>;
+using ID3D11Texture2DPtr = com_ptr<ID3D11Texture2D>;
 
 #include <math/math.h>
 using int1 = MathWorker::int1;

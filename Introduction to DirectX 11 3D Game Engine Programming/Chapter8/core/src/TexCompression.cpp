@@ -1,5 +1,8 @@
 #include <core/TexCompression.h>
 
+namespace RenderWorker
+{
+
 uint32_t BlockWidth(ElementFormat format)
 {
     switch (format)
@@ -232,4 +235,5 @@ ElementFormat DecodedFormat(ElementFormat format)
         COMMON_ASSERT(!IsCompressedFormat(format));
         return format;
     }
+}
 }

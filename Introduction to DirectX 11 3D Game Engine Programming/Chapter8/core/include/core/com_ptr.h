@@ -34,7 +34,8 @@
 #pragma once
 #include <utility>
 #include <core/common.h>
-
+#include <core/ErrorHandling.h>
+#include <core/Uuid.h>
 
 	template <typename T>
 	class com_ptr

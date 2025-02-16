@@ -1,9 +1,9 @@
 #include <core/Context.h>
-#include <cassert>
-#include <core/D3D11RenderFactory.h>
-#include <core/World.h>
 #include <core/Util.h>
+#include "D3D11/D3D11RenderFactory.h"
 
+namespace RenderWorker
+{
 std::unique_ptr<Context> Context::instance_;
 
 Context& Context::Instance()
@@ -26,22 +26,22 @@ void Context::AppInstance(WinAPP& app)
 
 WinAPP& Context::AppInstance()
 {
-    assert(app_);
+    COMMON_ASSERT(app_);
     return *app_;
 }
 
-void Context::RenderEngineInstance(D3D11RenderEngine& render_engine)
+void Context::RenderEngineInstance(RenderEngine& render_engine)
 {
     render_engine_ = &render_engine;
 }
 
-D3D11RenderEngine& Context::RenderEngineInstance() const
+RenderEngine& Context::RenderEngineInstance() const
 {
     COMMON_ASSERT(render_engine_);
     return *render_engine_;
 }
 
-D3D11RenderFactory& Context::RenderFactoryInstance()
+RenderFactory& Context::RenderFactoryInstance()
 {
     COMMON_ASSERT(render_engine_);
     return *render_factory_;
@@ -61,4 +61,5 @@ void Context::LoadConfig(const char* file_name)
 
     world_ = MakeSharedPtr<World>();
     COMMON_ASSERT(world_);
+}
 }

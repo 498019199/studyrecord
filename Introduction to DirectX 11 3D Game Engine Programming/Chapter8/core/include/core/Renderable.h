@@ -1,9 +1,14 @@
-//可渲染对象类 头文件
 #pragma once
-#include <core/common.h>
-#include <core/D3D11RenderEngine.h>
+//可渲染对象类 头文件
 
-class D3D11Renderable
+#include <core/common.h>
+#include <core/RenderEffect.h>
+#include <core/RenderLayout.h>
+
+namespace RenderWorker
+{
+
+class Renderable
 {
 public:
     struct ConstantBuffer
@@ -13,11 +18,11 @@ public:
         float4x4 proj;
     };
 public:
-    D3D11Renderable();
-    ~D3D11Renderable();
+    Renderable();
+    ~Renderable();
     
-    D3D11RenderLayout& GetRenderLayout() const;
-	D3D11RenderLayout& GetRenderLayout(uint32_t lod) const;
+    RenderLayout& GetRenderLayout() const;
+	RenderLayout& GetRenderLayout(uint32_t lod) const;
 
 	RenderEffect* GetRenderEffect();
 
@@ -27,4 +32,5 @@ protected:
     std::vector<RenderLayoutPtr> rls_;
     RenderEffectPtr effect_;
 };
-
+using RenderablePtr = std::shared_ptr<RenderWorker::Renderable>;
+}

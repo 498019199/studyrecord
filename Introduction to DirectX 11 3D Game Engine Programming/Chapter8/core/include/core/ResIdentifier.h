@@ -8,6 +8,10 @@
 #include <vector>
 #include <core/Util.h>
 
+namespace RenderWorker
+{
+
+
 class ResIdentifier final
 {
 public:
@@ -89,3 +93,4 @@ private:
 };
 
 using ResIdentifierPtr = std::shared_ptr<ResIdentifier>;
+}

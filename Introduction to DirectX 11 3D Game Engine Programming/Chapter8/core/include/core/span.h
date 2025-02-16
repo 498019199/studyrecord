@@ -1,6 +1,9 @@
 #pragma once
 #include <span>
 
+namespace RenderWorker
+{
+
 template <typename ElementType>
 constexpr std::span<ElementType> MakeSpan() noexcept
 {
@@ -107,4 +110,5 @@ template <typename ElementType1, typename ElementType2, std::size_t Extent>
 constexpr bool operator>=(std::span<ElementType1, Extent> l, std::span<ElementType2, Extent> r) noexcept
 {
     return !(l < r);
+}
 }

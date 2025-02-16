@@ -5,10 +5,9 @@
 #include <cstdint>
 #include <list>
 
-class Timer;
-class D3D11RenderEngine;
+namespace RenderWorker
+{
 struct RenderSettings;
-class D3D11RenderMesh;
 
 class WinAPP
 {
@@ -51,13 +50,4 @@ private:
 
 };
 
-
-
-
-
-
-
-
-
-
-
+}

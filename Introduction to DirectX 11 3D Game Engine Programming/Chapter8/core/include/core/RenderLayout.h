@@ -1,7 +1,11 @@
 #pragma once
-#include <core/common.h>
-#include <core/ElementFormat.h>
-#include <core/RenderEffect.h>
+#include <core/GraphicsBuffer.h>
+#include <core/ShaderObject.h>
+
+namespace RenderWorker
+{
+
+class RenderEffect;
 
 // 顶点布局和顶点缓存
 enum VertexElementUsage
@@ -54,7 +58,7 @@ struct VertexElement
     ElementFormat format;
 };
 
-class D3D11RenderLayout
+class RenderLayout
 {
 public:
    enum topology_type
@@ -118,7 +122,7 @@ public:
         uint32_t freq;
     };
 public:
-    D3D11RenderLayout();
+    RenderLayout();
 
     void TopologyType(topology_type type)
     {
@@ -166,34 +170,21 @@ public:
         return vertex_streams_[index].freq;
     }
 
+    ElementFormat IndexStreamFormat() const
+    {
+        return index_format_;
+    }
+    
     void BindVertexStream(const GraphicsBufferPtr& buffer, const VertexElement& vet,
 		stream_type type = ST_Geometry, uint32_t freq = 1);
 	void BindVertexStream(const GraphicsBufferPtr& buffer, std::span<VertexElement const> vet,
 			stream_type type = ST_Geometry, uint32_t freq = 1);
 
     void BindIndexStream(const GraphicsBufferPtr& buffer, ElementFormat format);
-    ElementFormat IndexStreamFormat() const
-    {
-        return index_format_;
-    }
+
 
     void Active() const;
-
-    ID3D11InputLayout* InputLayout(const RenderEffect& effect) const;
-
-    const std::vector<ID3D11Buffer*> & VBs() const
-    {
-        return vbs_;
-    }
-    const std::vector<UINT> & Strides() const
-    {
-        return strides_;
-    }
-    const std::vector<UINT> & Offsets() const
-    {
-        return offsets_;
-    }
-private:
+protected:
     topology_type topo_type_;
 
 	GraphicsBufferPtr index_stream_;// 索引缓冲区
@@ -201,14 +192,10 @@ private:
 
     std::vector<StreamUnit> vertex_streams_;; // 顶点缓冲区
 
-    mutable bool streams_dirty_;
-
     uint32_t force_num_vertices_{0xFFFFFFFF};
 	uint32_t force_num_indices_{0xFFFFFFFF};
 
-    mutable std::vector<D3D11_INPUT_ELEMENT_DESC> vertex_elems_;
-    mutable std::map<ShaderStage, ID3D11InputLayoutPtr> input_layouts_;
-    mutable std::vector<ID3D11Buffer*> vbs_;
-    mutable std::vector<UINT> strides_;
-    mutable std::vector<UINT> offsets_;
+    mutable bool streams_dirty_;
 };
+using RenderLayoutPtr = std::shared_ptr<RenderLayout>;
+}

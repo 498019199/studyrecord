@@ -3,6 +3,9 @@
 #include <core/common.h>
 #include <core/ElementFormat.h>
 
+namespace RenderWorker
+{
+
 enum TextureMapAccess
 {
     TMA_Read_Only,
@@ -102,3 +105,4 @@ void GetImageInfo(std::string_view tex_name, Texture::TextureType& type,
     ElementFormat& format, uint32_t& row_pitch, uint32_t& slice_pitch);
     
 TexturePtr LoadVirtualTexture(std::string_view tex_name);
+}

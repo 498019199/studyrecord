@@ -1,13 +1,43 @@
 #pragma once
 
 #if defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
+	#define ZENGINE_PLATFORM_WINDOWS
+
+	#if defined(_WIN64)
+		#define ZENGINE_PLATFORM_WIN64
+	#else
+		#define ZENGINE_PLATFORM_WIN32
+	#endif
+
 	// Shut min/max in windows.h
 	#ifndef NOMINMAX
 		#define NOMINMAX
 	#endif
-
 	#undef max
 	#undef min
+
+	#ifndef _WIN32_WINNT_WIN7
+		#define _WIN32_WINNT_WIN7 0x0601
+	#endif
+	#ifndef _WIN32_WINNT_WINBLUE
+		#define _WIN32_WINNT_WINBLUE 0x0603
+	#endif
+	#ifndef _WIN32_WINNT_WIN10
+		#define _WIN32_WINNT_WIN10 0x0A00
+	#endif
+#elif defined(__ANDROID__)
+	#define ZENGINE_PLATFORM_ANDROID
+#elif defined(linux) || defined(__linux) || defined(__linux__)
+	#define ZENGINE_PLATFORM_LINUX
+#elif defined(__APPLE__)
+	#include <TargetConditionals.h>
+	#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
+		#define ZENGINE_PLATFORM_IOS
+	#else
+		#define ZENGINE_PLATFORM_DARWIN
+	#endif
+#else
+	#error "Unknown platform. The supported target platforms are Windows, Android, Linux, macOS, and iOS."
 #endif
 
 #if __cplusplus > 202002L

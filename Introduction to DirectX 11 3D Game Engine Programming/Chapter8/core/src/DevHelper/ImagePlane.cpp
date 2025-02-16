@@ -1,9 +1,12 @@
 #include <DevHelper/ImagePlane.h>
-#include <core/D3D11RenderEngine.h>
+#include <core/RenderEngine.h>
 
 #include <FreeImage.h>
 
 #include <filesystem>
+namespace RenderWorker
+{
+
 bool ImagePlane::Load(std::string_view name)
 {
     // const std::string name_str = name;
@@ -195,4 +198,6 @@ bool ImagePlane::Load(std::string_view name)
     //     uncompressed_init_data.slice_pitch = uncompressed_init_data.row_pitch * height;
     // }
     return false;
+}
+
 }

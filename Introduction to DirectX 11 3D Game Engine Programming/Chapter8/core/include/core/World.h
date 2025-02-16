@@ -1,7 +1,11 @@
 #pragma once
-#include <core/common.h>
 #include <core/SceneNode.h>
+#include <core/Renderable.h>
+#include <core/Light.h>
 #include <core/RenderEffect.h>
+
+namespace RenderWorker
+{
 
 class World
 {
@@ -11,10 +15,10 @@ public:
     void BeginWorld();
     void UpdateScene(float dt);
 
-    void AddRenderable(D3D11Renderable* node);
+    void AddRenderable(Renderable* node);
 private:
     SceneNode scene_root_;
-    std::vector<D3D11Renderable*> all_scene_nodes_;
+    std::vector<Renderable*> all_scene_nodes_;
 
 public:
     bool is_wireframe_mode_{false};
@@ -26,6 +30,5 @@ public:
     PointLightSource default_point_light_;						// 默认点光
     SpotLightSource default_spot_light_;						    // 默认汇聚光
 };
-
-
-
+using WorldPtr = std::shared_ptr<World>;
+}

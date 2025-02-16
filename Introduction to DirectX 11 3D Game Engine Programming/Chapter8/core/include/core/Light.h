@@ -77,6 +77,7 @@
 
 // };
 #include <core/common.h>
+
 struct DirectionalLightSource
 {
     DirectionalLightSource() { memset(this, 0, sizeof(DirectionalLightSource)); }

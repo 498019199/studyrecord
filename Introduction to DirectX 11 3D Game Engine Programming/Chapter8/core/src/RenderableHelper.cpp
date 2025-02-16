@@ -1,11 +1,15 @@
 #include <core/RenderableHelper.h>
-#include <core/D3D11RenderLayout.h>
-#include <core/D3D11RenderFactory.h>
 #include <core/RenderEffect.h>
 #include <core/Context.h>
 #include <core/Util.h>
+
+#include "D3D11/D3D11RenderLayout.h"
+#include "D3D11/D3D11RenderFactory.h"
+
 #include <filesystem>
 
+namespace RenderWorker
+{
 struct VertexPosNormalColor
 {
     float3 pos;
@@ -98,12 +102,12 @@ RenderableBox::  RenderableBox(float width, float height, float depth, const Col
     auto ib = rf.MakeIndexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable, sizeof(indices), indices);
     rls_[0]->BindIndexStream(ib, EF_R16UI);
 
-	auto currentPath = std::filesystem::current_path().parent_path().parent_path().string();
-	currentPath += "\\Chapter8\\HLSL\\";
-    effect_ = MakeSharedPtr<RenderEffect>();
-    effect_->CreateConstant();
-    effect_->AttackVertexShader(currentPath + "Basic_2D_VS");
-    effect_->AttackPixelShader(currentPath + "Basic_2D_PS");
+	//auto currentPath = std::filesystem::current_path().parent_path().parent_path().string();
+	//currentPath += "\\Chapter8\\HLSL\\";
+    //effect_ = MakeSharedPtr<RenderEffect>();
+    // effect_->CreateConstant();
+    // effect_->AttackVertexShader(currentPath + "Basic_2D_VS");
+    // effect_->AttackPixelShader(currentPath + "Basic_2D_PS");
 }
 
 RenderableSphere::RenderableSphere(float radius, int levels, int slices, const Color & color)
@@ -206,10 +210,11 @@ RenderableSphere::RenderableSphere(float radius, int levels, int slices, const C
         static_cast<uint32_t>(indice_vec.size() * sizeof(indice_vec[0])), &indice_vec[0]);
     rls_[0]->BindIndexStream(ib, EF_R16UI);
 
-	auto currentPath = std::filesystem::current_path().parent_path().parent_path().string();
-	currentPath += "\\Chapter7\\HLSL\\";
-    effect_ = MakeSharedPtr<RenderEffect>();
-    effect_->CreateConstant();
-    effect_->AttackVertexShader(currentPath + "Light_VS");
-    effect_->AttackPixelShader(currentPath + "Light_PS");
+	// auto currentPath = std::filesystem::current_path().parent_path().parent_path().string();
+	// currentPath += "\\Chapter7\\HLSL\\";
+    // effect_ = MakeSharedPtr<RenderEffect>();
+    // effect_->CreateConstant();
+    // effect_->AttackVertexShader(currentPath + "Light_VS");
+    // effect_->AttackPixelShader(currentPath + "Light_PS");
+}
 }

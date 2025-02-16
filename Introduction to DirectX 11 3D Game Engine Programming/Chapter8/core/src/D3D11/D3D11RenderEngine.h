@@ -1,9 +1,14 @@
 #pragma once
 #include <core/common.h>
-#include <core/D3D11RenderLayout.h>
+#include <core/RenderLayout.h>
+#include <core/RenderEngine.h>
+#include "D3D11Util.h"
+
+namespace RenderWorker
+{
 
 struct RenderSettings;
-class D3D11RenderEngine
+class D3D11RenderEngine :public RenderEngine
 {
 public:
     D3D11RenderEngine(HWND hwnd, const RenderSettings& settings);
@@ -14,7 +19,7 @@ public:
     ID3D11Device* D3DDevice() const;
     ID3D11DeviceContext* D3DDeviceImmContext() const;
 
-    void DoRender(const RenderEffect& effect, const D3D11RenderLayout& rl);
+    void DoRender(const RenderEffect& effect, const RenderLayout& rl);
     void EndRender() const;
     void SwitchChain() const; 
 
@@ -47,9 +52,9 @@ private:
     std::vector<UINT> vb_stride_cache_;
     std::vector<UINT> vb_offset_cache_;
     ID3D11Buffer* ib_cache_{nullptr};
-    D3D11RenderLayout::topology_type topology_type_cache_ {D3D11RenderLayout::TT_PointList};
+    RenderLayout::topology_type topology_type_cache_ {RenderLayout::TT_PointList};
 };
-
+}
 
 
 

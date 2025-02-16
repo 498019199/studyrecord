@@ -1,18 +1,11 @@
 #pragma once
-#include <core/common.h>
+#include <core/GraphicsBuffer.h>
+#include <core/ShaderObject.h>
 #include <core/Light.h>
 
-enum class ShaderStage
+namespace RenderWorker
 {
-    Vertex,
-    Pixel,
-    Geometry,
-    Compute,
-    Hull,
-    Domain,
 
-    NumStages,
-};
 
 enum PolygonMode
 {
@@ -41,9 +34,9 @@ struct PSConstantBuffer
 class RenderEffect
 {
 public:
-    void CreateConstant();
-    void AttackVertexShader(const std::string& filename);
-    void AttackPixelShader(const std::string& filename);
+    //void CreateConstant();
+    //void AttackVertexShader(const std::string& filename);
+    //void AttackPixelShader(const std::string& filename);
 
     const GraphicsBufferPtr& HWBuff_VS() const noexcept
     {
@@ -55,40 +48,43 @@ public:
         return ps_hw_buff_;
     }
 
-    ID3D11VertexShader* GetVertexShader() const
-    {
-        return vertex_shader_.get();
-    }
-    ID3D11PixelShader* GetPixelShader() const
-    {
-        return pixel_shader_.get();
-    }
+    ShaderObjectPtr const& ShaderObjectByIndex(uint32_t n) const noexcept
+	{
+		COMMON_ASSERT(n < shader_objs_.size());
+		return shader_objs_[n];
+	}
+    // ID3D11VertexShader* GetVertexShader() const
+    // {
+    //     return vertex_shader_.get();
+    // }
+    // ID3D11PixelShader* GetPixelShader() const
+    // {
+    //     return pixel_shader_.get();
+    // }
 
-    ID3DBlob* VsCode() const
-    {
-        return vertex_blob_.get();
-    }
+    // ID3DBlob* VsCode() const
+    // {
+    //     return vertex_blob_.get();
+    // }
 
-    ID3DBlob* PsCode() const
-    {
-        return pixel_blob_.get();
-    }
+    // ID3DBlob* PsCode() const
+    // {
+    //     return pixel_blob_.get();
+    // }
 
-    void Active() const;
+    //void Active() const;
 private:
-    ID3D11VertexShaderPtr  vertex_shader_;	// 顶点着色器
-    ID3D11PixelShaderPtr pixel_shader_;	    // 像素着色器
-    ID3D11RasterizerStatePtr rasterizer_state_;
-    com_ptr<ID3DBlob> vertex_blob_;
-    com_ptr<ID3DBlob> pixel_blob_;
+    // ID3D11VertexShaderPtr  vertex_shader_;	// 顶点着色器
+    // ID3D11PixelShaderPtr pixel_shader_;	    // 像素着色器
+    // ID3D11RasterizerStatePtr rasterizer_state_;
+    // com_ptr<ID3DBlob> vertex_blob_;
+    // com_ptr<ID3DBlob> pixel_blob_;
 
     GraphicsBufferPtr vs_hw_buff_; // 常量缓冲区
     GraphicsBufferPtr ps_hw_buff_; 
+
+    std::vector<ShaderObjectPtr> shader_objs_;
 };
 
-
-
-
-
-
-
+using RenderEffectPtr = std::shared_ptr<RenderEffect>;
+}

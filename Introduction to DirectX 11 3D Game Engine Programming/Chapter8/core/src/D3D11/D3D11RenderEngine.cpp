@@ -1,8 +1,13 @@
-#include <core/D3D11RenderEngine.h>
-#include <core/D3D11RenderLayout.h>
-#include <core/D3D11Util.h>
-#include <core/D3D11GraphicsBuffer.h>
+#include <core/Context.h>
 #include <core/RenderEffect.h>
+
+#include "D3D11RenderEngine.h"
+#include "D3D11Util.h"
+#include "D3D11GraphicsBuffer.h"
+#include "D3D11RenderLayout.h"
+
+namespace RenderWorker
+{
 
 D3D11RenderEngine::D3D11RenderEngine(HWND hwnd, const RenderSettings& settings)
 {
@@ -190,15 +195,15 @@ ID3D11DeviceContext* D3D11RenderEngine::D3DDeviceImmContext() const
     return d3d_imm_ctx_;
 }
 
-void D3D11RenderEngine::DoRender(const RenderEffect& effect, const D3D11RenderLayout& rl)
+void D3D11RenderEngine::DoRender(const RenderEffect& effect, const RenderLayout& rl)
 {
-	
-	uint32_t vertex_stream_num = rl.VertexStreamNum();
-	rl.Active();
+	D3D11RenderLayout const& d3d_rl = checked_cast<D3D11RenderLayout const&>(rl);
+	d3d_rl.Active();
 
-	const auto& vbs = rl.VBs();
-	const auto& strides = rl.Strides();
-	const auto& offsets = rl.Offsets();
+	uint32_t vertex_stream_num = d3d_rl.VertexStreamNum();
+	const auto& vbs = d3d_rl.VBs();
+	const auto& strides = d3d_rl.Strides();
+	const auto& offsets = d3d_rl.Offsets();
 	if(0 != vertex_stream_num)
 	{
 		if ((vb_cache_.size() != vertex_stream_num) || (vb_cache_ != vbs)
@@ -210,13 +215,7 @@ void D3D11RenderEngine::DoRender(const RenderEffect& effect, const D3D11RenderLa
 			vb_offset_cache_ = offsets;
 		}
 
-		// auto blob = effect.VsCode();
-        // ID3D11InputLayoutPtr new_layout;
-        // TIFHR(d3d_device_->CreateInputLayout(&rl.vertex_elems_[0], static_cast<UINT>(rl.vertex_elems_.size()),
-        //      blob->GetBufferPointer(), blob->GetBufferSize(), new_layout.put()));
-        // auto layout = new_layout.get();
-
-		auto layout = rl.InputLayout(effect);
+		auto layout = d3d_rl.InputLayout(effect.ShaderObjectByIndex(0).get());
 		if (layout != input_layout_cache_)
 		{
 			d3d_imm_ctx_->IASetInputLayout(layout);
@@ -294,7 +293,7 @@ void D3D11RenderEngine::DoRender(const RenderEffect& effect, const D3D11RenderLa
     // 将更新好的常量缓冲区绑定到顶点着色器
 	if(rl.UseIndices())
 	{
-		ID3D11Buffer* d3dib = rl.GetIndexStream()->D3DBuffer();
+		ID3D11Buffer* d3dib = checked_cast<D3D11GraphicsBuffer&>(*rl.GetIndexStream()).D3DBuffer();
 		if (ib_cache_ != d3dib)
 		{
 			ib_cache_ = d3dib;
@@ -310,14 +309,14 @@ void D3D11RenderEngine::DoRender(const RenderEffect& effect, const D3D11RenderLa
 		}
 	}
 
-	// 将更新好的常量缓冲区绑定到顶点着色器和像素着色器
-	ID3D11Buffer* d3d11_cbuff_vs = effect.HWBuff_VS()->D3DBuffer();
-    d3d_imm_ctx_->VSSetConstantBuffers(0, 1, &d3d11_cbuff_vs);
-	ID3D11Buffer* d3d11_cbuff_ps = effect.HWBuff_PS()->D3DBuffer();
-	d3d_imm_ctx_->PSSetConstantBuffers(1, 1, &d3d11_cbuff_ps);
-	// 将着色器绑定到渲染管线
-    d3d_imm_ctx_->VSSetShader(effect.GetVertexShader(), nullptr, 0);
-    d3d_imm_ctx_->PSSetShader(effect.GetPixelShader(), nullptr, 0);
+	// // 将更新好的常量缓冲区绑定到顶点着色器和像素着色器
+	// ID3D11Buffer* d3d11_cbuff_vs = checked_cast<D3D11GraphicsBuffer&>(effect.HWBuff_VS()).D3DBuffer();
+    // d3d_imm_ctx_->VSSetConstantBuffers(0, 1, &d3d11_cbuff_vs);
+	// ID3D11Buffer* d3d11_cbuff_ps = checked_cast<D3D11GraphicsBuffer&>(effect.HWBuff_PS()).D3DBuffer(); 
+	// d3d_imm_ctx_->PSSetConstantBuffers(1, 1, &d3d11_cbuff_ps);
+	// // 将着色器绑定到渲染管线
+    // d3d_imm_ctx_->VSSetShader(effect.GetVertexShader(), nullptr, 0);
+    // d3d_imm_ctx_->PSSetShader(effect.GetPixelShader(), nullptr, 0);
 }
 
 void D3D11RenderEngine::RSSetState(ID3D11RasterizerState* ras)
@@ -327,4 +326,7 @@ void D3D11RenderEngine::RSSetState(ID3D11RasterizerState* ras)
 		d3d_imm_ctx_->RSSetState(ras);
 		rasterizer_state_cache_ = ras;
 	}
+}
+
+
 }

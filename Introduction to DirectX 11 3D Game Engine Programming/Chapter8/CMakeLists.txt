@@ -9,11 +9,12 @@ set(SRC_LIST
     ${PROJECT_SOURCE_DIR}/Chapter8/main_texture.cpp
 
     ${PROJECT_SOURCE_DIR}/Chapter8/core/src/D3D11/D3D11GraphicsBuffer.cpp
-    ${PROJECT_SOURCE_DIR}/Chapter8/core/src/D3D11/D3D11Renderable.cpp
     ${PROJECT_SOURCE_DIR}/Chapter8/core/src/D3D11/D3D11RenderEngine.cpp
     ${PROJECT_SOURCE_DIR}/Chapter8/core/src/D3D11/D3D11RenderLayout.cpp
+    ${PROJECT_SOURCE_DIR}/Chapter8/core/src/D3D11/D3D11ShaderObject.cpp
     ${PROJECT_SOURCE_DIR}/Chapter8/core/src/D3D11/D3D11Util.cpp 
     ${PROJECT_SOURCE_DIR}/Chapter8/core/src/D3D11/D3D11Texture.cpp
+    ${PROJECT_SOURCE_DIR}/Chapter8/core/src/D3D11/D3D11Texture2D.cpp
     ${PROJECT_SOURCE_DIR}/Chapter8/core/src/D3D11/D3D11RenderFactory.cpp
 
     ${PROJECT_SOURCE_DIR}/Chapter8/core/src/App/WinApp.cpp
@@ -24,13 +25,17 @@ set(SRC_LIST
     ${PROJECT_SOURCE_DIR}/Chapter8/core/src/DevHelper/ImagePlane.cpp
 
     ${PROJECT_SOURCE_DIR}/Chapter8/core/src/Context.cpp
+    ${PROJECT_SOURCE_DIR}/Chapter8/core/src/GraphicsBuffer.cpp
     ${PROJECT_SOURCE_DIR}/Chapter8/core/src/Light.cpp 
     ${PROJECT_SOURCE_DIR}/Chapter8/core/src/Mesh.cpp 
+    ${PROJECT_SOURCE_DIR}/Chapter8/core/src/Renderable.cpp
     ${PROJECT_SOURCE_DIR}/Chapter8/core/src/RenderableHelper.cpp
     ${PROJECT_SOURCE_DIR}/Chapter8/core/src/RenderEffect.cpp
+    ${PROJECT_SOURCE_DIR}/Chapter8/core/src/ShaderObject.cpp
     ${PROJECT_SOURCE_DIR}/Chapter8/core/src/TexCompression.cpp
+    ${PROJECT_SOURCE_DIR}/Chapter8/core/src/RenderLayout.cpp
     ${PROJECT_SOURCE_DIR}/Chapter8/core/src/Texture.cpp
-    ${PROJECT_SOURCE_DIR}/Chapter8/core/src/Timer.cpp
+    ${PROJECT_SOURCE_DIR}/Chapter8/core/src/Timer.cpp 
     ${PROJECT_SOURCE_DIR}/Chapter8/core/src/Util.cpp)
 add_executable(Chapter8 ${SRC_LIST})
 

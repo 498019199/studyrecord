@@ -1,16 +1,20 @@
-#include <core/D3D11GraphicsBuffer.h>
-#include <core/D3D11RenderEngine.h>
 #include <core/Context.h>
 #include <core/Util.h>
 
+#include "D3D11Util.h"
+#include "D3D11GraphicsBuffer.h"
+#include "D3D11RenderEngine.h"
+
+namespace RenderWorker
+{
+
 D3D11GraphicsBuffer::D3D11GraphicsBuffer(BufferUsage usage, uint32_t access_hint, uint32_t bind_flags,
             uint32_t size_in_byte, uint32_t structure_byte_stride)
-            :usage_(usage), access_hint_(access_hint), size_in_byte_(size_in_byte), structure_byte_stride_(structure_byte_stride),
-            bind_flags_(bind_flags)
+            :GraphicsBuffer(usage, access_hint, size_in_byte, structure_byte_stride), bind_flags_(bind_flags)
 {
-    const auto& re = Context::Instance().RenderEngineInstance();
-    d3d_device_ = re.D3DDevice();
-    d3d_imm_ctx_ = re.D3DDeviceImmContext();
+    const auto& d3d11_re = checked_cast<const D3D11RenderEngine&>(Context::Instance().RenderEngineInstance());
+    d3d_device_ = d3d11_re.D3DDevice();
+    d3d_imm_ctx_ = d3d11_re.D3DDeviceImmContext();
 }
 
 void D3D11GraphicsBuffer::GetD3DFlags(D3D11_USAGE& usage, UINT& cpu_access_flags, UINT& bind_flags, UINT& misc_flags)
@@ -154,4 +158,5 @@ void D3D11GraphicsBuffer::Unmap()
     COMMON_ASSERT(d3d_buffer_);
 
     d3d_imm_ctx_->Unmap(d3d_buffer_.get(), 0);
+}
 }
