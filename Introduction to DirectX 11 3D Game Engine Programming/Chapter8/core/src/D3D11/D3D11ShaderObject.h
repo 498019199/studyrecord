@@ -69,6 +69,9 @@ public:
     uint32_t VsSignature() const noexcept;
     
 private:
+    void DoLinkShaders(RenderEffect& effect) override;
+    
+private:
     struct D3D11Immutable
     {
         std::array<std::vector<ID3D11SamplerState*>, ShaderStageNum> samplers_;

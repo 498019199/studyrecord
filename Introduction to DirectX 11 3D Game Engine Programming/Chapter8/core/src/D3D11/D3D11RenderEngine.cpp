@@ -26,9 +26,9 @@ D3D11RenderEngine::D3D11RenderEngine(HWND hwnd, const RenderSettings& settings)
 			createDeviceFlags, 
 			0, 0,              // default feature level array
 			D3D11_SDK_VERSION,
-			&d3d_device_,
+			d3d_device_.put(),
 			&featureLevel,
-			&d3d_imm_ctx_);
+			d3d_imm_ctx_.put());
 
 	if( FAILED(hr) )
 	{
@@ -86,11 +86,14 @@ D3D11RenderEngine::D3D11RenderEngine(HWND hwnd, const RenderSettings& settings)
 	IDXGIFactory* dxgiFactory = 0;
 	TIFHR(dxgiAdapter->GetParent(__uuidof(IDXGIFactory), (void**)&dxgiFactory));
 
-	TIFHR(dxgiFactory->CreateSwapChain(d3d_device_, &sd, &swap_chain_));
+	TIFHR(dxgiFactory->CreateSwapChain(d3d_device_.get(), &sd, swap_chain_.put()));
 	
-    ReleaseCOM(dxgiDevice);
-	ReleaseCOM(dxgiAdapter);
-	ReleaseCOM(dxgiFactory);
+	if(dxgiDevice)
+    	dxgiDevice->Release();
+	if(dxgiAdapter)
+		dxgiAdapter->Release();
+	if(dxgiFactory)
+		dxgiFactory->Release();
 	// The remaining steps that need to be carried out for d3d creation
 	// also need to be executed every time the window is resized.  So
 	// just call the OnResize method here to avoid code duplication.
@@ -105,16 +108,16 @@ D3D11RenderEngine::D3D11RenderEngine(HWND hwnd, const RenderSettings& settings)
 
 D3D11RenderEngine::~D3D11RenderEngine()
 {
-	ReleaseCOM(render_target_view_);
-	ReleaseCOM(depth_stencil_view_);
-	ReleaseCOM(swap_chain_);
-	ReleaseCOM(depth_stencil_buff_);
+	render_target_view_.reset();
+	depth_stencil_view_.reset();
+	swap_chain_.reset();
+	depth_stencil_buff_.reset();
 
 	if( d3d_imm_ctx_ )
 		d3d_imm_ctx_->ClearState();
 
-	ReleaseCOM(d3d_imm_ctx_);
-	ReleaseCOM(d3d_device_);
+	d3d_imm_ctx_.reset();
+	d3d_device_.reset();
 }
 
 void D3D11RenderEngine::OnResize()
@@ -125,16 +128,17 @@ void D3D11RenderEngine::OnResize()
 
 	// Release the old views, as they hold references to the buffers we
 	// will be destroying.  Also release the old depth/stencil buffer.
-	ReleaseCOM(render_target_view_);
-	ReleaseCOM(depth_stencil_view_);
-	ReleaseCOM(depth_stencil_buff_);
+	render_target_view_.reset();
+	depth_stencil_view_.reset();
+	depth_stencil_buff_.reset();
 
 	// Resize the swap chain and recreate the render target view.
 	TIFHR(swap_chain_->ResizeBuffers(1, weight_, height_, DXGI_FORMAT_R8G8B8A8_UNORM, 0));
 	ID3D11Texture2D* backBuffer;
 	TIFHR(swap_chain_->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&backBuffer)));
-	TIFHR(d3d_device_->CreateRenderTargetView(backBuffer, 0, &render_target_view_));
-	ReleaseCOM(backBuffer);
+	TIFHR(d3d_device_->CreateRenderTargetView(backBuffer, 0, render_target_view_.put()));
+	if(backBuffer)
+		backBuffer->Release();
 
 	// Create the depth/stencil buffer and view.
 	D3D11_TEXTURE2D_DESC depthStencilDesc;
@@ -152,11 +156,11 @@ void D3D11RenderEngine::OnResize()
 	depthStencilDesc.CPUAccessFlags = 0; 
 	depthStencilDesc.MiscFlags      = 0;
 
-	TIFHR(d3d_device_->CreateTexture2D(&depthStencilDesc, 0, &depth_stencil_buff_));
-	TIFHR(d3d_device_->CreateDepthStencilView(depth_stencil_buff_, 0, &depth_stencil_view_));
+	TIFHR(d3d_device_->CreateTexture2D(&depthStencilDesc, 0, depth_stencil_buff_.put()));
+	TIFHR(d3d_device_->CreateDepthStencilView(depth_stencil_buff_.get(), 0, depth_stencil_view_.put()));
 
 	// Bind the render target view and depth/stencil view to the pipeline.
-	d3d_imm_ctx_->OMSetRenderTargets(1, &render_target_view_, depth_stencil_view_);
+	d3d_imm_ctx_->OMSetRenderTargets(1, render_target_view_.put(), depth_stencil_view_.get());
 
 	// Set the viewport transform.
 	screen_viewport_.TopLeftX = 0;
@@ -174,8 +178,8 @@ void D3D11RenderEngine::EndRender() const
 	assert(swap_chain_);
 
 	Color blackColor(0.0, 0.0, 0.0f, 1.0f);
-	d3d_imm_ctx_->ClearRenderTargetView(render_target_view_, &blackColor.r());
-	d3d_imm_ctx_->ClearDepthStencilView(depth_stencil_view_, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.0f, 0);
+	d3d_imm_ctx_->ClearRenderTargetView(render_target_view_.get(), &blackColor.r());
+	d3d_imm_ctx_->ClearDepthStencilView(depth_stencil_view_.get(), D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.0f, 0);
 
 	d3d_imm_ctx_->DrawIndexed(num_vertices_just_rendered_, 0, 0);
 }
@@ -187,12 +191,12 @@ void D3D11RenderEngine::SwitchChain() const
 
 ID3D11Device* D3D11RenderEngine::D3DDevice() const
 {
-	return d3d_device_;
+	return d3d_device_.get();
 }
 
 ID3D11DeviceContext* D3D11RenderEngine::D3DDeviceImmContext() const
 {
-    return d3d_imm_ctx_;
+    return d3d_imm_ctx_.get();
 }
 
 void D3D11RenderEngine::DoRender(const RenderEffect& effect, const RenderLayout& rl)

@@ -32,6 +32,12 @@ public:
         return is_validate_;
     }
 
+    // Pixel shader only
+    virtual bool HasDiscard() const noexcept
+    {
+        return false;
+    }
+
     bool HWResourceReady() const noexcept
     {
         return hw_res_ready_;

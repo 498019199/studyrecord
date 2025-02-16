@@ -1,11 +1,14 @@
 #pragma once
+#include <core/macro.h>
+
+#include <cassert>
+#include <cstdint>
+#include <memory>
+
 #include <string>
 #include <string_view>
 #include <bit>
 #include <utility>
-#include <utility>
-#include <memory>
-#include <core/macro.h>
 
 #ifdef _DEBUG
 	#define COMMON_ASSERT(val) assert(val)
@@ -143,7 +146,7 @@ template <typename To, typename From>
 inline typename std::add_lvalue_reference<To>::type checked_cast(From& p) noexcept
 {
     typedef typename std::remove_reference<To>::type RawToType;
-    (dynamic_cast<RawToType*>(&p) == static_cast<RawToType*>(&p));
+    COMMON_ASSERT(dynamic_cast<RawToType*>(&p) == static_cast<RawToType*>(&p));
     return static_cast<RawToType&>(p);
 }
 
@@ -151,7 +154,7 @@ template <typename To, typename From>
 inline typename std::add_lvalue_reference<const To>::type checked_cast(const From& p) noexcept
 {
     typedef typename std::remove_reference<const To>::type RawToType;
-    (dynamic_cast<const RawToType*>(&p) == static_cast<const RawToType*>(&p));
+    COMMON_ASSERT(dynamic_cast<const RawToType*>(&p) == static_cast<const RawToType*>(&p));
     return static_cast<const RawToType&>(p);
 }
 

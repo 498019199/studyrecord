@@ -11,6 +11,9 @@
 #include <core/ShaderObject.h>
 namespace RenderWorker
 {
+    using ID3D11DevicePtr = com_ptr<ID3D11Device>;
+    using ID3D11DeviceContextPtr = com_ptr<ID3D11DeviceContext>;
+    using IDXGISwapChainPtr = com_ptr<IDXGISwapChain>;
     using ID3D11BufferPtr = com_ptr<ID3D11Buffer>;
     using ID3D11InputLayoutPtr = com_ptr<ID3D11InputLayout>;
     using ID3D11RasterizerStatePtr = com_ptr<ID3D11RasterizerState>;
@@ -18,6 +21,9 @@ namespace RenderWorker
     using ID3D11PixelShaderPtr = com_ptr<ID3D11PixelShader>;
     using ID3D11ResourcePtr = com_ptr<ID3D11Resource>;
     using ID3D11Texture2DPtr = com_ptr<ID3D11Texture2D>;
+    using ID3D11RenderTargetViewPtr = com_ptr<ID3D11RenderTargetView>;
+	using ID3D11DepthStencilViewPtr = com_ptr<ID3D11DepthStencilView>;
+    using ID3D11InputLayoutPtr = com_ptr<ID3D11InputLayout>;
 }
 
 //---------------------------------------------------------------------------------------

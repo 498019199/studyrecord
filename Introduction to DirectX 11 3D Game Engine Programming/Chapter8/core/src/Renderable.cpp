@@ -38,7 +38,7 @@ void Renderable::Render()
     int32_t lod = 0;
     
     const auto& effect = *this->GetRenderEffect();
-    const RenderLayout& layout = this->GetRenderLayout(lod);
+    const auto& layout = this->GetRenderLayout(lod);
 
     auto& d3d11_re = checked_cast<D3D11RenderEngine&>(Context::Instance().RenderEngineInstance());
     d3d11_re.DoRender(effect, layout);

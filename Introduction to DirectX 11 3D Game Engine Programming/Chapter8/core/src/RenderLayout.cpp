@@ -8,7 +8,17 @@
 
 namespace RenderWorker
 {
-RenderLayout::RenderLayout() = default;
+RenderLayout::RenderLayout()
+: topo_type_(TT_PointList),
+    index_format_(EF_Unknown),
+    force_num_vertices_(0xFFFFFFFF),
+    force_num_indices_(0xFFFFFFFF),
+    streams_dirty_(true)
+{
+    vertex_streams_.reserve(4);
+}
+
+RenderLayout::~RenderLayout() noexcept = default;
 
 void RenderLayout::BindVertexStream(const GraphicsBufferPtr& buffer, VertexElement const& vet,
     stream_type type /*= ST_Geometry*/, uint32_t freq/* = 1*/)

@@ -123,7 +123,8 @@ public:
     };
 public:
     RenderLayout();
-
+    virtual ~RenderLayout() noexcept;
+    
     void TopologyType(topology_type type)
     {
         topo_type_ = type;

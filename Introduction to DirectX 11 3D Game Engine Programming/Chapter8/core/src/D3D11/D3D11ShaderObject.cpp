@@ -48,4 +48,9 @@ uint32_t D3D11ShaderObject::VsSignature() const noexcept
     return checked_cast<D3D11VertexShaderStageObject&>(*this->Stage(ShaderStage::Vertex)).VsSignature();
 }
 
+void D3D11ShaderObject::DoLinkShaders(RenderEffect& effect)
+{
+    
+}
+
 }

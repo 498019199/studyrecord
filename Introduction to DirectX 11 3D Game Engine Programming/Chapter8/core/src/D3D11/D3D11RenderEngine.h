@@ -30,18 +30,18 @@ private:
     int sample_count_{0};
     int sample_quality_{0};
     
-    ID3D11Device* d3d_device_{nullptr};
-	ID3D11DeviceContext* d3d_imm_ctx_{nullptr};
-	IDXGISwapChain* swap_chain_{nullptr};
+    ID3D11DevicePtr d3d_device_;
+	ID3D11DeviceContextPtr d3d_imm_ctx_;
+	IDXGISwapChainPtr swap_chain_;
 
     uint32_t num_primitives_just_rendered_{0};
 	uint32_t num_vertices_just_rendered_{0};
 
     int index_count_{0};
-    ID3D11Texture2D* depth_stencil_buff_{nullptr};
-    ID3D11DepthStencilView* depth_stencil_view_{nullptr};
+    ID3D11Texture2DPtr depth_stencil_buff_;
+    ID3D11DepthStencilViewPtr depth_stencil_view_;
 
-    ID3D11RenderTargetView* render_target_view_{nullptr};
+    ID3D11RenderTargetViewPtr render_target_view_;
     
     D3D11_VIEWPORT screen_viewport_;
 
