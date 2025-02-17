@@ -53,14 +53,3 @@ git hide folder
 
 CMake 
 first cmake CMakeLists.txt content
-
-
-
-[build] D3D11Texture2D.obj : error LNK2019: unresolved external symbol 
-
-"struct RenderWorker::Uuid const & __cdecl RenderWorker::UuidOf<struct ID3D11Resource>(void)" 
-(??$UuidOf@UID3D11Resource@@@RenderWorker@@YAAEBUUuid@0@XZ) referenced in function 
-"public: class RenderWorker::com_ptr<struct ID3D11Resource> __cdecl RenderWorker::com_ptr<struct ID3D11Texture2D>::as<struct ID3D11Resource>(void)const " 
-
-(??$as@UID3D11Resource@@@?$com_ptr@UID3D11Texture2D@@@RenderWorker@@QEBA?AV?$com_ptr@UID3D11Resource@@@1@XZ)
- [G:\shareData\project\github\studyrecord\Introduction to DirectX 11 3D Game Engine Programming\build\Chapter8\Chapter8.vcxproj]
