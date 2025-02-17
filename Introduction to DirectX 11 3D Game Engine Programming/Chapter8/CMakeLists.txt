@@ -12,7 +12,9 @@ set(SRC_LIST
 
     ${PROJECT_SOURCE_DIR}/Chapter8/core/src/D3D11/D3D11GraphicsBuffer.cpp
     ${PROJECT_SOURCE_DIR}/Chapter8/core/src/D3D11/D3D11RenderEngine.cpp
-    ${PROJECT_SOURCE_DIR}/Chapter8/core/src/D3D11/D3D11RenderLayout.cpp
+    ${PROJECT_SOURCE_DIR}/Chapter8/core/src/D3D11/D3D11RenderLayout.cpp 
+    ${PROJECT_SOURCE_DIR}/Chapter8/core/src/D3D11/D3D11RenderStateObject.cpp
+    ${PROJECT_SOURCE_DIR}/Chapter8/core/src/D3D11/D3D11RenderView.cpp
     ${PROJECT_SOURCE_DIR}/Chapter8/core/src/D3D11/D3D11ShaderObject.cpp
     ${PROJECT_SOURCE_DIR}/Chapter8/core/src/D3D11/D3D11Util.cpp 
     ${PROJECT_SOURCE_DIR}/Chapter8/core/src/D3D11/D3D11Texture.cpp
@@ -34,6 +36,8 @@ set(SRC_LIST
     ${PROJECT_SOURCE_DIR}/Chapter8/core/src/RenderEngine.cpp 
     ${PROJECT_SOURCE_DIR}/Chapter8/core/src/RenderFactory.cpp 
     ${PROJECT_SOURCE_DIR}/Chapter8/core/src/RenderLayout.cpp
+    ${PROJECT_SOURCE_DIR}/Chapter8/core/src/RenderStateObject.cpp
+    ${PROJECT_SOURCE_DIR}/Chapter8/core/src/RenderView.cpp
     ${PROJECT_SOURCE_DIR}/Chapter8/core/src/ShaderObject.cpp
     ${PROJECT_SOURCE_DIR}/Chapter8/core/src/TexCompression.cpp
     ${PROJECT_SOURCE_DIR}/Chapter8/core/src/Texture.cpp

@@ -102,6 +102,9 @@ public:
 
 private:
     const std::shared_ptr<D3D11Immutable> d3d_immutable_;
+
+    std::array<std::vector<std::tuple<void*, uint32_t, uint32_t>>, ShaderStageNum> srvsrcs_;
+    std::array<std::vector<ID3D11ShaderResourceView*>, ShaderStageNum> srvs_;
 };
 
 }

@@ -9,6 +9,7 @@
 #include <render/RenderLayout.h>
 #include <render/Texture.h>
 #include <render/ShaderObject.h>
+#include <render/RenderStateObject.h>
 namespace RenderWorker
 {
     using ID3D11DevicePtr = com_ptr<ID3D11Device>;
@@ -27,6 +28,8 @@ namespace RenderWorker
     using ID3D11RenderTargetViewPtr = com_ptr<ID3D11RenderTargetView>;
 	using ID3D11DepthStencilViewPtr = com_ptr<ID3D11DepthStencilView>;
     using ID3D11InputLayoutPtr = com_ptr<ID3D11InputLayout>;
+    using ID3D11SamplerStatePtr = com_ptr<ID3D11SamplerState>;
+	using ID3D11ShaderResourceViewPtr = com_ptr<ID3D11ShaderResourceView>;
 }
 
 //---------------------------------------------------------------------------------------
@@ -71,6 +74,10 @@ class D3D11Mapping final
 public:
     static DXGI_FORMAT MappingFormat(ElementFormat format);
     static ElementFormat MappingFormat(DXGI_FORMAT d3dfmt);
+
+    static D3D11_FILTER Mapping(TexFilterOp filter);
+    static D3D11_TEXTURE_ADDRESS_MODE Mapping(TexAddressingMode mode);
+    static D3D11_COMPARISON_FUNC Mapping(CompareFunction func);
 
     static D3D11_PRIMITIVE_TOPOLOGY Mapping(RenderLayout::topology_type tt);
     static void Mapping(std::vector<D3D11_INPUT_ELEMENT_DESC>& elements, uint32_t stream, std::span<const VertexElement> vet,

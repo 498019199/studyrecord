@@ -4,6 +4,7 @@
 #include "D3D11RenderLayout.h"
 #include "D3D11ShaderObject.h"
 #include "D3D11Texture.h"
+#include "D3D11RenderStateObject.h"
 
 namespace RenderWorker
 {
@@ -59,6 +60,11 @@ TexturePtr D3D11RenderFactory::MakeTexture2D(uint32_t width, uint32_t height, ui
 {
     TexturePtr ret =  MakeSharedPtr<D3D11Texture2D>(width, height, num_mip_maps, array_size, format, sample_count, sample_quality, access_hint);
     return ret;
+}
+
+SamplerStateObjectPtr D3D11RenderFactory::MakeSamplerStateObject(const SamplerStateDesc& desc)
+{
+    return MakeSharedPtr<D3D11SamplerStateObject>(desc);
 }
 
 GraphicsBufferPtr D3D11RenderFactory::MakeVertexBuffer(BufferUsage usage, uint32_t access_hint, uint32_t size_in_byte, void const * init_data,

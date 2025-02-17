@@ -505,6 +505,111 @@ ElementFormat D3D11Mapping::MappingFormat(DXGI_FORMAT format)
     }
 }
 
+D3D11_FILTER D3D11Mapping::Mapping(TexFilterOp filter)
+{
+	switch (filter)
+    {
+    case TFO_Min_Mag_Mip_Point:
+        return D3D11_FILTER_MIN_MAG_MIP_POINT;
+
+    case TFO_Min_Mag_Point_Mip_Linear:
+        return D3D11_FILTER_MIN_MAG_POINT_MIP_LINEAR;
+
+    case TFO_Min_Point_Mag_Linear_Mip_Point:
+        return D3D11_FILTER_MIN_POINT_MAG_LINEAR_MIP_POINT;
+
+    case TFO_Min_Point_Mag_Mip_Linear:
+        return D3D11_FILTER_MIN_POINT_MAG_MIP_LINEAR;
+
+    case TFO_Min_Mag_Linear_Mip_Point:
+        return D3D11_FILTER_MIN_MAG_LINEAR_MIP_POINT;
+
+    case TFO_Min_Mag_Mip_Linear:
+        return D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+
+    case TFO_Anisotropic:
+        return D3D11_FILTER_ANISOTROPIC;
+
+    case TFO_Cmp_Min_Mag_Mip_Point:
+        return D3D11_FILTER_COMPARISON_MIN_MAG_MIP_POINT;
+
+    case TFO_Cmp_Min_Mag_Point_Mip_Linear:
+        return D3D11_FILTER_COMPARISON_MIN_MAG_POINT_MIP_LINEAR;
+
+    case TFO_Cmp_Min_Point_Mag_Linear_Mip_Point:
+        return D3D11_FILTER_COMPARISON_MIN_POINT_MAG_LINEAR_MIP_POINT;
+
+    case TFO_Cmp_Min_Point_Mag_Mip_Linear:
+        return D3D11_FILTER_COMPARISON_MIN_POINT_MAG_MIP_LINEAR;
+
+    case TFO_Cmp_Min_Mag_Linear_Mip_Point:
+        return D3D11_FILTER_COMPARISON_MIN_MAG_LINEAR_MIP_POINT;
+
+    case TFO_Cmp_Min_Mag_Mip_Linear:
+        return D3D11_FILTER_COMPARISON_MIN_MAG_MIP_LINEAR;
+
+    case TFO_Cmp_Anisotropic:
+        return D3D11_FILTER_COMPARISON_ANISOTROPIC;
+
+    default:
+        KFL_UNREACHABLE("Invalid texture filter operation");
+    }
+}
+
+D3D11_TEXTURE_ADDRESS_MODE D3D11Mapping::Mapping(TexAddressingMode mode)
+{
+    switch (mode)
+    {
+    case TAM_Clamp:
+        return D3D11_TEXTURE_ADDRESS_CLAMP;
+
+    case TAM_Wrap:
+        return D3D11_TEXTURE_ADDRESS_WRAP;
+
+    case TAM_Mirror:
+        return D3D11_TEXTURE_ADDRESS_MIRROR;
+
+    case TAM_Border:
+        return D3D11_TEXTURE_ADDRESS_BORDER;
+
+    default:
+        KFL_UNREACHABLE("Invalid texture addressing mode");
+    }
+}
+
+D3D11_COMPARISON_FUNC D3D11Mapping::Mapping(CompareFunction func)
+{
+    switch (func)
+    {
+    case CF_AlwaysFail:
+        return D3D11_COMPARISON_NEVER;
+
+    case CF_AlwaysPass:
+        return D3D11_COMPARISON_ALWAYS;
+
+    case CF_Less:
+        return D3D11_COMPARISON_LESS;
+
+    case CF_LessEqual:
+        return D3D11_COMPARISON_LESS_EQUAL;
+
+    case CF_Equal:
+        return D3D11_COMPARISON_EQUAL;
+
+    case CF_NotEqual:
+        return D3D11_COMPARISON_NOT_EQUAL;
+
+    case CF_GreaterEqual:
+        return D3D11_COMPARISON_GREATER_EQUAL;
+
+    case CF_Greater:
+        return D3D11_COMPARISON_GREATER;
+
+    default:
+        KFL_UNREACHABLE("Invalid compare function");
+    }
+}
+
 void D3D11Mapping::Mapping(std::vector<D3D11_INPUT_ELEMENT_DESC>& elements, uint32_t stream, std::span<const VertexElement> vet,
     RenderLayout::stream_type type, uint32_t freq)
 {

@@ -2,6 +2,8 @@
 #include <render/GraphicsBuffer.h>
 #include <render/ShaderObject.h>
 #include <render/Light.h>
+#include <render/RenderStateObject.h>
+#include <render/Texture.h>
 
 #include <vector>
 namespace RenderWorker
@@ -106,6 +108,10 @@ private:
 
     uint32_t shader_obj_index_{0};
     std::vector<ShaderObjectPtr> shader_objs_;
+
+public:
+    SamplerStateObjectPtr sm_;
+    TexturePtr tex_;
 };
 
 

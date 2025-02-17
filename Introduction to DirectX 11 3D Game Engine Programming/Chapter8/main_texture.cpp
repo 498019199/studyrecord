@@ -115,6 +115,23 @@ public:
         desc1.profile = currentPath + "Basic_2D_PS";
         effect_->AddShaderDesc("pixel_shader", desc1);
         effect_->Load(currentPath);
+
+
+        SamplerStateDesc desc;
+        desc.addr_mode_u = TexAddressingMode::TAM_Wrap;
+        desc.addr_mode_v = TexAddressingMode::TAM_Wrap;
+        desc.addr_mode_w = TexAddressingMode::TAM_Wrap;
+        desc.filter = TexFilterOp::TFO_Min_Mag_Mip_Linear;
+        desc.max_anisotropy ;
+        desc.min_lod = 0.f;
+        desc.max_lod = std::numeric_limits<float>::max();
+        desc.mip_map_lod_bias = 0;
+        desc.cmp_func = CompareFunction::CF_AlwaysFail;
+        effect_.sm_ = rf.MakeSamplerStateObject(desc);
+
+        auto currentPath2 = std::filesystem::current_path().parent_path().parent_path().string();
+        const std::string file_path = currentPath2 + "\\Models\\Chapter8\\WoodCrate.dds";
+        effect_.tex_ = LoadTexture(file_path, EAH_GPU_Read | EAH_Immutable);
     }
 };
 
