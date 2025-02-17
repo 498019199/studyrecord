@@ -91,7 +91,9 @@ public:
         return ShaderObjectByIndex(shader_obj_index_);
     }
     
+    uint32_t CBuffersNum() const noexcept;
     RenderEffectConstantBuffer* CBufferByName(const std::string& name) const noexcept;
+    RenderEffectConstantBuffer* CBufferByIndex(uint32_t index) const noexcept;
 private:
     struct Immutable final
     {
@@ -105,6 +107,10 @@ private:
     uint32_t shader_obj_index_{0};
     std::vector<ShaderObjectPtr> shader_objs_;
 };
+
+
+
+
 
 
 

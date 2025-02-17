@@ -29,7 +29,7 @@ public:
     void VSSetShader(ID3D11VertexShader* shader);
 	void PSSetShader(ID3D11PixelShader* shader);
     // 将更新好的常量缓冲区绑定到顶点着色器和像素着色器
-    void SetConstantBuffers(ShaderStage stage, int index, ID3D11Buffer* cb);
+    void SetConstantBuffers(ShaderStage stage, std::span<const ID3D11Buffer*> cbs);
 private:
     int weight_{0};
     int height_{0};
@@ -55,7 +55,7 @@ private:
     
     ID3D11VertexShader* vertex_shader_cache_{nullptr};
     ID3D11PixelShader* pixel_shader_cache_{nullptr};
-    std::array<ID3D11Buffer*, ShaderStageNum> shader_cb_ptr_cache_;
+    std::array<std::vector<ID3D11Buffer*>, ShaderStageNum> shader_cb_ptr_cache_;
 
     ID3D11InputLayout* input_layout_cache_{nullptr};
     std::vector<ID3D11Buffer*> vb_cache_;

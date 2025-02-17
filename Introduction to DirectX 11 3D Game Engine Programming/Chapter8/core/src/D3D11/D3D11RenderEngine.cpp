@@ -326,14 +326,8 @@ void D3D11RenderEngine::DoRender(const RenderEffect& effect, const RenderLayout&
 		}
 	}
 
-	// // 将更新好的常量缓冲区绑定到顶点着色器和像素着色器
-	// ID3D11Buffer* d3d11_cbuff_vs = checked_cast<D3D11GraphicsBuffer&>(effect.HWBuff_VS()).D3DBuffer();
-    // d3d_imm_ctx_->VSSetConstantBuffers(0, 1, &d3d11_cbuff_vs);
-	// ID3D11Buffer* d3d11_cbuff_ps = checked_cast<D3D11GraphicsBuffer&>(effect.HWBuff_PS()).D3DBuffer(); 
-	// d3d_imm_ctx_->PSSetConstantBuffers(1, 1, &d3d11_cbuff_ps);
-	// 
-    // d3d_imm_ctx_->VSSetShader(effect.GetVertexShader(), nullptr, 0);
-    // d3d_imm_ctx_->PSSetShader(effect.GetPixelShader(), nullptr, 0);
+	// 将更新好的常量缓冲区绑定到顶点着色器和像素着色器
+	effect.GetShaderObject()->Bind(effect);
 }
 
 void D3D11RenderEngine::RSSetState(ID3D11RasterizerState* ras)
@@ -363,14 +357,14 @@ void D3D11RenderEngine::PSSetShader(ID3D11PixelShader* shader)
 	}
 }
 
-void D3D11RenderEngine::SetConstantBuffers(ShaderStage stage, int index, ID3D11Buffer* cb)
+void D3D11RenderEngine::SetConstantBuffers(ShaderStage stage, std::span<const ID3D11Buffer*> cbs)
 {
 	uint32_t const stage_index = std::to_underlying(stage);
-	if (shader_cb_ptr_cache_[stage_index] != cb)
+	if (MakeSpan(shader_cb_ptr_cache_[stage_index]) != cbs)
 	{
-		ShaderSetConstantBuffers[stage_index](d3d_imm_ctx_.get(), 0, index, &cb);
+		//ShaderSetConstantBuffers[stage_index](d3d_imm_ctx_.get(), 0, static_cast<UINT>(cbs.size()), &cbs[0]);
 
-		shader_cb_ptr_cache_[stage_index] = cb;
+		//shader_cb_ptr_cache_[stage_index].assign(cbs.begin(), cbs.end());
 	}
 }
 }

@@ -79,36 +79,36 @@ constexpr std::span<T const, 1> MakeSpan(T const& val)
 template <typename ElementType1, typename ElementType2, std::size_t FirstExtent, std::size_t SecondExtent>
 constexpr bool operator==(std::span<ElementType1, FirstExtent> lhs, std::span<ElementType2, SecondExtent> rhs) noexcept
 {
-    return std::equal(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+	return std::equal(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
 }
 
 template <typename ElementType1, typename ElementType2, std::size_t Extent>
 constexpr bool operator!=(std::span<ElementType1, Extent> lhs, std::span<ElementType2, Extent> rhs) noexcept
 {
-    return !(lhs == rhs);
+	return !(lhs == rhs);
 }
 
 template <typename ElementType1, typename ElementType2, std::size_t Extent>
 constexpr bool operator<(std::span<ElementType1, Extent> lhs, std::span<ElementType2, Extent> rhs) noexcept
 {
-    return std::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+	return std::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
 }
 
 template <typename ElementType1, typename ElementType2, std::size_t Extent>
 constexpr bool operator<=(std::span<ElementType1, Extent> lhs, std::span<ElementType2, Extent> rhs) noexcept
 {
-    return !(lhs > rhs);
+	return !(lhs > rhs);
 }
 
 template <typename ElementType1, typename ElementType2, std::size_t Extent>
 constexpr bool operator>(std::span<ElementType1, Extent> lhs, std::span<ElementType2, Extent> rhs) noexcept
 {
-    return rhs < lhs;
+	return rhs < lhs;
 }
 
 template <typename ElementType1, typename ElementType2, std::size_t Extent>
 constexpr bool operator>=(std::span<ElementType1, Extent> l, std::span<ElementType2, Extent> r) noexcept
 {
-    return !(l < r);
+	return !(l < r);
 }
 }

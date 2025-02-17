@@ -174,6 +174,11 @@ void RenderEffect::Load(const std::string& file_path)
     cbuff1->Resize(size);
 }
 
+uint32_t RenderEffect::CBuffersNum() const noexcept
+{
+    return static_cast<uint32_t>(cbuffers_.size());
+}
+
 RenderEffectConstantBuffer* RenderEffect::CBufferByName(const std::string& name) const noexcept
 {
     for (uint32_t i = 0; i < cbuffers_.size(); ++i)
@@ -184,5 +189,11 @@ RenderEffectConstantBuffer* RenderEffect::CBufferByName(const std::string& name)
         }
     }
     return nullptr;
+}
+
+RenderEffectConstantBuffer* RenderEffect::CBufferByIndex(uint32_t index) const noexcept
+{
+    COMMON_ASSERT(index < this->CBuffersNum());
+    return cbuffers_[index].get();
 }
 }

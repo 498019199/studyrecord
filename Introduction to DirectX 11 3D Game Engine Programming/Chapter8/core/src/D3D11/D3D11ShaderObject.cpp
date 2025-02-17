@@ -37,7 +37,7 @@ void D3D11ShaderStageObject::CreateHwShader(const RenderEffect& effect, const st
 {
     if (!shader_code_.empty())
     {
-        const ShaderDesc& sd = effect.GetShaderDesc(shader_desc_ids[std::to_underlying(stage_)]);
+        //const ShaderDesc& sd = effect.GetShaderDesc(shader_desc_ids[std::to_underlying(stage_)]);
         is_validate_ = true;
         this->StageSpecificCreateHwShader(effect, shader_desc_ids);
     }
@@ -122,15 +122,27 @@ void D3D11ShaderObject::Bind(const RenderEffect& effect)
     auto const& ps_stage = this->Stage(ShaderStage::Pixel);
 	re.PSSetShader(ps_stage ? checked_cast<D3D11ShaderStageObject&>(*ps_stage).HwPixelShader() : nullptr);
 
-    // ID3D11Buffer* d3d11_cbuffs[D3D11_COMMONSHADER_CONSTANT_BUFFER_API_SLOT_COUNT];
-    // auto* cb = effectCBufferByIndex(cbuff_indices[i]);
-    auto cb1 = effect.CBufferByName("VSConstantBuffer")->HWBuff();
-    auto cbuff1 = checked_cast<D3D11GraphicsBuffer*>(cb1.get())->D3DBuffer();
-    re.SetConstantBuffers(ShaderStage::Vertex, 0, cbuff1);
+    for (size_t stage_index = 0; stage_index < ShaderStageNum; ++stage_index)
+    {
+        const ShaderStage stage = static_cast<ShaderStage>(stage_index);
+        const auto* shader_stage = checked_cast<D3D11ShaderStageObject*>(this->Stage(static_cast<ShaderStage>(stage)).get());
+        if (!shader_stage)
+        {
+            continue;
+        }
 
-    auto cb2 = effect.CBufferByName("VSConstantBuffer")->HWBuff();
-    auto cbuff2 = checked_cast<D3D11GraphicsBuffer*>(cb2.get())->D3DBuffer();
-    re.SetConstantBuffers(ShaderStage::Vertex, 1, cbuff2);
+        //ID3D11Buffer* d3d11_cbuffs[D3D11_COMMONSHADER_CONSTANT_BUFFER_API_SLOT_COUNT];
+    }
+
+
+    
+    auto* cb1 = effect.CBufferByIndex(0);
+    auto d3d11_cbuff_vs = checked_cast<D3D11GraphicsBuffer*>(cb1->HWBuff().get())->D3DBuffer();
+    re.D3DDeviceImmContext()->VSSetConstantBuffers(0, 1, &d3d11_cbuff_vs);
+
+    auto* cb2 = effect.CBufferByIndex(1);
+    auto d3d11_cbuff_ps = checked_cast<D3D11GraphicsBuffer*>(cb2->HWBuff().get())->D3DBuffer();
+    re.D3DDeviceImmContext()->PSSetConstantBuffers(1, 1, &d3d11_cbuff_ps);
 }
 
 void D3D11ShaderObject::Unbind()
