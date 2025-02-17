@@ -36,7 +36,8 @@
 #include <core/common.h>
 #include <core/ErrorHandling.h>
 #include <core/Uuid.h>
-
+namespace RenderWorker
+{
 	template <typename T>
 	class com_ptr
 	{
@@ -358,20 +359,20 @@
 	{
 		return !(lhs < rhs);
 	}
-
+}
 
 namespace std
 {
 	template <typename T>
-	void swap(com_ptr<T>& lhs, com_ptr<T>& rhs) noexcept
+	void swap(RenderWorker::com_ptr<T>& lhs, RenderWorker::com_ptr<T>& rhs) noexcept
 	{
 		lhs.swap(rhs);
 	}
 
 	template <typename T>
-	struct hash<com_ptr<T>>
+	struct hash<RenderWorker::com_ptr<T>>
 	{
-		using argument_type = com_ptr<T>;
+		using argument_type = RenderWorker::com_ptr<T>;
 		using result_type = std::size_t;
 
 		result_type operator()(argument_type const& p) const noexcept

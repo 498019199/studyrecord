@@ -51,6 +51,9 @@ public:
 	// Gets the size of texture array
 	uint32_t ArraySize() const;
 
+    // Returns the pixel format for the texture surface.
+	ElementFormat Format() const;
+
     // Returns the width of the texture.
     virtual uint32_t Width(uint32_t level) const = 0;
     // Returns the height of the texture.
@@ -71,6 +74,8 @@ protected:
     uint32_t		sample_count_, sample_quality_;
     uint32_t		access_hint_;
 };
+
+
 using TexturePtr = std::shared_ptr<Texture>;
 
 class VirtualTexture : public Texture
@@ -86,6 +91,15 @@ public:
     void CreateHWResource(std::span<ElementInitData const> init_data, float4 const * clear_value_hint) override;
     void DeleteHWResource() override;
     bool HWResourceReady() const override;
+
+    const std::vector<ElementInitData>& SubresourceData() const
+    {
+        return subres_data_;
+    }
+    const std::vector<uint8_t>& DataBlock() const
+    {
+        return data_block_;
+    }
 private:
     bool ref_only_;
 
@@ -105,4 +119,5 @@ void GetImageInfo(std::string_view tex_name, Texture::TextureType& type,
     ElementFormat& format, uint32_t& row_pitch, uint32_t& slice_pitch);
     
 TexturePtr LoadVirtualTexture(std::string_view tex_name);
+TexturePtr LoadTexture(std::string_view tex_name, uint32_t access_hint);
 }

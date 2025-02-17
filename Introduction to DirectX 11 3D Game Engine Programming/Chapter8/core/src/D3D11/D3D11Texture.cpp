@@ -34,6 +34,24 @@ bool D3D11Texture::HWResourceReady() const
     return d3d_texture_.get() ? true : false;
 }
 
+uint32_t D3D11Texture::Width(uint32_t level) const noexcept 
+{
+    COMMON_ASSERT(level < mip_maps_num_);
+    return 1;
+}
+
+uint32_t D3D11Texture::Height(uint32_t level) const noexcept 
+{
+    COMMON_ASSERT(level < mip_maps_num_);
+    return 1;
+}
+
+uint32_t D3D11Texture::Depth(uint32_t level) const noexcept 
+{
+    COMMON_ASSERT(level < mip_maps_num_);
+    return 1;
+}
+
 void D3D11Texture::GetD3DFlags(D3D11_USAGE& usage, UINT& bind_flags, UINT& cpu_access_flags, UINT& misc_flags)
 {
     if (access_hint_ & EAH_Immutable)
@@ -110,6 +128,18 @@ void D3D11Texture::GetD3DFlags(D3D11_USAGE& usage, UINT& bind_flags, UINT& cpu_a
         bind_flags |= D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET;
         misc_flags |= D3D11_RESOURCE_MISC_GENERATE_MIPS;
     }
+}
+
+uint32_t D3D11Texture2D::Width(uint32_t level) const noexcept 
+{
+    COMMON_ASSERT(level < mip_maps_num_);
+    return std::max(1U, width_ >> level);
+}
+
+uint32_t D3D11Texture2D::Height(uint32_t level) const noexcept 
+{
+    COMMON_ASSERT(level < mip_maps_num_);
+    return std::max(1U, height_ >> level);
 }
 
 

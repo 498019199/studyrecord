@@ -1,6 +1,8 @@
 #include <render/Texture.h>
 #include <render/TexCompression.h>
 #include <core/ResIdentifier.h>
+#include <core/Context.h>
+#include <render/RenderFactory.h>
 
 #include <fstream>
 #include <filesystem>
@@ -1208,8 +1210,10 @@ uint32_t Texture::ArraySize() const
     return array_size_;
 }
 
-
-
+ElementFormat Texture::Format() const
+{
+    return format_;
+}
 
 
 
@@ -1398,6 +1402,39 @@ void GetImageInfo(std::string_view tex_name, Texture::TextureType& type,
         ReadDdsFileHeader(tex_res, type, width, height, depth, num_mipmaps, array_size, format,
             row_pitch, slice_pitch);
     }
+}
+
+TexturePtr LoadTexture(std::string_view tex_name, uint32_t access_hint)
+{
+	TexturePtr tex = LoadVirtualTexture(tex_name);
+
+	auto& sw_tex = checked_cast<VirtualTexture&>(*tex);
+	std::vector<ElementInitData> init_data;
+	init_data = sw_tex.SubresourceData();
+	auto& rf = Context::Instance().RenderFactoryInstance();
+
+	TexturePtr texture;
+	switch (tex->Type())
+	{
+	case Texture::TT_1D:
+		break;
+
+	case Texture::TT_2D:
+		texture = rf.MakeTexture2D(tex->Width(0), tex->Height(0), tex->MipMapsNum(), 
+		tex->ArraySize(), tex->Format(), 1, 0, access_hint);
+		break;
+
+	case Texture::TT_3D:
+		break;
+
+	case Texture::TT_Cube:
+		break;
+
+	default:
+		KFL_UNREACHABLE("Invalid texture type");
+	}
+	texture->CreateHWResource(init_data, nullptr);
+	return texture;
 }
 
 TexturePtr LoadVirtualTexture(std::string_view tex_name)

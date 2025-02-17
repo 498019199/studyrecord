@@ -77,7 +77,8 @@
 
 // };
 #include <core/common.h>
-
+namespace RenderWorker
+{
 struct DirectionalLightSource
 {
     DirectionalLightSource() { memset(this, 0, sizeof(DirectionalLightSource)); }
@@ -143,3 +144,4 @@ struct Material
     float4 specular_; // w = 镜面反射强度
     float4 reflect_;
 };
+}

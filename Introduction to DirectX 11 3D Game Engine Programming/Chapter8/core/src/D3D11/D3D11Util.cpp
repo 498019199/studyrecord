@@ -6,6 +6,9 @@
 #include <utility>
 #include <d3dcompiler.h>
 
+DEFINE_UUID_OF(ID3D11Resource);
+DEFINE_UUID_OF(ID3D11Texture2D);
+
 std::string CombineFileLine(std::string_view file, uint32_t line)
 {
     return std::format("{}: {}", std::move(file), line);

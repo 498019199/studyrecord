@@ -132,7 +132,7 @@ void test_load_virtual_tex()
 {
     auto currentPath = std::filesystem::current_path().parent_path().parent_path().string();
     const std::string file_path = currentPath + "\\Models\\Chapter8\\WoodCrate.dds";
-    auto virtual_tex = LoadVirtualTexture(file_path);
+    auto virtual_tex = LoadTexture(file_path, EAH_GPU_Read | EAH_Immutable);
     if(virtual_tex->HWResourceReady())
         virtual_tex->DeleteHWResource();
 }
@@ -148,7 +148,7 @@ int main() {
     app.InitDevice(app.GetHWND(), settings);
     Context::Instance().WorldInstance().BeginWorld();
     
-    test_load_virtual_tex();
+    //test_load_virtual_tex();
     CreateBox();
 
     app.Run();

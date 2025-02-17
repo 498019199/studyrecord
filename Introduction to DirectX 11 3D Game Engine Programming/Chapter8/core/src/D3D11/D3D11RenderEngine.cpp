@@ -10,7 +10,29 @@
 
 namespace RenderWorker
 {
-static std::function<void(ID3D11DeviceContext*, UINT, UINT, ID3D11Buffer * const *)> const ShaderSetConstantBuffers[] =
+static const std::function<void(ID3D11DeviceContext*, UINT, UINT, ID3D11ShaderResourceView * const *)> ShaderSetShaderResources[] =
+{
+	std::mem_fn(&ID3D11DeviceContext::VSSetShaderResources),
+	std::mem_fn(&ID3D11DeviceContext::PSSetShaderResources),
+	std::mem_fn(&ID3D11DeviceContext::GSSetShaderResources),
+	std::mem_fn(&ID3D11DeviceContext::CSSetShaderResources),
+	std::mem_fn(&ID3D11DeviceContext::HSSetShaderResources),
+	std::mem_fn(&ID3D11DeviceContext::DSSetShaderResources)
+};
+static_assert(std::size(ShaderSetShaderResources) == ShaderStageNum);
+
+static const std::function<void(ID3D11DeviceContext*, UINT, UINT, ID3D11SamplerState * const *)>  ShaderSetSamplers[] =
+{
+	std::mem_fn(&ID3D11DeviceContext::VSSetSamplers),
+	std::mem_fn(&ID3D11DeviceContext::PSSetSamplers),
+	std::mem_fn(&ID3D11DeviceContext::GSSetSamplers),
+	std::mem_fn(&ID3D11DeviceContext::CSSetSamplers),
+	std::mem_fn(&ID3D11DeviceContext::HSSetSamplers),
+	std::mem_fn(&ID3D11DeviceContext::DSSetSamplers)
+};
+static_assert(std::size(ShaderSetSamplers) == ShaderStageNum);
+
+static const std::function<void(ID3D11DeviceContext*, UINT, UINT, ID3D11Buffer * const *)> ShaderSetConstantBuffers[] =
 {
 	std::mem_fn(&ID3D11DeviceContext::VSSetConstantBuffers),
 	std::mem_fn(&ID3D11DeviceContext::PSSetConstantBuffers),
@@ -357,12 +379,45 @@ void D3D11RenderEngine::PSSetShader(ID3D11PixelShader* shader)
 	}
 }
 
+void D3D11RenderEngine::SetShaderResources(ShaderStage stage, 
+	std::span<std::tuple<void*, uint32_t, uint32_t> const> srvsrcs,
+	std::span<const ID3D11ShaderResourceView*> srvs)
+{
+	uint32_t const stage_index = std::to_underlying(stage);
+	if (MakeSpan(shader_srv_ptr_cache_[stage_index]) != srvs)
+	{
+		size_t const old_size = shader_srv_ptr_cache_[stage_index].size();
+		//shader_srv_ptr_cache_[stage_index].assign(srvs.begin(), srvs.end());
+		if (old_size > static_cast<size_t>(srvs.size()))
+		{
+			shader_srv_ptr_cache_[stage_index].resize(old_size, nullptr);
+		}
+
+		ShaderSetShaderResources[stage_index](d3d_imm_ctx_.get(), 0,
+			static_cast<UINT>(shader_srv_ptr_cache_[stage_index].size()), &shader_srv_ptr_cache_[stage_index][0]);
+
+		shader_srvsrc_cache_[stage_index].assign(srvsrcs.begin(), srvsrcs.end());
+		shader_srv_ptr_cache_[stage_index].resize(srvs.size());
+	}
+}
+
+void D3D11RenderEngine::SetSamplers(ShaderStage stage, std::span<const ID3D11SamplerState*> samplers)
+{
+	uint32_t const stage_index = std::to_underlying(stage);
+	if (MakeSpan(shader_sampler_ptr_cache_[stage_index]) != samplers)
+	{
+		//ShaderSetSamplers[stage_index](d3d_imm_ctx_.get(), 0, static_cast<UINT>(samplers.size()), &(samplers[0]));
+
+		//shader_sampler_ptr_cache_[stage_index].assign(samplers.begin(), samplers.end());
+	}
+}
+
 void D3D11RenderEngine::SetConstantBuffers(ShaderStage stage, std::span<const ID3D11Buffer*> cbs)
 {
 	uint32_t const stage_index = std::to_underlying(stage);
 	if (MakeSpan(shader_cb_ptr_cache_[stage_index]) != cbs)
 	{
-		//ShaderSetConstantBuffers[stage_index](d3d_imm_ctx_.get(), 0, static_cast<UINT>(cbs.size()), &cbs[0]);
+		//ShaderSetConstantBuffers[stage_index](d3d_imm_ctx_.get(), 0, static_cast<UINT>(cbs.size()), &(cbs[0]));
 
 		//shader_cb_ptr_cache_[stage_index].assign(cbs.begin(), cbs.end());
 	}

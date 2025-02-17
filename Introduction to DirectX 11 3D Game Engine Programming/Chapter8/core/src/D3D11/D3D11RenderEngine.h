@@ -28,6 +28,8 @@ public:
     // 将着色器绑定到渲染管线
     void VSSetShader(ID3D11VertexShader* shader);
 	void PSSetShader(ID3D11PixelShader* shader);
+    void SetShaderResources(ShaderStage stage, std::span<std::tuple<void*, uint32_t, uint32_t> const> srvsrcs, std::span<const ID3D11ShaderResourceView*> srvs);
+    void SetSamplers(ShaderStage stage, std::span<const ID3D11SamplerState*> samplers);
     // 将更新好的常量缓冲区绑定到顶点着色器和像素着色器
     void SetConstantBuffers(ShaderStage stage, std::span<const ID3D11Buffer*> cbs);
 private:
@@ -56,6 +58,9 @@ private:
     ID3D11VertexShader* vertex_shader_cache_{nullptr};
     ID3D11PixelShader* pixel_shader_cache_{nullptr};
     std::array<std::vector<ID3D11Buffer*>, ShaderStageNum> shader_cb_ptr_cache_;
+    std::array<std::vector<std::tuple<void*, uint32_t, uint32_t>>, ShaderStageNum> shader_srvsrc_cache_;
+    std::array<std::vector<ID3D11ShaderResourceView*>, ShaderStageNum> shader_srv_ptr_cache_;
+    std::array<std::vector<ID3D11SamplerState*>, ShaderStageNum> shader_sampler_ptr_cache_;
 
     ID3D11InputLayout* input_layout_cache_{nullptr};
     std::vector<ID3D11Buffer*> vb_cache_;

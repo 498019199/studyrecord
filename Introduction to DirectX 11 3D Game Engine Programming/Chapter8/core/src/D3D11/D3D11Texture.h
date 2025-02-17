@@ -15,6 +15,9 @@ public:
     void DeleteHWResource() override;
     bool HWResourceReady() const override;
     
+    uint32_t Width(uint32_t level) const noexcept override;
+    uint32_t Height(uint32_t level) const noexcept override;
+    uint32_t Depth(uint32_t level) const noexcept override;
 protected:
     void GetD3DFlags(D3D11_USAGE& usage, UINT& bind_flags, UINT& cpu_access_flags, UINT& misc_flags);
 
@@ -30,8 +33,11 @@ protected:
 class D3D11Texture2D final : public D3D11Texture
 {
 public:
-    D3D11Texture2D(uint32_t width, uint32_t height, uint32_t numMipMaps, uint32_t array_size, ElementFormat format, uint32_t sample_count, uint32_t sample_quality, uint32_t access_hint);
+    D3D11Texture2D(uint32_t width, uint32_t height, uint32_t num_mip_maps, uint32_t array_size, ElementFormat format, uint32_t sample_count, uint32_t sample_quality, uint32_t access_hint);
     explicit D3D11Texture2D(ID3D11Texture2DPtr const & d3d_tex);
+
+    uint32_t Width(uint32_t level) const noexcept override;
+    uint32_t Height(uint32_t level) const noexcept override;
 
     void CreateHWResource(std::span<ElementInitData const> init_data, float4 const * clear_value_hint) override;
 

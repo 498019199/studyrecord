@@ -10,8 +10,12 @@ public:
     D3D11RenderFactory();
 
     RenderLayoutPtr MakeRenderLayout() override;
+    
     ShaderObjectPtr MakeShaderObject() override;
     ShaderStageObjectPtr MakeShaderStageObject(ShaderStage stage) override;
+
+    TexturePtr MakeTexture2D(uint32_t width, uint32_t height, uint32_t num_mip_maps, uint32_t array_size,
+        ElementFormat format, uint32_t sample_count, uint32_t sample_quality, uint32_t access_hint) override;
 
     GraphicsBufferPtr MakeVertexBuffer(BufferUsage usage, uint32_t access_hint, uint32_t size_in_byte, void const * init_data,
         uint32_t structure_byte_stride = 0) override;

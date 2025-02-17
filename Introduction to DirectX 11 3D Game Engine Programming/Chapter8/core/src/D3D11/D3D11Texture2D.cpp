@@ -8,24 +8,24 @@
 namespace RenderWorker
 {
 
-D3D11Texture2D::D3D11Texture2D(uint32_t width, uint32_t height, uint32_t numMipMaps, uint32_t array_size, ElementFormat format,
+D3D11Texture2D::D3D11Texture2D(uint32_t width, uint32_t height, uint32_t num_mip_maps, uint32_t array_size, ElementFormat format,
     uint32_t sample_count, uint32_t sample_quality, uint32_t access_hint)
     :D3D11Texture(TT_2D, sample_count, sample_quality, access_hint)
 {
-    if (0 == numMipMaps)
+    if (0 == num_mip_maps)
     {
-        numMipMaps = 1;
+        num_mip_maps = 1;
         uint32_t w = width;
         uint32_t h = height;
         while ((w != 1) || (h != 1))
         {
-        ++ numMipMaps;
+        ++ num_mip_maps;
 
         w = std::max(1U, w / 2);
         h = std::max(1U, h / 2);
         }
     }
-    mip_maps_num_ = numMipMaps;
+    mip_maps_num_ = num_mip_maps;
 
     array_size_ = array_size;
     format_		= format;
@@ -135,8 +135,8 @@ void D3D11Texture2D::CreateHWResource(std::span<ElementInitData const> init_data
         }
     }
 
-    //ID3D11Texture2DPtr d3d_tex;
-    //TIFHR(d3d_device_->CreateTexture2D(&desc, subres_data.data(), d3d_tex.put()));
-    //d3d_tex.as(d3d_texture_);
+    ID3D11Texture2DPtr d3d_tex;
+    TIFHR(d3d_device_->CreateTexture2D(&desc, subres_data.data(), d3d_tex.put()));
+    d3d_tex.as(d3d_texture_);
 }
 }

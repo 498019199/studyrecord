@@ -10,6 +10,8 @@
 
 
 #include <math/math.h>
+namespace RenderWorker
+{
 using int1 = MathWorker::int1;
 using int2 = MathWorker::int2;
 using int3 = MathWorker::int3;
@@ -26,3 +28,4 @@ using quater = MathWorker::quater;
 using rotator = MathWorker::rotator;
 using float4x4 = MathWorker::float4x4;
 using Color = MathWorker::Color;
+}
