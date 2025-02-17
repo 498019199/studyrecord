@@ -1,0 +1,8 @@
+/lib
+/build
+/bin
+/3rd/dxsdk/dxsdk
+/3rd/assimp/assimp
+/3rd/FreeImage/FreeImage
+/3rd/zlib/zlib
+*.cso
