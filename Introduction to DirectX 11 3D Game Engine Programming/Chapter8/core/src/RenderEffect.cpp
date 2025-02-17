@@ -1,4 +1,4 @@
-#include <core/RenderEffect.h>
+#include <render/RenderEffect.h>
 #include <core/Context.h>
 
 #include "D3D11/D3D11RenderEngine.h"
@@ -7,15 +7,58 @@
 
 namespace RenderWorker
 {
+RenderEffectConstantBuffer::RenderEffectConstantBuffer(RenderEffect& effect)
+{
+    
+}
+
+void RenderEffectConstantBuffer::Load(const std::string& name)
+{
+    if (!immutable_)
+    {
+        immutable_ = MakeSharedPtr<Immutable>();
+    }
+    immutable_->name = name;
+}
+
+void RenderEffectConstantBuffer::Resize(uint32_t size)
+{
+    buff_.resize(size);
+    if (size > 0)
+    {
+        if (!hw_buff_ || (size > hw_buff_->Size()))
+        {
+            auto& rf = Context::Instance().RenderFactoryInstance();
+            hw_buff_ = rf.MakeConstantBuffer(BU_Dynamic, 0, size, nullptr);
+        }
+    }
+
+    dirty_ = true;
+}
+
+
+
+
+
+
+
+
+// 计算最接近且不小于给定值的 16 的倍数
+UINT AlignTo16(UINT value) 
+{
+    return (value + 15) & ~15;
+}
+
 RenderEffect::RenderEffect()
 {
     if (!immutable_)
     {
         immutable_ = MakeSharedPtr<Immutable>();
     }
+    shader_desc_ids_.fill(0);
 }
 
-uint32_t RenderEffect::AddShaderDesc(const ShaderDesc& sd)
+uint32_t RenderEffect::AddShaderDesc(const std::string& state_name_hash, const ShaderDesc& sd)
 {
     for (uint32_t i = 0; i < immutable_->shader_descs.size(); ++i)
     {
@@ -27,6 +70,36 @@ uint32_t RenderEffect::AddShaderDesc(const ShaderDesc& sd)
 
     uint32_t id = static_cast<uint32_t>(immutable_->shader_descs.size());
     immutable_->shader_descs.push_back(sd);
+
+
+    ShaderStage stage;
+    if ("vertex_shader" == state_name_hash)
+    {
+        stage = ShaderStage::Vertex;
+    }
+    else if ("pixel_shader" == state_name_hash)
+    {
+        stage = ShaderStage::Pixel;
+    }
+    else if ("geometry_shader" == state_name_hash)
+    {
+        stage = ShaderStage::Geometry;
+    }
+    else if ("compute_shader" == state_name_hash)
+    {
+        stage = ShaderStage::Compute;
+    }
+    else if ("hull_shader" == state_name_hash)
+    {
+        stage = ShaderStage::Hull;
+    }
+    else
+    {
+        COMMON_ASSERT("domain_shader" == state_name_hash);
+        stage = ShaderStage::Domain;
+    }
+
+    shader_desc_ids_[std::to_underlying(stage)] = id;
     return id;
 }
 
@@ -45,7 +118,8 @@ ShaderDesc const& RenderEffect::GetShaderDesc(uint32_t id) const noexcept
 uint32_t RenderEffect::AddShaderObject()
 {
     uint32_t index = static_cast<uint32_t>(shader_objs_.size());
-    shader_objs_.push_back(Context::Instance().RenderFactoryInstance().MakeShaderObject());
+    auto& rf = Context::Instance().RenderFactoryInstance();
+    shader_objs_.push_back(rf.MakeShaderObject());
     return index;
 }
 
@@ -61,15 +135,12 @@ void RenderEffect::Load(const std::string& file_path)
     auto const & shader_obj = this->GetShaderObject();
     for (uint32_t stage_index = 0; stage_index < ShaderStageNum; ++stage_index)
     {
-        if(stage_index >= shader_desc_ids_.size())
-        {
-            break;
-        }
         ShaderDesc& sd = GetShaderDesc(shader_desc_ids_[stage_index]);
         const ShaderStage stage = static_cast<ShaderStage>(stage_index);
         ShaderStageObjectPtr shader_stage;
         if (sd.tech_pass_type == 0xFFFFFFFF)
         {
+            sd.tech_pass_type = 0;
             shader_stage = rf.MakeShaderStageObject(stage);
         }
 
@@ -81,54 +152,37 @@ void RenderEffect::Load(const std::string& file_path)
         ShaderDesc const& sd = GetShaderDesc(shader_desc_ids_[stage_index]);
         if (!sd.func_name.empty())
         {
-            ShaderStage const stage = static_cast<ShaderStage>(stage_index);
-            shader_obj->Stage(stage)->CreateHwShader(*this, shader_desc_ids_);
+            const ShaderStage stage = static_cast<ShaderStage>(stage_index);
+            auto shader_stage_obj = shader_obj->Stage(stage);
+            if(shader_stage_obj)
+            {
+                shader_stage_obj->CompileShader(*this, shader_desc_ids_);
+                shader_stage_obj->CreateHwShader(*this, shader_desc_ids_);
+            }
         }
     }
+
+  	shader_obj->LinkShaders(*this);
+    auto cbuff1 = cbuffers_.emplace_back(MakeSharedPtr<RenderEffectConstantBuffer>(*this)).get();
+    cbuff1->Load("VSConstantBuffer");
+    uint32_t size = AlignTo16(sizeof(VSConstantBuffer));
+    cbuff1->Resize(size);
+
+    auto cbuff2 = cbuffers_.emplace_back(MakeSharedPtr<RenderEffectConstantBuffer>(*this)).get();
+    cbuff2->Load("PSConstantBuffer");
+    size = AlignTo16(sizeof(PSConstantBuffer));
+    cbuff1->Resize(size);
 }
-    
-// // 计算最接近且不小于给定值的 16 的倍数
-// UINT AlignTo16(UINT value) {
-//     return (value + 15) & ~15;
-// }
-// void RenderEffect::CreateConstant()
-// {
-//     auto const& re = Context::Instance().RenderEngineInstance();
-//     D3D11_RASTERIZER_DESC wireframeDesc;
-// 	ZeroMemory(&wireframeDesc, sizeof(D3D11_RASTERIZER_DESC));
-// 	wireframeDesc.FillMode = D3D11_FILL_WIREFRAME;
-// 	wireframeDesc.CullMode = D3D11_CULL_BACK;
-// 	wireframeDesc.FrontCounterClockwise = false;
-// 	wireframeDesc.DepthClipEnable = true;
-//     TIFHR(re.D3DDevice()->CreateRasterizerState(&wireframeDesc, rasterizer_state_.put()));
 
-//     // 设置常量缓冲区描述
-//     uint32_t size = AlignTo16(sizeof(VSConstantBuffer));
-//     auto& rf = Context::Instance().RenderFactoryInstance();
-//     vs_hw_buff_ = rf.MakeConstantBuffer(BU_Dynamic, EAH_CPU_Write, size, nullptr);
-
-//     size = AlignTo16(sizeof(PSConstantBuffer));
-//     ps_hw_buff_ = rf.MakeConstantBuffer(BU_Dynamic, EAH_CPU_Write, size, nullptr);
-// }
-
-// void RenderEffect::AttackVertexShader(const std::string& filename)
-// {
-//     // 创建顶点着色器
-//     auto const& re = Context::Instance().RenderEngineInstance();
-//     TIFHR(CreateShaderFromFile(filename, "VS", "vs_5_0", vertex_blob_.put()));
-//     TIFHR(re.D3DDevice()->CreateVertexShader(vertex_blob_->GetBufferPointer(), vertex_blob_->GetBufferSize(), nullptr, vertex_shader_.put()));
-// }
-
-// void RenderEffect::AttackPixelShader(const std::string& filename)
-// {
-//     auto const& re = Context::Instance().RenderEngineInstance();
-//     TIFHR(CreateShaderFromFile(filename, "PS", "ps_5_0", pixel_blob_.put()));
-//     TIFHR(re.D3DDevice()->CreatePixelShader(pixel_blob_->GetBufferPointer(), pixel_blob_->GetBufferSize(), nullptr, pixel_shader_.put()));
-// }
-
-// void RenderEffect::Active() const
-// {
-//     auto& re = Context::Instance().RenderEngineInstance();
-//     re.RSSetState(rasterizer_state_.get());
-// }
+RenderEffectConstantBuffer* RenderEffect::CBufferByName(const std::string& name) const noexcept
+{
+    for (uint32_t i = 0; i < cbuffers_.size(); ++i)
+    {
+        if (name == cbuffers_[i]->Name())
+        {
+            return cbuffers_[i].get();
+        }
+    }
+    return nullptr;
+}
 }

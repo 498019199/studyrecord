@@ -1,6 +1,6 @@
 #pragma once
-#include <core/GraphicsBuffer.h>
-#include <core/ShaderObject.h>
+#include <render/GraphicsBuffer.h>
+#include <render/ShaderObject.h>
 
 namespace RenderWorker
 {

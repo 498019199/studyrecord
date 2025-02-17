@@ -1,4 +1,4 @@
-#include <core/TexCompression.h>
+#include <render/TexCompression.h>
 
 namespace RenderWorker
 {

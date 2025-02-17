@@ -45,7 +45,10 @@ public:
     explicit ShaderStageObject(ShaderStage stage) noexcept;
     virtual ~ShaderStageObject() noexcept;
 
-    virtual void CreateHwShader(const RenderEffect& effect, std::array<uint32_t, ShaderStageNum> const& shader_desc_ids) = 0;
+	virtual void CompileShader(RenderEffect const& effect,
+			const std::array<uint32_t, ShaderStageNum>& shader_desc_ids) = 0;
+
+    virtual void CreateHwShader(const RenderEffect& effect, const std::array<uint32_t, ShaderStageNum>& shader_desc_ids) = 0;
 
     bool Validate() const noexcept
     {
@@ -64,7 +67,7 @@ public:
     }
 protected:
     virtual void StageSpecificCreateHwShader(
-        [[maybe_unused]] RenderEffect const& effect, [[maybe_unused]] const std::vector<uint32_t>&  shader_desc_ids)
+        [[maybe_unused]] const RenderEffect& effect, [[maybe_unused]] const std::array<uint32_t, ShaderStageNum>& shader_desc_ids)
     {
     }
 
@@ -91,6 +94,8 @@ public:
 
     void LinkShaders(RenderEffect& effect);
 
+    virtual void Bind(const RenderEffect& effect) = 0;
+    virtual void Unbind() = 0;
 private:
     virtual void DoLinkShaders(RenderEffect& effect) = 0;
 

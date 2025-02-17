@@ -1,5 +1,5 @@
-#include <core/Renderable.h>
-#include <core/RenderEffect.h>
+#include <render/Renderable.h>
+#include <render/RenderEffect.h>
 #include <core/Context.h>
 
 #include "D3D11/D3D11RenderLayout.h"

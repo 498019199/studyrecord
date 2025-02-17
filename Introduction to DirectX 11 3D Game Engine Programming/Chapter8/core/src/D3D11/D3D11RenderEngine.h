@@ -1,7 +1,7 @@
 #pragma once
 #include <core/common.h>
-#include <core/RenderLayout.h>
-#include <core/RenderEngine.h>
+#include <render/RenderLayout.h>
+#include <render/RenderEngine.h>
 #include "D3D11Util.h"
 
 namespace RenderWorker
@@ -20,10 +20,16 @@ public:
     ID3D11DeviceContext* D3DDeviceImmContext() const;
 
     void DoRender(const RenderEffect& effect, const RenderLayout& rl);
-    void EndRender() const;
+    void EndRender() const override;
     void SwitchChain() const; 
 
     void RSSetState(ID3D11RasterizerState* ras);
+    
+    // 将着色器绑定到渲染管线
+    void VSSetShader(ID3D11VertexShader* shader);
+	void PSSetShader(ID3D11PixelShader* shader);
+    // 将更新好的常量缓冲区绑定到顶点着色器和像素着色器
+    void SetConstantBuffers(ShaderStage stage, int index, ID3D11Buffer* cb);
 private:
     int weight_{0};
     int height_{0};
@@ -46,6 +52,10 @@ private:
     D3D11_VIEWPORT screen_viewport_;
 
     ID3D11RasterizerState* rasterizer_state_cache_{nullptr};
+    
+    ID3D11VertexShader* vertex_shader_cache_{nullptr};
+    ID3D11PixelShader* pixel_shader_cache_{nullptr};
+    std::array<ID3D11Buffer*, ShaderStageNum> shader_cb_ptr_cache_;
 
     ID3D11InputLayout* input_layout_cache_{nullptr};
     std::vector<ID3D11Buffer*> vb_cache_;

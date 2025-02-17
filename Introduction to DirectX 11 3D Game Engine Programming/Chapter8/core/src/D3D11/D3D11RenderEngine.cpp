@@ -1,13 +1,25 @@
 #include <core/Context.h>
-#include <core/RenderEffect.h>
+#include <render/RenderEffect.h>
 
 #include "D3D11RenderEngine.h"
 #include "D3D11Util.h"
 #include "D3D11GraphicsBuffer.h"
 #include "D3D11RenderLayout.h"
 
+#include <functional>
+
 namespace RenderWorker
 {
+static std::function<void(ID3D11DeviceContext*, UINT, UINT, ID3D11Buffer * const *)> const ShaderSetConstantBuffers[] =
+{
+	std::mem_fn(&ID3D11DeviceContext::VSSetConstantBuffers),
+	std::mem_fn(&ID3D11DeviceContext::PSSetConstantBuffers),
+	std::mem_fn(&ID3D11DeviceContext::GSSetConstantBuffers),
+	std::mem_fn(&ID3D11DeviceContext::CSSetConstantBuffers),
+	std::mem_fn(&ID3D11DeviceContext::HSSetConstantBuffers),
+	std::mem_fn(&ID3D11DeviceContext::DSSetConstantBuffers)
+};
+static_assert(std::size(ShaderSetConstantBuffers) == ShaderStageNum);
 
 D3D11RenderEngine::D3D11RenderEngine(HWND hwnd, const RenderSettings& settings)
 {
@@ -288,7 +300,7 @@ void D3D11RenderEngine::DoRender(const RenderEffect& effect, const RenderLayout&
 		}
 		else
 		{
-			//KFL_UNREACHABLE("Invalid topology type");
+			KFL_UNREACHABLE("Invalid topology type");
 		}
 		break;
 	}
@@ -319,7 +331,7 @@ void D3D11RenderEngine::DoRender(const RenderEffect& effect, const RenderLayout&
     // d3d_imm_ctx_->VSSetConstantBuffers(0, 1, &d3d11_cbuff_vs);
 	// ID3D11Buffer* d3d11_cbuff_ps = checked_cast<D3D11GraphicsBuffer&>(effect.HWBuff_PS()).D3DBuffer(); 
 	// d3d_imm_ctx_->PSSetConstantBuffers(1, 1, &d3d11_cbuff_ps);
-	// // 将着色器绑定到渲染管线
+	// 
     // d3d_imm_ctx_->VSSetShader(effect.GetVertexShader(), nullptr, 0);
     // d3d_imm_ctx_->PSSetShader(effect.GetPixelShader(), nullptr, 0);
 }
@@ -333,5 +345,32 @@ void D3D11RenderEngine::RSSetState(ID3D11RasterizerState* ras)
 	}
 }
 
+void D3D11RenderEngine::VSSetShader(ID3D11VertexShader* shader)
+{
+	if (vertex_shader_cache_ != shader)
+	{
+		d3d_imm_ctx_->VSSetShader(shader, nullptr, 0);
+		vertex_shader_cache_ = shader;
+	}
+}
 
+void D3D11RenderEngine::PSSetShader(ID3D11PixelShader* shader)
+{
+	if (pixel_shader_cache_ != shader)
+	{
+		d3d_imm_ctx_->PSSetShader(shader, nullptr, 0);
+		pixel_shader_cache_ = shader;
+	}
+}
+
+void D3D11RenderEngine::SetConstantBuffers(ShaderStage stage, int index, ID3D11Buffer* cb)
+{
+	uint32_t const stage_index = std::to_underlying(stage);
+	if (shader_cb_ptr_cache_[stage_index] != cb)
+	{
+		ShaderSetConstantBuffers[stage_index](d3d_imm_ctx_.get(), 0, index, &cb);
+
+		shader_cb_ptr_cache_[stage_index] = cb;
+	}
+}
 }

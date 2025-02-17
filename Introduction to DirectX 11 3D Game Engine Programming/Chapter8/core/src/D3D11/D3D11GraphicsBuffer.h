@@ -1,7 +1,7 @@
 #pragma once
 
-#include <core/GraphicsBuffer.h>
-#include <core/ElementFormat.h>
+#include <render/GraphicsBuffer.h>
+#include <render/ElementFormat.h>
 #include "D3D11Util.h"
 
 namespace RenderWorker

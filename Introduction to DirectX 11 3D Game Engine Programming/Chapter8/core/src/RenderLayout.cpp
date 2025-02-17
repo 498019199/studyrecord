@@ -1,6 +1,6 @@
 
-#include <core/RenderLayout.h>
-#include <core/RenderEffect.h>
+#include <render/RenderLayout.h>
+#include <render/RenderEffect.h>
 #include <core/Context.h>
 
 #include "D3D11/D3D11RenderEngine.h"

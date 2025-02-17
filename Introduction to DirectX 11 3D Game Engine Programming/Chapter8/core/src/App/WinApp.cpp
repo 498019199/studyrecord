@@ -122,10 +122,9 @@ bool WinAPP::InitDevice(HWND hwnd, const RenderSettings& settings)
 	if(re)
 	{
 		Context::Instance().RenderEngineInstance(*re);
+		InitImGui();
 		return true;    
 	}
-
-	InitImGui();
 	return false;
 }
 

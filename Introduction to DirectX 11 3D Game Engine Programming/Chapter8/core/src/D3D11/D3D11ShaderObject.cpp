@@ -2,6 +2,7 @@
 
 #include "D3D11ShaderObject.h"
 #include "D3D11RenderFactory.h"
+#include "D3D11GraphicsBuffer.h"
 #include "D3D11RenderEngine.h"
 
 namespace RenderWorker
@@ -11,11 +12,32 @@ D3D11ShaderStageObject::D3D11ShaderStageObject(ShaderStage stage)
 {
 }
 
-void D3D11ShaderStageObject::CreateHwShader(const RenderEffect& effect, const std::vector<uint32_t>& shader_desc_ids)
+void D3D11ShaderStageObject::CompileShader(RenderEffect const& effect,
+            const std::array<uint32_t, ShaderStageNum>& shader_desc_ids)
+{
+    uint32_t const shader_desc_id = shader_desc_ids[std::to_underlying(stage_)];
+    const auto& sd = effect.GetShaderDesc(shader_desc_id);
+
+    com_ptr<ID3DBlob> stripped_blob;
+    switch(stage_)
+    {
+        case ShaderStage::Vertex:
+            TIFHR(CreateShaderFromFile(sd.profile.c_str(), "VS", "vs_5_0", stripped_blob.put()));
+            break;
+        case ShaderStage::Pixel:
+            TIFHR(CreateShaderFromFile(sd.profile.c_str(), "PS", "ps_5_0", stripped_blob.put()));
+            break;
+    }
+    
+    uint8_t const * p = static_cast<uint8_t const *>(stripped_blob->GetBufferPointer());
+	shader_code_.assign(p, p + stripped_blob->GetBufferSize());
+}
+
+void D3D11ShaderStageObject::CreateHwShader(const RenderEffect& effect, const std::array<uint32_t, ShaderStageNum>& shader_desc_ids)
 {
     if (!shader_code_.empty())
     {
-        ShaderDesc const& sd = effect.GetShaderDesc(shader_desc_ids[std::to_underlying(stage_)]);
+        const ShaderDesc& sd = effect.GetShaderDesc(shader_desc_ids[std::to_underlying(stage_)]);
         is_validate_ = true;
         this->StageSpecificCreateHwShader(effect, shader_desc_ids);
     }
@@ -44,7 +66,7 @@ void D3D11VertexShaderStageObject::ClearHwShader()
     vertex_shader_.reset();
 }
 
-void D3D11VertexShaderStageObject::StageSpecificCreateHwShader(const RenderEffect& effect, const std::vector<uint32_t>&  shader_desc_ids)
+void D3D11VertexShaderStageObject::StageSpecificCreateHwShader(const RenderEffect& effect, const std::array<uint32_t, ShaderStageNum>& shader_desc_ids)
 {
     auto const& re = checked_cast<D3D11RenderEngine const&>(Context::Instance().RenderEngineInstance());
     auto d3d_device = re.D3DDevice();
@@ -66,9 +88,9 @@ void D3D11PixelShaderStageObject::ClearHwShader()
     pixel_shader_.reset();
 }
 
-void D3D11PixelShaderStageObject::StageSpecificCreateHwShader(const RenderEffect& effect, const std::vector<uint32_t>&  shader_desc_ids)
+void D3D11PixelShaderStageObject::StageSpecificCreateHwShader(const RenderEffect& effect, const std::array<uint32_t, ShaderStageNum>& shader_desc_ids)
 {
-    auto const& re = checked_cast<D3D11RenderEngine const&>(Context::Instance().RenderEngineInstance());
+    const auto& re = checked_cast<D3D11RenderEngine const&>(Context::Instance().RenderEngineInstance());
     auto d3d_device = re.D3DDevice();
     if (FAILED(d3d_device->CreatePixelShader(shader_code_.data(), shader_code_.size(), nullptr, pixel_shader_.put())))
     {
@@ -90,6 +112,32 @@ D3D11ShaderObject::D3D11ShaderObject(std::shared_ptr<Immutable> immutable, std::
     
 }
 
+void D3D11ShaderObject::Bind(const RenderEffect& effect)
+{
+    auto& re = checked_cast<D3D11RenderEngine&>(Context::Instance().RenderEngineInstance());
+
+    auto const& vs_stage = this->Stage(ShaderStage::Vertex);
+    re.VSSetShader(vs_stage ? checked_cast<D3D11ShaderStageObject&>(*vs_stage).HwVertexShader() : nullptr);
+
+    auto const& ps_stage = this->Stage(ShaderStage::Pixel);
+	re.PSSetShader(ps_stage ? checked_cast<D3D11ShaderStageObject&>(*ps_stage).HwPixelShader() : nullptr);
+
+    // ID3D11Buffer* d3d11_cbuffs[D3D11_COMMONSHADER_CONSTANT_BUFFER_API_SLOT_COUNT];
+    // auto* cb = effectCBufferByIndex(cbuff_indices[i]);
+    auto cb1 = effect.CBufferByName("VSConstantBuffer")->HWBuff();
+    auto cbuff1 = checked_cast<D3D11GraphicsBuffer*>(cb1.get())->D3DBuffer();
+    re.SetConstantBuffers(ShaderStage::Vertex, 0, cbuff1);
+
+    auto cb2 = effect.CBufferByName("VSConstantBuffer")->HWBuff();
+    auto cbuff2 = checked_cast<D3D11GraphicsBuffer*>(cb2.get())->D3DBuffer();
+    re.SetConstantBuffers(ShaderStage::Vertex, 1, cbuff2);
+}
+
+void D3D11ShaderObject::Unbind()
+{
+    
+}
+
 std::span<uint8_t const> D3D11ShaderObject::VsCode() const
 {
     return checked_cast<D3D11ShaderStageObject&>(*this->Stage(ShaderStage::Vertex)).ShaderCodeBlob();
@@ -102,7 +150,18 @@ uint32_t D3D11ShaderObject::VsSignature() const noexcept
 
 void D3D11ShaderObject::DoLinkShaders(RenderEffect& effect)
 {
-    
+    for (size_t stage = 0; stage < ShaderStageNum; ++stage)
+    {
+        const auto* shader_stage = checked_cast<D3D11ShaderStageObject*>(this->Stage(static_cast<ShaderStage>(stage)).get());
+        if (nullptr == shader_stage)
+        {
+            continue;
+        }
+        if (shader_stage->ShaderCodeBlob().empty())
+        {
+            continue;
+        }
+    }
 }
 
 }

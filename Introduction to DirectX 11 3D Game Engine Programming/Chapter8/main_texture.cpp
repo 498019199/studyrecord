@@ -1,9 +1,9 @@
 #include <core/WinApp.h>
 #include <core/Util.h>
-#include <core/RenderableHelper.h>
-#include <core/RenderEffect.h>
+#include <render/RenderableHelper.h>
+#include <render/RenderEffect.h>
 #include <core/Context.h>
-#include <core/Texture.h>
+#include <render/Texture.h>
 #include <math/math.h>
 #include <core/World.h>
 
@@ -108,16 +108,13 @@ public:
         effect_ = MakeSharedPtr<RenderEffect>();
         ShaderDesc desc1;
         desc1.func_name = "VS";
+        desc1.profile = currentPath + "Basic_2D_VS";
         desc1.tech_pass_type = 0xFFFFFFFF;
-        effect_->AddShaderDesc(desc1);
+        effect_->AddShaderDesc("vertex_shader", desc1);
         desc1.func_name = "PS";
-        effect_->AddShaderDesc(desc1);
-        effect_->AddShaderType(ShaderStage::Vertex);
-        effect_->AddShaderType(ShaderStage::Pixel);
+        desc1.profile = currentPath + "Basic_2D_PS";
+        effect_->AddShaderDesc("pixel_shader", desc1);
         effect_->Load(currentPath);
-//         effect_->CreateConstant();
-//         effect_->AttackVertexShader(currentPath + "Basic_2D_VS");
-//         effect_->AttackPixelShader(currentPath + "Basic_2D_PS");
     }
 };
 

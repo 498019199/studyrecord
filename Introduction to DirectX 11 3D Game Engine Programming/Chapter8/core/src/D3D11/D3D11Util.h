@@ -5,10 +5,10 @@
 #include <core/macro.h>
 #include <core/common.h>
 
-#include <core/ElementFormat.h>
-#include <core/RenderLayout.h>
-#include <core/Texture.h>
-#include <core/ShaderObject.h>
+#include <render/ElementFormat.h>
+#include <render/RenderLayout.h>
+#include <render/Texture.h>
+#include <render/ShaderObject.h>
 namespace RenderWorker
 {
     using ID3D11DevicePtr = com_ptr<ID3D11Device>;

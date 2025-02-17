@@ -1,7 +1,7 @@
 #include <DevHelper/ImagePlane.h>
-#include <core/RenderEngine.h>
+#include <render/RenderEngine.h>
 
-#include <FreeImage.h>
+//#include <FreeImage.h>
 
 #include <filesystem>
 namespace RenderWorker

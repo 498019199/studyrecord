@@ -1,5 +1,5 @@
-#include <core/Texture.h>
-#include <core/TexCompression.h>
+#include <render/Texture.h>
+#include <render/TexCompression.h>
 #include <core/ResIdentifier.h>
 
 #include <fstream>

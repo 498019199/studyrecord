@@ -1,6 +1,6 @@
 #pragma once
 #include <core/common.h>
-#include <core/Texture.h>
+#include <render/Texture.h>
 
 namespace RenderWorker
 {

@@ -1,5 +1,5 @@
-#include <core/RenderableHelper.h>
-#include <core/RenderEffect.h>
+#include <render/RenderableHelper.h>
+#include <render/RenderEffect.h>
 #include <core/Context.h>
 #include <core/Util.h>
 

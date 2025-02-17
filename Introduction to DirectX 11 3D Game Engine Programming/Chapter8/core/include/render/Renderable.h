@@ -2,8 +2,8 @@
 //可渲染对象类 头文件
 
 #include <core/common.h>
-#include <core/RenderEffect.h>
-#include <core/RenderLayout.h>
+#include <render/RenderEffect.h>
+#include <render/RenderLayout.h>
 
 namespace RenderWorker
 {

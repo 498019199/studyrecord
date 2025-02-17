@@ -1,6 +1,6 @@
 #pragma once
 
-#include <core/Renderable.h>
+#include <render/Renderable.h>
 
 namespace RenderWorker
 {

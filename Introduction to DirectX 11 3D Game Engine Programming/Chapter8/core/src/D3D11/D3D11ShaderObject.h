@@ -1,5 +1,5 @@
 #pragma once
-#include <core/ShaderObject.h>
+#include <render/ShaderObject.h>
 #include "D3D11Util.h"
 
 namespace RenderWorker
@@ -9,7 +9,10 @@ class D3D11ShaderStageObject : public ShaderStageObject
 public:
     explicit D3D11ShaderStageObject(ShaderStage stage);
     
-    void CreateHwShader(const RenderEffect& effect, const std::vector<uint32_t>&  shader_desc_ids) override;
+    void CompileShader(RenderEffect const& effect,
+			const std::array<uint32_t, ShaderStageNum>& shader_desc_ids) override;
+
+    void CreateHwShader(const RenderEffect& effect, const std::array<uint32_t, ShaderStageNum>&   shader_desc_ids) override;
 
     std::span<uint8_t const> ShaderCodeBlob() const;
 
@@ -23,7 +26,7 @@ public:
     }
 private:
     virtual void ClearHwShader() = 0;
-
+  
 protected:
 	bool is_available_;
     std::vector<uint8_t> shader_code_;
@@ -46,7 +49,7 @@ public:
 
 private:
     void ClearHwShader() override;
-    void StageSpecificCreateHwShader(const RenderEffect& effect, const std::vector<uint32_t>&  shader_desc_ids) override;
+    void StageSpecificCreateHwShader(const RenderEffect& effect, const std::array<uint32_t, ShaderStageNum>& shader_desc_ids) override;
 
 private:
     ID3D11VertexShaderPtr vertex_shader_;
@@ -65,7 +68,7 @@ public:
 
 private:
     void ClearHwShader() override;
-    void StageSpecificCreateHwShader(const RenderEffect& effect, const std::vector<uint32_t>&  shader_desc_ids) override;
+    void StageSpecificCreateHwShader(const RenderEffect& effect, const std::array<uint32_t, ShaderStageNum>& shader_desc_ids) override;
 
 private:
     ID3D11PixelShaderPtr pixel_shader_;
@@ -79,6 +82,9 @@ public:
     D3D11ShaderObject();
     D3D11ShaderObject(std::shared_ptr<Immutable> immutable, std::shared_ptr<D3D11Immutable> d3d_immutable) noexcept;
  
+    void Bind(const RenderEffect& effect) override;
+    void Unbind() override;
+
     std::span<uint8_t const> VsCode() const;
     uint32_t VsSignature() const noexcept;
     

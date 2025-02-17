@@ -1,4 +1,4 @@
-#include <core/ShaderObject.h>
+#include <render/ShaderObject.h>
 
 
 namespace RenderWorker

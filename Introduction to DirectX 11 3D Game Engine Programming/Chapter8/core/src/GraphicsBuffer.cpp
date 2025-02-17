@@ -1,4 +1,4 @@
-#include <core/GraphicsBuffer.h>
+#include <render/GraphicsBuffer.h>
 
 namespace RenderWorker
 {

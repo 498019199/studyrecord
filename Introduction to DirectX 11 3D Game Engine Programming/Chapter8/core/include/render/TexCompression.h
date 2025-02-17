@@ -1,7 +1,7 @@
 
 
 
-#include <core/Texture.h>
+#include <render/Texture.h>
 
 namespace RenderWorker
 {

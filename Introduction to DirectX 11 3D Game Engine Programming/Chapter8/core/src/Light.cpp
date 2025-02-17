@@ -1,4 +1,4 @@
-#include <core/Light.h>
+#include <render/Light.h>
 
 // LightSource::LightSource(LightType type)
 //     :type_(type)

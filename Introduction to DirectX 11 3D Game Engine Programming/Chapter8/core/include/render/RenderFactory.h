@@ -1,7 +1,7 @@
 #pragma once
-#include <core/GraphicsBuffer.h>
-#include <core/RenderLayout.h>
-#include <core/ShaderObject.h>
+#include <render/GraphicsBuffer.h>
+#include <render/RenderLayout.h>
+#include <render/ShaderObject.h>
 
 namespace RenderWorker
 {

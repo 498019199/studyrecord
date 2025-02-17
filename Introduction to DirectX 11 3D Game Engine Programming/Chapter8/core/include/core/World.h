@@ -1,8 +1,8 @@
 #pragma once
 #include <core/SceneNode.h>
-#include <core/Renderable.h>
-#include <core/Light.h>
-#include <core/RenderEffect.h>
+#include <render/Renderable.h>
+#include <render/Light.h>
+#include <render/RenderEffect.h>
 
 namespace RenderWorker
 {

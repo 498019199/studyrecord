@@ -1,8 +1,8 @@
 #pragma once
 #include <core/WinApp.h>
 #include <core/World.h>
-#include <core/RenderFactory.h>
-#include <core/RenderEngine.h>
+#include <render/RenderFactory.h>
+#include <render/RenderEngine.h>
 
 namespace RenderWorker
 {

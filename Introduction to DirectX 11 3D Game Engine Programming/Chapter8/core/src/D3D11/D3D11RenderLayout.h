@@ -1,6 +1,6 @@
 #pragma once
-#include <core/RenderLayout.h>
-#include <core/ShaderObject.h>
+#include <render/RenderLayout.h>
+#include <render/ShaderObject.h>
 
 #include "D3D11Util.h"
 
