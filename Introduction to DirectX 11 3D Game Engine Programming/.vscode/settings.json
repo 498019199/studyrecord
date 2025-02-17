@@ -1,8 +1,9 @@
 {
     "cmake.automaticReconfigure": false,
     "cmake.generator": "Visual Studio 17 2022",
-    "cmake.generatorPlatform": "x64",
-    
+    "cmake.configureSettings": {
+        "CMAKE_GENERATOR_PLATFORM": "x64"
+    },
     "files.associations": {
         "*.h": "cpp",
         "xlocinfo": "cpp",

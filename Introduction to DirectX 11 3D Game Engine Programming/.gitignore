@@ -6,14 +6,10 @@
 /vcpkg.json
 /vcpkg-configuration.json
 /vcpkg_
-/3rd/assimp/assimp
-/3rd/zlib/zlib
-/3rd/FreeImage/FreeImage
-/3rd/DirectX-Headers/DirectX-Headers
-/3rd/dxsdk/dxsdk
 *.cso
 
 
+/3rd/dxsdk/dxsdk
 /Chapter4
 /Chapter6
 /Chapter7

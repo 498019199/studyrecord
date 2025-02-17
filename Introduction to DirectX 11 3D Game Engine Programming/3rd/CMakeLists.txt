@@ -113,9 +113,9 @@ FOREACH(flag_var
 	ENDIF()
 ENDFOREACH()
 
-#add_subdirectory(zlib)
-#add_subdirectory(assimp)
-#add_subdirectory(FreeImage)
+add_subdirectory(zlib)
+add_subdirectory(assimp)
+add_subdirectory(FreeImage)
 if(ZENGINE_PLATFORM_WINDOWS)
 	#add_subdirectory(dxsdk)
 	#add_subdirectory(DirectX-Headers)
