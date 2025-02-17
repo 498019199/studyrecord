@@ -29,7 +29,7 @@ void RenderEffectConstantBuffer::Resize(uint32_t size)
         if (!hw_buff_ || (size > hw_buff_->Size()))
         {
             auto& rf = Context::Instance().RenderFactoryInstance();
-            hw_buff_ = rf.MakeConstantBuffer(BU_Dynamic, 0, size, nullptr);
+            hw_buff_ = rf.MakeConstantBuffer(BU_Dynamic, EAH_CPU_Write, size, nullptr);
         }
     }
 
@@ -171,7 +171,7 @@ void RenderEffect::Load(const std::string& file_path)
     auto cbuff2 = cbuffers_.emplace_back(MakeSharedPtr<RenderEffectConstantBuffer>(*this)).get();
     cbuff2->Load("PSConstantBuffer");
     size = AlignTo16(sizeof(PSConstantBuffer));
-    cbuff1->Resize(size);
+    cbuff2->Resize(size);
 }
 
 uint32_t RenderEffect::CBuffersNum() const noexcept

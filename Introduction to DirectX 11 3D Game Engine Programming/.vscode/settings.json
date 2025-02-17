@@ -104,6 +104,6 @@
     "files.exclude":{
         "Chapter4": true,
         "Chapter6": true,
-        "Chapter7": true,
+        //"Chapter7": true,
     }
 }
