@@ -47,7 +47,7 @@ public:
 
         merged_ves.emplace_back(VertexElement(VEU_Position, 0, EF_BGR32F));
         merged_ves.emplace_back(VertexElement(VEU_Normal, 0, EF_BGR32F));
-        merged_ves.emplace_back(VertexElement(VEU_Diffuse, 0, EF_ABGR32F));
+        merged_ves.emplace_back(VertexElement(VEU_TextureCoord, 0, EF_ABGR32F));
 
         auto vb = rf.MakeVertexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable, static_cast<uint32_t>(4 * sizeof(vertex[0])), &vertex[0]);
         rls_[0]->BindVertexStream(vb, merged_ves);
@@ -84,12 +84,19 @@ public:
         desc.cmp_func = CompareFunction::CF_AlwaysFail;
         effect_->sm1_ = rf.MakeSamplerStateObject(desc);
 
-        const std::string file_path1 = Context::Instance().GetResourcePath() + DDS;
+        auto currentPath2 = std::filesystem::current_path().parent_path().parent_path().string();
+        const std::string file_path1 = currentPath2 + "\\Models\\Chapter9\\" + DDS;
         auto tex1 = LoadTexture(file_path1, EAH_GPU_Read | EAH_Immutable);
         effect_->srv1_ = rf.MakeTextureSrv(tex1);
     }
 };
 
+struct Vertex8
+{
+    float3 pos;
+    float3 normal;
+    float2 tex;
+};
 class RenderableBoxTex : public Renderable
 {
 public:
@@ -177,15 +184,15 @@ public:
         rls_[0]->BindIndexStream(ib, EF_R16UI);
 
         auto currentPath = std::filesystem::current_path().parent_path().parent_path().string();
-        currentPath += "\\Chapter8\\HLSL\\";
+        currentPath += "\\Chapter9\\HLSL\\";
         effect_ = MakeSharedPtr<RenderEffect>();
         ShaderDesc desc1;
         desc1.func_name = "VS";
-        desc1.profile = currentPath + "Basic_2D_VS";
+        desc1.profile = currentPath + "Basic_3D_VS";
         desc1.tech_pass_type = 0xFFFFFFFF;
         effect_->AddShaderDesc("vertex_shader", desc1);
         desc1.func_name = "PS";
-        desc1.profile = currentPath + "Basic_2D_PS";
+        desc1.profile = currentPath + "Basic_3D_PS";
         effect_->AddShaderDesc("pixel_shader", desc1);
         effect_->Load(currentPath);
 
@@ -202,20 +209,11 @@ public:
         desc.cmp_func = CompareFunction::CF_AlwaysFail;
         effect_->sm1_ = rf.MakeSamplerStateObject(desc);
 
-        const std::string file_path1 = Context::Instance().GetResourcePath() + "WireFence.dds";
+
+        auto currentPath2 = std::filesystem::current_path().parent_path().parent_path().string();
+        const std::string file_path1 = currentPath2 + "\\Models\\Chapter9\\" + "WireFence.dds";
         auto tex1 = LoadTexture(file_path1, EAH_GPU_Read | EAH_Immutable);
         effect_->srv1_ = rf.MakeTextureSrv(tex1);
-
-        desc.addr_mode_u = TexAddressingMode::TAM_Wrap;
-        desc.addr_mode_v = TexAddressingMode::TAM_Wrap;
-        desc.addr_mode_w = TexAddressingMode::TAM_Wrap;
-        desc.filter = TexFilterOp::TFO_Min_Mag_Mip_Linear;
-        desc.max_anisotropy ;
-        desc.min_lod = 0.f;
-        desc.max_lod = std::numeric_limits<float>::max();
-        desc.mip_map_lod_bias = 0;
-        desc.cmp_func = CompareFunction::CF_AlwaysFail;
-        effect_->sm2_ = rf.MakeSamplerStateObject(desc);
     }
 };
 
@@ -223,16 +221,18 @@ void CreateScene()
 {
     // 初始化地板
     auto floor = new RenderablePlaneTex(20.0f, 20.0f, 5.0f, 5.0f, "floor.dds");
+    Context::Instance().WorldInstance().AddRenderable(floor);
 
     // 初始化墙体
-    RenderablePlaneTex* wall[4];
     for (int i = 0; i < 4; ++i)
     {
-        wall[i] = new RenderablePlaneTex(20.0f, 8.0f, 5.0f, 1.5f, "brick.dds");
+        auto wal = new RenderablePlaneTex(20.0f, 8.0f, 5.0f, 1.5f, "brick.dds");
+        Context::Instance().WorldInstance().AddRenderable(wal);
     }
 
     // 初始化篱笆盒
     auto box = new RenderableBoxTex(2.0f, 2.0f, 2.0f, Color(1.f, 1.f, 1.f, 1.f));
+    Context::Instance().WorldInstance().AddRenderable(box);
 }
 
 int main() {
@@ -246,6 +246,7 @@ int main() {
     app.InitDevice(app.GetHWND(), settings);
     Context::Instance().WorldInstance().BeginWorld();
     
+    CreateScene();
 
     app.Run();
     return 0;

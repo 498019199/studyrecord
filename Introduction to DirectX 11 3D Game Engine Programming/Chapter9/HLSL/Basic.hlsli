@@ -32,6 +32,18 @@ struct VertexIn
     float2 tex : TEXCOORD;
 };
 
+struct VertexPosHTex
+{
+    float4 posH : SV_POSITION;
+    float2 tex : TEXCOORD;
+};
+
+struct VertexPosTex
+{
+    float3 posL : POSITION;
+    float2 tex : TEXCOORD;
+};
+
 struct VertexOut
 {
     float4 posH : SV_POSITION;

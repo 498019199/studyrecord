@@ -209,14 +209,6 @@ void WinAPP::ImguiUpdate(float dt)
     phi += 0.3f * dt, theta += 0.37f * dt, phi2 -= 0.01f;
 
 	auto& wd = Context::Instance().WorldInstance();
-    wd.vs_cb_.world = MathWorker::Transpose(MathWorker::MatrixRotateX(phi) * MathWorker::MatrixRotateY(theta));
-	wd.vs_cb_.worldInvTranspose = MathWorker::Transpose(MathWorker::MatrixInverse(wd.vs_cb_.world));
-	wd.vs_cb_.RotateM = MathWorker::MatrixMove(-0.5f, -0.5f, 0.f) *
-		MathWorker::MatrixRotateZ(phi2) *
-		MathWorker::MatrixMove(0.5f, 0.5f, 0.f);
-
-	// ImGui::ShowAboutWindow();
-	// ImGui::ShowDemoWindow();
 	// ImGui::ShowUserGuide();
 	// 获取IO事件
     ImGuiIO& io = ImGui::GetIO();

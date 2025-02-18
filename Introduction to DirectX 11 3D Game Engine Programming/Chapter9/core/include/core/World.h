@@ -15,10 +15,10 @@ public:
     void BeginWorld();
     void UpdateScene(float dt);
 
-    void AddRenderable(Renderable* node);
+    void AddRenderable(Renderable* obj);
 private:
     SceneNode scene_root_;
-    std::vector<Renderable*> all_scene_nodes_;
+    std::vector<std::pair<const RenderEffect*, std::vector<Renderable*>>> render_queue_;
 
 public:
     bool is_wireframe_mode_{false};

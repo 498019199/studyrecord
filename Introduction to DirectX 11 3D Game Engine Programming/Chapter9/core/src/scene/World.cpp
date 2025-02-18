@@ -59,58 +59,73 @@ void World::BeginWorld()
     ps_cb_.eyePos = float4(0.0f, 0.0f, -5.0f, 0.0f);
 }
 
-void World::AddRenderable(Renderable* node)
+void World::AddRenderable(Renderable* obj)
 {
-    all_scene_nodes_.emplace_back(node);
+    COMMON_ASSERT(obj);
+    const RenderEffect* obj_eff = obj->GetRenderEffect();
+    COMMON_ASSERT(obj_eff);
+
+    bool found = false;
+    for (auto& items : render_queue_)
+    {
+        if (items.first == obj_eff)
+        {
+            items.second.push_back(obj);
+            found = true;
+            break;
+        }
+    }
+    if (!found)
+    {
+        render_queue_.emplace_back(obj_eff, std::vector<Renderable*>(1, obj));
+    }
 }
 
 void World::UpdateScene(float dt)
 {
-    for(auto node : all_scene_nodes_)
+    for (auto& items : render_queue_)
     {
-        auto effect = node->GetRenderEffect();
-        if(nullptr == effect)
+        for (auto const & item : items.second)
         {
-           continue;
-        }
-        auto vs_buff = checked_cast<D3D11GraphicsBuffer*>(effect->CBufferByName("VSConstantBuffer")->HWBuff().get());
-        if(vs_buff)
-        {
-            VSConstantBuffer* data = static_cast<VSConstantBuffer*>(vs_buff->Map(BufferAccess::BA_Write_Only));
-            if(nullptr == data)
+            auto effect = item->GetRenderEffect();
+            if(nullptr == effect)
             {
-                continue;
+               continue;
             }
-            memcpy_s(data, sizeof(vs_cb_), &vs_cb_, sizeof(vs_cb_));
-            vs_buff->Unmap();
-        }
 
-        auto ps_buff = checked_cast<D3D11GraphicsBuffer*>(effect->CBufferByName("PSConstantBuffer")->HWBuff().get());
-        if(ps_buff)
-        {
-            PSConstantBuffer* data = static_cast<PSConstantBuffer*>(ps_buff->Map(BufferAccess::BA_Write_Only));
-            if(nullptr == data)
+            auto vs_buff = checked_cast<D3D11GraphicsBuffer*>(effect->CBufferByName("VSConstantBuffer")->HWBuff().get());
+            if(vs_buff)
             {
-                continue;
+                VSConstantBuffer* data = static_cast<VSConstantBuffer*>(vs_buff->Map(BufferAccess::BA_Write_Only));
+                if(nullptr == data)
+                {
+                    continue;
+                }
+                memcpy_s(data, sizeof(vs_cb_), &vs_cb_, sizeof(vs_cb_));
+                vs_buff->Unmap();
             }
-            memcpy_s(data, sizeof(ps_cb_), &ps_cb_, sizeof(ps_cb_));
-            ps_buff->Unmap();
+    
+            auto ps_buff = checked_cast<D3D11GraphicsBuffer*>(effect->CBufferByName("PSConstantBuffer")->HWBuff().get());
+            if(ps_buff)
+            {
+                PSConstantBuffer* data = static_cast<PSConstantBuffer*>(ps_buff->Map(BufferAccess::BA_Write_Only));
+                if(nullptr == data)
+                {
+                    continue;
+                }
+                memcpy_s(data, sizeof(ps_cb_), &ps_cb_, sizeof(ps_cb_));
+                ps_buff->Unmap();
+            }
         }
     }
 
     auto& re = Context::Instance().RenderEngineInstance();
-    for(auto node : all_scene_nodes_)
+    for (auto& items : render_queue_)
     {
-        if(is_wireframe_mode_)
+        for (auto const & item : items.second)
         {
-            const auto& effect = node->GetRenderEffect();
-            //effect->Active();
+            item->Render();
         }
-        else
-        {
-            //re.RSSetState(nullptr);
-        }
-        node->Render();
     }
     re.EndRender();
 }

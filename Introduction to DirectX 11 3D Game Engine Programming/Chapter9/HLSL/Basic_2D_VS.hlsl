@@ -1,17 +1,10 @@
 #include "Basic.hlsli"
 
-VertexOut VS(VertexIn vIn)
+// 顶点着色器(2D)
+VertexPosHTex VS(VertexPosTex vIn)
 {
-    VertexOut vOut;
-    matrix viewProj = mul(gView, gProj);
-    float4 posW = mul(float4(vIn.posL, 1.0f), gWorld);
-
-    vOut.posH = mul(posW, viewProj);
-    vOut.posW = posW.xyz;
-    vOut.normalW = mul(vIn.normalL, (float3x3) gWorldInvTranspose);
-
-    // 旋转
-    vOut.tex2 = mul(float4(vIn.tex, 0.f, 1.f), gRotateM);
-    vOut.tex1 = vIn.tex;
+    VertexPosHTex vOut;
+    vOut.posH = float4(vIn.posL, 1.0f);
+    vOut.tex = vIn.tex;
     return vOut;
 }

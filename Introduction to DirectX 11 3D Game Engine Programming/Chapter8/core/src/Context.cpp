@@ -65,7 +65,7 @@ void Context::LoadConfig(const char* file_name)
     COMMON_ASSERT(world_);
 
     work_path_ = std::filesystem::current_path().parent_path().parent_path().string();
-    resource_path_ = work_path_ + "\\Models\\Chapter8\\";
+    resource_path_ = work_path_ + "\\Models\\Chapter9\\";
 }
 
 const std::string& Context::GetWorkPath() const
