@@ -4,7 +4,7 @@
             "name": "Win32",
             "includePath": [
                 "${workspaceFolder}/**",
-                "${workspaceFolder}/Chapter8/core/include",
+                "${workspaceFolder}/Chapter9/core/include",
                 "${workspaceFolder}/math/include"
             ],
             "defines": [

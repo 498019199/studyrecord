@@ -8,7 +8,7 @@
             "name": "C/C++: build and debug",
             "type": "cppvsdbg",
             "request": "launch",
-            "program": "${workspaceFolder}\\bin\\Debug\\Chapter8.exe",
+            "program": "${workspaceFolder}\\bin\\Debug\\Chapter9.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}\\bin\\Debug",
