@@ -22,9 +22,9 @@ public:
     void SetPosition(const float3& pos);
     void SetRotation(const rotator& rot);
 private:
-    float4x4 xform_to_parent_; // xform 父节点转换矩阵
-
     SceneNode* parent_ = nullptr;
 	std::vector<SceneNodePtr> children_;
+
+    float4x4 xform_to_parent_; // xform 父节点转换矩阵
 };
 }

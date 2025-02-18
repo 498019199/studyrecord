@@ -29,7 +29,7 @@ RenderLayout& Renderable::GetRenderLayout(uint32_t lod) const
 }
 
 RenderEffect* Renderable::GetRenderEffect()
-{
+{       
     return effect_.get();
 }
 
@@ -41,7 +41,7 @@ void Renderable::Render()
     const auto& layout = this->GetRenderLayout(lod);
 
     auto& d3d11_re = checked_cast<D3D11RenderEngine&>(Context::Instance().RenderEngineInstance());
-    d3d11_re.DoRender(effect, layout);
+        d3d11_re.DoRender(effect, layout);
 }
 
 }
