@@ -4,6 +4,7 @@
 #include <render/ShaderObject.h>
 #include <render/Texture.h>
 #include <render/RenderStateObject.h>
+#include <render/RenderView.h>
 
 namespace RenderWorker
 {
@@ -24,6 +25,13 @@ public:
 
     virtual SamplerStateObjectPtr MakeSamplerStateObject(const SamplerStateDesc& desc) = 0;
 
+    ShaderResourceViewPtr MakeTextureSrv(const TexturePtr& texture);
+    ShaderResourceViewPtr MakeTextureSrv(const TexturePtr& texture, ElementFormat pf);
+    ShaderResourceViewPtr MakeTextureSrv(const TexturePtr& texture, uint32_t first_array_index, uint32_t array_size,
+		uint32_t first_level, uint32_t num_levels);
+    virtual ShaderResourceViewPtr MakeTextureSrv(const TexturePtr& texture, ElementFormat pf, uint32_t first_array_index,
+			uint32_t array_size, uint32_t first_level, uint32_t num_levels) = 0;
+
     virtual GraphicsBufferPtr MakeVertexBuffer(BufferUsage usage, uint32_t access_hint, uint32_t size_in_byte, void const * init_data,
         uint32_t structure_byte_stride = 0) = 0;
     virtual GraphicsBufferPtr MakeIndexBuffer(BufferUsage usage, uint32_t access_hint, uint32_t size_in_byte, void const * init_data,
@@ -31,6 +39,10 @@ public:
     virtual GraphicsBufferPtr MakeConstantBuffer(BufferUsage usage, uint32_t access_hint, uint32_t size_in_byte, void const * init_data,
         uint32_t structure_byte_stride = 0) = 0;
 };
+
+
+
+
 
 using RenderFactoryPtr = std::shared_ptr<RenderFactory>;
 }

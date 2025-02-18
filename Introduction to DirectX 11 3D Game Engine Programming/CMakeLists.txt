@@ -35,8 +35,9 @@ endif()
 
 add_subdirectory(3rd)
 add_subdirectory(math)
-file(COPY ${PROJECT_SOURCE_DIR}/math/include DESTINATION "${LIBRARY_OUTPUT_PATH}")
 add_subdirectory(${PROJECT_3RD_DIR}/imgui)
+file(COPY ${PROJECT_SOURCE_DIR}/math/include DESTINATION "${LIBRARY_OUTPUT_PATH}")
+
 
 #add_subdirectory(Chapter4)
 #add_subdirectory(Chapter6) 

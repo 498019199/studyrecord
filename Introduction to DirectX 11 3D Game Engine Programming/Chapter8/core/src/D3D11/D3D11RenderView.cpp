@@ -1,5 +1,11 @@
 #include "D3D11RenderView.h"
 
+#include <core/Context.h>
+#include <core/Context.h>
+
+#include "D3D11RenderEngine.h"
+#include "D3D11Texture.h"
+
 namespace RenderWorker
 {
 D3D11TextureShaderResourceView::D3D11TextureShaderResourceView(TexturePtr const & texture, ElementFormat pf, uint32_t first_array_index, uint32_t array_size,
@@ -7,7 +13,7 @@ D3D11TextureShaderResourceView::D3D11TextureShaderResourceView(TexturePtr const 
 {
     COMMON_ASSERT(texture->AccessHint() & EAH_GPU_Read);
 
-    auto const& re = checked_cast<D3D11RenderEngine const&>(Context::Instance().RenderEngineInstance());
+    auto const& re = checked_cast<const D3D11RenderEngine&>(Context::Instance().RenderEngineInstance());
     d3d_device_ = re.D3DDevice();
     d3d_imm_ctx_ = re.D3DDeviceImmContext();
 

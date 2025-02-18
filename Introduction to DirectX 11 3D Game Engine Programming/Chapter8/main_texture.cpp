@@ -127,11 +127,11 @@ public:
         desc.max_lod = std::numeric_limits<float>::max();
         desc.mip_map_lod_bias = 0;
         desc.cmp_func = CompareFunction::CF_AlwaysFail;
-        effect_.sm_ = rf.MakeSamplerStateObject(desc);
+        effect_->sm_ = rf.MakeSamplerStateObject(desc);
 
-        auto currentPath2 = std::filesystem::current_path().parent_path().parent_path().string();
-        const std::string file_path = currentPath2 + "\\Models\\Chapter8\\WoodCrate.dds";
-        effect_.tex_ = LoadTexture(file_path, EAH_GPU_Read | EAH_Immutable);
+        const std::string file_path = Context::Instance().GetResourcePath() + "WoodCrate.dds";
+        auto tex = LoadTexture(file_path, EAH_GPU_Read | EAH_Immutable);
+        effect_->srv_ = rf.MakeTextureSrv(tex);
     }
 };
 
@@ -147,8 +147,7 @@ void CreateBox()
 
 void test_load_virtual_tex()
 {
-    auto currentPath = std::filesystem::current_path().parent_path().parent_path().string();
-    const std::string file_path = currentPath + "\\Models\\Chapter8\\WoodCrate.dds";
+    const std::string file_path = Context::Instance().GetResourcePath() + "WoodCrate.dds";
     auto virtual_tex = LoadTexture(file_path, EAH_GPU_Read | EAH_Immutable);
     if(virtual_tex->HWResourceReady())
         virtual_tex->DeleteHWResource();

@@ -37,6 +37,9 @@ public:
     World& WorldInstance();
     
     void LoadConfig(const char* file_name);
+
+    const std::string& GetWorkPath() const;
+    const std::string& GetResourcePath() const;
 private:
     static std::unique_ptr<Context> instance_;
     WinAPP* app_;
@@ -44,7 +47,11 @@ private:
     RenderEngine* render_engine_;
     RenderFactoryPtr render_factory_;
     WorldPtr world_;
+
+    std::string work_path_;
+    std::string resource_path_;
 };
+
 
 }
 

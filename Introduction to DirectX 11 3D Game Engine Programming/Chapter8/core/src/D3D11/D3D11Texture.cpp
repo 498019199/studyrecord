@@ -1,6 +1,9 @@
 #include "D3D11Texture.h"
+
 #include <core/Context.h>
+#include <core/Hash.h>
 #include <render/ElementFormat.h>
+
 #include "D3D11RenderEngine.h"
 
 namespace RenderWorker
@@ -50,6 +53,31 @@ uint32_t D3D11Texture::Depth(uint32_t level) const noexcept
 {
     COMMON_ASSERT(level < mip_maps_num_);
     return 1;
+}
+
+ID3D11ShaderResourceViewPtr const & D3D11Texture::RetrieveD3DShaderResourceView(ElementFormat pf, uint32_t first_array_index,
+    uint32_t array_size, uint32_t first_level, uint32_t num_levels)
+{
+    COMMON_ASSERT(this->AccessHint() & EAH_GPU_Read);
+
+    size_t hash_val = HashValue(pf);
+    HashCombine(hash_val, first_array_index);
+    HashCombine(hash_val, array_size);
+    HashCombine(hash_val, first_level);
+    HashCombine(hash_val, num_levels);
+
+    auto iter = d3d_sr_views_.find(hash_val);
+    if (iter != d3d_sr_views_.end())
+    {
+        return iter->second;
+    }
+    else
+    {
+        auto desc = this->FillSRVDesc(pf, first_array_index, array_size, first_level, num_levels);
+        ID3D11ShaderResourceViewPtr d3d_sr_view;
+        d3d_device_->CreateShaderResourceView(this->D3DResource(), &desc, d3d_sr_view.put());
+        return d3d_sr_views_.emplace(hash_val, std::move(d3d_sr_view)).first->second;
+    }
 }
 
 void D3D11Texture::GetD3DFlags(D3D11_USAGE& usage, UINT& bind_flags, UINT& cpu_access_flags, UINT& misc_flags)
@@ -130,6 +158,15 @@ void D3D11Texture::GetD3DFlags(D3D11_USAGE& usage, UINT& bind_flags, UINT& cpu_a
     }
 }
 
+D3D11_SHADER_RESOURCE_VIEW_DESC D3D11Texture::FillSRVDesc([[maybe_unused]] ElementFormat pf,
+    [[maybe_unused]] uint32_t first_array_index, 
+    [[maybe_unused]] uint32_t array_size, 
+    [[maybe_unused]] uint32_t first_level,
+    [[maybe_unused]] uint32_t num_levels) const
+{
+    KFL_UNREACHABLE("Can't be called");
+}
+
 uint32_t D3D11Texture2D::Width(uint32_t level) const noexcept 
 {
     COMMON_ASSERT(level < mip_maps_num_);
@@ -141,7 +178,6 @@ uint32_t D3D11Texture2D::Height(uint32_t level) const noexcept
     COMMON_ASSERT(level < mip_maps_num_);
     return std::max(1U, height_ >> level);
 }
-
 
 
 }

@@ -5,7 +5,7 @@
 #include "D3D11GraphicsBuffer.h"
 #include "D3D11RenderEngine.h"
 #include "D3D11RenderStateObject.h"
-#include "D3D11Texture.h"
+#include "D3D11RenderView.h"
 
 namespace RenderWorker
 {
@@ -142,8 +142,8 @@ void D3D11ShaderObject::Bind(const RenderEffect& effect)
     auto sm = checked_cast<D3D11SamplerStateObject&>(*effect.sm_).D3DSamplerState();
     re.D3DDeviceImmContext()->PSSetSamplers(0, 1, &sm);
 
-    auto d3d_res = checked_cast<D3D11Texture&>(*effect.tex_).D3DResource();
-    re.D3DDeviceImmContext()->PSSetShaderResources(0, 1, &d3d_res);
+    auto d3d_srv = checked_cast<D3D11ShaderResourceView&>(*effect.srv_).RetrieveD3DShaderResourceView();
+    re.D3DDeviceImmContext()->PSSetShaderResources(0, 1, &d3d_srv);
 
     auto* cb1 = effect.CBufferByIndex(0);
     auto d3d11_cbuff_vs = checked_cast<D3D11GraphicsBuffer*>(cb1->HWBuff().get())->D3DBuffer();

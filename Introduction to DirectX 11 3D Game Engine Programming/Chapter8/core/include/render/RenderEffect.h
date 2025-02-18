@@ -4,6 +4,7 @@
 #include <render/Light.h>
 #include <render/RenderStateObject.h>
 #include <render/Texture.h>
+#include <render/RenderView.h>
 
 #include <vector>
 namespace RenderWorker
@@ -111,7 +112,7 @@ private:
 
 public:
     SamplerStateObjectPtr sm_;
-    TexturePtr tex_;
+    ShaderResourceViewPtr srv_;
 };
 
 

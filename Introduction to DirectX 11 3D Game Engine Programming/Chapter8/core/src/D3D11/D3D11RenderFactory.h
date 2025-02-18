@@ -18,7 +18,10 @@ public:
         ElementFormat format, uint32_t sample_count, uint32_t sample_quality, uint32_t access_hint) override;
 
     SamplerStateObjectPtr MakeSamplerStateObject(const SamplerStateDesc& desc) override;
-    
+
+    ShaderResourceViewPtr MakeTextureSrv(const TexturePtr& texture, ElementFormat pf, uint32_t first_array_index,
+			uint32_t array_size, uint32_t first_level, uint32_t num_levels) override;
+
     GraphicsBufferPtr MakeVertexBuffer(BufferUsage usage, uint32_t access_hint, uint32_t size_in_byte, void const * init_data,
         uint32_t structure_byte_stride = 0) override;
     GraphicsBufferPtr MakeIndexBuffer(BufferUsage usage, uint32_t access_hint, uint32_t size_in_byte, void const * init_data,

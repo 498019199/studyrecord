@@ -2,6 +2,8 @@
 #include <core/Util.h>
 #include "D3D11/D3D11RenderFactory.h"
 
+#include <filesystem>
+
 namespace RenderWorker
 {
 std::unique_ptr<Context> Context::instance_;
@@ -61,5 +63,19 @@ void Context::LoadConfig(const char* file_name)
 
     world_ = MakeSharedPtr<World>();
     COMMON_ASSERT(world_);
+
+    work_path_ = std::filesystem::current_path().parent_path().parent_path().string();
+    resource_path_ = work_path_ + "\\Models\\Chapter8\\";
 }
+
+const std::string& Context::GetWorkPath() const
+{
+    return work_path_;
+}
+
+const std::string& Context::GetResourcePath() const
+{
+    return resource_path_;
+}
+
 }
