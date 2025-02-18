@@ -205,12 +205,15 @@ int WinAPP::Run()
 void WinAPP::ImguiUpdate(float dt)
 {
 	static bool animateCube = true, customColor = false;
-    static float phi = 0.0f, theta = 0.0f;
-    phi += 0.3f * dt, theta += 0.37f * dt;
+    static float phi = 0.0f, theta = 0.0f, phi2 = 0.0f;
+    phi += 0.3f * dt, theta += 0.37f * dt, phi2 -= 0.01f;
 
 	auto& wd = Context::Instance().WorldInstance();
     wd.vs_cb_.world = MathWorker::Transpose(MathWorker::MatrixRotateX(phi) * MathWorker::MatrixRotateY(theta));
 	wd.vs_cb_.worldInvTranspose = MathWorker::Transpose(MathWorker::MatrixInverse(wd.vs_cb_.world));
+	wd.vs_cb_.RotateM = MathWorker::MatrixMove(-0.5f, -0.5f, 0.f) *
+		MathWorker::MatrixRotateZ(phi2) *
+		MathWorker::MatrixMove(0.5f, 0.5f, 0.f);
 
 	// ImGui::ShowAboutWindow();
 	// ImGui::ShowDemoWindow();
@@ -218,7 +221,7 @@ void WinAPP::ImguiUpdate(float dt)
 	// 获取IO事件
     ImGuiIO& io = ImGui::GetIO();
 
-	if (ImGui::Begin("Lighting"))
+	if (ImGui::Begin("Texture Box"))
 	{
     	ImGui::SameLine(0.0f, 25.0f);                       // 下一个控件在同一行往右25像素单位
 

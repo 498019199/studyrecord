@@ -24,6 +24,7 @@ struct VSConstantBuffer
     float4x4 view;//128
     float4x4 proj;//192
     float4x4 worldInvTranspose;
+    float4x4 RotateM;
 };
 
 struct PSConstantBuffer
@@ -111,8 +112,10 @@ private:
     std::vector<ShaderObjectPtr> shader_objs_;
 
 public:
-    SamplerStateObjectPtr sm_;
-    ShaderResourceViewPtr srv_;
+    SamplerStateObjectPtr sm1_;
+    SamplerStateObjectPtr sm2_;
+    ShaderResourceViewPtr srv1_;
+    ShaderResourceViewPtr srv2_;
 };
 
 

@@ -28,7 +28,9 @@ float4 PS(VertexOut pIn) : SV_Target
     diffuse += D;
     spec += S;
 
-    float4 texColor = gTex.Sample(gSamLinear, pIn.tex);
+    float4 texColor1 = gTex1.Sample(gSamLinear1, pIn.tex1);
+    float4 texColor2 = gTex2.Sample(gSamLinear2, pIn.tex2);
+    float4 texColor = texColor1 * texColor2;
     float4 litColor = texColor * (ambient + diffuse) + spec;
     litColor.a = texColor.a * gMaterial.Diffuse.a;
     return litColor;

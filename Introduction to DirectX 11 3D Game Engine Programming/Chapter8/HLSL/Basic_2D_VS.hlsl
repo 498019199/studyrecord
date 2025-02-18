@@ -9,6 +9,9 @@ VertexOut VS(VertexIn vIn)
     vOut.posH = mul(posW, viewProj);
     vOut.posW = posW.xyz;
     vOut.normalW = mul(vIn.normalL, (float3x3) gWorldInvTranspose);
-    vOut.tex = vIn.tex;
+
+    // 旋转
+    vOut.tex2 = mul(float4(vIn.tex, 0.f, 1.f), gRotateM);
+    vOut.tex1 = vIn.tex;
     return vOut;
 }

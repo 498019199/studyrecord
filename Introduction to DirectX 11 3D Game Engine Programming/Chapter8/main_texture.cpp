@@ -118,6 +118,22 @@ public:
 
 
         SamplerStateDesc desc;
+        desc.border_clr = Color(1.f, 1.f, 1.f, 1.f);
+        desc.addr_mode_u = TexAddressingMode::TAM_Border;
+        desc.addr_mode_v = TexAddressingMode::TAM_Border;
+        desc.addr_mode_w = TexAddressingMode::TAM_Border;
+        desc.filter = TexFilterOp::TFO_Min_Mag_Mip_Linear;
+        desc.max_anisotropy ;
+        desc.min_lod = 0.f;
+        desc.max_lod = std::numeric_limits<float>::max();
+        desc.mip_map_lod_bias = 0;
+        desc.cmp_func = CompareFunction::CF_AlwaysFail;
+        effect_->sm1_ = rf.MakeSamplerStateObject(desc);
+
+        const std::string file_path1 = Context::Instance().GetResourcePath() + "flare.dds";
+        auto tex1 = LoadTexture(file_path1, EAH_GPU_Read | EAH_Immutable);
+        effect_->srv1_ = rf.MakeTextureSrv(tex1);
+
         desc.addr_mode_u = TexAddressingMode::TAM_Wrap;
         desc.addr_mode_v = TexAddressingMode::TAM_Wrap;
         desc.addr_mode_w = TexAddressingMode::TAM_Wrap;
@@ -127,11 +143,11 @@ public:
         desc.max_lod = std::numeric_limits<float>::max();
         desc.mip_map_lod_bias = 0;
         desc.cmp_func = CompareFunction::CF_AlwaysFail;
-        effect_->sm_ = rf.MakeSamplerStateObject(desc);
+        effect_->sm2_ = rf.MakeSamplerStateObject(desc);
 
-        const std::string file_path = Context::Instance().GetResourcePath() + "WoodCrate.dds";
-        auto tex = LoadTexture(file_path, EAH_GPU_Read | EAH_Immutable);
-        effect_->srv_ = rf.MakeTextureSrv(tex);
+        const std::string file_path2 = Context::Instance().GetResourcePath() + "flarealpha.dds";
+        auto tex2 = LoadTexture(file_path2, EAH_GPU_Read | EAH_Immutable);
+        effect_->srv2_ = rf.MakeTextureSrv(tex2);
     }
 };
 
