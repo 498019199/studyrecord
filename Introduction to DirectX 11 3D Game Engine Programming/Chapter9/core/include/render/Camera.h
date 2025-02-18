@@ -3,10 +3,10 @@
 
 namespace RenderWorker
 {
-class Camere:public SceneNode
+class Camera:public SceneNode
 {
 public:
-    Camere();
+    Camera();
     
     const float3& EyePos() const;
     float3 LookAt() const;
@@ -45,16 +45,6 @@ private:
     float4x4    inv_proj_mat_;
     // 视口矩阵
 };
+using CameraPtr = std::shared_ptr<Camera>;
 
-
-
-
-
-
-
-
-class FirstPersonCamera: public Camere
-{
-
-};
 }

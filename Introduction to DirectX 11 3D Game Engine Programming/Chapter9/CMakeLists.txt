@@ -26,8 +26,9 @@ set(SRC_LIST
     ${PROJECT_SOURCE_DIR}/Chapter9/core/src/Scene/SceneNode.cpp
     ${PROJECT_SOURCE_DIR}/Chapter9/core/src/Scene/World.cpp
     
-    ${PROJECT_SOURCE_DIR}/Chapter9/core/src/Camere.cpp
+    ${PROJECT_SOURCE_DIR}/Chapter9/core/src/Camere.cpp 
     ${PROJECT_SOURCE_DIR}/Chapter9/core/src/Context.cpp
+    ${PROJECT_SOURCE_DIR}/Chapter9/core/src/Control.cpp
     ${PROJECT_SOURCE_DIR}/Chapter9/core/src/GraphicsBuffer.cpp
     ${PROJECT_SOURCE_DIR}/Chapter9/core/src/Light.cpp 
     ${PROJECT_SOURCE_DIR}/Chapter9/core/src/Mesh.cpp 
