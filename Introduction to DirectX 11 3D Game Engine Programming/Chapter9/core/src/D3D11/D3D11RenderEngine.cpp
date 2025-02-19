@@ -361,6 +361,17 @@ void D3D11RenderEngine::RSSetState(ID3D11RasterizerState* ras)
 	}
 }
 
+void D3D11RenderEngine::OMSetBlendState(ID3D11BlendState* bs, Color const & blend_factor, uint32_t sample_mask)
+{
+	if ((blend_state_cache_ != bs) || (blend_factor_cache_ != blend_factor) || (sample_mask_cache_ != sample_mask))
+	{
+		d3d_imm_ctx_->OMSetBlendState(bs, &blend_factor.r(), sample_mask);
+		blend_state_cache_ = bs;
+		blend_factor_cache_ = blend_factor;
+		sample_mask_cache_ = sample_mask;
+	}
+}
+
 void D3D11RenderEngine::VSSetShader(ID3D11VertexShader* shader)
 {
 	if (vertex_shader_cache_ != shader)

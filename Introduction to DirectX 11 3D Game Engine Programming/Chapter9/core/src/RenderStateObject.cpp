@@ -14,9 +14,16 @@ SamplerStateDesc::SamplerStateDesc()
 {
 }
 
-bool operator<(SamplerStateDesc const & lhs, SamplerStateDesc const & rhs)
+bool operator<(const SamplerStateDesc& lhs, const SamplerStateDesc& rhs)
 {
     return std::memcmp(&lhs, &rhs, sizeof(lhs)) < 0;
 }
 
+
+RenderStateObject::RenderStateObject(
+    const RasterizerStateDesc& rs_desc, const DepthStencilStateDesc& dss_desc, const BlendStateDesc& bs_desc)
+    :rs_desc_(rs_desc), dss_desc_(dss_desc), bs_desc_(bs_desc)
+{}
+
+~RenderStateObject() noexcept = default;
 }

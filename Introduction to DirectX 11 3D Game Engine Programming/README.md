@@ -2,6 +2,13 @@ Chapter4 初始化dx11,windows
 Chapter6 draw simple geometry
 Chapter7 framework, light mode
 Chapter7 texture create ,detele, use, texture animation
+自己增加 需要相机，effect架构完善
+
+大佬git学习
+
+[DirectX11 With Windows SDK](https://directx11.tech/#/README)
+KlayGE
+
 2024年11月17日 23点58分
 4.4 框架设计 Adapt 适配器，windowApp 窗口和消息循环，RenderDevice Device和context，GameTick 计时器从
 

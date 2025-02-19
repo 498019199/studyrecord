@@ -82,14 +82,14 @@ struct SamplerStateDesc
 
     SamplerStateDesc();
 
-    friend bool operator<(SamplerStateDesc const & lhs, SamplerStateDesc const & rhs);
+    friend bool operator<(const SamplerStateDesc&);
 };
 //static_assert(sizeof(SamplerStateDesc) == 49);
 
 class SamplerStateObject
 {
 public:
-    explicit SamplerStateObject(SamplerStateDesc const & desc)
+    explicit SamplerStateObject(const SamplerStateDesc& lhs, const SamplerStateDesc& rhs)
         : desc_(desc)
     {
     }
@@ -107,4 +107,131 @@ protected:
     SamplerStateDesc desc_;
 };
 using SamplerStateObjectPtr = std::shared_ptr<SamplerStateObject>;
+
+enum PolygonMode
+{
+    PM_Point,
+    PM_Line,
+    PM_Fill
+};
+
+enum ShadeMode
+{
+    SM_Flat,
+    SM_Gouraud
+};
+
+enum CullMode
+{
+    CM_None,
+    CM_Front,
+    CM_Back
+};
+
+struct RasterizerStateDesc
+{
+    PolygonMode			polygon_mode;
+    ShadeMode			shade_mode;
+    CullMode			cull_mode;
+    bool				front_face_ccw;
+    float				polygon_offset_factor;
+    float				polygon_offset_units;
+    bool				depth_clip_enable;
+    bool				scissor_enable;
+    bool				multisample_enable;
+};
+//static_assert(sizeof(RasterizerStateDesc) == 24);
+
+enum BlendOperation
+{
+    BOP_Add		= 1,
+    BOP_Sub		= 2,
+    BOP_Rev_Sub	= 3,
+    BOP_Min		= 4,
+    BOP_Max		= 5,
+};
+
+enum AlphaBlendFactor
+{
+    ABF_Zero,
+    ABF_One,
+    ABF_Src_Alpha,
+    ABF_Dst_Alpha,
+    ABF_Inv_Src_Alpha,
+    ABF_Inv_Dst_Alpha,
+    ABF_Src_Color,
+    ABF_Dst_Color,
+    ABF_Inv_Src_Color,
+    ABF_Inv_Dst_Color,
+    ABF_Src_Alpha_Sat,
+    ABF_Blend_Factor,
+    ABF_Inv_Blend_Factor,
+    ABF_Src1_Alpha,
+    ABF_Inv_Src1_Alpha,
+    ABF_Src1_Color,
+    ABF_Inv_Src1_Color
+};
+
+enum LogicOperation
+{
+    LOP_Clear,
+    LOP_Set,
+    LOP_Copy,
+    LOP_CopyInverted,
+    LOP_Noop,
+    LOP_Invert,
+    LOP_And,
+    LOP_NAnd,
+    LOP_Or,
+    LOP_NOR,
+    LOP_XOR,
+    LOP_Equiv,
+    LOP_AndReverse,
+    LOP_AndInverted,
+    LOP_OrReverse,
+    LOP_OrInverted
+};
+
+struct BlendStateDesc
+{
+    Color blend_factor;
+    uint32_t sample_mask;
+
+    bool				alpha_to_coverage_enable;
+    bool				independent_blend_enable;
+
+    std::array<bool, 8>				blend_enable;
+    std::array<bool, 8>				logic_op_enable;
+    std::array<BlendOperation, 8>	blend_op;
+    std::array<AlphaBlendFactor, 8>	src_blend;
+    std::array<AlphaBlendFactor, 8>	dest_blend;
+    std::array<BlendOperation, 8>	blend_op_alpha;
+    std::array<AlphaBlendFactor, 8>	src_blend_alpha;
+    std::array<AlphaBlendFactor, 8>	dest_blend_alpha;
+    std::array<LogicOperation, 8>	logic_op;
+    std::array<uint8_t, 8>			color_write_mask;
+};
+
+struct DepthStencilStateDesc
+{
+    bool				depth_enable;
+    bool				depth_write_mask;
+};
+class RenderStateObject
+{
+public:
+    RenderStateObject(const RasterizerStateDesc& rs_desc, const DepthStencilStateDesc& dss_desc, const BlendStateDesc& bs_desc);
+    virtual ~RenderStateObject() noexcept;
+
+    const RasterizerStateDesc& GetRasterizerStateDesc() const noexcept { return rs_desc_; }
+    const DepthStencilStateDesc& GetDepthStencilStateDesc() const noexcept { return dss_desc_; }
+    const BlendStateDesc& GetBlendStateDesc() const noexcept { return bs_desc_; }
+
+    virtual void Active() = 0;
+protected:
+    RasterizerStateDesc rs_desc_;
+    DepthStencilStateDesc dss_desc_;
+    BlendStateDesc bs_desc_;
+};
+using RenderStateObjectPtr = std::shared_ptr<RenderStateObject>;
 }

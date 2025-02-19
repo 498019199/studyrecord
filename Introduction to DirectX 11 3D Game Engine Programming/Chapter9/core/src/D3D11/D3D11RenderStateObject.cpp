@@ -28,4 +28,24 @@ D3D11SamplerStateObject::D3D11SamplerStateObject(SamplerStateDesc const & desc)
 
     TIFHR(d3d_device->CreateSamplerState(&d3d_desc, sampler_state_.put()));
 }
+
+D3D11RenderStateObject(const RasterizerStateDesc& rs_desc, const DepthStencilStateDesc& dss_desc, const BlendStateDesc& bs_desc)
+    :RenderStateObject(rs_desc, dss_desc, bs_desc)
+{
+    const auto& d3d11_re = checked_cast<const D3D11RenderEngine&>(Context::Instance().RenderEngineInstance());
+    ID3D11Device* d3d_device = d3d11_re.D3DDevice();
+
+    D3D11_BLEND_DESC d3d_bs_desc;
+    for(int i = 0; i < 8; ++i)
+    {
+        
+    }
+}
+
+void D3D11RenderStateObject::Active()
+{
+    auto& d3d11_re = checked_cast<D3D11RenderEngine&>(Context::Instance().RenderEngineInstance());
+    d3d11_re.RSSetState(rasterizer_state_.get());
+    //d3d11_re.OMSetBlendState(blend_state_.get(), bs_desc_.blend_factor, bs_desc_.sample_mask);
+}
 }

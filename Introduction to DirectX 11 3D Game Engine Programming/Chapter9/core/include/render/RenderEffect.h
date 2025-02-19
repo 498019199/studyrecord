@@ -76,6 +76,7 @@ class RenderEffect
 public:
     RenderEffect();
     
+    void Load1(const std::string& file_path);
     void Load(const std::string& file_path);
 
     uint32_t AddShaderDesc(const std::string& state_name_hash, ShaderDesc const & sd);

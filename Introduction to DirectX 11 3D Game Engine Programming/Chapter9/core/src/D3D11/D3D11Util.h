@@ -17,7 +17,7 @@ namespace RenderWorker
     using IDXGISwapChainPtr = com_ptr<IDXGISwapChain>;
     using ID3D11BufferPtr = com_ptr<ID3D11Buffer>;
     using ID3D11InputLayoutPtr = com_ptr<ID3D11InputLayout>;
-    using ID3D11RasterizerStatePtr = com_ptr<ID3D11RasterizerState>;
+
     using ID3D11VertexShaderPtr = com_ptr<ID3D11VertexShader>;
     using ID3D11PixelShaderPtr = com_ptr<ID3D11PixelShader>;
 	using ID3D11ResourcePtr = com_ptr<ID3D11Resource>;
@@ -30,6 +30,9 @@ namespace RenderWorker
     using ID3D11InputLayoutPtr = com_ptr<ID3D11InputLayout>;
     using ID3D11SamplerStatePtr = com_ptr<ID3D11SamplerState>;
 	using ID3D11ShaderResourceViewPtr = com_ptr<ID3D11ShaderResourceView>;
+    using ID3D11RasterizerStatePtr = com_ptr<ID3D11RasterizerState>;
+    using ID3D11BlendStatePtr = com_ptr<ID3D11BlendState1>;
+    using ID3D11DepthStencilStatePtr = com_ptr<ID3D11DepthStencilState>;
 }
 
 //---------------------------------------------------------------------------------------

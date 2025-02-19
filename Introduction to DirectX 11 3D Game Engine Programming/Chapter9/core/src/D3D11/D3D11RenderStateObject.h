@@ -16,4 +16,31 @@ public:
 private:
     ID3D11SamplerStatePtr sampler_state_;
 };
+
+class D3D11RenderStateObject final : public RenderStateObject
+{
+public: 
+    D3D11RenderStateObject(const RasterizerStateDesc& rs_desc, const DepthStencilStateDesc& dss_desc, const BlendStateDesc& bs_desc);
+
+    void Active() override;
+
+    ID3D11RasterizerState1* D3DRasterizerState() const
+    {
+        return rasterizer_state_.get();
+    }
+
+    ID3D11DepthStencilState* D3DDepthStencilState() const
+    {
+        return depth_stencil_state_.get();
+    }
+
+    ID3D11BlendState1* D3DBlendState() const
+    {
+        return blend_state_.get();
+    }
+private:
+    ID3D11RasterizerStatePtr rasterizer_state_;
+    ID3D11DepthStencilStatePtr dss_desc_;
+    ID3D11BlendStatePtr blend_state_;
+};
 }

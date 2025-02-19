@@ -5,6 +5,11 @@
 #include "D3D11/D3D11RenderFactory.h"
 #include "D3D11/D3D11Util.h"
 
+#include <core/ResIdentifier.h>
+#include <core/JsonDom.h>
+#include <core/Hash.h>
+#include <filesystem>
+
 namespace RenderWorker
 {
 RenderEffectConstantBuffer::RenderEffectConstantBuffer(RenderEffect& effect)
@@ -12,13 +17,13 @@ RenderEffectConstantBuffer::RenderEffectConstantBuffer(RenderEffect& effect)
     
 }
 
-void RenderEffectConstantBuffer::Load(const std::string& name)
+void RenderEffectConstantBuffer::Load(const std::string& effect_name)
 {
     if (!immutable_)
     {
         immutable_ = MakeSharedPtr<Immutable>();
     }
-    immutable_->name = name;
+    immutable_->name = effect_name;
 }
 
 void RenderEffectConstantBuffer::Resize(uint32_t size)
@@ -123,6 +128,48 @@ uint32_t RenderEffect::AddShaderObject()
     return index;
 }
 
+void RenderEffect::Load1(const std::string& effect_name)
+{
+    std::string path_file = effect_name.data();
+    size_t lastIndex = path_file.rfind("\\");
+    std::string package_path = path_file.substr(0, lastIndex);
+    std::string name = path_file.substr(lastIndex + 1);
+
+    uint64_t const timestamp = std::filesystem::last_write_time(package_path).time_since_epoch().count();
+    ResIdentifierPtr effect_res = MakeSharedPtr<ResIdentifier>(
+        name, timestamp, MakeSharedPtr<std::ifstream>(path_file.c_str(), std::ios_base::binary));
+    if(!effect_res)
+    {
+        return ;
+    }
+    auto root_value = LoadJson(*effect_res);
+    if (auto const* cbuffer_val = root_value.Member("cbuffer"))
+    {
+
+    }
+    if (auto const* parameter_val = root_value.Member("parameter"))
+    {
+
+    }
+    if (auto const* effect_val = root_value.Member("effect"))
+    {
+        for(auto item : effect_val->ValueObject())
+        {
+            auto hash = HashValue(item.first);
+            const auto& Value = item.second;
+            
+            if(CtHash("vertex_shader") == hash)
+            {
+
+            }
+            else if(CtHash("pixel_shader") == hash)
+            {
+
+            }
+        }
+    }
+
+}
 void RenderEffect::Load(const std::string& file_path)
 {
     if (!immutable_)

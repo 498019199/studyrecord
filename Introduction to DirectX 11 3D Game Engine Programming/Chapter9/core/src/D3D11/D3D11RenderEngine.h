@@ -24,7 +24,8 @@ public:
     void SwitchChain() const; 
 
     void RSSetState(ID3D11RasterizerState* ras);
-    
+    void OMSetBlendState(ID3D11BlendState* bs, Color const & blend_factor, uint32_t sample_mask);
+
     // 将着色器绑定到渲染管线
     void VSSetShader(ID3D11VertexShader* shader);
 	void PSSetShader(ID3D11PixelShader* shader);
@@ -53,7 +54,12 @@ private:
     
     D3D11_VIEWPORT screen_viewport_;
 
+    // 渲染状态
     ID3D11RasterizerState* rasterizer_state_cache_{nullptr};
+    // 混合状态
+    ID3D11BlendState* blend_state_cache_{nullptr};
+    Color blend_factor_cache_{1, 1, 1, 1};
+    uint32_t sample_mask_cache_{0xFFFFFFFF};
     
     ID3D11VertexShader* vertex_shader_cache_{nullptr};
     ID3D11PixelShader* pixel_shader_cache_{nullptr};

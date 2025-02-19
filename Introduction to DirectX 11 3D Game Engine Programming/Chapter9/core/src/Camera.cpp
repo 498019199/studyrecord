@@ -9,27 +9,27 @@ Camera::Camera()
 
 const float3& Camera::EyePos() const
 {
-    
+    return float3(0, 0, 0);
 }
 
 float3 Camera::LookAt() const
 {
-    
+    return float3(0, 0, 0);
 }
 
 const float3& Camera::RightVec() const
 {
-    
+    return float3(0, 0, 0);
 }
 
 const float3& Camera::UpVec() const
 {
-    
+    return float3(0, 0, 0);
 }
 
 const float3& Camera::ForwardVec() const
 {
-    
+    return float3(0, 0, 0);
 }
 
 void Camera::ProjParams(float fov, float aspect, float near_plane, float far_plane)
