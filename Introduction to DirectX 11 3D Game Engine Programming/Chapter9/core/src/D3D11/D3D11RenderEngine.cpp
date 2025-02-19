@@ -349,7 +349,7 @@ void D3D11RenderEngine::DoRender(const RenderEffect& effect, const RenderLayout&
 	}
 
 	// 将更新好的常量缓冲区绑定到顶点着色器和像素着色器
-	effect.GetShaderObject()->Bind(effect);
+	//effect.GetShaderObject()->Bind(effect);
 }
 
 void D3D11RenderEngine::RSSetState(ID3D11RasterizerState* ras)

@@ -137,31 +137,31 @@ void D3D11ShaderObject::Bind(const RenderEffect& effect)
     }
 
     
-    if(effect.sm1_)
-    {
-        auto sm1 = checked_cast<D3D11SamplerStateObject&>(*effect.sm1_).D3DSamplerState();
-        re.D3DDeviceImmContext()->PSSetSamplers(0, 1, &sm1);
+    // if(effect.sm1_)
+    // {
+    //     auto sm1 = checked_cast<D3D11SamplerStateObject&>(*effect.sm1_).D3DSamplerState();
+    //     re.D3DDeviceImmContext()->PSSetSamplers(0, 1, &sm1);
     
-        auto d3d_srv1 = checked_cast<D3D11ShaderResourceView&>(*effect.srv1_).RetrieveD3DShaderResourceView();
-        re.D3DDeviceImmContext()->PSSetShaderResources(0, 1, &d3d_srv1);
-    }
+    //     auto d3d_srv1 = checked_cast<D3D11ShaderResourceView&>(*effect.srv1_).RetrieveD3DShaderResourceView();
+    //     re.D3DDeviceImmContext()->PSSetShaderResources(0, 1, &d3d_srv1);
+    // }
 
-    if(effect.sm2_)
-    {
-        auto sm2 = checked_cast<D3D11SamplerStateObject&>(*effect.sm2_).D3DSamplerState();
-        re.D3DDeviceImmContext()->PSSetSamplers(1, 1, &sm2);
+    // if(effect.sm2_)
+    // {
+    //     auto sm2 = checked_cast<D3D11SamplerStateObject&>(*effect.sm2_).D3DSamplerState();
+    //     re.D3DDeviceImmContext()->PSSetSamplers(1, 1, &sm2);
         
-        auto d3d_srv2 = checked_cast<D3D11ShaderResourceView&>(*effect.srv2_).RetrieveD3DShaderResourceView();
-        re.D3DDeviceImmContext()->PSSetShaderResources(1, 1, &d3d_srv2);
-    }
+    //     auto d3d_srv2 = checked_cast<D3D11ShaderResourceView&>(*effect.srv2_).RetrieveD3DShaderResourceView();
+    //     re.D3DDeviceImmContext()->PSSetShaderResources(1, 1, &d3d_srv2);
+    // }
 
-    auto* cb1 = effect.CBufferByIndex(0);
-    auto d3d11_cbuff_vs = checked_cast<D3D11GraphicsBuffer*>(cb1->HWBuff().get())->D3DBuffer();
-    re.D3DDeviceImmContext()->VSSetConstantBuffers(0, 1, &d3d11_cbuff_vs);
+    // auto* cb1 = effect.CBufferByIndex(0);
+    // auto d3d11_cbuff_vs = checked_cast<D3D11GraphicsBuffer*>(cb1->HWBuff().get())->D3DBuffer();
+    // re.D3DDeviceImmContext()->VSSetConstantBuffers(0, 1, &d3d11_cbuff_vs);
 
-    auto* cb2 = effect.CBufferByIndex(1);
-    auto d3d11_cbuff_ps = checked_cast<D3D11GraphicsBuffer*>(cb2->HWBuff().get())->D3DBuffer();
-    re.D3DDeviceImmContext()->PSSetConstantBuffers(1, 1, &d3d11_cbuff_ps);
+    // auto* cb2 = effect.CBufferByIndex(1);
+    // auto d3d11_cbuff_ps = checked_cast<D3D11GraphicsBuffer*>(cb2->HWBuff().get())->D3DBuffer();
+    // re.D3DDeviceImmContext()->PSSetConstantBuffers(1, 1, &d3d11_cbuff_ps);
 }
 
 void D3D11ShaderObject::Unbind()

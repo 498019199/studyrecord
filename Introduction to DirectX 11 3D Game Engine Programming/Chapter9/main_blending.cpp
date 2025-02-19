@@ -60,34 +60,8 @@ public:
         auto floor = RenderablePlane(20.0f, 20.0f, 5.0f, 5.0f, Color(1.0f, 1.0f, 1.0f, 1.0f));
 
         auto currentPath = std::filesystem::current_path().parent_path().parent_path().string();
-        currentPath += "\\Chapter9\\HLSL\\";
-        effect_ = MakeSharedPtr<RenderEffect>();
-        ShaderDesc desc1;
-        desc1.func_name = "VS";
-        desc1.profile = currentPath + "Basic_2D_VS";
-        desc1.tech_pass_type = 0xFFFFFFFF;
-        effect_->AddShaderDesc("vertex_shader", desc1);
-        desc1.func_name = "PS";
-        desc1.profile = currentPath + "Basic_2D_PS";
-        effect_->AddShaderDesc("pixel_shader", desc1);
-        effect_->Load(currentPath);
-
-        SamplerStateDesc desc;
-        desc.addr_mode_u = TexAddressingMode::TAM_Wrap;
-        desc.addr_mode_v = TexAddressingMode::TAM_Wrap;
-        desc.addr_mode_w = TexAddressingMode::TAM_Wrap;
-        desc.filter = TexFilterOp::TFO_Min_Mag_Mip_Linear;
-        desc.max_anisotropy ;
-        desc.min_lod = 0.f;
-        desc.max_lod = std::numeric_limits<float>::max();
-        desc.mip_map_lod_bias = 0;
-        desc.cmp_func = CompareFunction::CF_AlwaysFail;
-        effect_->sm1_ = rf.MakeSamplerStateObject(desc);
-
-        auto currentPath2 = std::filesystem::current_path().parent_path().parent_path().string();
-        const std::string file_path1 = currentPath2 + "\\Models\\Chapter9\\" + DDS;
-        auto tex1 = LoadTexture(file_path1, EAH_GPU_Read | EAH_Immutable);
-        effect_->srv1_ = rf.MakeTextureSrv(tex1);
+        currentPath += "\\Models\\Chapter9\\box2D.xml";
+        effect_ = SyncLoadRenderEffect(currentPath);
     }
 };
 
@@ -184,36 +158,8 @@ public:
         rls_[0]->BindIndexStream(ib, EF_R16UI);
 
         auto currentPath = std::filesystem::current_path().parent_path().parent_path().string();
-        currentPath += "\\Chapter9\\HLSL\\";
-        effect_ = MakeSharedPtr<RenderEffect>();
-        ShaderDesc desc1;
-        desc1.func_name = "VS";
-        desc1.profile = currentPath + "Basic_3D_VS";
-        desc1.tech_pass_type = 0xFFFFFFFF;
-        effect_->AddShaderDesc("vertex_shader", desc1);
-        desc1.func_name = "PS";
-        desc1.profile = currentPath + "Basic_3D_PS";
-        effect_->AddShaderDesc("pixel_shader", desc1);
-        effect_->Load(currentPath);
-
-
-        SamplerStateDesc desc;
-        desc.addr_mode_u = TexAddressingMode::TAM_Wrap;
-        desc.addr_mode_v = TexAddressingMode::TAM_Wrap;
-        desc.addr_mode_w = TexAddressingMode::TAM_Wrap;
-        desc.filter = TexFilterOp::TFO_Min_Mag_Mip_Linear;
-        desc.max_anisotropy ;
-        desc.min_lod = 0.f;
-        desc.max_lod = std::numeric_limits<float>::max();
-        desc.mip_map_lod_bias = 0;
-        desc.cmp_func = CompareFunction::CF_AlwaysFail;
-        effect_->sm1_ = rf.MakeSamplerStateObject(desc);
-
-
-        auto currentPath2 = std::filesystem::current_path().parent_path().parent_path().string();
-        const std::string file_path1 = currentPath2 + "\\Models\\Chapter9\\" + "WireFence.dds";
-        auto tex1 = LoadTexture(file_path1, EAH_GPU_Read | EAH_Immutable);
-        effect_->srv1_ = rf.MakeTextureSrv(tex1);
+        currentPath += "\\Models\\Chapter9\\box3D.xml";
+        effect_ = SyncLoadRenderEffect(currentPath);
     }
 };
 

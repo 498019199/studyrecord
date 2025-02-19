@@ -29,24 +29,22 @@
  */
 
 
-#include <core/ResIdentifier.h>
 #include <core/Util.h>
+#include <core/StringUtil.h>
 
 #include <iterator>
 #include <string>
-#ifdef KLAYGE_CXX17_LIBRARY_CHARCONV_SUPPORT
 #include <charconv>
-#endif
 
-#if defined(KLAYGE_COMPILER_MSVC)
+#if defined(ZENGINE_COMPILER_MSVC)
 #pragma warning(push)
 #pragma warning(disable : 6313) // Incorrect operator: zero-valued flag cannot be tested with bitwise-and
 #endif
 #include <rapidxml.hpp>
-#if defined(KLAYGE_COMPILER_MSVC)
+#if defined(ZENGINE_COMPILER_MSVC)
 #pragma warning(pop)
 #endif
-#if defined(KLAYGE_COMPILER_MSVC)
+#if defined(ZENGINE_COMPILER_MSVC)
 #pragma warning(push)
 #pragma warning(disable : 4100) // 'flags': unreferenced formal parameter
 #elif defined(KLAYGE_COMPILER_GCC)
@@ -260,7 +258,7 @@ namespace
 	bool TryConvertStringToValue(std::string const& value_str, bool& val)
 	{
 		std::string lower_value_str = value_str;
-		ToLower(lower_value_str);
+		StringUtil::ToLower(lower_value_str);
 		if ((lower_value_str == "true") || (lower_value_str == "1"))
 		{
 			val = true;

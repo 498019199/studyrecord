@@ -59,19 +59,6 @@ namespace std
 std::string& Convert(std::string& dest, std::wstring_view src);
 std::wstring& Convert(std::wstring& dest, std::string_view src);
 
-template <typename RangeType>
-inline void ToLower(RangeType& arg, std::locale const& loc)
-{
-    using CharType = typename Detail::RangeValue<RangeType>::value_type;
-    std::for_each(std::begin(arg), std::end(arg), [&loc](CharType& ch) { ch = static_cast<CharType>(std::tolower(ch, loc)); });
-}
-
-template <typename RangeType>
-inline void ToLower(RangeType& arg)
-{
-    ToLower(arg, std::locale());
-}
-
 // 产生FourCC常量
 template <unsigned char ch0, unsigned char ch1, unsigned char ch2, unsigned char ch3>
 struct MakeFourCC
@@ -178,3 +165,4 @@ checked_pointer_cast(std::shared_ptr<From> const & p) noexcept
     COMMON_ASSERT(dynamic_cast<To*>(p.get()) == static_cast<To*>(p.get()));
     return std::static_pointer_cast<To>(p);
 }
+

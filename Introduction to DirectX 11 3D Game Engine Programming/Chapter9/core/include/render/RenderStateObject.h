@@ -1,9 +1,102 @@
 #pragma once
 #include <core/Util.h>
+#include <core/macro.h>
 #include <core/common.h>
 
 namespace RenderWorker
 {
+enum PolygonMode
+{
+    PM_Point,
+    PM_Line,
+    PM_Fill
+};
+
+enum ShadeMode
+{
+    SM_Flat,
+    SM_Gouraud
+};
+
+enum CullMode
+{
+    CM_None,
+    CM_Front,
+    CM_Back
+};
+
+enum BlendOperation
+{
+    BOP_Add		= 1,
+    BOP_Sub		= 2,
+    BOP_Rev_Sub	= 3,
+    BOP_Min		= 4,
+    BOP_Max		= 5,
+};
+
+enum AlphaBlendFactor
+{
+    ABF_Zero,
+    ABF_One,
+    ABF_Src_Alpha,
+    ABF_Dst_Alpha,
+    ABF_Inv_Src_Alpha,
+    ABF_Inv_Dst_Alpha,
+    ABF_Src_Color,
+    ABF_Dst_Color,
+    ABF_Inv_Src_Color,
+    ABF_Inv_Dst_Color,
+    ABF_Src_Alpha_Sat,
+    ABF_Blend_Factor,
+    ABF_Inv_Blend_Factor,
+    ABF_Src1_Alpha,
+    ABF_Inv_Src1_Alpha,
+    ABF_Src1_Color,
+    ABF_Inv_Src1_Color
+};
+
+enum CompareFunction
+{
+    CF_AlwaysFail,
+    CF_AlwaysPass,
+    CF_Less,
+    CF_LessEqual,
+    CF_Equal,
+    CF_NotEqual,
+    CF_GreaterEqual,
+    CF_Greater
+};
+
+// Enum describing the various actions which can be taken onthe stencil buffer
+enum StencilOperation
+{
+    // Leave the stencil buffer unchanged
+    SOP_Keep,
+    // Set the stencil value to zero
+    SOP_Zero,
+    // Set the stencil value to the reference value
+    SOP_Replace,
+    // Increase the stencil value by 1, clamping at the maximum value
+    SOP_Incr,
+    // Decrease the stencil value by 1, clamping at 0
+    SOP_Decr,
+    // Invert the bits of the stencil buffer
+    SOP_Invert,
+    // Increase the stencil value by 1, wrap the result if necessary
+    SOP_Incr_Wrap,
+    // Decrease the stencil value by 1, wrap the result if necessary
+    SOP_Decr_Wrap
+};
+
+enum ColorMask
+{
+    CMASK_Red   = 1UL << 0,
+    CMASK_Green = 1UL << 1,
+    CMASK_Blue  = 1UL << 2,
+    CMASK_Alpha = 1UL << 3,
+    CMASK_All   = CMASK_Red | CMASK_Green | CMASK_Blue | CMASK_Alpha
+};
+
 // Sampler addressing modes - default is TAM_Wrap.
 enum TexAddressingMode
 {
@@ -51,127 +144,6 @@ enum TexFilterOp
     TFO_Cmp_Anisotropic						= TFOE_Comparison | TFO_Anisotropic
 };
 
-enum CompareFunction
-{
-    CF_AlwaysFail,
-    CF_AlwaysPass,
-    CF_Less,
-    CF_LessEqual,
-    CF_Equal,
-    CF_NotEqual,
-    CF_GreaterEqual,
-    CF_Greater
-};
-
-struct SamplerStateDesc
-{
-    Color border_clr; // 边界外的颜色，使用D3D11_TEXTURE_BORDER_COLOR时需要指定
-
-    TexAddressingMode addr_mode_u; // U方向寻址模式
-    TexAddressingMode addr_mode_v; // V方向寻址模式
-    TexAddressingMode addr_mode_w; // W方向寻址模式
-
-    TexFilterOp filter; // 所选过滤器
-
-    uint8_t max_anisotropy; // 最大各向异性等级(1-16)
-    float min_lod; // 若mipmap等级低于MinLOD，则使用等级MinLOD。最小允许设为0
-    float max_lod; // 若mipmap等级高于MaxLOD，则使用等级MaxLOD。必须比MinLOD大  
-    float mip_map_lod_bias; // mipmap等级偏移值，最终算出的mipmap等级会加上该偏移值
-
-    CompareFunction cmp_func;
-
-    SamplerStateDesc();
-
-    friend bool operator<(const SamplerStateDesc&);
-};
-//static_assert(sizeof(SamplerStateDesc) == 49);
-
-class SamplerStateObject
-{
-public:
-    explicit SamplerStateObject(const SamplerStateDesc& lhs, const SamplerStateDesc& rhs)
-        : desc_(desc)
-    {
-    }
-
-    virtual ~SamplerStateObject()
-    {
-    }
-
-    SamplerStateDesc const & GetDesc() const
-    {
-        return desc_;
-    }
-
-protected:
-    SamplerStateDesc desc_;
-};
-using SamplerStateObjectPtr = std::shared_ptr<SamplerStateObject>;
-
-enum PolygonMode
-{
-    PM_Point,
-    PM_Line,
-    PM_Fill
-};
-
-enum ShadeMode
-{
-    SM_Flat,
-    SM_Gouraud
-};
-
-enum CullMode
-{
-    CM_None,
-    CM_Front,
-    CM_Back
-};
-
-struct RasterizerStateDesc
-{
-    PolygonMode			polygon_mode;
-    ShadeMode			shade_mode;
-    CullMode			cull_mode;
-    bool				front_face_ccw;
-    float				polygon_offset_factor;
-    float				polygon_offset_units;
-    bool				depth_clip_enable;
-    bool				scissor_enable;
-    bool				multisample_enable;
-};
-//static_assert(sizeof(RasterizerStateDesc) == 24);
-
-enum BlendOperation
-{
-    BOP_Add		= 1,
-    BOP_Sub		= 2,
-    BOP_Rev_Sub	= 3,
-    BOP_Min		= 4,
-    BOP_Max		= 5,
-};
-
-enum AlphaBlendFactor
-{
-    ABF_Zero,
-    ABF_One,
-    ABF_Src_Alpha,
-    ABF_Dst_Alpha,
-    ABF_Inv_Src_Alpha,
-    ABF_Inv_Dst_Alpha,
-    ABF_Src_Color,
-    ABF_Dst_Color,
-    ABF_Inv_Src_Color,
-    ABF_Inv_Dst_Color,
-    ABF_Src_Alpha_Sat,
-    ABF_Blend_Factor,
-    ABF_Inv_Blend_Factor,
-    ABF_Src1_Alpha,
-    ABF_Inv_Src1_Alpha,
-    ABF_Src1_Color,
-    ABF_Inv_Src1_Color
-};
-
 enum LogicOperation
 {
     LOP_Clear,
@@ -192,6 +164,27 @@ enum LogicOperation
     LOP_OrInverted
 };
 
+#ifdef ZENGINE_HAS_STRUCT_PACK
+#pragma pack(push, 1)
+#endif
+struct RasterizerStateDesc
+{
+    PolygonMode			polygon_mode;
+    ShadeMode			shade_mode;
+    CullMode			cull_mode;
+    bool				front_face_ccw;
+    float				polygon_offset_factor;
+    float				polygon_offset_units;
+    bool				depth_clip_enable;
+    bool				scissor_enable;
+    bool				multisample_enable;
+
+    RasterizerStateDesc();
+    friend bool operator<(RasterizerStateDesc const & lhs, RasterizerStateDesc const & rhs);
+    friend bool operator>(RasterizerStateDesc const & lhs, RasterizerStateDesc const & rhs);
+};
+static_assert(sizeof(RasterizerStateDesc) == 24);
+
 struct BlendStateDesc
 {
     Color blend_factor;
@@ -210,13 +203,94 @@ struct BlendStateDesc
     std::array<AlphaBlendFactor, 8>	dest_blend_alpha;
     std::array<LogicOperation, 8>	logic_op;
     std::array<uint8_t, 8>			color_write_mask;
+
+    BlendStateDesc();
+    friend bool operator<(BlendStateDesc const & lhs, BlendStateDesc const & rhs);
+    friend bool operator>(BlendStateDesc const & lhs, BlendStateDesc const & rhs);
 };
+static_assert(sizeof(BlendStateDesc) == 270);
 
 struct DepthStencilStateDesc
 {
     bool				depth_enable;
     bool				depth_write_mask;
+    CompareFunction		depth_func;
+
+    bool				front_stencil_enable;
+    CompareFunction		front_stencil_func;
+    uint16_t			front_stencil_ref;
+    uint16_t			front_stencil_read_mask;
+    uint16_t			front_stencil_write_mask;
+    StencilOperation	front_stencil_fail;
+    StencilOperation	front_stencil_depth_fail;
+    StencilOperation	front_stencil_pass;
+
+    bool				back_stencil_enable;
+    CompareFunction		back_stencil_func;
+    uint16_t			back_stencil_ref;
+    uint16_t			back_stencil_read_mask;
+    uint16_t			back_stencil_write_mask;
+    StencilOperation	back_stencil_fail;
+    StencilOperation	back_stencil_depth_fail;
+    StencilOperation	back_stencil_pass;
+
+    DepthStencilStateDesc();
+
+    friend bool operator<(DepthStencilStateDesc const & lhs, DepthStencilStateDesc const & rhs);
+    friend bool operator>(DepthStencilStateDesc const & lhs, DepthStencilStateDesc const & rhs);
 };
+static_assert(sizeof(DepthStencilStateDesc) == 52);
+
+struct SamplerStateDesc
+{
+    Color border_clr; // 边界外的颜色，使用D3D11_TEXTURE_BORDER_COLOR时需要指定
+
+    TexAddressingMode addr_mode_u; // U方向寻址模式
+    TexAddressingMode addr_mode_v; // V方向寻址模式
+    TexAddressingMode addr_mode_w; // W方向寻址模式
+
+    TexFilterOp filter; // 所选过滤器
+
+    uint8_t max_anisotropy; // 最大各向异性等级(1-16)
+    float min_lod; // 若mipmap等级低于MinLOD，则使用等级MinLOD。最小允许设为0
+    float max_lod; // 若mipmap等级高于MaxLOD，则使用等级MaxLOD。必须比MinLOD大  
+    float mip_map_lod_bias; // mipmap等级偏移值，最终算出的mipmap等级会加上该偏移值
+
+    CompareFunction cmp_func;
+
+    SamplerStateDesc();
+
+    friend bool operator<(const SamplerStateDesc& lhs, const SamplerStateDesc& rhs);
+    friend bool operator>(const SamplerStateDesc& lhs, const SamplerStateDesc& rhs);
+};
+static_assert(sizeof(SamplerStateDesc) == 49);
+#ifdef ZENGINE_HAS_STRUCT_PACK
+#pragma pack(pop)
+#endif
+
+class SamplerStateObject
+{
+public:
+    explicit SamplerStateObject(SamplerStateDesc const & desc)
+        : desc_(desc)
+    {
+    }
+
+    virtual ~SamplerStateObject()
+    {
+    }
+
+    SamplerStateDesc const & GetDesc() const
+    {
+        return desc_;
+    }
+
+protected:
+    SamplerStateDesc desc_;
+};
+using SamplerStateObjectPtr = std::shared_ptr<SamplerStateObject>;
+
+
 class RenderStateObject
 {
 public:

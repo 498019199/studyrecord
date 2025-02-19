@@ -25,6 +25,21 @@
 	#ifndef _WIN32_WINNT_WIN10
 		#define _WIN32_WINNT_WIN10 0x0A00
 	#endif
+
+	#if (_WIN32_WINNT >= _WIN32_WINNT_WIN10)
+		#include <winapifamily.h>
+		#if defined(WINAPI_FAMILY) && (WINAPI_FAMILY != WINAPI_FAMILY_DESKTOP_APP)
+			#ifndef NTDDI_WIN10_RS4
+				#error "You need to install Windows SDK 10.0.17133.0 or up to build UWP."
+			#endif
+			#define ZENGINE_PLATFORM_WINDOWS_STORE
+		#else
+			#define ZENGINE_PLATFORM_WINDOWS_DESKTOP
+		#endif
+	#else
+		#define ZENGINE_PLATFORM_WINDOWS_DESKTOP
+	#endif
+
 #elif defined(__ANDROID__)
 	#define ZENGINE_PLATFORM_ANDROID
 #elif defined(linux) || defined(__linux) || defined(__linux__)
@@ -68,4 +83,15 @@
 	#pragma warning(disable : 4819) // Allow non-ANSI characters.
 #else
 	#error "Unknown compiler. Please install vc, g++, or clang."
+#endif
+
+
+#if defined(ZENGINE_PLATFORM_WINDOWS_DESKTOP) || defined(ZENGINE_PLATFORM_LINUX) || defined(ZENGINE_PLATFORM_DARWIN)
+	#define ZENGINE_IS_DEV_PLATFORM 1
+#else
+	#define ZENGINE_IS_DEV_PLATFORM 0
+#endif
+
+#if defined(ZENGINE_COMPILER_MSVC) || defined(ZENGINE_COMPILER_GCC) || defined(ZENGINE_COMPILER_CLANG) || defined(ZENGINE_COMPILER_CLANGCL)
+	#define ZENGINE_HAS_STRUCT_PACK
 #endif

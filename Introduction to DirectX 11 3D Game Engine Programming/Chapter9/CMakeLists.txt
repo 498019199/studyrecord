@@ -4,12 +4,17 @@ include_directories(
     ${PROJECT_SOURCE_DIR}/3rd/dxsdk/dxsdk/Include
     ${PROJECT_SOURCE_DIR}/3rd/FreeImage/FreeImage/Source
     ${PROJECT_SOURCE_DIR}/3rd/rapidjson/rapidjson/include
+    ${PROJECT_SOURCE_DIR}/3rd/rapidxml/rapidxml
     ${PROJECT_SOURCE_DIR}/3rd/imgui)
 
 set(SRC_LIST
     ${PROJECT_SOURCE_DIR}/Chapter9/main_blending.cpp
 
     ${PROJECT_SOURCE_DIR}/Chapter9/core/src/App/WinApp.cpp
+
+    ${PROJECT_SOURCE_DIR}/Chapter9/core/src/Base/Timer.cpp
+    ${PROJECT_SOURCE_DIR}/Chapter9/core/src/Base/Util.cpp
+    ${PROJECT_SOURCE_DIR}/Chapter9/core/src/Base/XMLDom.cpp
 
     ${PROJECT_SOURCE_DIR}/Chapter9/core/src/D3D11/D3D11GraphicsBuffer.cpp
     ${PROJECT_SOURCE_DIR}/Chapter9/core/src/D3D11/D3D11RenderEngine.cpp
@@ -31,7 +36,6 @@ set(SRC_LIST
     ${PROJECT_SOURCE_DIR}/Chapter9/core/src/Context.cpp
     ${PROJECT_SOURCE_DIR}/Chapter9/core/src/Control.cpp
     ${PROJECT_SOURCE_DIR}/Chapter9/core/src/GraphicsBuffer.cpp
-    ${PROJECT_SOURCE_DIR}/Chapter9/core/src/JsonDom.cpp 
     ${PROJECT_SOURCE_DIR}/Chapter9/core/src/Light.cpp 
     ${PROJECT_SOURCE_DIR}/Chapter9/core/src/Mesh.cpp 
     ${PROJECT_SOURCE_DIR}/Chapter9/core/src/Renderable.cpp
@@ -44,10 +48,7 @@ set(SRC_LIST
     ${PROJECT_SOURCE_DIR}/Chapter9/core/src/RenderView.cpp
     ${PROJECT_SOURCE_DIR}/Chapter9/core/src/ShaderObject.cpp
     ${PROJECT_SOURCE_DIR}/Chapter9/core/src/TexCompression.cpp
-    ${PROJECT_SOURCE_DIR}/Chapter9/core/src/Texture.cpp
-    ${PROJECT_SOURCE_DIR}/Chapter9/core/src/Timer.cpp
-    ${PROJECT_SOURCE_DIR}/Chapter9/core/src/Util.cpp
-    ${PROJECT_SOURCE_DIR}/Chapter9/core/src/XMLDom.cpp)
+    ${PROJECT_SOURCE_DIR}/Chapter9/core/src/Texture.cpp)
 add_executable(Chapter9 ${SRC_LIST})
 
 target_link_libraries(Chapter9 PRIVATE 

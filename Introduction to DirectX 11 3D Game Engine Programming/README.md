@@ -2,7 +2,7 @@ Chapter4 初始化dx11,windows
 Chapter6 draw simple geometry
 Chapter7 framework, light mode
 Chapter7 texture create ,detele, use, texture animation
-自己增加 需要相机，effect架构完善
+自己增加 需要相机，effect架构完善(移植KlayGE)
 
 大佬git学习
 
