@@ -1,9 +1,12 @@
 #include <render/RenderEffect.h>
 #include <core/Context.h>
+#include <core/ResIdentifier.h>
 
 #include "D3D11/D3D11RenderEngine.h"
 #include "D3D11/D3D11RenderFactory.h"
 #include "D3D11/D3D11Util.h"
+
+#include <filesystem>
 
 namespace RenderWorker
 {
@@ -19,6 +22,16 @@ void RenderEffectConstantBuffer::Load(const std::string& name)
         immutable_ = MakeSharedPtr<Immutable>();
     }
     immutable_->name = name;
+
+    std::string path_file = name.data();
+    size_t lastIndex = path_file.rfind("\\");
+    std::string package_path = path_file.substr(0, lastIndex);
+    std::string file_name = path_file.substr(lastIndex + 1);
+
+    uint64_t const timestamp = std::filesystem::last_write_time(package_path).time_since_epoch().count();
+    ResIdentifierPtr tex_res = MakeSharedPtr<ResIdentifier>(
+        file_name, timestamp, MakeSharedPtr<std::ifstream>(path_file.c_str(), std::ios_base::binary));
+    
 }
 
 void RenderEffectConstantBuffer::Resize(uint32_t size)

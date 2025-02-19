@@ -113,6 +113,7 @@ FOREACH(flag_var
 	ENDIF()
 ENDFOREACH()
 
+add_subdirectory(rapidjson)
 add_subdirectory(zlib)
 add_subdirectory(assimp)
 add_subdirectory(FreeImage)

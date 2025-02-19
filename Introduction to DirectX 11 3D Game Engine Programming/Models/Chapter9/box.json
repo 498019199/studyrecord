@@ -1,0 +1,82 @@
+{
+    "cbuffer":[
+        {
+            "name": "VSConstantBuffer",
+            "world": "float4x4",
+            "view": "float4x4",
+            "projection": "float4x4"
+            
+        },
+        {
+            "name":"PSConstantBuffer",
+            "directional_light": {
+                "ambient": "float4",
+                "diffuse": "float4",
+                "specular": "float4",
+                "direction": "float3",
+                "pad": "float"
+            },
+            "point_light":{
+                "ambient": "float4",
+                "diffuse": "float4",
+                "specular": "float4",
+                "pos": "float3",
+                "range": "float",
+                "att": "float3",
+                "pad": "float"
+            },
+            "spot_light":{
+                "ambient": "float4",
+                "diffuse": "float4",
+                "specular": "float4",
+                "pos": "float3",
+                "range": "float",
+                "direction": "float3",
+                "spot": "float",
+                "att": "float3",
+                "pad": "float"
+            },
+            "material": {
+                "ambient": "float4",
+                "diffuse": "float4",
+                "specular": "float4",
+                "reflect": "float4"
+            },
+            "eyePos":"float"
+        }
+    ],
+    "parameter":[
+        {
+            "type":"sampler",
+            "state":{
+                "filtering": "min_mag_linear_mip_point",
+                "address_u":"clamp",
+                "address_v":"clamp"
+            }
+        },
+        {
+            "type":"rw_texture2D",
+            "state":{
+                "type": "texture2d" 
+            }
+        }
+    ],
+
+    "effect":{
+        "rasterizer_state":{
+            "shade_mode":"solid",
+            "cull_mode":"back"
+        },
+        "blend_state":{
+            "blend_enable" : "true",
+			"blend_op" : "add",
+			"src_blend" : "one",
+			"dest_blend" : "one",
+			"blend_op_alpha" : "add",
+			"src_blend_alpha" : "one",
+			"dest_blend_alpha" : "one"
+        },
+        "vertex_shader":"Basic_3D_VS",
+        "pixel_shader":"Basic_3D_PS"
+    }
+}

@@ -5,4 +5,5 @@
 /3rd/assimp/assimp
 /3rd/FreeImage/FreeImage
 /3rd/zlib/zlib
+/3rd/rapidjson/rapidjson
 *.cso

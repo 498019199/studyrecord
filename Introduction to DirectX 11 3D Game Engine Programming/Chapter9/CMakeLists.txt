@@ -3,6 +3,7 @@ include_directories(
     ${PROJECT_SOURCE_DIR}/math/include
     ${PROJECT_SOURCE_DIR}/3rd/dxsdk/dxsdk/Include
     ${PROJECT_SOURCE_DIR}/3rd/FreeImage/FreeImage/Source
+    ${PROJECT_SOURCE_DIR}/3rd/rapidjson/rapidjson/include
     ${PROJECT_SOURCE_DIR}/3rd/imgui)
 
 set(SRC_LIST
@@ -26,7 +27,7 @@ set(SRC_LIST
     ${PROJECT_SOURCE_DIR}/Chapter9/core/src/Scene/SceneNode.cpp
     ${PROJECT_SOURCE_DIR}/Chapter9/core/src/Scene/World.cpp
     
-    ${PROJECT_SOURCE_DIR}/Chapter9/core/src/Camere.cpp 
+    ${PROJECT_SOURCE_DIR}/Chapter9/core/src/Camera.cpp 
     ${PROJECT_SOURCE_DIR}/Chapter9/core/src/Context.cpp
     ${PROJECT_SOURCE_DIR}/Chapter9/core/src/Control.cpp
     ${PROJECT_SOURCE_DIR}/Chapter9/core/src/GraphicsBuffer.cpp

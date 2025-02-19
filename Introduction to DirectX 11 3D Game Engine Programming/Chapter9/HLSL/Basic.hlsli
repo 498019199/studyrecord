@@ -3,9 +3,6 @@
 Texture2D gTex1 : register(t0);
 SamplerState gSamLinear1 : register(s0);
 
-Texture2D gTex2 : register(t1);
-SamplerState gSamLinear2 : register(s1);
-
 cbuffer VSConstantBuffer : register(b0)
 {
     matrix gWorld; // matrix可以用float4x4替代。不加row_major的情况下，矩阵默认为列主矩阵，
