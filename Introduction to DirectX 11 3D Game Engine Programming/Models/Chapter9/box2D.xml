@@ -1,0 +1,26 @@
+<?xml version='1.0'?>
+<effect>
+    <parameter type="texture2D" name="src1_tex"/>
+	<parameter type="sampler" name="point_sampler">
+		<state name="filtering" value="min_mag_mip_point"/>
+		<state name="address_u" value="clamp"/>
+		<state name="address_v" value="clamp"/>
+	</parameter>
+
+    <technique name="Basic_2D">
+        <pass name="p0">
+            <state name="cull_mode" value="front"/>
+
+            <state name="blend_enable" value="true"/>
+			<state name="blend_op" value="add"/>
+			<state name="src_blend" value="one"/>
+			<state name="dest_blend" value="one"/>
+			<state name="blend_op_alpha" value="add"/>
+			<state name="src_blend_alpha" value="one"/>
+			<state name="dest_blend_alpha" value="one"/>
+
+            <state name="vertex_shader" value="Basic_2D_VS()"/>
+			<state name="pixel_shader" value="Basic_2D_PS()"/>
+        </pass>
+    </technique>
+</effect>

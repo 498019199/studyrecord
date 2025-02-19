@@ -1,0 +1,73 @@
+<?xml version='1.0'?>
+<effect>
+    <struct name="DirectionalLight">
+        <member type="float4" name="ambient"/>
+        <member type="float4" name="diffuse"/>
+        <member type="float4" name="specular"/>
+        <member type="float3" name="direction"/>
+        <member type="float" name="pad"/>
+    </struct>
+        <struct name="PointLight">
+        <member type="float4" name="ambient"/>
+        <member type="float4" name="diffuse"/>
+        <member type="float4" name="specular"/>
+        <member type="float3" name="pos"/>
+        <member type="float" name="range"/>
+        <member type="float3" name="att"/>
+        <member type="float" name="pad"/>
+    </struct>
+        <struct name="SpotLight">
+        <member type="float4" name="ambient"/>
+        <member type="float4" name="diffuse"/>
+        <member type="float4" name="specular"/>
+        <member type="float3" name="pos"/>
+        <member type="float" name="range"/>
+        <member type="float3" name="direction"/>
+        <member type="float" name="spot"/>
+        <member type="float3" name="att"/>
+        <member type="float" name="pad"/>
+    </struct>
+    <struct name="Material">
+        <member type="float4" name="ambient"/>
+        <member type="float4" name="diffuse"/>
+        <member type="float4" name="specular"/>
+        <member type="float4" name="reflect"/>
+    </struct>
+
+    <cbuffer name="VSConstantBuffer">
+        <parameter type="float4x4" name="world"/>
+        <parameter type="float4x4" name="view"/>
+        <parameter type="float4x4" name="projection"/>
+    </cbuffer>
+    <cbuffer name="PSConstantBuffer">
+        <parameter type="DirectionalLight" name="directional_light"/>
+        <parameter type="PointLight" name="point_light"/>
+        <parameter type="SpotLight" name="spot_light"/>
+        <parameter type="Material" name="material"/>
+        <parameter type="float" name="eyePos"/>
+    </cbuffer>
+
+    <parameter type="texture2D" name="src1_tex"/>
+	<parameter type="sampler" name="point_sampler">
+		<state name="filtering" value="min_mag_mip_point"/>
+		<state name="address_u" value="clamp"/>
+		<state name="address_v" value="clamp"/>
+	</parameter>
+
+    <technique name="Basic_3D">
+        <pass name="p0">
+            <state name="cull_mode" value="front"/>
+
+            <state name="blend_enable" value="true"/>
+			<state name="blend_op" value="add"/>
+			<state name="src_blend" value="one"/>
+			<state name="dest_blend" value="one"/>
+			<state name="blend_op_alpha" value="add"/>
+			<state name="src_blend_alpha" value="one"/>
+			<state name="dest_blend_alpha" value="one"/>
+
+            <state name="vertex_shader" value="Basic_3D_VS()"/>
+			<state name="pixel_shader" value="Basic_3D_PS()"/>
+        </pass>
+    </technique>
+</effect>

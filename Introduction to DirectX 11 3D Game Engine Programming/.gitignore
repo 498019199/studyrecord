@@ -6,4 +6,5 @@
 /3rd/FreeImage/FreeImage
 /3rd/zlib/zlib
 /3rd/rapidjson/rapidjson
+/3rd/rapidxml/rapidxml
 *.cso

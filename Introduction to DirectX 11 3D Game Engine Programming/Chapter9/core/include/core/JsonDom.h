@@ -51,6 +51,7 @@ namespace RenderWorker
 		Object,
 	};
 
+	using JsonTable = std::span<std::pair<std::string, JsonValue> const>;
 	class JsonValue
 	{
 	public:
@@ -90,7 +91,7 @@ namespace RenderWorker
 		float ValueFloat() const;
 		std::string_view ValueString() const;
 		std::span<JsonValue const> ValueArray() const;
-		std::span<std::pair<std::string, JsonValue> const> ValueObject() const;
+		JsonTable ValueObject() const;
 
 		void Value(bool value);
 		void Value(int32_t value);

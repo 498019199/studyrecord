@@ -522,7 +522,7 @@ namespace RenderWorker
 			return MakeSpan(array_value);
 		}
 
-		std::span<std::pair<std::string, JsonValue> const> ValueObject() const
+		JsonTable ValueObject() const
 		{
 			if (type_ != JsonValueType::Object)
 			{
@@ -711,7 +711,7 @@ namespace RenderWorker
 		return pimpl_->ValueArray();
 	}
 
-	std::span<std::pair<std::string, JsonValue> const> JsonValue::ValueObject() const
+	JsonTable JsonValue::ValueObject() const
 	{
 		return pimpl_->ValueObject();
 	}

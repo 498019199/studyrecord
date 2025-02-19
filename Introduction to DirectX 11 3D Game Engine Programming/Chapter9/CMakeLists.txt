@@ -45,8 +45,9 @@ set(SRC_LIST
     ${PROJECT_SOURCE_DIR}/Chapter9/core/src/ShaderObject.cpp
     ${PROJECT_SOURCE_DIR}/Chapter9/core/src/TexCompression.cpp
     ${PROJECT_SOURCE_DIR}/Chapter9/core/src/Texture.cpp
-    ${PROJECT_SOURCE_DIR}/Chapter9/core/src/Timer.cpp 
-    ${PROJECT_SOURCE_DIR}/Chapter9/core/src/Util.cpp)
+    ${PROJECT_SOURCE_DIR}/Chapter9/core/src/Timer.cpp
+    ${PROJECT_SOURCE_DIR}/Chapter9/core/src/Util.cpp
+    ${PROJECT_SOURCE_DIR}/Chapter9/core/src/XMLDom.cpp)
 add_executable(Chapter9 ${SRC_LIST})
 
 target_link_libraries(Chapter9 PRIVATE 

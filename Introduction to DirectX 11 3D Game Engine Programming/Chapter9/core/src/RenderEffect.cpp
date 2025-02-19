@@ -6,7 +6,7 @@
 #include "D3D11/D3D11Util.h"
 
 #include <core/ResIdentifier.h>
-#include <core/JsonDom.h>
+
 #include <core/Hash.h>
 #include <filesystem>
 
@@ -128,48 +128,6 @@ uint32_t RenderEffect::AddShaderObject()
     return index;
 }
 
-void RenderEffect::Load1(const std::string& effect_name)
-{
-    std::string path_file = effect_name.data();
-    size_t lastIndex = path_file.rfind("\\");
-    std::string package_path = path_file.substr(0, lastIndex);
-    std::string name = path_file.substr(lastIndex + 1);
-
-    uint64_t const timestamp = std::filesystem::last_write_time(package_path).time_since_epoch().count();
-    ResIdentifierPtr effect_res = MakeSharedPtr<ResIdentifier>(
-        name, timestamp, MakeSharedPtr<std::ifstream>(path_file.c_str(), std::ios_base::binary));
-    if(!effect_res)
-    {
-        return ;
-    }
-    auto root_value = LoadJson(*effect_res);
-    if (auto const* cbuffer_val = root_value.Member("cbuffer"))
-    {
-
-    }
-    if (auto const* parameter_val = root_value.Member("parameter"))
-    {
-
-    }
-    if (auto const* effect_val = root_value.Member("effect"))
-    {
-        for(auto item : effect_val->ValueObject())
-        {
-            auto hash = HashValue(item.first);
-            const auto& Value = item.second;
-            
-            if(CtHash("vertex_shader") == hash)
-            {
-
-            }
-            else if(CtHash("pixel_shader") == hash)
-            {
-
-            }
-        }
-    }
-
-}
 void RenderEffect::Load(const std::string& file_path)
 {
     if (!immutable_)
@@ -243,4 +201,35 @@ RenderEffectConstantBuffer* RenderEffect::CBufferByIndex(uint32_t index) const n
     COMMON_ASSERT(index < this->CBuffersNum());
     return cbuffers_[index].get();
 }
+
+
+void RenderEffect::Load1(const std::string& effect_name)
+{
+    std::string path_file = effect_name.data();
+    size_t lastIndex = path_file.rfind("\\");
+    std::string package_path = path_file.substr(0, lastIndex);
+    std::string name = path_file.substr(lastIndex + 1);
+
+    uint64_t const timestamp = std::filesystem::last_write_time(package_path).time_since_epoch().count();
+    ResIdentifierPtr effect_res = MakeSharedPtr<ResIdentifier>(
+        name, timestamp, MakeSharedPtr<std::ifstream>(path_file.c_str(), std::ios_base::binary));
+    if(!effect_res)
+    {
+        return ;
+    }
+
+}
+
+void RenderTechnique::Load(RenderEffect& effect, const XMLNode& node, uint32_t tech_index)
+{
+    //name_ = Value.
+    name_hash_ = HashValue(name_);
+}
+
+void RenderPass::Load(RenderEffect& effect, const XMLNode& node, uint32_t tech_index, uint32_t pass_index)
+{
+    
+}
+
+
 }

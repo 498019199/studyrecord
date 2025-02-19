@@ -1,4 +1,6 @@
 #pragma once
+#include <core/XMLDom.h>
+
 #include <render/GraphicsBuffer.h>
 #include <render/ShaderObject.h>
 #include <render/Light.h>
@@ -119,6 +121,28 @@ public:
     ShaderResourceViewPtr srv2_;
 };
 
+class RenderTechnique final
+{
+public:
+    void Load(RenderEffect& effect, const XMLNode& node, uint32_t tech_index);
+
+private:
+    std::string name_;
+    size_t name_hash_;
+};
+
+
+
+
+class RenderPass final
+{
+public:
+    void Load(RenderEffect& effect, const XMLNode& node, uint32_t tech_index, uint32_t pass_index);
+
+private:
+    std::string name_;
+    size_t name_hash_;
+};
 
 
 
