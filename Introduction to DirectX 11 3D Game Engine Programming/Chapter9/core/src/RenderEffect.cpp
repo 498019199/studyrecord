@@ -3164,7 +3164,7 @@ namespace
 			if (value)
 			{
 				uint32_t array_size = value->ArraySize();
-				uint32_t mipmap = value->NumMipMaps();
+				uint32_t mipmap = value->MipMapsNum();
 
 				auto& rf = Context::Instance().RenderFactoryInstance();
 				val_ = rf.MakeTextureSrv(value, 0, array_size, 0, mipmap);
@@ -3230,122 +3230,122 @@ namespace
 		std::string elem_type_;
 	};
 
-	class RenderVariableRwTexture final : public RenderVariableIOable
-	{
-	public:
-		std::unique_ptr<RenderVariable> Clone() override
-		{
-			auto ret = MakeUniquePtr<RenderVariableRwTexture>();
-			UnorderedAccessViewPtr val;
-			this->Value(val);
-			*ret = val;
-			std::string elem_type;
-			this->Value(elem_type);
-			*ret = elem_type;
-			return ret;
-		}
+// 	class RenderVariableRwTexture final : public RenderVariableIOable
+// 	{
+// 	public:
+// 		std::unique_ptr<RenderVariable> Clone() override
+// 		{
+// 			auto ret = MakeUniquePtr<RenderVariableRwTexture>();
+// 			UnorderedAccessViewPtr val;
+// 			this->Value(val);
+// 			*ret = val;
+// 			std::string elem_type;
+// 			this->Value(elem_type);
+// 			*ret = elem_type;
+// 			return ret;
+// 		}
 
-#if ZENGINE_IS_DEV_PLATFORM
-		void Load([[maybe_unused]] RenderEffect const& effect, XMLNode const& node, [[maybe_unused]] uint32_t array_size) override
-		{
-			*this = UnorderedAccessViewPtr();
+// #if ZENGINE_IS_DEV_PLATFORM
+// 		void Load([[maybe_unused]] RenderEffect const& effect, XMLNode const& node, [[maybe_unused]] uint32_t array_size) override
+// 		{
+// 			*this = UnorderedAccessViewPtr();
 
-			if (auto attr = node.Attrib("elem_type"))
-			{
-				*this = std::string(attr->ValueString());
-			}
-			else
-			{
-				*this = std::string("float4");
-			}
-		}
-#endif
+// 			if (auto attr = node.Attrib("elem_type"))
+// 			{
+// 				*this = std::string(attr->ValueString());
+// 			}
+// 			else
+// 			{
+// 				*this = std::string("float4");
+// 			}
+// 		}
+// #endif
 
-		void StreamIn([[maybe_unused]] RenderEffect const& effect, ResIdentifier& res) override
-		{
-			*this = UnorderedAccessViewPtr();
-			*this = ReadShortString(res);
-		}
+// 		void StreamIn([[maybe_unused]] RenderEffect const& effect, ResIdentifier& res) override
+// 		{
+// 			*this = UnorderedAccessViewPtr();
+// 			*this = ReadShortString(res);
+// 		}
 
-#if ZENGINE_IS_DEV_PLATFORM
-		void StreamOut(std::ostream& os) const override
-		{
-			std::string tmp;
-			this->Value(tmp);
-			WriteShortString(os, tmp);
-		}
-#endif
+// #if ZENGINE_IS_DEV_PLATFORM
+// 		void StreamOut(std::ostream& os) const override
+// 		{
+// 			std::string tmp;
+// 			this->Value(tmp);
+// 			WriteShortString(os, tmp);
+// 		}
+// #endif
 
-		RenderVariable& operator=(TexturePtr const& value) override
-		{
-			auto& rf = Context::Instance().RenderFactoryInstance();
-			switch (value->Type())
-			{
-			case Texture::TT_1D:
-				val_ = rf.Make1DUav(value, 0, static_cast<int>(value->ArraySize()), 0);
-				break;
+// 		RenderVariable& operator=(TexturePtr const& value) override
+// 		{
+// 			auto& rf = Context::Instance().RenderFactoryInstance();
+// 			switch (value->Type())
+// 			{
+// 			case Texture::TT_1D:
+// 				val_ = rf.Make1DUav(value, 0, static_cast<int>(value->ArraySize()), 0);
+// 				break;
 
-			case Texture::TT_2D:
-				val_ = rf.Make2DUav(value, 0, static_cast<int>(value->ArraySize()), 0);
-				break;
+// 			case Texture::TT_2D:
+// 				val_ = rf.Make2DUav(value, 0, static_cast<int>(value->ArraySize()), 0);
+// 				break;
 
-			case Texture::TT_3D:
-				val_ = rf.Make3DUav(value, 0, 0, value->Depth(0), 0);
-				break;
+// 			case Texture::TT_3D:
+// 				val_ = rf.Make3DUav(value, 0, 0, value->Depth(0), 0);
+// 				break;
 
-			case Texture::TT_Cube:
-				val_ = rf.MakeCubeUav(value, 0, 0);
-				break;
-			}
-			return *this;
-		}
+// 			case Texture::TT_Cube:
+// 				val_ = rf.MakeCubeUav(value, 0, 0);
+// 				break;
+// 			}
+// 			return *this;
+// 		}
 
-		RenderVariable& operator=(UnorderedAccessViewPtr const& value) override
-		{
-			val_ = value;
-			return *this;
-		}
+// 		RenderVariable& operator=(UnorderedAccessViewPtr const& value) override
+// 		{
+// 			val_ = value;
+// 			return *this;
+// 		}
 
-		RenderVariable& operator=(std::string const& value) override
-		{
-			elem_type_ = value;
-			return *this;
-		}
+// 		RenderVariable& operator=(std::string const& value) override
+// 		{
+// 			elem_type_ = value;
+// 			return *this;
+// 		}
 
-		RenderVariable& operator=(std::string_view value) override
-		{
-			elem_type_ = std::string(std::move(value));
-			return *this;
-		}
+// 		RenderVariable& operator=(std::string_view value) override
+// 		{
+// 			elem_type_ = std::string(std::move(value));
+// 			return *this;
+// 		}
 
-		using RenderVariableIOable::operator=;
+// 		using RenderVariableIOable::operator=;
 
-		void Value(TexturePtr& val) const override
-		{
-			val = val_->TextureResource();
-		}
+// 		void Value(TexturePtr& val) const override
+// 		{
+// 			val = val_->TextureResource();
+// 		}
 
-		void Value(UnorderedAccessViewPtr& val) const override
-		{
-			val = val_;
-		}
+// 		void Value(UnorderedAccessViewPtr& val) const override
+// 		{
+// 			val = val_;
+// 		}
 
-		void Value(std::string& val) const override
-		{
-			val = elem_type_;
-		}
+// 		void Value(std::string& val) const override
+// 		{
+// 			val = elem_type_;
+// 		}
 
-		void Value(std::string_view& val) const override
-		{
-			val = elem_type_;
-		}
+// 		void Value(std::string_view& val) const override
+// 		{
+// 			val = elem_type_;
+// 		}
 
-		using RenderVariableIOable::Value;
+// 		using RenderVariableIOable::Value;
 
-	protected:
-		UnorderedAccessViewPtr val_;
-		std::string elem_type_;
-	};
+// 	protected:
+// 		UnorderedAccessViewPtr val_;
+// 		std::string elem_type_;
+// 	};
 
 	class RenderVariableBuffer final : public RenderVariableIOable
 	{
@@ -3435,93 +3435,93 @@ namespace
 		std::string elem_type_;
 	};
 
-	class RenderVariableRwBuffer final : public RenderVariableIOable
-	{
-	public:
-		std::unique_ptr<RenderVariable> Clone() override
-		{
-			auto ret = MakeUniquePtr<RenderVariableRwBuffer>();
-			UnorderedAccessViewPtr val;
-			this->Value(val);
-			*ret = val;
-			std::string elem_type;
-			this->Value(elem_type);
-			*ret = elem_type;
-			return ret;
-		}
+// 	class RenderVariableRwBuffer final : public RenderVariableIOable
+// 	{
+// 	public:
+// 		std::unique_ptr<RenderVariable> Clone() override
+// 		{
+// 			auto ret = MakeUniquePtr<RenderVariableRwBuffer>();
+// 			UnorderedAccessViewPtr val;
+// 			this->Value(val);
+// 			*ret = val;
+// 			std::string elem_type;
+// 			this->Value(elem_type);
+// 			*ret = elem_type;
+// 			return ret;
+// 		}
 
-#if ZENGINE_IS_DEV_PLATFORM
-		void Load([[maybe_unused]] RenderEffect const& effect, XMLNode const& node, [[maybe_unused]] uint32_t array_size) override
-		{
-			*this = UnorderedAccessViewPtr();
+// #if ZENGINE_IS_DEV_PLATFORM
+// 		void Load([[maybe_unused]] RenderEffect const& effect, XMLNode const& node, [[maybe_unused]] uint32_t array_size) override
+// 		{
+// 			*this = UnorderedAccessViewPtr();
 
-			if (auto attr = node.Attrib("elem_type"))
-			{
-				*this = std::string(attr->ValueString());
-			}
-			else
-			{
-				*this = std::string("float4");
-			}
-		}
-#endif
+// 			if (auto attr = node.Attrib("elem_type"))
+// 			{
+// 				*this = std::string(attr->ValueString());
+// 			}
+// 			else
+// 			{
+// 				*this = std::string("float4");
+// 			}
+// 		}
+// #endif
 
-		void StreamIn([[maybe_unused]] RenderEffect const& effect, ResIdentifier& res) override
-		{
-			*this = UnorderedAccessViewPtr();
-			*this = ReadShortString(res);
-		}
+// 		void StreamIn([[maybe_unused]] RenderEffect const& effect, ResIdentifier& res) override
+// 		{
+// 			*this = UnorderedAccessViewPtr();
+// 			*this = ReadShortString(res);
+// 		}
 
-#if ZENGINE_IS_DEV_PLATFORM
-		void StreamOut(std::ostream& os) const override
-		{
-			std::string tmp;
-			this->Value(tmp);
-			WriteShortString(os, tmp);
-		}
-#endif
+// #if ZENGINE_IS_DEV_PLATFORM
+// 		void StreamOut(std::ostream& os) const override
+// 		{
+// 			std::string tmp;
+// 			this->Value(tmp);
+// 			WriteShortString(os, tmp);
+// 		}
+// #endif
 
-		RenderVariable& operator=(UnorderedAccessViewPtr const& value) override
-		{
-			val_ = value;
-			return *this;
-		}
+// 		RenderVariable& operator=(UnorderedAccessViewPtr const& value) override
+// 		{
+// 			val_ = value;
+// 			return *this;
+// 		}
 
-		RenderVariable& operator=(std::string const& value) override
-		{
-			elem_type_ = value;
-			return *this;
-		}
+// 		RenderVariable& operator=(std::string const& value) override
+// 		{
+// 			elem_type_ = value;
+// 			return *this;
+// 		}
 
-		RenderVariable& operator=(std::string_view value) override
-		{
-			elem_type_ = std::string(std::move(value));
-			return *this;
-		}
+// 		RenderVariable& operator=(std::string_view value) override
+// 		{
+// 			elem_type_ = std::string(std::move(value));
+// 			return *this;
+// 		}
 
-		using RenderVariableIOable::operator=;
+// 		using RenderVariableIOable::operator=;
 
-		void Value(UnorderedAccessViewPtr& val) const override
-		{
-			val = val_;
-		}
+// 		void Value(UnorderedAccessViewPtr& val) const override
+// 		{
+// 			val = val_;
+// 		}
 
-		void Value(std::string& val) const override
-		{
-			val = elem_type_;
-		}
+// 		void Value(std::string& val) const override
+// 		{
+// 			val = elem_type_;
+// 		}
 
-		void Value(std::string_view& val) const override
-		{
-			val = elem_type_;
-		}
+// 		void Value(std::string_view& val) const override
+// 		{
+// 			val = elem_type_;
+// 		}
 
-		using RenderVariableIOable::Value;
+// 		using RenderVariableIOable::Value;
 
-	protected:
-		UnorderedAccessViewPtr val_;
-		std::string elem_type_;
-	};
+// 	protected:
+// 		UnorderedAccessViewPtr val_;
+// 		std::string elem_type_;
+// 	};
 
 	class RenderVariableByteAddressBuffer final : public RenderVariableIOable
 	{
@@ -3573,55 +3573,55 @@ namespace
 		ShaderResourceViewPtr val_;
 	};
 
-	class RenderVariableRwByteAddressBuffer final : public RenderVariableIOable
-	{
-	public:
-		std::unique_ptr<RenderVariable> Clone() override
-		{
-			auto ret = MakeUniquePtr<RenderVariableRwByteAddressBuffer>();
-			UnorderedAccessViewPtr val;
-			this->Value(val);
-			*ret = val;
-			return ret;
-		}
+// 	class RenderVariableRwByteAddressBuffer final : public RenderVariableIOable
+// 	{
+// 	public:
+// 		std::unique_ptr<RenderVariable> Clone() override
+// 		{
+// 			auto ret = MakeUniquePtr<RenderVariableRwByteAddressBuffer>();
+// 			UnorderedAccessViewPtr val;
+// 			this->Value(val);
+// 			*ret = val;
+// 			return ret;
+// 		}
 
-#if ZENGINE_IS_DEV_PLATFORM
-		void Load([[maybe_unused]] RenderEffect const& effect, [[maybe_unused]] XMLNode const& node,
-			[[maybe_unused]] uint32_t array_size) override
-		{
-			*this = UnorderedAccessViewPtr();
-		}
-#endif
+// #if ZENGINE_IS_DEV_PLATFORM
+// 		void Load([[maybe_unused]] RenderEffect const& effect, [[maybe_unused]] XMLNode const& node,
+// 			[[maybe_unused]] uint32_t array_size) override
+// 		{
+// 			*this = UnorderedAccessViewPtr();
+// 		}
+// #endif
 
-		void StreamIn([[maybe_unused]] RenderEffect const& effect, [[maybe_unused]] ResIdentifier& res) override
-		{
-			*this = UnorderedAccessViewPtr();
-		}
+// 		void StreamIn([[maybe_unused]] RenderEffect const& effect, [[maybe_unused]] ResIdentifier& res) override
+// 		{
+// 			*this = UnorderedAccessViewPtr();
+// 		}
 
-#if ZENGINE_IS_DEV_PLATFORM
-		void StreamOut([[maybe_unused]] std::ostream& os) const override
-		{
-		}
-#endif
+// #if ZENGINE_IS_DEV_PLATFORM
+// 		void StreamOut([[maybe_unused]] std::ostream& os) const override
+// 		{
+// 		}
+// #endif
 
-		RenderVariable& operator=(UnorderedAccessViewPtr const& value) override
-		{
-			val_ = value;
-			return *this;
-		}
+// 		RenderVariable& operator=(UnorderedAccessViewPtr const& value) override
+// 		{
+// 			val_ = value;
+// 			return *this;
+// 		}
 
-		using RenderVariableIOable::operator=;
+// 		using RenderVariableIOable::operator=;
 
-		void Value(UnorderedAccessViewPtr& val) const override
-		{
-			val = val_;
-		}
+// 		void Value(UnorderedAccessViewPtr& val) const override
+// 		{
+// 			val = val_;
+// 		}
 
-		using RenderVariableIOable::Value;
+// 		using RenderVariableIOable::Value;
 
-	protected:
-		UnorderedAccessViewPtr val_;
-	};
+// 	protected:
+// 		UnorderedAccessViewPtr val_;
+// 	};
 
 	class RenderVariableStruct final : public RenderVariableArray<uint8_t>
 	{
@@ -3745,7 +3745,7 @@ namespace
 		case REDT_rasterizer_ordered_texture2D:
 		case REDT_rasterizer_ordered_texture2DArray:
 		case REDT_rasterizer_ordered_texture3D:
-			ret = MakeUniquePtr<RenderVariableRwTexture>();
+			//ret = MakeUniquePtr<RenderVariableRwTexture>();
 			break;
 
 		case REDT_sampler:
@@ -3888,7 +3888,7 @@ namespace
 		case REDT_rw_structured_buffer:
 		case REDT_rasterizer_ordered_buffer:
 		case REDT_rasterizer_ordered_structured_buffer:
-			ret = MakeUniquePtr<RenderVariableRwBuffer>();
+			//ret = MakeUniquePtr<RenderVariableRwBuffer>();
 			break;
 
 		case REDT_byte_address_buffer:
@@ -3897,7 +3897,7 @@ namespace
 
 		case REDT_rw_byte_address_buffer:
 		case REDT_rasterizer_ordered_byte_address_buffer:
-			ret = MakeUniquePtr<RenderVariableRwByteAddressBuffer>();
+			//ret = MakeUniquePtr<RenderVariableRwByteAddressBuffer>();
 			break;
 
 		case REDT_struct:
@@ -3935,7 +3935,7 @@ namespace
 		checked_cast<RenderVariableIOable const&>(var).StreamOut(os);
 	}
 
-	void LoadVersion(XMLNode const& node, ShaderModel& ver)
+	void LoadVersion(XMLNode const& node, /*ShaderModel& ver*/)
 	{
 		uint32_t major_ver = 0;
 		uint32_t minor_ver = 0;
@@ -3974,130 +3974,8 @@ namespace
 #endif
 }
 
-namespace KlayGE
+namespace RenderWorker
 {
-	class EffectLoadingDesc : public ResLoadingDesc
-	{
-	private:
-		struct EffectDesc
-		{
-			std::vector<std::string> res_name;
-
-			bool cloned = false;
-			RenderEffectPtr effect;
-		};
-
-	public:
-		explicit EffectLoadingDesc(std::span<std::string const> name)
-		{
-			effect_desc_.res_name = std::vector<std::string>(name.begin(), name.end());
-			effect_desc_.effect = MakeSharedPtr<RenderEffect>();
-		}
-
-		uint64_t Type() const override
-		{
-			return CtHash("EffectLoadingDesc");
-		}
-
-		bool StateLess() const override
-		{
-			return false;
-		}
-
-		std::shared_ptr<void> CreateResource() override
-		{
-			effect_desc_.effect->Load(effect_desc_.res_name);
-			return effect_desc_.effect;
-		}
-
-		void SubThreadStage() override
-		{
-			std::lock_guard<std::mutex> lock(main_thread_stage_mutex_);
-
-			RenderEffectPtr const& effect = effect_desc_.effect;
-			if (effect && effect->HWResourceReady())
-			{
-				return;
-			}
-
-#if ZENGINE_IS_DEV_PLATFORM
-			effect->CompileShaders();
-#endif
-
-			RenderFactory& rf = Context::Instance().RenderFactoryInstance();
-			RenderDeviceCaps const & caps = rf.RenderEngineInstance().DeviceCaps();
-			if (caps.multithread_res_creating_support)
-			{
-				this->MainThreadStageNoLock();
-			}
-		}
-
-		void MainThreadStage() override
-		{
-			std::lock_guard<std::mutex> lock(main_thread_stage_mutex_);
-			this->MainThreadStageNoLock();
-		}
-
-		bool HasSubThreadStage() const override
-		{
-			return true;
-		}
-
-		bool Match(ResLoadingDesc const & rhs) const override
-		{
-			if (this->Type() == rhs.Type())
-			{
-				EffectLoadingDesc const & eld = static_cast<EffectLoadingDesc const &>(rhs);
-				return (effect_desc_.res_name == eld.effect_desc_.res_name);
-			}
-			return false;
-		}
-
-		void CopyDataFrom(ResLoadingDesc const & rhs) override
-		{
-			COMMON_ASSERT(this->Type() == rhs.Type());
-
-			EffectLoadingDesc const & eld = static_cast<EffectLoadingDesc const &>(rhs);
-			effect_desc_.res_name = eld.effect_desc_.res_name;
-			effect_desc_.effect = eld.effect_desc_.effect->Clone();
-			effect_desc_.cloned = true;
-		}
-
-		std::shared_ptr<void> CloneResourceFrom(std::shared_ptr<void> const & resource) override
-		{
-			auto rhs_effect = std::static_pointer_cast<RenderEffect>(resource);
-			if (effect_desc_.cloned)
-			{
-				rhs_effect->Reclone(*effect_desc_.effect);
-			}
-			else
-			{
-				rhs_effect->CloneInPlace(*effect_desc_.effect);
-			}
-			return std::static_pointer_cast<void>(effect_desc_.effect);
-		}
-
-		std::shared_ptr<void> Resource() const override
-		{
-			return effect_desc_.effect;
-		}
-
-	private:
-		void MainThreadStageNoLock()
-		{
-			RenderEffectPtr const& effect = effect_desc_.effect;
-			if (!effect || !effect->HWResourceReady())
-			{
-				effect->CreateHwShaders();
-			}
-		}
-
-	private:
-		EffectDesc effect_desc_;
-		std::mutex main_thread_stage_mutex_;
-	};
-
-
 // 	RenderEffectAnnotation::RenderEffectAnnotation() = default;
 // 	RenderEffectAnnotation::RenderEffectAnnotation(RenderEffectAnnotation&& rhs) noexcept = default;
 // 	RenderEffectAnnotation& RenderEffectAnnotation::operator=(RenderEffectAnnotation&& rhs) noexcept = default;
@@ -4316,10 +4194,10 @@ namespace KlayGE
 
 			immutable_->macros.clear();
 			immutable_->struct_types.clear();
-			immutable_->shader_frags.clear();
+			//immutable_->shader_frags.clear();
 			immutable_->hlsl_shader.clear();
 			immutable_->techniques.clear();
-			immutable_->shader_graph_nodes.clear();
+			//immutable_->shader_graph_nodes.clear();
 
 			immutable_->shader_descs.resize(1);
 
@@ -4608,11 +4486,11 @@ namespace KlayGE
 		return &immutable_->techniques[n];
 	}
 
-	RenderShaderFragment const& RenderEffect::ShaderFragmentByIndex(uint32_t n) const noexcept
-	{
-		COMMON_ASSERT(n < this->NumShaderFragments());
-		return immutable_->shader_frags[n];
-	}
+	// RenderShaderFragment const& RenderEffect::ShaderFragmentByIndex(uint32_t n) const noexcept
+	// {
+	// 	COMMON_ASSERT(n < this->NumShaderFragments());
+	// 	return immutable_->shader_frags[n];
+	// }
 
 	uint32_t RenderEffect::AddShaderDesc(ShaderDesc const & sd)
 	{
@@ -4930,40 +4808,40 @@ namespace KlayGE
 			param.Load(*this, node);
 		}
 
-		for (XMLNode const* shader_graph_nodes_node = root.FirstNode("shader_graph_nodes"); shader_graph_nodes_node;
-			 shader_graph_nodes_node = shader_graph_nodes_node->NextSibling("shader_graph_nodes"))
-		{
-			for (XMLNode const* shader_node = shader_graph_nodes_node->FirstNode("node"); shader_node;
-				 shader_node = shader_node->NextSibling("node"))
-			{
-				auto name_attr = shader_node->Attrib("name");
-				COMMON_ASSERT(name_attr);
+		// for (XMLNode const* shader_graph_nodes_node = root.FirstNode("shader_graph_nodes"); shader_graph_nodes_node;
+		// 	 shader_graph_nodes_node = shader_graph_nodes_node->NextSibling("shader_graph_nodes"))
+		// {
+		// 	for (XMLNode const* shader_node = shader_graph_nodes_node->FirstNode("node"); shader_node;
+		// 		 shader_node = shader_node->NextSibling("node"))
+		// 	{
+		// 		auto name_attr = shader_node->Attrib("name");
+		// 		COMMON_ASSERT(name_attr);
 
-				size_t const node_name_hash = HashValue(name_attr->ValueString());
-				bool found = false;
-				for (auto& gn : immutable_->shader_graph_nodes)
-				{
-					if (node_name_hash == gn.NameHash())
-					{
-						gn.Load(*shader_node);
-						found = true;
-						break;
-					}
-				}
+		// 		size_t const node_name_hash = HashValue(name_attr->ValueString());
+		// 		bool found = false;
+		// 		for (auto& gn : immutable_->shader_graph_nodes)
+		// 		{
+		// 			if (node_name_hash == gn.NameHash())
+		// 			{
+		// 				gn.Load(*shader_node);
+		// 				found = true;
+		// 				break;
+		// 			}
+		// 		}
 
-				if (!found)
-				{
-					auto& node = immutable_->shader_graph_nodes.emplace_back();
-					node.Load(*shader_node);
-				}
-			}
-		}
+		// 		if (!found)
+		// 		{
+		// 			auto& node = immutable_->shader_graph_nodes.emplace_back();
+		// 			node.Load(*shader_node);
+		// 		}
+		// 	}
+		// }
 
-		for (XMLNode const* shader_node = root.FirstNode("shader"); shader_node; shader_node = shader_node->NextSibling("shader"))
-		{
-			auto& frag = immutable_->shader_frags.emplace_back();
-			frag.Load(*shader_node);
-		}
+		// for (XMLNode const* shader_node = root.FirstNode("shader"); shader_node; shader_node = shader_node->NextSibling("shader"))
+		// {
+		// 	auto& frag = immutable_->shader_frags.emplace_back();
+		// 	frag.Load(*shader_node);
+		// }
 
 		this->GenHLSLShaderText();
 
@@ -5005,7 +4883,7 @@ namespace KlayGE
 			std::string shader_platform_name(shader_platform_name_len, 0);
 			source.read(&shader_platform_name[0], shader_platform_name_len);
 
-			if ((re.NativeShaderFourCC() == shader_fourcc) && (re.NativeShaderVersion() == shader_ver)
+			/*if ((re.NativeShaderFourCC() == shader_fourcc) && (re.NativeShaderVersion() == shader_ver)
 				&& (re.NativeShaderPlatformName() == shader_platform_name))
 			{
 				uint64_t timestamp;
@@ -5123,7 +5001,7 @@ namespace KlayGE
 						}
 					}
 				}
-			}
+			}*/
 		}
 
 		return ret;
@@ -5140,15 +5018,15 @@ namespace KlayGE
 		uint32_t ver = Native2LE(KFX_VERSION);
 		os.write(reinterpret_cast<char const *>(&ver), sizeof(ver));
 
-		uint32_t shader_fourcc = Native2LE(re.NativeShaderFourCC());
-		os.write(reinterpret_cast<char const *>(&shader_fourcc), sizeof(shader_fourcc));
+		//uint32_t shader_fourcc = Native2LE(re.NativeShaderFourCC());
+		//os.write(reinterpret_cast<char const *>(&shader_fourcc), sizeof(shader_fourcc));
 
-		uint32_t shader_ver = Native2LE(re.NativeShaderVersion());
-		os.write(reinterpret_cast<char const *>(&shader_ver), sizeof(shader_ver));
+		//uint32_t shader_ver = Native2LE(re.NativeShaderVersion());
+		//os.write(reinterpret_cast<char const *>(&shader_ver), sizeof(shader_ver));
 
-		uint8_t shader_platform_name_len = static_cast<uint8_t>(re.NativeShaderPlatformName().size());
-		os.write(reinterpret_cast<char const *>(&shader_platform_name_len), sizeof(shader_platform_name_len));
-		os.write(&re.NativeShaderPlatformName()[0], shader_platform_name_len);
+		//uint8_t shader_platform_name_len = static_cast<uint8_t>(re.NativeShaderPlatformName().size());
+		//os.write(reinterpret_cast<char const *>(&shader_platform_name_len), sizeof(shader_platform_name_len));
+		//os.write(&re.NativeShaderPlatformName()[0], shader_platform_name_len);
 
 		uint64_t timestamp = Native2LE(immutable_->timestamp);
 		os.write(reinterpret_cast<char const *>(&timestamp), sizeof(timestamp));
@@ -5187,46 +5065,46 @@ namespace KlayGE
 				param.StreamOut(os);
 			}
 		}
-		{
-			uint8_t num_shader_graph_nodes = static_cast<uint8_t>(immutable_->shader_graph_nodes.size());
-			os.write(reinterpret_cast<char const *>(&num_shader_graph_nodes), sizeof(num_shader_graph_nodes));
-			for (auto const& node : immutable_->shader_graph_nodes)
-			{
-				node.StreamOut(os);
-			}
-		}
-		{
-			uint16_t num_shader_frags = Native2LE(static_cast<uint16_t>(immutable_->shader_frags.size()));
-			os.write(reinterpret_cast<char const *>(&num_shader_frags), sizeof(num_shader_frags));
-			for (auto const& frag : immutable_->shader_frags)
-			{
-				frag.StreamOut(os);
-			}
-		}
-		{
-			uint16_t num_shader_descs = Native2LE(static_cast<uint16_t>(immutable_->shader_descs.size() - 1));
-			os.write(reinterpret_cast<char const *>(&num_shader_descs), sizeof(num_shader_descs));
-			for (uint32_t i = 1; i < immutable_->shader_descs.size(); ++i)
-			{
-				WriteShortString(os, immutable_->shader_descs[i].profile);
-				WriteShortString(os, immutable_->shader_descs[i].func_name);
+		// {
+		// 	uint8_t num_shader_graph_nodes = static_cast<uint8_t>(immutable_->shader_graph_nodes.size());
+		// 	os.write(reinterpret_cast<char const *>(&num_shader_graph_nodes), sizeof(num_shader_graph_nodes));
+		// 	for (auto const& node : immutable_->shader_graph_nodes)
+		// 	{
+		// 		node.StreamOut(os);
+		// 	}
+		// }
+		// {
+		// 	uint16_t num_shader_frags = Native2LE(static_cast<uint16_t>(immutable_->shader_frags.size()));
+		// 	os.write(reinterpret_cast<char const *>(&num_shader_frags), sizeof(num_shader_frags));
+		// 	for (auto const& frag : immutable_->shader_frags)
+		// 	{
+		// 		frag.StreamOut(os);
+		// 	}
+		// }
+		// {
+		// 	uint16_t num_shader_descs = Native2LE(static_cast<uint16_t>(immutable_->shader_descs.size() - 1));
+		// 	os.write(reinterpret_cast<char const *>(&num_shader_descs), sizeof(num_shader_descs));
+		// 	for (uint32_t i = 1; i < immutable_->shader_descs.size(); ++i)
+		// 	{
+		// 		WriteShortString(os, immutable_->shader_descs[i].profile);
+		// 		WriteShortString(os, immutable_->shader_descs[i].func_name);
 
-				uint64_t tmp64 = Native2LE(immutable_->shader_descs[i].macros_hash);
-				os.write(reinterpret_cast<char const *>(&tmp64), sizeof(tmp64));
+		// 		uint64_t tmp64 = Native2LE(immutable_->shader_descs[i].macros_hash);
+		// 		os.write(reinterpret_cast<char const *>(&tmp64), sizeof(tmp64));
 
-				uint32_t tmp32 = Native2LE(immutable_->shader_descs[i].tech_pass_type);
-				os.write(reinterpret_cast<char const *>(&tmp32), sizeof(tmp32));
+		// 		uint32_t tmp32 = Native2LE(immutable_->shader_descs[i].tech_pass_type);
+		// 		os.write(reinterpret_cast<char const *>(&tmp32), sizeof(tmp32));
 
-				uint8_t len = static_cast<uint8_t>(immutable_->shader_descs[i].so_decl.size());
-				os.write(reinterpret_cast<char const *>(&len), sizeof(len));
-				for (uint32_t j = 0; j < len; ++ j)
-				{
-					ShaderDesc::StreamOutputDecl so_decl = immutable_->shader_descs[i].so_decl[j];
-					so_decl.usage = Native2LE(so_decl.usage);
-					os.write(reinterpret_cast<char const *>(&so_decl), sizeof(so_decl));
-				}
-			}
-		}
+		// 		uint8_t len = static_cast<uint8_t>(immutable_->shader_descs[i].so_decl.size());
+		// 		os.write(reinterpret_cast<char const *>(&len), sizeof(len));
+		// 		for (uint32_t j = 0; j < len; ++ j)
+		// 		{
+		// 			ShaderDesc::StreamOutputDecl so_decl = immutable_->shader_descs[i].so_decl[j];
+		// 			so_decl.usage = Native2LE(so_decl.usage);
+		// 			os.write(reinterpret_cast<char const *>(&so_decl), sizeof(so_decl));
+		// 		}
+		// 	}
+		// }
 
 		{
 			uint16_t num_techs = Native2LE(static_cast<uint16_t>(immutable_->techniques.size()));
@@ -5570,78 +5448,78 @@ namespace KlayGE
 			}
 		}
 
-		if (!immutable_->shader_graph_nodes.empty())
-		{
-			for (auto const& node : immutable_->shader_graph_nodes)
-			{
-				str += node.GenDeclarationCode();
-			}
-			str += '\n';
-		}
+		// if (!immutable_->shader_graph_nodes.empty())
+		// {
+		// 	for (auto const& node : immutable_->shader_graph_nodes)
+		// 	{
+		// 		str += node.GenDeclarationCode();
+		// 	}
+		// 	str += '\n';
+		// }
 
-		for (auto const& frag : immutable_->shader_frags)
-		{
-			ShaderStage const shader_stage = frag.Stage();
-			switch (shader_stage)
-			{
-			case ShaderStage::Vertex:
-				str += "#if KLAYGE_VERTEX_SHADER\n";
-				break;
+		// for (auto const& frag : immutable_->shader_frags)
+		// {
+		// 	ShaderStage const shader_stage = frag.Stage();
+		// 	switch (shader_stage)
+		// 	{
+		// 	case ShaderStage::Vertex:
+		// 		str += "#if KLAYGE_VERTEX_SHADER\n";
+		// 		break;
 
-			case ShaderStage::Pixel:
-				str += "#if KLAYGE_PIXEL_SHADER\n";
-				break;
+		// 	case ShaderStage::Pixel:
+		// 		str += "#if KLAYGE_PIXEL_SHADER\n";
+		// 		break;
 
-			case ShaderStage::Geometry:
-				str += "#if KLAYGE_GEOMETRY_SHADER\n";
-				break;
+		// 	case ShaderStage::Geometry:
+		// 		str += "#if KLAYGE_GEOMETRY_SHADER\n";
+		// 		break;
 
-			case ShaderStage::Compute:
-				str += "#if KLAYGE_COMPUTE_SHADER\n";
-				break;
+		// 	case ShaderStage::Compute:
+		// 		str += "#if KLAYGE_COMPUTE_SHADER\n";
+		// 		break;
 
-			case ShaderStage::Hull:
-				str += "#if KLAYGE_HULL_SHADER\n";
-				break;
+		// 	case ShaderStage::Hull:
+		// 		str += "#if KLAYGE_HULL_SHADER\n";
+		// 		break;
 
-			case ShaderStage::Domain:
-				str += "#if KLAYGE_DOMAIN_SHADER\n";
-				break;
+		// 	case ShaderStage::Domain:
+		// 		str += "#if KLAYGE_DOMAIN_SHADER\n";
+		// 		break;
 
-			case ShaderStage::NumStages:
-				break;
+		// 	case ShaderStage::NumStages:
+		// 		break;
 
-			default:
-				KFL_UNREACHABLE("Invalid shader type");
-			}
-			ShaderModel const & ver = frag.Version();
-			if ((ver.major_ver != 0) || (ver.minor_ver != 0))
-			{
-				str += std::format(
-					"#if KLAYGE_SHADER_MODEL >= SHADER_MODEL({}, {})\n", static_cast<int>(ver.major_ver), static_cast<int>(ver.minor_ver));
-			}
+		// 	default:
+		// 		KFL_UNREACHABLE("Invalid shader type");
+		// 	}
+		// 	ShaderModel const & ver = frag.Version();
+		// 	if ((ver.major_ver != 0) || (ver.minor_ver != 0))
+		// 	{
+		// 		str += std::format(
+		// 			"#if KLAYGE_SHADER_MODEL >= SHADER_MODEL({}, {})\n", static_cast<int>(ver.major_ver), static_cast<int>(ver.minor_ver));
+		// 	}
 
-			str += frag.str() + "\n";
+		// 	str += frag.str() + "\n";
 
-			if ((ver.major_ver != 0) || (ver.minor_ver != 0))
-			{
-				str += "#endif\n";
-			}
-			if (shader_stage != ShaderStage::NumStages)
-			{
-				str += "#endif\n";
-			}
-		}
+		// 	if ((ver.major_ver != 0) || (ver.minor_ver != 0))
+		// 	{
+		// 		str += "#endif\n";
+		// 	}
+		// 	if (shader_stage != ShaderStage::NumStages)
+		// 	{
+		// 		str += "#endif\n";
+		// 	}
+		// }
 
-		if (!immutable_->shader_graph_nodes.empty())
-		{
-			str += '\n';
-			for (auto const& node : immutable_->shader_graph_nodes)
-			{
-				str += node.GenDefinitionCode();
-			}
-			str += '\n';
-		}
+		// if (!immutable_->shader_graph_nodes.empty())
+		// {
+		// 	str += '\n';
+		// 	for (auto const& node : immutable_->shader_graph_nodes)
+		// 	{
+		// 		str += node.GenDefinitionCode();
+		// 	}
+		// 	str += '\n';
+		// }
 	}
 #endif
 
@@ -5666,16 +5544,16 @@ namespace KlayGE
 			COMMON_ASSERT(parent_tech);
 		}
 
-		ver_ = parent_tech ? parent_tech->Version() : ShaderModel(0, 0);
-		LoadVersion(node, ver_);
+		// ver_ = parent_tech ? parent_tech->Version() : ShaderModel(0, 0);
+		// LoadVersion(node, ver_);
 
-		RenderEngine& render_eng = Context::Instance().RenderFactoryInstance().RenderEngineInstance();
-		const auto& caps = render_eng.DeviceCaps();
-		if (ver_ > caps.max_shader_model)
-		{
-			is_validate_ = false;
-			return;
-		}
+		// RenderEngine& render_eng = Context::Instance().RenderFactoryInstance().RenderEngineInstance();
+		// const auto& caps = render_eng.DeviceCaps();
+		// if (ver_ > caps.max_shader_model)
+		// {
+		// 	is_validate_ = false;
+		// 	return;
+		// }
 
 		// if (XMLNode const* anno_node = node.FirstNode("annotation"))
 		// {
@@ -5815,13 +5693,13 @@ namespace KlayGE
 
 	void RenderTechnique::CompileShaders(RenderEffect& effect, uint32_t tech_index)
 	{
-		RenderEngine& render_eng = Context::Instance().RenderFactoryInstance().RenderEngineInstance();
-		const auto& caps = render_eng.DeviceCaps();
-		if (ver_ > caps.max_shader_model)
-		{
-			is_validate_ = false;
-			return;
-		}
+		//auto& rf = Context::Instance().RenderFactoryInstance();
+		// const auto& caps = render_eng.DeviceCaps();
+		// if (ver_ > caps.max_shader_model)
+		// {
+		// 	is_validate_ = false;
+		// 	return;
+		// }
 
 		uint32_t pass_index = 0;
 		for (auto& pass : passes_)
@@ -5834,13 +5712,13 @@ namespace KlayGE
 
 	void RenderTechnique::CreateHwShaders(RenderEffect& effect, uint32_t tech_index)
 	{
-		RenderEngine& render_eng = Context::Instance().RenderFactoryInstance().RenderEngineInstance();
-		const auto& caps = render_eng.DeviceCaps();
-		if (ver_ > caps.max_shader_model)
-		{
-			is_validate_ = false;
-			return;
-		}
+		//auto& rf = Context::Instance().RenderFactoryInstance();
+		// const auto& caps = render_eng.DeviceCaps();
+		// if (ver_ > caps.max_shader_model)
+		// {
+		// 	is_validate_ = false;
+		// 	return;
+		// }
 
 		is_validate_ = true;
 
@@ -5870,7 +5748,7 @@ namespace KlayGE
 		name_ = ReadShortString(res);
 		name_hash_ = HashValue(name_);
 
-		res.read(&ver_, sizeof(ver_));
+		//res.read(&ver_, sizeof(ver_));
 
 		// uint8_t num_anno;
 		// res.read(&num_anno, sizeof(num_anno));
@@ -5925,22 +5803,22 @@ namespace KlayGE
 	{
 		WriteShortString(os, name_);
 
-		os.write(reinterpret_cast<char const*>(&ver_), sizeof(ver_));
+		//os.write(reinterpret_cast<char const*>(&ver_), sizeof(ver_));
 
-		uint8_t num_anno;
-		if (annotations_)
-		{
-			num_anno = static_cast<uint8_t>(annotations_->size());
-		}
-		else
-		{
-			num_anno = 0;
-		}
-		os.write(reinterpret_cast<char const *>(&num_anno), sizeof(num_anno));
-		for (uint32_t i = 0; i < num_anno; ++ i)
-		{
-			(*annotations_)[i]->StreamOut(os);
-		}
+		// uint8_t num_anno;
+		// if (annotations_)
+		// {
+		// 	num_anno = static_cast<uint8_t>(annotations_->size());
+		// }
+		// else
+		// {
+		// 	num_anno = 0;
+		// }
+		// os.write(reinterpret_cast<char const *>(&num_anno), sizeof(num_anno));
+		// for (uint32_t i = 0; i < num_anno; ++ i)
+		// {
+		// 	(*annotations_)[i]->StreamOut(os);
+		// }
 
 		uint8_t num_macro;
 		if (macros_)
@@ -6667,32 +6545,32 @@ namespace KlayGE
 		shader_obj_index_ = effect.AddShaderObject();
 		auto const& shader_obj = this->GetShaderObject(effect);
 
-		bool native_accepted = true;
-		for (uint32_t stage_index = 0; stage_index < ShaderStageNum; ++stage_index)
-		{
-			ShaderDesc const& sd = effect.GetShaderDesc(shader_desc_ids_[stage_index]);
-			if (!sd.func_name.empty())
-			{
-				ShaderStage const stage = static_cast<ShaderStage>(stage_index);
+		// bool native_accepted = true;
+		// for (uint32_t stage_index = 0; stage_index < ShaderStageNum; ++stage_index)
+		// {
+		// 	ShaderDesc const& sd = effect.GetShaderDesc(shader_desc_ids_[stage_index]);
+		// 	if (!sd.func_name.empty())
+		// 	{
+		// 		ShaderStage const stage = static_cast<ShaderStage>(stage_index);
 
-				ShaderStageObjectPtr shader_stage;
-				if (sd.tech_pass_type == (tech_index << 16) + (pass_index << 8) + stage_index)
-				{
-					shader_stage = rf.MakeShaderStageObject(stage);
-					shader_stage->StreamIn(effect, shader_desc_ids_, res);
-				}
-				else
-				{
-					auto const& tech = *effect.TechniqueByIndex(sd.tech_pass_type >> 16);
-					auto const& pass = tech.Pass((sd.tech_pass_type >> 8) & 0xFF);
-					shader_stage = pass.GetShaderObject(effect)->Stage(stage);
-				}
+		// 		ShaderStageObjectPtr shader_stage;
+		// 		if (sd.tech_pass_type == (tech_index << 16) + (pass_index << 8) + stage_index)
+		// 		{
+		// 			shader_stage = rf.MakeShaderStageObject(stage);
+		// 			shader_stage->StreamIn(effect, shader_desc_ids_, res);
+		// 		}
+		// 		else
+		// 		{
+		// 			auto const& tech = *effect.TechniqueByIndex(sd.tech_pass_type >> 16);
+		// 			auto const& pass = tech.Pass((sd.tech_pass_type >> 8) & 0xFF);
+		// 			shader_stage = pass.GetShaderObject(effect)->Stage(stage);
+		// 		}
 
-				shader_obj->AttachStage(stage, shader_stage);
+		// 		shader_obj->AttachStage(stage, shader_stage);
 
-				native_accepted &= shader_stage->Validate();
-			}
-		}
+		// 		native_accepted &= shader_stage->Validate();
+		// 	}
+		// }
 
 		return native_accepted;
 	}
@@ -6786,24 +6664,24 @@ namespace KlayGE
 			os.write(reinterpret_cast<char const *>(&tmp), sizeof(tmp));
 		}
 
-		for (uint32_t stage = 0; stage < ShaderStageNum; ++stage)
-		{
-			ShaderDesc const& sd = effect.GetShaderDesc(shader_desc_ids_[stage]);
-			if (!sd.func_name.empty())
-			{
-				if (sd.tech_pass_type == (tech_index << 16) + (pass_index << 8) + stage)
-				{
-					this->GetShaderObject(effect)->Stage(static_cast<ShaderStage>(stage))->StreamOut(os);
-				}
-			}
-		}
+		// for (uint32_t stage = 0; stage < ShaderStageNum; ++stage)
+		// {
+		// 	ShaderDesc const& sd = effect.GetShaderDesc(shader_desc_ids_[stage]);
+		// 	if (!sd.func_name.empty())
+		// 	{
+		// 		if (sd.tech_pass_type == (tech_index << 16) + (pass_index << 8) + stage)
+		// 		{
+		// 			this->GetShaderObject(effect)->Stage(static_cast<ShaderStage>(stage))->StreamOut(os);
+		// 		}
+		// 	}
+		// }
 	}
 #endif
 
 	void RenderPass::Bind(RenderEffect const & effect) const
 	{
-		RenderEngine& render_eng = Context::Instance().RenderFactoryInstance().RenderEngineInstance();
-		render_eng.SetStateObject(render_state_obj_);
+		RenderFactory& rf = Context::Instance().RenderFactoryInstance();
+		rf.SetStateObject(render_state_obj_);
 
 		this->GetShaderObject(effect)->Bind(effect);
 	}
@@ -6813,11 +6691,11 @@ namespace KlayGE
 		this->GetShaderObject(effect)->Unbind();
 	}
 
-	RenderEffectAnnotation const& RenderPass::Annotation(uint32_t n) const noexcept
-	{
-		COMMON_ASSERT(n < this->NumAnnotations());
-		return *(*annotations_)[n];
-	}
+	// RenderEffectAnnotation const& RenderPass::Annotation(uint32_t n) const noexcept
+	// {
+	// 	COMMON_ASSERT(n < this->NumAnnotations());
+	// 	return *(*annotations_)[n];
+	// }
 
 	std::pair<std::string, std::string> const& RenderPass::MacroByIndex(uint32_t n) const noexcept
 	{
@@ -7232,7 +7110,7 @@ namespace KlayGE
 	}
 
 
-#if ZENGINE_IS_DEV_PLATFORM
+/*#if ZENGINE_IS_DEV_PLATFORM
 	void RenderShaderFragment::Load(XMLNode const& node)
 	{
 		stage_ = ShaderStage::NumStages;
@@ -7472,7 +7350,7 @@ namespace KlayGE
 		return ret;
 	}
 #endif
-
+*/
 
 	RenderVariable::RenderVariable() noexcept = default;
 	RenderVariable::~RenderVariable() noexcept = default;
@@ -7562,10 +7440,10 @@ namespace KlayGE
 		KFL_UNREACHABLE("Can't be called");
 	}
 
-	RenderVariable& RenderVariable::operator=([[maybe_unused]] UnorderedAccessViewPtr const & value)
-	{
-		KFL_UNREACHABLE("Can't be called");
-	}
+	// RenderVariable& RenderVariable::operator=([[maybe_unused]] UnorderedAccessViewPtr const & value)
+	// {
+	// 	KFL_UNREACHABLE("Can't be called");
+	// }
 
 	RenderVariable& RenderVariable::operator=([[maybe_unused]] SamplerStateObjectPtr const & value)
 	{
@@ -7817,10 +7695,10 @@ namespace KlayGE
 		KFL_UNREACHABLE("Can't be called");
 	}
 
-	void RenderVariable::Value([[maybe_unused]] UnorderedAccessViewPtr& value) const
-	{
-		KFL_UNREACHABLE("Can't be called");
-	}
+	// void RenderVariable::Value([[maybe_unused]] UnorderedAccessViewPtr& value) const
+	// {
+	// 	KFL_UNREACHABLE("Can't be called");
+	// }
 
 	void RenderVariable::Value([[maybe_unused]] SamplerStateObjectPtr& value) const
 	{
@@ -7926,28 +7804,5 @@ namespace KlayGE
 	void RenderVariable::RebindToCBuffer([[maybe_unused]] RenderEffect const& effect, [[maybe_unused]] uint32_t cbuff_index)
 	{		
 		KFL_UNREACHABLE("Can't be called");
-	}
-
-
-	RenderEffectPtr SyncLoadRenderEffect(std::string_view effect_name)
-	{
-		return Context::Instance().ResLoaderInstance().SyncQueryT<RenderEffect>(
-			MakeSharedPtr<EffectLoadingDesc>(MakeSpan<1>(std::string(effect_name))));
-	}
-
-	RenderEffectPtr SyncLoadRenderEffects(std::span<std::string const> effect_names)
-	{
-		return Context::Instance().ResLoaderInstance().SyncQueryT<RenderEffect>(MakeSharedPtr<EffectLoadingDesc>(effect_names));
-	}
-
-	RenderEffectPtr ASyncLoadRenderEffect(std::string_view effect_name)
-	{
-		return Context::Instance().ResLoaderInstance().ASyncQueryT<RenderEffect>(
-			MakeSharedPtr<EffectLoadingDesc>(MakeSpan<1>(std::string(effect_name))));
-	}
-
-	RenderEffectPtr ASyncLoadRenderEffects(std::span<std::string const> effect_names)
-	{
-		return Context::Instance().ResLoaderInstance().ASyncQueryT<RenderEffect>(MakeSharedPtr<EffectLoadingDesc>(effect_names));
 	}
 }
