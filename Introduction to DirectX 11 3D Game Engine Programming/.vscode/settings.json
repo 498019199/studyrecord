@@ -101,10 +101,12 @@
         "Chapter4": true,
         "Chapter6": true,
         "Chapter7": true,
+        "Chapter8": true,
     },
     "files.exclude":{
         "Chapter4": true,
         "Chapter6": true,
         "Chapter7": true,
+        "Chapter8": true,
     }
 }
