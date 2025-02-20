@@ -4,6 +4,29 @@
 namespace RenderWorker
 {
 
+bool operator!=(const ShaderDesc::StreamOutputDecl& lhs, const ShaderDesc::StreamOutputDecl& rhs) noexcept
+{
+    return !(lhs == rhs);
+}
+
+bool operator==(const ShaderDesc::StreamOutputDecl& lhs, const ShaderDesc::StreamOutputDecl& rhs) noexcept
+{
+    return (lhs.usage == rhs.usage) && (lhs.usage_index == rhs.usage_index)
+        && (lhs.start_component == rhs.start_component) && (lhs.component_count == rhs.component_count)
+        && (lhs.slot == rhs.slot);
+}
+
+bool operator!=(const ShaderDesc& lhs, const ShaderDesc& rhs) noexcept
+{
+    return !(lhs == rhs);
+}
+
+bool operator==(const ShaderDesc& lhs, const ShaderDesc& rhs) noexcept
+{
+    return (lhs.profile == rhs.profile) && (lhs.func_name == rhs.func_name)
+        && (lhs.macros_hash == rhs.macros_hash) && (lhs.so_decl == rhs.so_decl);
+    
+}
 
 ShaderStageObject::ShaderStageObject(ShaderStage stage) noexcept 
     :stage_(stage)

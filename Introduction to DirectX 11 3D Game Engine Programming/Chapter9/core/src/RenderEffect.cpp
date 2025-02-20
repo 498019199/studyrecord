@@ -3935,7 +3935,7 @@ namespace
 		checked_cast<RenderVariableIOable const&>(var).StreamOut(os);
 	}
 
-	void LoadVersion(XMLNode const& node, /*ShaderModel& ver*/)
+	void LoadVersion(XMLNode const& node/*, ShaderModel& ver*/)
 	{
 		uint32_t major_ver = 0;
 		uint32_t minor_ver = 0;
@@ -4135,35 +4135,41 @@ namespace RenderWorker
 			immutable_ = MakeSharedPtr<Immutable>();
 		}
 
-		auto& res_loader = Context::Instance().ResLoaderInstance();
+		//auto& res_loader = Context::Instance().ResLoaderInstance();
 
-		std::filesystem::path first_fxml_path(res_loader.Locate(*names.begin()));
-		std::filesystem::path first_fxml_directory = first_fxml_path.parent_path();
+		// std::filesystem::path first_fxml_path(res_loader.Locate(*names.begin()));
+		// std::filesystem::path first_fxml_directory = first_fxml_path.parent_path();
 
-		std::string connected_name;
-		for (size_t i = 0; i < names.size(); ++i)
-		{
-			connected_name += std::filesystem::path(names[i]).stem().string();
-			if (i != names.size() - 1)
-			{
-				connected_name += '+';
-			}
-		}
+		// std::string connected_name;
+		// for (size_t i = 0; i < names.size(); ++i)
+		// {
+		// 	connected_name += std::filesystem::path(names[i]).stem().string();
+		// 	if (i != names.size() - 1)
+		// 	{
+		// 		connected_name += '+';
+		// 	}
+		// }
 
-		std::string kfx_name = res_loader.Locate(connected_name + ".kfx");
-		if (kfx_name.empty())
-		{
-			kfx_name = (first_fxml_directory / (connected_name + ".kfx")).string();
-		}
+		// std::string kfx_name = res_loader.Locate(connected_name + ".kfx");
+		// if (kfx_name.empty())
+		// {
+		// 	kfx_name = (first_fxml_directory / (connected_name + ".kfx")).string();
+		// }
+		std::string path_file = *names.begin();
+    	size_t lastIndex = path_file.rfind("\\");
+    	std::string package_path = path_file.substr(0, lastIndex);
+    	std::string res_name = path_file.substr(lastIndex + 1);
 
-		immutable_->res_name = (first_fxml_directory / (connected_name + ".fxml")).string();
+		immutable_->res_name = res_name;//(first_fxml_directory / (connected_name + ".fxml")).string();
 		immutable_->res_name_hash = HashValue(immutable_->res_name);
 #if ZENGINE_IS_DEV_PLATFORM
 		for (auto const& name : names)
 		{
 			immutable_->timestamp = 0;
-
-			ResIdentifierPtr source = res_loader.Open(name);
+			//ResIdentifierPtr source = res_loader.Open(path_file);
+			uint64_t const timestamp = std::filesystem::last_write_time(package_path).time_since_epoch().count();
+    		ResIdentifierPtr source = MakeSharedPtr<ResIdentifier>(
+        		res_name, timestamp, MakeSharedPtr<std::ifstream>(name.c_str(), std::ios_base::binary));
 			if (source)
 			{
 				immutable_->timestamp = std::max(immutable_->timestamp, source->Timestamp());
@@ -4173,10 +4179,10 @@ namespace RenderWorker
 				std::vector<std::string> include_names;
 				this->RecursiveIncludeNode(root, include_names);
 
-				for (auto const& include_name : include_names)
-				{
-					immutable_->timestamp = std::max(immutable_->timestamp, res_loader.Timestamp(include_name));
-				}
+				// for (auto const& include_name : include_names)
+				// {
+				// 	immutable_->timestamp = immutable_->timestamp;//std::max(immutable_->timestamp, source->Timestamp(include_name));
+				// }
 			}
 		}
 #endif
@@ -4184,7 +4190,10 @@ namespace RenderWorker
 #if ZENGINE_IS_DEV_PLATFORM
 		immutable_->need_compile = false;
 #endif
-		ResIdentifierPtr kfx_source = res_loader.Open(kfx_name);
+		uint64_t const timestamp = std::filesystem::last_write_time(package_path).time_since_epoch().count();
+		//ResIdentifierPtr kfx_source = res_loader.Open(kfx_name);
+		ResIdentifierPtr kfx_source = MakeSharedPtr<ResIdentifier>(
+        	res_name, timestamp, MakeSharedPtr<std::ifstream>(path_file.c_str(), std::ios_base::binary));
 		if (!kfx_source || !this->StreamIn(*kfx_source))
 		{
 #if ZENGINE_IS_DEV_PLATFORM
@@ -4201,9 +4210,11 @@ namespace RenderWorker
 
 			immutable_->shader_descs.resize(1);
 
+			std::string main_path = names[0];
 			std::vector<std::string> include_names;
-
-			ResIdentifierPtr main_source = res_loader.Open(names[0]);
+			ResIdentifierPtr main_source = MakeSharedPtr<ResIdentifier>(
+        	res_name, timestamp, MakeSharedPtr<std::ifstream>(main_path.c_str(), std::ios_base::binary));
+			//ResIdentifierPtr main_source = res_loader.Open(names[0]);
 			if (main_source)
 			{
 				XMLNode root = LoadXml(*main_source);
@@ -4211,7 +4222,10 @@ namespace RenderWorker
 
 				for (size_t i = 1; i < names.size(); ++i)
 				{
-					ResIdentifierPtr source = res_loader.Open(names[i]);
+					//ResIdentifierPtr source = res_loader.Open(names[i]);
+					std::string include_pash = package_path + names[i];
+					ResIdentifierPtr source = MakeSharedPtr<ResIdentifier>(
+        				res_name, timestamp, MakeSharedPtr<std::ifstream>(include_pash.c_str(), std::ios_base::binary));
 					if (source)
 					{
 						XMLNode frag_root = LoadXml(*source);
@@ -4229,7 +4243,7 @@ namespace RenderWorker
 
 				this->Load(root);
 
-				immutable_->kfx_name = kfx_name;
+				immutable_->kfx_name = res_name;
 				immutable_->need_compile = true;
 			}
 #endif
@@ -4273,44 +4287,44 @@ namespace RenderWorker
 
 	void RenderEffect::CloneInPlace(RenderEffect& dst_effect)
 	{
-		dst_effect.immutable_ = immutable_;
+		// dst_effect.immutable_ = immutable_;
 
-		dst_effect.params_.resize(params_.size());
-		for (size_t i = 0; i < params_.size(); ++i)
-		{
-			dst_effect.params_[i] = params_[i].Clone();
-		}
+		// dst_effect.params_.resize(params_.size());
+		// for (size_t i = 0; i < params_.size(); ++i)
+		// {
+		// 	dst_effect.params_[i] = params_[i].Clone();
+		// }
 
-		dst_effect.cbuffers_.resize(cbuffers_.size());
-		for (size_t i = 0; i < cbuffers_.size(); ++i)
-		{
-			dst_effect.cbuffers_[i] = cbuffers_[i]->Clone(dst_effect);
-		}
+		// dst_effect.cbuffers_.resize(cbuffers_.size());
+		// for (size_t i = 0; i < cbuffers_.size(); ++i)
+		// {
+		// 	dst_effect.cbuffers_[i] = cbuffers_[i]->Clone(dst_effect);
+		// }
 
-		dst_effect.shader_objs_.resize(shader_objs_.size());
-		for (size_t i = 0; i < shader_objs_.size(); ++i)
-		{
-			if (shader_objs_[i]->HWResourceReady())
-			{
-				dst_effect.shader_objs_[i] = shader_objs_[i]->Clone(dst_effect);
-			}
-		}
+		// dst_effect.shader_objs_.resize(shader_objs_.size());
+		// for (size_t i = 0; i < shader_objs_.size(); ++i)
+		// {
+		// 	if (shader_objs_[i]->HWResourceReady())
+		// 	{
+		// 		dst_effect.shader_objs_[i] = shader_objs_[i]->Clone(dst_effect);
+		// 	}
+		// }
 	}
 
 	void RenderEffect::Reclone(RenderEffect& dst_effect)
 	{
-		for (size_t i = 0; i < cbuffers_.size(); ++i)
-		{
-			cbuffers_[i]->Reclone(*dst_effect.cbuffers_[i], dst_effect);
-		}
+		// for (size_t i = 0; i < cbuffers_.size(); ++i)
+		// {
+		// 	cbuffers_[i]->Reclone(*dst_effect.cbuffers_[i], dst_effect);
+		// }
 
-		for (size_t i = 0; i < shader_objs_.size(); ++i)
-		{
-			if (shader_objs_[i]->HWResourceReady())
-			{
-				dst_effect.shader_objs_[i] = shader_objs_[i]->Clone(dst_effect);
-			}
-		}
+		// for (size_t i = 0; i < shader_objs_.size(); ++i)
+		// {
+		// 	if (shader_objs_[i]->HWResourceReady())
+		// 	{
+		// 		dst_effect.shader_objs_[i] = shader_objs_[i]->Clone(dst_effect);
+		// 	}
+		// }
 	}
 
 	bool RenderEffect::HWResourceReady() const noexcept
@@ -4541,63 +4555,63 @@ namespace RenderWorker
 #if ZENGINE_IS_DEV_PLATFORM
 	void RenderEffect::PreprocessIncludes(XMLNode& root, std::vector<std::string>& include_names)
 	{
-		auto& res_loader = Context::Instance().ResLoaderInstance();
-		for (XMLNode const* node = root.FirstNode("include"); node; node = root.FirstNode("include"))
-		{
-			XMLAttribute const* attr = node->Attrib("name");
-			COMMON_ASSERT(attr);
+		// auto& res_loader = Context::Instance().ResLoaderInstance();
+		// for (XMLNode const* node = root.FirstNode("include"); node; node = root.FirstNode("include"))
+		// {
+		// 	XMLAttribute const* attr = node->Attrib("name");
+		// 	COMMON_ASSERT(attr);
 
-			std::string const include_name = std::string(attr->ValueString());
+		// 	std::string const include_name = std::string(attr->ValueString());
 
-			uint32_t node_index = root.FindChildNodeIndex(*node);
-			root.RemoveNode(*node);
+		// 	uint32_t node_index = root.FindChildNodeIndex(*node);
+		// 	root.RemoveNode(*node);
 
-			auto iter = std::find(include_names.begin(), include_names.end(), include_name);
-			if (iter == include_names.end())
-			{
-				auto const& include_root = LoadXml(*res_loader.Open(include_name));
-				for (XMLNode const* child_node = include_root.FirstNode(); child_node; child_node = child_node->NextSibling())
-				{
-					if (XMLNodeType::Element == child_node->Type())
-					{
-						root.InsertAt(node_index, *child_node);
-						++node_index;
-					}
-				}
+		// 	auto iter = std::find(include_names.begin(), include_names.end(), include_name);
+		// 	if (iter == include_names.end())
+		// 	{
+		// 		auto const& include_root = LoadXml(*res_loader.Open(include_name));
+		// 		for (XMLNode const* child_node = include_root.FirstNode(); child_node; child_node = child_node->NextSibling())
+		// 		{
+		// 			if (XMLNodeType::Element == child_node->Type())
+		// 			{
+		// 				root.InsertAt(node_index, *child_node);
+		// 				++node_index;
+		// 			}
+		// 		}
 
-				include_names.push_back(include_name);
-			}
-		}
+		// 		include_names.push_back(include_name);
+		// 	}
+		// }
 	}
 
 	void RenderEffect::RecursiveIncludeNode(XMLNode const& root, std::vector<std::string>& include_names) const
 	{
-		auto& res_loader = Context::Instance().ResLoaderInstance();
-		for (XMLNode const* node = root.FirstNode("include"); node; node = node->NextSibling("include"))
-		{
-			XMLAttribute const* attr = node->Attrib("name");
-			COMMON_ASSERT(attr);
+		// auto& res_loader = Context::Instance().ResLoaderInstance();
+		// for (XMLNode const* node = root.FirstNode("include"); node; node = node->NextSibling("include"))
+		// {
+		// 	XMLAttribute const* attr = node->Attrib("name");
+		// 	COMMON_ASSERT(attr);
 
-			std::string_view const include_name = attr->ValueString();
+		// 	std::string_view const include_name = attr->ValueString();
 
-			XMLNode include_root = LoadXml(*res_loader.Open(include_name));
-			this->RecursiveIncludeNode(include_root, include_names);
+		// 	XMLNode include_root = LoadXml(*res_loader.Open(include_name));
+		// 	this->RecursiveIncludeNode(include_root, include_names);
 
-			bool found = false;
-			for (size_t i = 0; i < include_names.size(); ++ i)
-			{
-				if (include_name == include_names[i])
-				{
-					found = true;
-					break;
-				}
-			}
+		// 	bool found = false;
+		// 	for (size_t i = 0; i < include_names.size(); ++ i)
+		// 	{
+		// 		if (include_name == include_names[i])
+		// 		{
+		// 			found = true;
+		// 			break;
+		// 		}
+		// 	}
 
-			if (!found)
-			{
-				include_names.emplace_back(include_name);
-			}
-		}
+		// 	if (!found)
+		// 	{
+		// 		include_names.emplace_back(include_name);
+		// 	}
+		// }
 	}
 
 	XMLNode RenderEffect::ResolveInheritTechNode(XMLNode& root, XMLNode const* tech_node)
@@ -4856,7 +4870,7 @@ namespace RenderWorker
 
 	bool RenderEffect::StreamIn(ResIdentifier& source)
 	{
-		RenderEngine& re = Context::Instance().RenderFactoryInstance().RenderEngineInstance();
+		//RenderEngine& re = Context::Instance().RenderFactoryInstance().RenderEngineInstance();
 
 		bool ret = false;
 
@@ -5010,7 +5024,7 @@ namespace RenderWorker
 #if ZENGINE_IS_DEV_PLATFORM
 	void RenderEffect::StreamOut(std::ostream& os) const
 	{
-		RenderEngine& re = Context::Instance().RenderFactoryInstance().RenderEngineInstance();
+		//RenderEngine& re = Context::Instance().RenderFactoryInstance().RenderEngineInstance();
 
 		uint32_t fourcc = Native2LE(MakeFourCC<'K', 'F', 'X', ' '>::value);
 		os.write(reinterpret_cast<char const *>(&fourcc), sizeof(fourcc));
@@ -5875,7 +5889,7 @@ namespace RenderWorker
 			auto const* shader_obj = pass->GetShaderObject(effect).get();
 			if (shader_obj)
 			{
-				hw_res_ready &= shader_obj->HWResourceReady();
+				//hw_res_ready &= shader_obj->HWResourceReady();
 			}
 			else
 			{
@@ -6545,32 +6559,32 @@ namespace RenderWorker
 		shader_obj_index_ = effect.AddShaderObject();
 		auto const& shader_obj = this->GetShaderObject(effect);
 
-		// bool native_accepted = true;
-		// for (uint32_t stage_index = 0; stage_index < ShaderStageNum; ++stage_index)
-		// {
-		// 	ShaderDesc const& sd = effect.GetShaderDesc(shader_desc_ids_[stage_index]);
-		// 	if (!sd.func_name.empty())
-		// 	{
-		// 		ShaderStage const stage = static_cast<ShaderStage>(stage_index);
+		bool native_accepted = true;
+		for (uint32_t stage_index = 0; stage_index < ShaderStageNum; ++stage_index)
+		{
+			ShaderDesc const& sd = effect.GetShaderDesc(shader_desc_ids_[stage_index]);
+			if (!sd.func_name.empty())
+			{
+				ShaderStage const stage = static_cast<ShaderStage>(stage_index);
 
-		// 		ShaderStageObjectPtr shader_stage;
-		// 		if (sd.tech_pass_type == (tech_index << 16) + (pass_index << 8) + stage_index)
-		// 		{
-		// 			shader_stage = rf.MakeShaderStageObject(stage);
-		// 			shader_stage->StreamIn(effect, shader_desc_ids_, res);
-		// 		}
-		// 		else
-		// 		{
-		// 			auto const& tech = *effect.TechniqueByIndex(sd.tech_pass_type >> 16);
-		// 			auto const& pass = tech.Pass((sd.tech_pass_type >> 8) & 0xFF);
-		// 			shader_stage = pass.GetShaderObject(effect)->Stage(stage);
-		// 		}
+				ShaderStageObjectPtr shader_stage;
+				if (sd.tech_pass_type == (tech_index << 16) + (pass_index << 8) + stage_index)
+				{
+					shader_stage = rf.MakeShaderStageObject(stage);
+					//shader_stage->StreamIn(effect, shader_desc_ids_, res);
+				}
+				else
+				{
+					auto const& tech = *effect.TechniqueByIndex(sd.tech_pass_type >> 16);
+					auto const& pass = tech.Pass((sd.tech_pass_type >> 8) & 0xFF);
+					shader_stage = pass.GetShaderObject(effect)->Stage(stage);
+				}
 
-		// 		shader_obj->AttachStage(stage, shader_stage);
+				shader_obj->AttachStage(stage, shader_stage);
 
-		// 		native_accepted &= shader_stage->Validate();
-		// 	}
-		// }
+				native_accepted &= shader_stage->Validate();
+			}
+		}
 
 		return native_accepted;
 	}
@@ -6580,7 +6594,7 @@ namespace RenderWorker
 	{
 		WriteShortString(os, name_);
 
-		uint8_t num_anno;
+		//uint8_t num_anno;
 		// if (annotations_)
 		// {
 		// 	num_anno = static_cast<uint8_t>(annotations_->size());
@@ -6680,8 +6694,8 @@ namespace RenderWorker
 
 	void RenderPass::Bind(RenderEffect const & effect) const
 	{
-		RenderFactory& rf = Context::Instance().RenderFactoryInstance();
-		rf.SetStateObject(render_state_obj_);
+		RenderEngine& re = Context::Instance().RenderEngineInstance();
+		re.SetStateObject(render_state_obj_);
 
 		this->GetShaderObject(effect)->Bind(effect);
 	}
@@ -6761,29 +6775,29 @@ namespace RenderWorker
 	}
 #endif
 
-	RenderEffectConstantBufferPtr RenderEffectConstantBuffer::Clone(RenderEffect& dst_effect)
-	{
-		auto ret = MakeSharedPtr<RenderEffectConstantBuffer>(dst_effect);
-		this->Reclone(*ret, dst_effect);
-		return ret;
-	}
+	// RenderEffectConstantBufferPtr RenderEffectConstantBuffer::Clone(RenderEffect& dst_effect)
+	// {
+	// 	auto ret = MakeSharedPtr<RenderEffectConstantBuffer>(dst_effect);
+	// 	this->Reclone(*ret, dst_effect);
+	// 	return ret;
+	// }
 
-	void RenderEffectConstantBuffer::Reclone(RenderEffectConstantBuffer& dst_cbuffer, RenderEffect& dst_effect)
-	{
-		if (effect_.ResNameHash() == dst_effect.ResNameHash())
-		{
-			dst_cbuffer.param_indices_ = param_indices_;
-		}
-		else
-		{
-			dst_cbuffer.param_indices_ = MakeSharedPtr<std::vector<uint32_t>>(param_indices_->size());
-		}
-		dst_cbuffer.immutable_ = immutable_;
-		dst_cbuffer.buff_ = buff_;
-		dst_cbuffer.Resize(static_cast<uint32_t>(buff_.size()));
+	// void RenderEffectConstantBuffer::Reclone(RenderEffectConstantBuffer& dst_cbuffer, RenderEffect& dst_effect)
+	// {
+	// 	if (effect_.ResNameHash() == dst_effect.ResNameHash())
+	// 	{
+	// 		dst_cbuffer.param_indices_ = param_indices_;
+	// 	}
+	// 	else
+	// 	{
+	// 		dst_cbuffer.param_indices_ = MakeSharedPtr<std::vector<uint32_t>>(param_indices_->size());
+	// 	}
+	// 	dst_cbuffer.immutable_ = immutable_;
+	// 	dst_cbuffer.buff_ = buff_;
+	// 	dst_cbuffer.Resize(static_cast<uint32_t>(buff_.size()));
 
-		this->RebindParameters(dst_cbuffer, dst_effect);
-	}
+	// 	this->RebindParameters(dst_cbuffer, dst_effect);
+	// }
 
 	void RenderEffectConstantBuffer::RebindParameters(RenderEffectConstantBuffer& dst_cbuffer, RenderEffect& dst_effect)
 	{
@@ -6853,7 +6867,7 @@ namespace RenderWorker
 	{
 		if (dirty_)
 		{
-			hw_buff_->UpdateSubresource(0, static_cast<uint32_t>(buff_.size()), &buff_[0]);
+			//hw_buff_->UpdateSubresource(0, static_cast<uint32_t>(buff_.size()), &buff_[0]);
 
 			dirty_ = false;
 		}
@@ -6986,28 +7000,28 @@ namespace RenderWorker
 		// }
 	}
 
-	void RenderEffectParameter::ProcessAnnotation(RenderEffectAnnotation& anno)
-	{
-		if (((REDT_texture1D == immutable_->type) || (REDT_texture2D == immutable_->type) || (REDT_texture2DMS == immutable_->type) ||
-				(REDT_texture3D == immutable_->type) || (REDT_textureCUBE == immutable_->type) ||
-				(REDT_texture1DArray == immutable_->type) || (REDT_texture2DArray == immutable_->type) ||
-				(REDT_texture2DMSArray == immutable_->type) || (REDT_texture3DArray == immutable_->type) ||
-				(REDT_textureCUBEArray == immutable_->type)) &&
-			(REDT_string == anno.Type()) && (anno.Name() == "SasResourceAddress"))
-		{
-			std::string val;
-			anno.Value(val);
+	// void RenderEffectParameter::ProcessAnnotation(RenderEffectAnnotation& anno)
+	// {
+	// 	if (((REDT_texture1D == immutable_->type) || (REDT_texture2D == immutable_->type) || (REDT_texture2DMS == immutable_->type) ||
+	// 			(REDT_texture3D == immutable_->type) || (REDT_textureCUBE == immutable_->type) ||
+	// 			(REDT_texture1DArray == immutable_->type) || (REDT_texture2DArray == immutable_->type) ||
+	// 			(REDT_texture2DMSArray == immutable_->type) || (REDT_texture3DArray == immutable_->type) ||
+	// 			(REDT_textureCUBEArray == immutable_->type)) &&
+	// 		(REDT_string == anno.Type()) && (anno.Name() == "SasResourceAddress"))
+	// 	{
+	// 		std::string val;
+	// 		anno.Value(val);
 
-			if (Context::Instance().ResLoaderInstance().Locate(val).empty())
-			{
-				LogError() << val << " NOT found" << std::endl;
-			}
-			else
-			{
-				*var_ = SyncLoadTexture(val, EAH_GPU_Read | EAH_Immutable);
-			}
-		}	
-	}
+	// 		if (Context::Instance().ResLoaderInstance().Locate(val).empty())
+	// 		{
+	// 			LogError() << val << " NOT found" << std::endl;
+	// 		}
+	// 		else
+	// 		{
+	// 			*var_ = SyncLoadTexture(val, EAH_GPU_Read | EAH_Immutable);
+	// 		}
+	// 	}	
+	// }
 
 #if ZENGINE_IS_DEV_PLATFORM
 	void RenderEffectParameter::StreamOut(std::ostream& os) const
@@ -7053,15 +7067,15 @@ namespace RenderWorker
 	}
 #endif
 
-	RenderEffectParameter RenderEffectParameter::Clone()
-	{
-		RenderEffectParameter ret;
+	// RenderEffectParameter RenderEffectParameter::Clone()
+	// {
+	// 	RenderEffectParameter ret;
 
-		ret.immutable_ = immutable_;
-		ret.var_ = var_->Clone();
+	// 	ret.immutable_ = immutable_;
+	// 	ret.var_ = var_->Clone();
 
-		return ret;
-	}
+	// 	return ret;
+	// }
 
 	RenderVariable const& RenderEffectParameter::Var() const noexcept
 	{
@@ -7804,5 +7818,14 @@ namespace RenderWorker
 	void RenderVariable::RebindToCBuffer([[maybe_unused]] RenderEffect const& effect, [[maybe_unused]] uint32_t cbuff_index)
 	{		
 		KFL_UNREACHABLE("Can't be called");
+
 	}
+
+
+RenderEffectPtr SyncLoadRenderEffect(std::string_view effect_name)
+{
+	auto effect = MakeSharedPtr<RenderEffect>();
+	effect->Load(MakeSpan<1>(std::string(effect_name)));
+	return effect;
+}
 }

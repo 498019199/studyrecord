@@ -62,6 +62,12 @@ public:
         auto currentPath = std::filesystem::current_path().parent_path().parent_path().string();
         currentPath += "\\Models\\Chapter9\\box2D.xml";
         effect_ = SyncLoadRenderEffect(currentPath);
+
+
+        auto currentPath2 = std::filesystem::current_path().parent_path().parent_path().string();
+        const std::string file_path1 = currentPath2 + "\\Models\\Chapter9\\" + DDS;
+        auto src1_tex_param = effect_->ParameterByName("src1_tex");
+        *src1_tex_param = SyncLoadTexture(file_path1, EAH_GPU_Read | EAH_Immutable);
     }
 };
 
@@ -160,6 +166,11 @@ public:
         auto currentPath = std::filesystem::current_path().parent_path().parent_path().string();
         currentPath += "\\Models\\Chapter9\\box3D.xml";
         effect_ = SyncLoadRenderEffect(currentPath);
+
+        auto currentPath2 = std::filesystem::current_path().parent_path().parent_path().string();
+        const std::string file_path1 = currentPath2 + "\\Models\\Chapter9\\" + "WireFence.dds";
+        auto src1_tex_param = effect_->ParameterByName("src1_tex");
+        *src1_tex_param = SyncLoadTexture(file_path1, EAH_GPU_Read | EAH_Immutable);
     }
 };
 

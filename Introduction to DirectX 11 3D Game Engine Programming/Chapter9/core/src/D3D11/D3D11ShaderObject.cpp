@@ -14,7 +14,7 @@ D3D11ShaderStageObject::D3D11ShaderStageObject(ShaderStage stage)
 {
 }
 
-void D3D11ShaderStageObject::CompileShader(RenderEffect const& effect,
+void D3D11ShaderStageObject::CompileShader(const RenderEffect& effect, const RenderTechnique& tech, const RenderPass& pass,
             const std::array<uint32_t, ShaderStageNum>& shader_desc_ids)
 {
     uint32_t const shader_desc_id = shader_desc_ids[std::to_underlying(stage_)];

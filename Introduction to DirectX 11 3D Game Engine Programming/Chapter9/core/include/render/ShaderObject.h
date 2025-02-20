@@ -1,5 +1,6 @@
 #pragma once
 #include <core/Util.h>
+#include <render/RenderLayout.h>
 
 #include <array>
 #include <memory>
@@ -7,6 +8,8 @@
 namespace RenderWorker
 {
 class RenderEffect;
+class RenderPass;
+class RenderTechnique;
 
 struct ShaderDesc
 {
@@ -15,16 +18,29 @@ struct ShaderDesc
     uint64_t macros_hash;
     uint32_t tech_pass_type;
 
-    friend bool operator==(ShaderDesc const& lhs, ShaderDesc const& rhs) noexcept
+    ShaderDesc()
+        : macros_hash(0), tech_pass_type(0xFFFFFFFF)
     {
-        return (lhs.profile == rhs.profile) && (lhs.func_name == rhs.func_name)
-            && (lhs.macros_hash == rhs.macros_hash);
     }
-    friend bool operator!=(ShaderDesc const& lhs, ShaderDesc const& rhs) noexcept
+
+    struct StreamOutputDecl
     {
-        return !(lhs == rhs);
-    }
+        VertexElementUsage usage;
+        uint8_t usage_index;
+        uint8_t start_component;
+        uint8_t component_count;
+        uint8_t slot;
+
+        friend bool operator==(const StreamOutputDecl& lhs, const StreamOutputDecl& rhs) noexcept;
+        friend bool operator!=(const StreamOutputDecl& lhs, const StreamOutputDecl& rhs) noexcept;
+    };
+    static_assert(sizeof(StreamOutputDecl) == 8);
+
+    std::vector<StreamOutputDecl> so_decl;
+    friend bool operator==(const ShaderDesc& lhs, const ShaderDesc& rhs) noexcept;
+    friend bool operator!=(const ShaderDesc& lhs, const ShaderDesc& rhs) noexcept;
 };
+
 
 enum class ShaderStage
 {
@@ -45,7 +61,7 @@ public:
     explicit ShaderStageObject(ShaderStage stage) noexcept;
     virtual ~ShaderStageObject() noexcept;
 
-	virtual void CompileShader(RenderEffect const& effect,
+	virtual void CompileShader(const RenderEffect& effect, const RenderTechnique& tech, const RenderPass& pass,
 			const std::array<uint32_t, ShaderStageNum>& shader_desc_ids) = 0;
 
     virtual void CreateHwShader(const RenderEffect& effect, const std::array<uint32_t, ShaderStageNum>& shader_desc_ids) = 0;
@@ -96,6 +112,11 @@ public:
 
     virtual void Bind(const RenderEffect& effect) = 0;
     virtual void Unbind() = 0;
+
+    bool Validate() const noexcept
+    {
+        return immutable_->is_validate_;
+    }
 private:
     virtual void DoLinkShaders(RenderEffect& effect) = 0;
 

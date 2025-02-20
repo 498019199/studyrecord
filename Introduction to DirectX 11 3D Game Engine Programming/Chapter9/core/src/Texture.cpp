@@ -1404,7 +1404,7 @@ void GetImageInfo(std::string_view tex_name, Texture::TextureType& type,
     }
 }
 
-TexturePtr LoadTexture(std::string_view tex_name, uint32_t access_hint)
+TexturePtr SyncLoadTexture(std::string_view tex_name, uint32_t access_hint)
 {
 	TexturePtr tex = LoadVirtualTexture(tex_name);
 

@@ -444,7 +444,7 @@ namespace MathWorker
     }
 
     // 视口为中心的正交投影矩阵
-	float4x4 OrthoLH(float w, float h, float nearPlane, float farPlane);
+	template float4x4 OrthoLH(float w, float h, float nearPlane, float farPlane);
     template<typename T>
 	Matrix4_T<T> OrthoLH(T w, T h, T nearPlane, T farPlane)
     {
@@ -455,7 +455,7 @@ namespace MathWorker
 
     // dx->[-1,1][-1,1][0,1]，selected
     // openGL->[-1,1][-1,1][-1,1]
-	float4x4 OrthoOffCenterLH(float left, float right, float bottom, float top, float farPlane, float nearPlane);
+	template float4x4 OrthoOffCenterLH(float left, float right, float bottom, float top, float farPlane, float nearPlane);
     template<typename T>
 	Matrix4_T<T> OrthoOffCenterLH(T left, T right, T bottom, T top, T farPlane, T nearPlane)
     {

@@ -119,5 +119,5 @@ void GetImageInfo(std::string_view tex_name, Texture::TextureType& type,
     ElementFormat& format, uint32_t& row_pitch, uint32_t& slice_pitch);
     
 TexturePtr LoadVirtualTexture(std::string_view tex_name);
-TexturePtr LoadTexture(std::string_view tex_name, uint32_t access_hint);
+TexturePtr SyncLoadTexture(std::string_view tex_name, uint32_t access_hint);
 }

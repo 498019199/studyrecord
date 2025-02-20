@@ -9,7 +9,7 @@ class D3D11ShaderStageObject : public ShaderStageObject
 public:
     explicit D3D11ShaderStageObject(ShaderStage stage);
     
-    void CompileShader(RenderEffect const& effect,
+    void CompileShader(const RenderEffect& effect, const RenderTechnique& tech, const RenderPass& pass,
 			const std::array<uint32_t, ShaderStageNum>& shader_desc_ids) override;
 
     void CreateHwShader(const RenderEffect& effect, const std::array<uint32_t, ShaderStageNum>&   shader_desc_ids) override;

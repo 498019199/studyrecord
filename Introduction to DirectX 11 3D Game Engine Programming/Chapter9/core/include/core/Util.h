@@ -56,6 +56,9 @@ namespace std
 
 #define KFL_UNREACHABLE(msg) std::unreachable()
 
+namespace RenderWorker
+{
+
 std::string& Convert(std::string& dest, std::wstring_view src);
 std::wstring& Convert(std::wstring& dest, std::string_view src);
 
@@ -166,3 +169,7 @@ checked_pointer_cast(std::shared_ptr<From> const & p) noexcept
     return std::static_pointer_cast<To>(p);
 }
 
+class ResIdentifier;
+std::string ReadShortString(ResIdentifier& res);
+void WriteShortString(std::ostream& os, std::string_view str);
+}

@@ -22,7 +22,7 @@ HRESULT CreateShaderFromFile(const std::string& filename,
 	ID3DBlob** ppBlobOut)
 {
     std::wstring swcFileName;
-    Convert(swcFileName, filename);
+    RenderWorker::Convert(swcFileName, filename);
 	std::wstring strOutFile = swcFileName + L".cso";
     std::wstring InputFile = swcFileName + L".hlsl";
     return CreateShaderFromFile(strOutFile.c_str(), InputFile.c_str(), entryPoint, shaderModel, ppBlobOut);
