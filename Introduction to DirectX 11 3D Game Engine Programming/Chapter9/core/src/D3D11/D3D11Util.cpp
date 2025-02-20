@@ -610,6 +610,42 @@ D3D11_COMPARISON_FUNC D3D11Mapping::Mapping(CompareFunction func)
     }
 }
 
+D3D11_CULL_MODE D3D11Mapping::Mapping(CullMode mode)
+{
+    switch (mode)
+    {
+    case CM_None:
+        return D3D11_CULL_NONE;
+
+    case CM_Front:
+        return D3D11_CULL_FRONT;
+
+    case CM_Back:
+        return D3D11_CULL_BACK;
+
+    default:
+        KFL_UNREACHABLE("Invalid cull mode");
+    }
+}
+
+D3D11_FILL_MODE D3D11Mapping::Mapping(PolygonMode mode)
+{
+    switch (mode)
+    {
+    case PM_Point:
+        return D3D11_FILL_WIREFRAME;
+
+    case PM_Line:
+        return D3D11_FILL_WIREFRAME;
+
+    case PM_Fill:
+        return D3D11_FILL_SOLID;
+
+    default:
+        KFL_UNREACHABLE("Invalid polygon mode");
+    }
+}
+
 void D3D11Mapping::Mapping(std::vector<D3D11_INPUT_ELEMENT_DESC>& elements, uint32_t stream, std::span<const VertexElement> vet,
     RenderLayout::stream_type type, uint32_t freq)
 {
@@ -822,4 +858,5 @@ D3D11_PRIMITIVE_TOPOLOGY D3D11Mapping::Mapping(RenderLayout::topology_type tt)
         KFL_UNREACHABLE("Invalid topology type");
     }
 }
+
 }

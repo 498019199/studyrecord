@@ -7,6 +7,53 @@
 #include "D3D11RenderStateObject.h"
 #include "D3D11RenderView.h"
 
+namespace
+{
+using namespace RenderWorker;
+
+class D3D11ShaderParameterSrvUpdater final
+{
+public:
+    D3D11ShaderParameterSrvUpdater(
+        std::tuple<void*, uint32_t, uint32_t>& srvsrc, ID3D11ShaderResourceView*& srv, RenderEffectParameter const& param)
+        : srvsrc_(srvsrc), srv_(srv), param_(param)
+    {
+    }
+
+    void operator()()
+    {
+        ShaderResourceViewPtr srv;
+        param_.Value(srv);
+        if (srv)
+        {
+            if (srv->TextureResource())
+            {
+                srvsrc_ = std::make_tuple(srv->TextureResource().get(),
+                    srv->FirstArrayIndex() * srv->TextureResource()->MipMapsNum() + srv->FirstLevel(),
+                    srv->ArraySize() * srv->NumLevels());
+            }
+            else
+            {
+                COMMON_ASSERT(srv->BufferResource());
+                srvsrc_ = std::make_tuple(srv->BufferResource().get(), 0, 1);
+            }
+
+            srv_ = checked_cast<D3D11ShaderResourceView&>(*srv).RetrieveD3DShaderResourceView();
+        }
+        else
+        {
+            std::get<0>(srvsrc_) = nullptr;
+            srv_ = nullptr;
+        }
+    }
+
+private:
+    std::tuple<void*, uint32_t, uint32_t>& srvsrc_;
+    ID3D11ShaderResourceView*& srv_;
+    RenderEffectParameter const& param_;
+};
+}
+
 namespace RenderWorker
 {
 D3D11ShaderStageObject::D3D11ShaderStageObject(ShaderStage stage)
@@ -124,6 +171,14 @@ void D3D11ShaderObject::Bind(const RenderEffect& effect)
     auto const& ps_stage = this->Stage(ShaderStage::Pixel);
 	re.PSSetShader(ps_stage ? checked_cast<D3D11ShaderStageObject&>(*ps_stage).HwPixelShader() : nullptr);
 
+    for (auto const & pbs : param_binds_)
+    {
+        for (auto const & pb : pbs)
+        {
+            pb.update();
+        }
+    }
+
     for (size_t stage_index = 0; stage_index < ShaderStageNum; ++stage_index)
     {
         const ShaderStage stage = static_cast<ShaderStage>(stage_index);
@@ -133,35 +188,34 @@ void D3D11ShaderObject::Bind(const RenderEffect& effect)
             continue;
         }
 
-        //ID3D11Buffer* d3d11_cbuffs[D3D11_COMMONSHADER_CONSTANT_BUFFER_API_SLOT_COUNT];
+        if (!srvs_[stage_index].empty())
+        {
+            // 绑定着色器资源
+            re.SetShaderResources(stage, srvsrcs_[stage_index], srvs_[stage_index]);
+        }
+
+        if (!d3d_immutable_->samplers_[stage_index].empty())
+        {
+            // 绑定取样器
+            re.SetSamplers(stage, d3d_immutable_->samplers_[stage_index]);
+        }
+
+        auto const& cbuff_indices = shader_stage->CBufferIndices();
+        if(cbuff_indices.empty())
+        {
+            continue;
+        }
+        ID3D11Buffer* d3d11_cbuffs[D3D11_COMMONSHADER_CONSTANT_BUFFER_API_SLOT_COUNT];
+        for (uint32_t i = 0; i < cbuff_indices.size(); ++i)
+        {
+            // 刷新常量
+            auto* cb = effect.CBufferByIndex(cbuff_indices[i]);
+            cb->Update();
+            d3d11_cbuffs[i] = checked_cast<D3D11GraphicsBuffer*>(cb->HWBuff().get())->D3DBuffer();
+        }
+
+        re.SetConstantBuffers(stage, MakeSpan(d3d11_cbuffs, cbuff_indices.size()));
     }
-
-    
-    // if(effect.sm1_)
-    // {
-    //     auto sm1 = checked_cast<D3D11SamplerStateObject&>(*effect.sm1_).D3DSamplerState();
-    //     re.D3DDeviceImmContext()->PSSetSamplers(0, 1, &sm1);
-    
-    //     auto d3d_srv1 = checked_cast<D3D11ShaderResourceView&>(*effect.srv1_).RetrieveD3DShaderResourceView();
-    //     re.D3DDeviceImmContext()->PSSetShaderResources(0, 1, &d3d_srv1);
-    // }
-
-    // if(effect.sm2_)
-    // {
-    //     auto sm2 = checked_cast<D3D11SamplerStateObject&>(*effect.sm2_).D3DSamplerState();
-    //     re.D3DDeviceImmContext()->PSSetSamplers(1, 1, &sm2);
-        
-    //     auto d3d_srv2 = checked_cast<D3D11ShaderResourceView&>(*effect.srv2_).RetrieveD3DShaderResourceView();
-    //     re.D3DDeviceImmContext()->PSSetShaderResources(1, 1, &d3d_srv2);
-    // }
-
-    // auto* cb1 = effect.CBufferByIndex(0);
-    // auto d3d11_cbuff_vs = checked_cast<D3D11GraphicsBuffer*>(cb1->HWBuff().get())->D3DBuffer();
-    // re.D3DDeviceImmContext()->VSSetConstantBuffers(0, 1, &d3d11_cbuff_vs);
-
-    // auto* cb2 = effect.CBufferByIndex(1);
-    // auto d3d11_cbuff_ps = checked_cast<D3D11GraphicsBuffer*>(cb2->HWBuff().get())->D3DBuffer();
-    // re.D3DDeviceImmContext()->PSSetConstantBuffers(1, 1, &d3d11_cbuff_ps);
 }
 
 void D3D11ShaderObject::Unbind()
@@ -192,7 +246,106 @@ void D3D11ShaderObject::DoLinkShaders(RenderEffect& effect)
         {
             continue;
         }
+
+        auto const& shader_desc = shader_stage->GetD3D11ShaderDesc();
+        d3d_immutable_->samplers_[stage].resize(shader_desc.num_samplers);
+        srvsrcs_[stage].resize(shader_desc.num_srvs, std::make_tuple(static_cast<void*>(nullptr), 0, 0));
+        srvs_[stage].resize(shader_desc.num_srvs);
+
+        for (size_t i = 0; i < shader_desc.res_desc.size(); ++i)
+        {
+            RenderEffectParameter* p = effect.ParameterByName(shader_desc.res_desc[i].name);
+            COMMON_ASSERT(p);
+
+            uint32_t offset = shader_desc.res_desc[i].bind_point;
+            if (D3D_SIT_SAMPLER == shader_desc.res_desc[i].type)
+            {
+                SamplerStateObjectPtr sampler;
+                p->Value(sampler);
+                if (sampler)
+                {
+                    // 获取取样器
+                    d3d_immutable_->samplers_[stage][offset] = checked_cast<D3D11SamplerStateObject&>(*sampler).D3DSamplerState();
+                }
+            }
+            else
+            {
+                // 获取着色器资源
+                param_binds_[stage].push_back(GetBindFunc(static_cast<ShaderStage>(stage), offset, *p));
+            }
+        }
     }
+}
+
+D3D11ShaderObject::ParameterBind D3D11ShaderObject::GetBindFunc(ShaderStage stage, uint32_t offset, RenderEffectParameter const& param)
+{
+    uint32_t const stage_index = std::to_underlying(stage);
+
+    ParameterBind ret;
+    ret.param = &param;
+    ret.offset = offset;
+
+    switch (param.Type())
+    {
+    case REDT_bool:
+    case REDT_uint:
+    case REDT_int:
+    case REDT_float:
+    case REDT_uint2:
+    case REDT_uint3:
+    case REDT_uint4:
+    case REDT_int2:
+    case REDT_int3:
+    case REDT_int4:
+    case REDT_float2:
+    case REDT_float3:
+    case REDT_float4:
+    case REDT_float4x4:
+    case REDT_sampler:
+        break;
+
+    case REDT_texture1D:
+    case REDT_texture2D:
+    case REDT_texture2DMS:
+    case REDT_texture3D:
+    case REDT_textureCUBE:
+    case REDT_texture1DArray:
+    case REDT_texture2DArray:
+    case REDT_texture2DMSArray:
+    case REDT_texture3DArray:
+    case REDT_textureCUBEArray:
+    case REDT_buffer:
+    case REDT_structured_buffer:
+    case REDT_consume_structured_buffer:
+    case REDT_append_structured_buffer:
+    case REDT_byte_address_buffer:
+        ret.update = D3D11ShaderParameterSrvUpdater(srvsrcs_[stage_index][offset], srvs_[stage_index][offset], param);
+        break;
+
+    case REDT_rw_texture1D:
+    case REDT_rw_texture2D:
+    case REDT_rw_texture3D:
+    case REDT_rw_texture1DArray:
+    case REDT_rw_texture2DArray:
+    case REDT_rasterizer_ordered_texture1D:
+    case REDT_rasterizer_ordered_texture1DArray:
+    case REDT_rasterizer_ordered_texture2D:
+    case REDT_rasterizer_ordered_texture2DArray:
+    case REDT_rasterizer_ordered_texture3D:
+    case REDT_rw_buffer:
+    case REDT_rw_structured_buffer:
+    case REDT_rw_byte_address_buffer:
+    case REDT_rasterizer_ordered_buffer:
+    case REDT_rasterizer_ordered_structured_buffer:
+    case REDT_rasterizer_ordered_byte_address_buffer:
+        //ret.update = D3D11ShaderParameterUavUpdater(uavsrcs_[offset], uavs_[offset], uav_init_counts_[offset], param);
+        break;
+
+    default:
+        KFL_UNREACHABLE("Invalid type");
+    }
+
+    return ret;
 }
 
 }

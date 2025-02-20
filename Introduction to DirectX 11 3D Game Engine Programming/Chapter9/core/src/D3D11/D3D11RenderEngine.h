@@ -19,20 +19,24 @@ public:
     ID3D11Device* D3DDevice() const;
     ID3D11DeviceContext* D3DDeviceImmContext() const;
 
-    void DoRender(const RenderEffect& effect, const RenderLayout& rl);
+    void DoRender(const RenderEffect& effect, const RenderTechnique& tech, const RenderLayout& rl);
     void EndRender() const override;
     void SwitchChain() const; 
 
+    // 设置光栅化状态
     void RSSetState(ID3D11RasterizerState* ras);
+    // 设置混合状态
     void OMSetBlendState(ID3D11BlendState* bs, Color const & blend_factor, uint32_t sample_mask);
 
     // 将着色器绑定到渲染管线
     void VSSetShader(ID3D11VertexShader* shader);
 	void PSSetShader(ID3D11PixelShader* shader);
-    void SetShaderResources(ShaderStage stage, std::span<std::tuple<void*, uint32_t, uint32_t> const> srvsrcs, std::span<const ID3D11ShaderResourceView*> srvs);
-    void SetSamplers(ShaderStage stage, std::span<const ID3D11SamplerState*> samplers);
+    // 绑定资源
+    void SetShaderResources(ShaderStage stage, std::span<std::tuple<void*, uint32_t, uint32_t> const> srvsrcs, std::span<ID3D11ShaderResourceView* const> srvs);
+    // 绑定取样器
+    void SetSamplers(ShaderStage stage, std::span<ID3D11SamplerState* const> samplers);
     // 将更新好的常量缓冲区绑定到顶点着色器和像素着色器
-    void SetConstantBuffers(ShaderStage stage, std::span<const ID3D11Buffer*> cbs);
+    void SetConstantBuffers(ShaderStage stage, std::span<ID3D11Buffer* const> cbs);
 private:
     int weight_{0};
     int height_{0};
@@ -46,7 +50,6 @@ private:
     uint32_t num_primitives_just_rendered_{0};
 	uint32_t num_vertices_just_rendered_{0};
 
-    int index_count_{0};
     ID3D11Texture2DPtr depth_stencil_buff_;
     ID3D11DepthStencilViewPtr depth_stencil_view_;
 
@@ -61,13 +64,17 @@ private:
     Color blend_factor_cache_{1, 1, 1, 1};
     uint32_t sample_mask_cache_{0xFFFFFFFF};
     
+    // 当前绑定的着色器
     ID3D11VertexShader* vertex_shader_cache_{nullptr};
     ID3D11PixelShader* pixel_shader_cache_{nullptr};
+
     std::array<std::vector<ID3D11Buffer*>, ShaderStageNum> shader_cb_ptr_cache_;
     std::array<std::vector<std::tuple<void*, uint32_t, uint32_t>>, ShaderStageNum> shader_srvsrc_cache_;
+    // shader 图片绑定
     std::array<std::vector<ID3D11ShaderResourceView*>, ShaderStageNum> shader_srv_ptr_cache_;
     std::array<std::vector<ID3D11SamplerState*>, ShaderStageNum> shader_sampler_ptr_cache_;
 
+    // 顶点索引相关
     ID3D11InputLayout* input_layout_cache_{nullptr};
     std::vector<ID3D11Buffer*> vb_cache_;
     std::vector<UINT> vb_stride_cache_;

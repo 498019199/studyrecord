@@ -233,13 +233,14 @@ ID3D11DeviceContext* D3D11RenderEngine::D3DDeviceImmContext() const
     return d3d_imm_ctx_.get();
 }
 
-void D3D11RenderEngine::DoRender(const RenderEffect& effect, const RenderLayout& rl)
+void D3D11RenderEngine::DoRender(const RenderEffect& effect, const RenderTechnique& tech, const RenderLayout& rl)
 {
 	uint32_t vertex_stream_num = rl.VertexStreamNum();
 
 	const auto& d3d_rl = checked_cast<const D3D11RenderLayout&>(rl);
 	d3d_rl.Active();
 
+	// 绑定顶点
 	const auto& vbs = d3d_rl.VBs();
 	const auto& strides = d3d_rl.Strides();
 	const auto& offsets = d3d_rl.Offsets();
@@ -329,7 +330,7 @@ void D3D11RenderEngine::DoRender(const RenderEffect& effect, const RenderLayout&
 	num_primitives_just_rendered_ = prim_count;
 	num_vertices_just_rendered_ = vertex_count;
 
-    // 将更新好的常量缓冲区绑定到顶点着色器
+    // 绑定索引资源
 	if(rl.UseIndices())
 	{
 		ID3D11Buffer* d3dib = checked_cast<D3D11GraphicsBuffer&>(*rl.GetIndexStream()).D3DBuffer();
@@ -349,7 +350,12 @@ void D3D11RenderEngine::DoRender(const RenderEffect& effect, const RenderLayout&
 	}
 
 	// 将更新好的常量缓冲区绑定到顶点着色器和像素着色器
-	//effect.GetShaderObject()->Bind(effect);
+	uint32_t const num_passes = tech.NumPasses();
+	for (uint32_t i = 0; i < num_passes; ++ i)
+	{
+		auto& pass = tech.Pass(i);
+		pass.Bind(effect);
+	}
 }
 
 void D3D11RenderEngine::RSSetState(ID3D11RasterizerState* ras)
@@ -391,14 +397,13 @@ void D3D11RenderEngine::PSSetShader(ID3D11PixelShader* shader)
 }
 
 void D3D11RenderEngine::SetShaderResources(ShaderStage stage, 
-	std::span<std::tuple<void*, uint32_t, uint32_t> const> srvsrcs,
-	std::span<const ID3D11ShaderResourceView*> srvs)
+	std::span<std::tuple<void*, uint32_t, uint32_t> const> srvsrcs, std::span<ID3D11ShaderResourceView* const> srvs)
 {
 	uint32_t const stage_index = std::to_underlying(stage);
 	if (MakeSpan(shader_srv_ptr_cache_[stage_index]) != srvs)
 	{
 		size_t const old_size = shader_srv_ptr_cache_[stage_index].size();
-		//shader_srv_ptr_cache_[stage_index].assign(srvs.begin(), srvs.end());
+		shader_srv_ptr_cache_[stage_index].assign(srvs.begin(), srvs.end());
 		if (old_size > static_cast<size_t>(srvs.size()))
 		{
 			shader_srv_ptr_cache_[stage_index].resize(old_size, nullptr);
@@ -412,25 +417,25 @@ void D3D11RenderEngine::SetShaderResources(ShaderStage stage,
 	}
 }
 
-void D3D11RenderEngine::SetSamplers(ShaderStage stage, std::span<const ID3D11SamplerState*> samplers)
+void D3D11RenderEngine::SetSamplers(ShaderStage stage, std::span<ID3D11SamplerState* const> samplers)
 {
 	uint32_t const stage_index = std::to_underlying(stage);
 	if (MakeSpan(shader_sampler_ptr_cache_[stage_index]) != samplers)
 	{
-		//ShaderSetSamplers[stage_index](d3d_imm_ctx_.get(), 0, static_cast<UINT>(samplers.size()), &(samplers[0]));
+		ShaderSetSamplers[stage_index](d3d_imm_ctx_.get(), 0, static_cast<UINT>(samplers.size()), &(samplers[0]));
 
-		//shader_sampler_ptr_cache_[stage_index].assign(samplers.begin(), samplers.end());
+		shader_sampler_ptr_cache_[stage_index].assign(samplers.begin(), samplers.end());
 	}
 }
 
-void D3D11RenderEngine::SetConstantBuffers(ShaderStage stage, std::span<const ID3D11Buffer*> cbs)
+void D3D11RenderEngine::SetConstantBuffers(ShaderStage stage, std::span<ID3D11Buffer* const> cbs)
 {
 	uint32_t const stage_index = std::to_underlying(stage);
 	if (MakeSpan(shader_cb_ptr_cache_[stage_index]) != cbs)
 	{
-		//ShaderSetConstantBuffers[stage_index](d3d_imm_ctx_.get(), 0, static_cast<UINT>(cbs.size()), &(cbs[0]));
+		ShaderSetConstantBuffers[stage_index](d3d_imm_ctx_.get(), 0, static_cast<UINT>(cbs.size()), &(cbs[0]));
 
-		//shader_cb_ptr_cache_[stage_index].assign(cbs.begin(), cbs.end());
+		shader_cb_ptr_cache_[stage_index].assign(cbs.begin(), cbs.end());
 	}
 }
 }

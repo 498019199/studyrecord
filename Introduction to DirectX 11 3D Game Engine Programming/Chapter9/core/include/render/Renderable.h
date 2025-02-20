@@ -24,13 +24,18 @@ public:
     RenderLayout& GetRenderLayout() const;
 	RenderLayout& GetRenderLayout(uint32_t lod) const;
 
-	RenderEffect* GetRenderEffect();
+	virtual RenderEffect* GetRenderEffect() const;
+    virtual RenderTechnique* GetRenderTechnique() const;
 
     void Render();
 protected:
     int32_t active_lod_ = 0;
+
+    // 布局顶点索引
     std::vector<RenderLayoutPtr> rls_;
+    // 效果参数合集
     RenderEffectPtr effect_;
+    RenderTechnique* technique_ = nullptr;
 };
 using RenderablePtr = std::shared_ptr<RenderWorker::Renderable>;
 }

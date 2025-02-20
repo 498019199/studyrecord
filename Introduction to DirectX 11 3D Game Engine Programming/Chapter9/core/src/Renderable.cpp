@@ -28,20 +28,25 @@ RenderLayout& Renderable::GetRenderLayout(uint32_t lod) const
     return *rls_[lod];
 }
 
-RenderEffect* Renderable::GetRenderEffect()
+RenderEffect* Renderable::GetRenderEffect() const
 {       
     return effect_.get();
+}
+
+RenderTechnique* Renderable::GetRenderTechnique() const
+{
+    return technique_;
 }
 
 void Renderable::Render()
 {
     int32_t lod = 0;
     
-    const auto& effect = *this->GetRenderEffect();
-    const auto& layout = this->GetRenderLayout(lod);
-
+    const auto& effect = *GetRenderEffect();
+    const auto& layout = GetRenderLayout(lod);
+    const auto& tech = *GetRenderTechnique();
     auto& d3d11_re = checked_cast<D3D11RenderEngine&>(Context::Instance().RenderEngineInstance());
-        d3d11_re.DoRender(effect, layout);
+        d3d11_re.DoRender(effect, tech, layout);
 }
 
 }

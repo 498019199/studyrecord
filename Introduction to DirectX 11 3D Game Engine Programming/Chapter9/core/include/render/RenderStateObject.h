@@ -8,8 +8,8 @@ namespace RenderWorker
 enum PolygonMode
 {
     PM_Point,
-    PM_Line,
-    PM_Fill
+    PM_Line,    // 线框填充方式 
+    PM_Fill     // 	面填充方式
 };
 
 enum ShadeMode
@@ -20,9 +20,9 @@ enum ShadeMode
 
 enum CullMode
 {
-    CM_None,
-    CM_Front,
-    CM_Back
+    CM_None,    // 无背面裁剪，即三角形无论处在视野的正面还是背面都能看到
+    CM_Front,   // 对处在视野正面的三角形进行裁剪
+    CM_Back     // 对处在视野背面的三角形进行裁剪
 };
 
 enum BlendOperation

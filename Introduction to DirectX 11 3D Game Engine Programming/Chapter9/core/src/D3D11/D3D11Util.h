@@ -82,6 +82,9 @@ public:
     static D3D11_TEXTURE_ADDRESS_MODE Mapping(TexAddressingMode mode);
     static D3D11_COMPARISON_FUNC Mapping(CompareFunction func);
 
+    static D3D11_CULL_MODE Mapping(CullMode mode);
+    static D3D11_FILL_MODE Mapping(PolygonMode mode);
+    
     static D3D11_PRIMITIVE_TOPOLOGY Mapping(RenderLayout::topology_type tt);
     static void Mapping(std::vector<D3D11_INPUT_ELEMENT_DESC>& elements, uint32_t stream, std::span<const VertexElement> vet,
         RenderLayout::stream_type type, uint32_t freq);
