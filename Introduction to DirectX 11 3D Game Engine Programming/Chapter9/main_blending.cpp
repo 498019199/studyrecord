@@ -10,6 +10,28 @@
 #include <filesystem>
 using namespace RenderWorker;
 
+struct VSConstantBuffer
+{
+    float4x4 world;//16*4=64
+    float4x4 view;//128
+    float4x4 proj;//192
+    float4x4 worldInvTranspose;
+    float4x4 RotateM;
+};
+
+struct PSConstantBuffer
+{
+    DirectionalLightSource directional_light;
+    //·默认环境光
+    PointLightSource point_light;
+    //·默认点光
+    SpotLightSource spot_light;
+    //默认汇聚光
+    Material material;
+    float4 eyePos;
+};
+
+
 struct VertexPosNormalTex
 {
     float3 pos;
@@ -176,7 +198,21 @@ public:
             // ******************
     // 初始化默认光照
     // 方向光
-    auto _1 = (effect_->ParameterByName("directional_light")) ;
+    auto cbuff = (effect_->CBufferByName("PSConstantBuffer")) ;
+    for (uint32_t j = 0; j < cbuff->NumParameters(); ++j)
+    {
+        auto param = effect_->ParameterByIndex(cbuff->ParameterIndex(j));
+        if(nullptr == param)
+        {
+            continue;
+        }
+        uint32_t stride;
+        if (param->Type() == REDT_struct)
+        {
+            stride = 1;
+        }
+        //param->BindToCBuffer(*effect_, cbuff_indices[i], shader_desc.cb_desc[i].var_desc[j].start_offset, stride);
+    }
     //default_directional_light_.ambient_ = float4(0.2f, 0.2f, 0.2f, 1.0f);
     // default_directional_light_.diffuse_ = float4(0.8f, 0.8f, 0.8f, 1.0f);
     // default_directional_light_.specular_ = float4(0.5f, 0.5f, 0.5f, 1.0f);

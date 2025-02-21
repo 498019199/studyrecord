@@ -19,8 +19,8 @@
 			<state name="src_blend_alpha" value="one"/>
 			<state name="dest_blend_alpha" value="one"/>
 
-            <state name="vertex_shader" value="Basic_2D_VS()"/>
-			<state name="pixel_shader" value="Basic_2D_PS()"/>
+            <state name="vertex_shader" value="\\Chapter9\\HLSL\\Basic_2D_VS"/>
+			<state name="pixel_shader" value="\\Chapter9\\HLSL\\Basic_2D_PS"/>
         </pass>
     </technique>
 </effect>

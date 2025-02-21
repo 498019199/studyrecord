@@ -71,10 +71,10 @@ void D3D11ShaderStageObject::CompileShader(const RenderEffect& effect, const Ren
     switch(stage_)
     {
         case ShaderStage::Vertex:
-            TIFHR(CreateShaderFromFile(sd.profile.c_str(), "VS", "vs_5_0", stripped_blob.put()));
+            TIFHR(CreateShaderFromFile(sd.func_name.c_str(), "VS", "vs_5_0", stripped_blob.put()));
             break;
         case ShaderStage::Pixel:
-            TIFHR(CreateShaderFromFile(sd.profile.c_str(), "PS", "ps_5_0", stripped_blob.put()));
+            TIFHR(CreateShaderFromFile(sd.func_name.c_str(), "PS", "ps_5_0", stripped_blob.put()));
             break;
     }
     

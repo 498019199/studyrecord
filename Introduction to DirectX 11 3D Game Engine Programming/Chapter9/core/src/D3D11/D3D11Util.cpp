@@ -5,6 +5,7 @@
 #include <format>
 #include <utility>
 #include <d3dcompiler.h>
+#include <filesystem>
 
 DEFINE_UUID_OF(ID3D11Resource);
 DEFINE_UUID_OF(ID3D11Texture2D);
@@ -21,8 +22,10 @@ HRESULT CreateShaderFromFile(const std::string& filename,
 	LPCSTR shaderModel,
 	ID3DBlob** ppBlobOut)
 {
+    auto currentPath = std::filesystem::current_path().parent_path().parent_path().string();
+    auto new_filename = currentPath + filename;
     std::wstring swcFileName;
-    RenderWorker::Convert(swcFileName, filename);
+    RenderWorker::Convert(swcFileName, new_filename);
 	std::wstring strOutFile = swcFileName + L".cso";
     std::wstring InputFile = swcFileName + L".hlsl";
     return CreateShaderFromFile(strOutFile.c_str(), InputFile.c_str(), entryPoint, shaderModel, ppBlobOut);

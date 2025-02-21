@@ -106,16 +106,21 @@ public:
     virtual ~ShaderObject() noexcept;
 
     void AttachStage(ShaderStage stage, const ShaderStageObjectPtr&  shader_stage);
-    const ShaderStageObjectPtr&  Stage(ShaderStage stage) const noexcept;
 
     void LinkShaders(RenderEffect& effect);
 
+    const ShaderStageObjectPtr&  Stage(ShaderStage stage) const noexcept;
+    
     virtual void Bind(const RenderEffect& effect) = 0;
     virtual void Unbind() = 0;
 
     bool Validate() const noexcept
     {
         return immutable_->is_validate_;
+    }
+    bool HWResourceReady() const noexcept
+    {
+        return hw_res_ready_;
     }
 private:
     virtual void DoLinkShaders(RenderEffect& effect) = 0;

@@ -5889,7 +5889,7 @@ namespace RenderWorker
 			auto const* shader_obj = pass->GetShaderObject(effect).get();
 			if (shader_obj)
 			{
-				//hw_res_ready &= shader_obj->HWResourceReady();
+				hw_res_ready &= shader_obj->HWResourceReady();
 			}
 			else
 			{
@@ -7826,6 +7826,16 @@ RenderEffectPtr SyncLoadRenderEffect(std::string_view effect_name)
 {
 	auto effect = MakeSharedPtr<RenderEffect>();
 	effect->Load(MakeSpan<1>(std::string(effect_name)));
+	if (effect && effect->HWResourceReady())
+	{
+		return nullptr;
+	}
+
+#if ZENGINE_IS_DEV_PLATFORM
+	effect->CompileShaders();
+#endif
+
+	effect->CreateHwShaders();
 	return effect;
 }
 }
