@@ -8,7 +8,8 @@
 // Simple d3d error checker for book demos.
 //---------------------------------------------------------------------------------------
 // Throw error message
-std::string RenderWorker::CombineFileLine(std::string_view file, uint32_t line);
+std::string CombineFileLine(std::string_view file, uint32_t line);
+
 #define TMSG(msg) throw std::runtime_error(msg)
 
 #if defined(DEBUG) | defined(_DEBUG)

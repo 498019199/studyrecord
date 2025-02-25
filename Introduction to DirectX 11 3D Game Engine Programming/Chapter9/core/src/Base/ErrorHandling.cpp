@@ -1,9 +1,7 @@
 #include <core/ErrorHandling.h>
 #include <format>
-namespace RenderWorker
+
+std::string CombineFileLine(std::string_view file, uint32_t line)
 {
-	std::string CombineFileLine(std::string_view file, uint32_t line)
-	{
-		return std::format("{}: {}", std::move(file), line);
-	}
+	return std::format("{}: {}", std::move(file), line);
 }

@@ -1,6 +1,9 @@
 #include <render/ShaderObject.h>
 
 #include <core/DllLoader.h>
+#include <core/com_ptr.h>
+#include <core/Context.h>
+#if ZENGINE_IS_DEV_PLATFORM
 
 #ifdef ZENGINE_PLATFORM_WINDOWS
 #define CALL_D3DCOMPILER_DIRECTLY
@@ -9,6 +12,8 @@
 #ifdef CALL_D3DCOMPILER_DIRECTLY
 #include <d3dcompiler.h>
 #endif
+#endif
+
 
 namespace
 {
@@ -27,6 +32,59 @@ public:
     {
         static D3DCompilerLoader initer;
         return initer;
+    }
+
+    HRESULT D3DCompile(std::string const & src_data,
+        D3D_SHADER_MACRO const * defines, char const * entry_point,
+        char const * target, uint32_t flags1, uint32_t flags2,
+        std::vector<uint8_t>& code, std::string& error_msgs) const
+    {
+#ifdef CALL_D3DCOMPILER_DIRECTLY
+        com_ptr<ID3DBlob> code_blob;
+        com_ptr<ID3DBlob> error_msgs_blob;
+        HRESULT hr = DynamicD3DCompile_(src_data.c_str(), static_cast<UINT>(src_data.size()),
+            nullptr, defines, nullptr, entry_point,
+            target, flags1, flags2, code_blob.put(), error_msgs_blob.put());
+        if (code_blob)
+        {
+            uint8_t const * p = static_cast<uint8_t const *>(code_blob->GetBufferPointer());
+            code.assign(p, p + code_blob->GetBufferSize());
+        }
+        else
+        {
+            code.clear();
+        }
+        if (error_msgs_blob)
+        {
+            char const * p = static_cast<char const *>(error_msgs_blob->GetBufferPointer());
+            error_msgs.assign(p, p + error_msgs_blob->GetBufferSize());
+        }
+        else
+        {
+            error_msgs.clear();
+        }
+        return hr;
+#else
+#endif
+    }
+
+    HRESULT D3DStripShader(std::vector<uint8_t> const & shader_code, uint32_t strip_flags, std::vector<uint8_t>& stripped_code)
+    {
+#ifdef CALL_D3DCOMPILER_DIRECTLY
+        com_ptr<ID3DBlob> stripped_blob;
+        HRESULT hr = DynamicD3DStripShader_(&shader_code[0], static_cast<UINT>(shader_code.size()), strip_flags, stripped_blob.put());
+
+        uint8_t const * p = static_cast<uint8_t const *>(stripped_blob->GetBufferPointer());
+        stripped_code.assign(p, p + stripped_blob->GetBufferSize());
+
+        return hr;
+#else
+        // TODO
+        KFL_UNUSED(shader_code);
+        KFL_UNUSED(strip_flags);
+        KFL_UNUSED(stripped_code);
+        return S_OK;
+#endif
     }
 
     HRESULT D3DReflect(std::vector<uint8_t> const & shader_code, void** reflector)
@@ -169,12 +227,62 @@ void ShaderObject::LinkShaders(RenderEffect& effect)
 		RenderPass const& pass, std::vector<std::pair<char const*, char const*>> const& api_special_macros, char const* func_name,
 		char const* shader_profile, uint32_t flags, void** reflector, bool strip)
 	{
+        auto& re = Context::Instance().RenderEngineInstance();
+        std::string const & hlsl_shader_text = effect.HLSLShaderText();
         std::vector<uint8_t> code;
         
+        std::string err_msg;
+		std::vector<D3D_SHADER_MACRO> macros;
+        for (uint32_t i = 0; i < api_special_macros.size(); ++i)
+		{
+			macros.emplace_back(D3D_SHADER_MACRO{api_special_macros[i].first, api_special_macros[i].second});
+		}
+
+        for (uint32_t i = 0; i < tech.NumMacros(); ++i)
+		{
+			std::pair<std::string, std::string> const & name_value = tech.MacroByIndex(i);
+			macros.emplace_back(D3D_SHADER_MACRO{name_value.first.c_str(), name_value.second.c_str()});
+		}
+
+        for (uint32_t i = 0; i < pass.NumMacros(); ++i)
+		{
+			std::pair<std::string, std::string> const & name_value = pass.MacroByIndex(i);
+			macros.emplace_back(D3D_SHADER_MACRO{name_value.first.c_str(), name_value.second.c_str()});
+		}
+        macros.emplace_back(D3D_SHADER_MACRO{nullptr, nullptr});
+
+        D3DCompilerLoader::Instance().D3DCompile(hlsl_shader_text, &macros[0],
+			func_name, shader_profile,
+			flags, 0, code, err_msg);
+        if (!err_msg.empty())
+        {
+
+        }
+
         if (reflector != nullptr)
 		{
 			D3DCompilerLoader::Instance().D3DReflect(code, reflector);
 		}
+
+        if (strip)
+		{
+#ifndef ZENGINE_PLATFORM_WINDOWS
+			enum D3DCOMPILER_STRIP_FLAGS
+			{
+				D3DCOMPILER_STRIP_REFLECTION_DATA = 1,
+				D3DCOMPILER_STRIP_DEBUG_INFO = 2,
+				D3DCOMPILER_STRIP_TEST_BLOBS = 4,
+				D3DCOMPILER_STRIP_PRIVATE_DATA = 8,
+				D3DCOMPILER_STRIP_ROOT_SIGNATURE = 16,
+			};
+#endif
+
+			const uint32_t strip_flags = D3DCOMPILER_STRIP_REFLECTION_DATA | D3DCOMPILER_STRIP_DEBUG_INFO | D3DCOMPILER_STRIP_TEST_BLOBS |
+										 D3DCOMPILER_STRIP_PRIVATE_DATA | D3DCOMPILER_STRIP_ROOT_SIGNATURE;
+			D3DCompilerLoader::Instance().D3DStripShader(code, strip_flags, code);
+		}
+
+		return code;
     }
 #endif
 }
