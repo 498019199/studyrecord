@@ -7,6 +7,11 @@
 #include "D3D11RenderStateObject.h"
 #include "D3D11RenderView.h"
 
+#if ZENGINE_IS_DEV_PLATFORM
+#include <d3dcompiler.h>
+#endif
+
+
 namespace
 {
 using namespace RenderWorker;
@@ -64,24 +69,37 @@ D3D11ShaderStageObject::D3D11ShaderStageObject(ShaderStage stage)
 void D3D11ShaderStageObject::CompileShader(const RenderEffect& effect, const RenderTechnique& tech, const RenderPass& pass,
             const std::array<uint32_t, ShaderStageNum>& shader_desc_ids)
 {
+    shader_code_.clear();
+
     uint32_t const shader_desc_id = shader_desc_ids[std::to_underlying(stage_)];
     const auto& sd = effect.GetShaderDesc(shader_desc_id);
 
-    com_ptr<ID3DBlob> stripped_blob;
-    switch(stage_)
-    {
-        case ShaderStage::Vertex:
-            TIFHR(CreateShaderFromFile(sd.func_name.c_str(), "VS", "vs_5_0", stripped_blob.put()));
-            break;
-        case ShaderStage::Pixel:
-            TIFHR(CreateShaderFromFile(sd.func_name.c_str(), "PS", "ps_5_0", stripped_blob.put()));
-            break;
-    }
-    
-    uint8_t const * p = static_cast<uint8_t const *>(stripped_blob->GetBufferPointer());
-	shader_code_.assign(p, p + stripped_blob->GetBufferSize());
 
-    //com_ptr<ID3D11ShaderReflection> reflection;
+    shader_profile_ = std::string(GetShaderProfile(effect, shader_desc_id));
+    is_validate_ = !shader_profile_.empty();
+
+    if (is_validate_)
+    {
+        std::vector<std::pair<char const*, char const*>> macros;
+        uint32_t flags = D3DCOMPILE_ENABLE_STRICTNESS;
+    #if !defined(_DEBUG)
+        flags |= D3DCOMPILE_OPTIMIZATION_LEVEL3;
+    #endif
+    
+        com_ptr<ID3D11ShaderReflection> reflection;
+        shader_code_ = ShaderStageObject::CompileToDXBC(
+            stage_, effect, tech, pass, macros, sd.func_name.c_str(), shader_profile_.c_str(), flags, reflection.put_void(), true); 
+        
+        if(!shader_code_.empty())
+        {
+            if (reflection != nullptr)
+            {
+                D3D11_SHADER_DESC desc;
+                reflection->GetDesc(&desc);
+            }
+        }
+    }
+
 }
 
 void D3D11ShaderStageObject::CreateHwShader(const RenderEffect& effect, const std::array<uint32_t, ShaderStageNum>& shader_desc_ids)
@@ -104,6 +122,24 @@ void D3D11ShaderStageObject::CreateHwShader(const RenderEffect& effect, const st
 std::span<uint8_t const> D3D11ShaderStageObject::ShaderCodeBlob() const
 {
     return MakeSpan(shader_code_);
+}
+
+std::string_view D3D11ShaderStageObject::GetShaderProfile(RenderEffect const& effect, uint32_t shader_desc_id) const 
+{
+    std::string_view shader_profile = effect.GetShaderDesc(shader_desc_id).profile;
+    if (is_available_)
+    {
+        if (shader_profile == "auto")
+        {
+            auto& re = checked_cast<D3D11RenderEngine&>(Context::Instance().RenderEngineInstance());
+            //shader_profile = re.DefaultShaderProfile(stage_);
+        }
+    }
+    else
+    {
+        shader_profile = std::string_view();
+    }
+    return shader_profile;
 }
 
 D3D11VertexShaderStageObject::D3D11VertexShaderStageObject()

@@ -72,6 +72,9 @@ public:
         return nullptr;
     }
 private:
+    
+    std::string_view GetShaderProfile(RenderEffect const& effect, uint32_t shader_desc_id) const override;  
+    
     virtual void ClearHwShader() = 0;
   
 protected:
@@ -79,6 +82,7 @@ protected:
     std::vector<uint8_t> shader_code_;
 
     D3D11ShaderDesc shader_desc_;
+    std::string shader_profile_;
     std::vector<uint8_t> cbuff_indices_;
 };
 

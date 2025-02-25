@@ -15,6 +15,7 @@ set(SRC_LIST
     ${PROJECT_SOURCE_DIR}/Chapter9/core/src/Base/Timer.cpp
     ${PROJECT_SOURCE_DIR}/Chapter9/core/src/Base/Util.cpp
     ${PROJECT_SOURCE_DIR}/Chapter9/core/src/Base/XMLDom.cpp
+    ${PROJECT_SOURCE_DIR}/Chapter9/core/src/Base/DllLoader.cpp
 
     ${PROJECT_SOURCE_DIR}/Chapter9/core/src/D3D11/D3D11GraphicsBuffer.cpp
     ${PROJECT_SOURCE_DIR}/Chapter9/core/src/D3D11/D3D11RenderEngine.cpp

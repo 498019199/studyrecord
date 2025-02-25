@@ -7,4 +7,5 @@
 /3rd/zlib/zlib
 /3rd/rapidjson/rapidjson
 /3rd/rapidxml/rapidxml
+/3rd/d3dcompiler/d3dcompiler
 *.cso
