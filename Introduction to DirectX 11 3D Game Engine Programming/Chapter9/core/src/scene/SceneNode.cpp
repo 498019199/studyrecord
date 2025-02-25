@@ -36,4 +36,10 @@ void SceneNode::SetRotation(const rotator& rot)
 // {
 
 // }
+
+void SceneNode::Update(float dt)
+{
+    
+}
+
 }

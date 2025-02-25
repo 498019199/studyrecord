@@ -80,6 +80,8 @@ void D3D11ShaderStageObject::CompileShader(const RenderEffect& effect, const Ren
     
     uint8_t const * p = static_cast<uint8_t const *>(stripped_blob->GetBufferPointer());
 	shader_code_.assign(p, p + stripped_blob->GetBufferSize());
+
+    //com_ptr<ID3D11ShaderReflection> reflection;
 }
 
 void D3D11ShaderStageObject::CreateHwShader(const RenderEffect& effect, const std::array<uint32_t, ShaderStageNum>& shader_desc_ids)

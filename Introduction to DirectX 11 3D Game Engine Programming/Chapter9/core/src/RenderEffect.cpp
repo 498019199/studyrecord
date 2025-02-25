@@ -7830,12 +7830,6 @@ RenderEffectPtr SyncLoadRenderEffect(std::string_view effect_name)
 	{
 		return nullptr;
 	}
-
-#if ZENGINE_IS_DEV_PLATFORM
-	effect->CompileShaders();
-#endif
-
-	effect->CreateHwShaders();
 	return effect;
 }
 }

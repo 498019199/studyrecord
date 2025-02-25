@@ -21,6 +21,8 @@ public:
     
     void SetPosition(const float3& pos);
     void SetRotation(const rotator& rot);
+
+    virtual void Update(float dt);
 private:
     SceneNode* parent_ = nullptr;
 	std::vector<SceneNodePtr> children_;

@@ -2,13 +2,14 @@
 //可渲染对象类 头文件
 
 #include <core/common.h>
+#include <core/SceneNode.h>
 #include <render/RenderEffect.h>
 #include <render/RenderLayout.h>
 
 namespace RenderWorker
 {
 
-class Renderable
+class Renderable:public SceneNode
 {
 public:
     struct ConstantBuffer

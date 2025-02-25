@@ -1,0 +1,24 @@
+<?xml version='1.0'?>
+<effect>
+    <cbuffer name="VSConstantBuffer">
+        <parameter type="float4x4" name="world"/>
+        <parameter type="float4x4" name="view"/>
+        <parameter type="float4x4" name="projection"/>
+    </cbuffer>
+    <technique name="Cube">
+        <pass name="p0">
+            <state name="cull_mode" value="front"/>
+
+            <state name="blend_enable" value="true"/>
+			<state name="blend_op" value="add"/>
+			<state name="src_blend" value="one"/>
+			<state name="dest_blend" value="one"/>
+			<state name="blend_op_alpha" value="add"/>
+			<state name="src_blend_alpha" value="one"/>
+			<state name="dest_blend_alpha" value="one"/>
+
+            <state name="vertex_shader" value="\\Chapter9\\HLSL\\Basic_3D_VS"/>
+			<state name="pixel_shader" value="\\Chapter9\\HLSL\\Basic_3D_PS"/>
+        </pass>
+    </technique>
+</effect>

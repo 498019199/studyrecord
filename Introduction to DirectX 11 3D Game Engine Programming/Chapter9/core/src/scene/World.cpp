@@ -51,5 +51,13 @@ void World::UpdateScene(float dt)
         }
     }
     re.EndRender();
+
+    for (auto& items : render_queue_)
+    {
+        for (auto const & item : items.second)
+        {
+            item->Update(dt);
+        }
+    }
 }
 }
