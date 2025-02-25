@@ -10,6 +10,7 @@
 #endif
 
 #ifdef CALL_D3DCOMPILER_DIRECTLY
+#include <d3dx11.h>
 #include <d3dcompiler.h>
 #endif
 #endif
