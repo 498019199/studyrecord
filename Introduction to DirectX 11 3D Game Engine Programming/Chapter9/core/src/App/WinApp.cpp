@@ -208,8 +208,6 @@ void WinAPP::ImguiUpdate(float dt)
     static float phi = 0.0f, theta = 0.0f, phi2 = 0.0f;
     phi += 0.3f * dt, theta += 0.37f * dt, phi2 -= 0.01f;
 
-	auto& wd = Context::Instance().WorldInstance();
-	// ImGui::ShowUserGuide();
 	// 获取IO事件
     ImGuiIO& io = ImGui::GetIO();
 
@@ -217,7 +215,14 @@ void WinAPP::ImguiUpdate(float dt)
 	{
     	ImGui::SameLine(0.0f, 25.0f);                       // 下一个控件在同一行往右25像素单位
 
-		ImGui::Checkbox("WireFrame Mode", &wd.is_wireframe_mode_);
+		auto& re = Context::Instance().RenderEngineInstance();
+		bool is_wireframe_mode = re.ForceLineMode();
+		ImGui::Checkbox("WireFrame Mode", &is_wireframe_mode);
+		if(is_wireframe_mode != re.ForceLineMode())
+		{
+			re.ForceLineMode(is_wireframe_mode);
+		}
+
 		// 不允许在操作UI时操作物体
     	if (!ImGui::IsAnyItemActive())
 		{

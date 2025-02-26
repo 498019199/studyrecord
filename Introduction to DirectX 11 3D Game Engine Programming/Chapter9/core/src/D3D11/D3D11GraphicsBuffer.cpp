@@ -117,6 +117,28 @@ void D3D11GraphicsBuffer::DeleteHWResource()
     d3d_buffer_.reset();
 }
 
+bool D3D11GraphicsBuffer::HWResourceReady() const 
+{
+    return d3d_buffer_.get() ? true : false;
+}
+
+void D3D11GraphicsBuffer::UpdateSubresource(uint32_t offset, uint32_t size, void const * data)
+{
+    D3D11_BOX* p = nullptr;
+    D3D11_BOX box;
+    if (!(bind_flags_ & D3D11_BIND_CONSTANT_BUFFER))
+    {
+        p = &box;
+        box.left = offset;
+        box.top = 0;
+        box.front = 0;
+        box.right = offset + size;
+        box.bottom = 1;
+        box.back = 1;
+    }
+    d3d_imm_ctx_->UpdateSubresource(d3d_buffer_.get(), 0, p, data, size, size);
+}
+
 void* D3D11GraphicsBuffer::Map(BufferAccess ba)
 {
     COMMON_ASSERT(d3d_buffer_);

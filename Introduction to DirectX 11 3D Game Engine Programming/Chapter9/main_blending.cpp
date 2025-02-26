@@ -285,6 +285,12 @@ private:
     uint32_t eys_pos_offset_;
 };
 
+struct Vertex7
+{
+    float3 pos;
+    float3 normal;
+    Color color;
+};
 class RenderableCubeTest : public Renderable
 {
 public:
@@ -296,7 +302,7 @@ public:
         rls_[0]->TopologyType(RenderLayout::TT_TriangleList);
 
         std::vector<VertexElement> merged_ves;
-        Vertex8 vertex[24];
+        Vertex7 vertex[24];
 
         // 右面(+X面)
         vertex[0].pos = float3(w2, -h2, -d2);
@@ -333,29 +339,28 @@ public:
         {
             // 右面(+X面)
             vertex[i].normal = float3(1.0f, 0.0f, 0.0f);
+            vertex[i].color = color;
+
             // 左面(-X面)
             vertex[i + 4].normal = float3(-1.0f, 0.0f, 0.0f);
+            vertex[i + 4].color = color;
             // 顶面(+Y面)
             vertex[i + 8].normal= float3(0.0f, 1.0f, 0.0f);
+            vertex[i + 8].color = color;
             // 底面(-Y面)
             vertex[i + 12].normal = float3(0.0f, -1.0f, 0.0f);
+            vertex[i + 12].color = color;
             // 背面(+Z面)
             vertex[i + 16].normal = float3(0.0f, 0.0f, 1.0f);
+            vertex[i + 16].color = color;
             // 正面(-Z面)
             vertex[i + 20].normal = float3(0.0f, 0.0f, -1.0f);
-        }
-
-        for (UINT i = 0; i < 6; ++i)
-        {
-            vertex[i * 4].tex = float2(0.0f, 1.0f);
-            vertex[i * 4 + 1].tex = float2(0.0f, 0.0f);
-            vertex[i * 4 + 2].tex = float2(1.0f, 0.0f);
-            vertex[i * 4 + 3].tex = float2(1.0f, 1.0f);
+            vertex[i + 20].color = color;
         }
 
         merged_ves.emplace_back(VertexElement(VEU_Position, 0, EF_BGR32F));
         merged_ves.emplace_back(VertexElement(VEU_Normal, 0, EF_BGR32F));
-        merged_ves.emplace_back(VertexElement(VEU_TextureCoord, 0, EF_GR32F));
+        merged_ves.emplace_back(VertexElement(VEU_Diffuse, 0, EF_ABGR32F));
         auto vb = rf.MakeVertexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable, static_cast<uint32_t>(24 * sizeof(vertex[0])), &vertex[0]);
         rls_[0]->BindVertexStream(vb, merged_ves);
 
@@ -377,9 +382,9 @@ public:
         technique_ = effect_->TechniqueByName("Cube");
         effect_constant_buffer_ = effect_->CBufferByName("VSConstantBuffer");
 
-        world_offset_ = effect_->ParameterByName("world")->CBufferOffset();
-		view_offset_ = effect_->ParameterByName("view")->CBufferOffset();
-		projection_offset_ = effect_->ParameterByName("projection")->CBufferOffset();
+        world_offset_ = effect_->ParameterByName("g_World")->CBufferOffset();
+		view_offset_ = effect_->ParameterByName("g_View")->CBufferOffset();
+		projection_offset_ = effect_->ParameterByName("g_Proj")->CBufferOffset();
 
         // 初始化用于VS的常量缓冲区的值
         WorldMat(*effect_constant_buffer_)= float4x4::Identity();
@@ -405,6 +410,19 @@ public:
 	{
 		return *cbuff.template VariableInBuff<float4x4>(projection_offset_);
 	}
+
+    void Update(float dt) override
+    {
+        static bool animateCube = true, customColor = false;
+        static float phi = 0.0f, theta = 0.0f;
+        phi += 0.3f * dt, theta += 0.37f * dt;
+    
+        auto world = MathWorker::Transpose(MathWorker::MatrixRotateX(phi) * MathWorker::MatrixRotateY(theta));
+        auto worldInvTranspose = MathWorker::Transpose(MathWorker::MatrixInverse(world));
+        WorldMat(*effect_constant_buffer_)= world;
+
+        effect_constant_buffer_->Dirty(true);
+    }
 private:
     uint32_t world_offset_;
     uint32_t view_offset_;
@@ -412,7 +430,7 @@ private:
     RenderEffectConstantBuffer* effect_constant_buffer_;
 };
 
-void TestCube()
+void Test_chapter7()
 {
     auto box = new RenderableCubeTest(2.0f, 2.0f, 2.0f, Color(1.f, 1.f, 1.f, 1.f));
     Context::Instance().WorldInstance().AddRenderable(box);
@@ -447,7 +465,7 @@ int main() {
     app.InitDevice(app.GetHWND(), settings);
     Context::Instance().WorldInstance().BeginWorld();
     
-    TestCube();
+    Test_chapter7();
 
     app.Run();
     return 0;

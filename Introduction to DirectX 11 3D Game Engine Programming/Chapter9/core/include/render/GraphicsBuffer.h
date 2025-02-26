@@ -46,6 +46,11 @@ public:
         return structure_byte_stride_;
     }
     
+    virtual void CreateHWResource(void const * init_data) = 0;
+    virtual void DeleteHWResource() = 0;
+    virtual bool HWResourceReady() const = 0;
+    
+    virtual void UpdateSubresource(uint32_t offset, uint32_t size, void const * data) = 0;
 protected:
     BufferUsage usage_;
     uint32_t access_hint_;

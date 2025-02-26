@@ -48,6 +48,7 @@ D3D11RenderStateObject::D3D11RenderStateObject(RasterizerStateDesc const & rs_de
     d3d_rs_desc.MultisampleEnable = rs_desc.multisample_enable;                     // 是否允许多重采样
     d3d_rs_desc.AntialiasedLineEnable = false;                                      // 是否允许反走样线，仅当多重采样为FALSE时才有效
     //d3d_rs_desc.ForcedSampleCount = 0; // TODO: Add support to forced sample count
+    TIFHR(d3d_device->CreateRasterizerState(&d3d_rs_desc, rasterizer_state_.put()));
 }
 
 void D3D11RenderStateObject::Active()

@@ -216,7 +216,7 @@ void ShaderObject::LinkShaders(RenderEffect& effect)
             }
         }
 
-        this->DoLinkShaders(effect);
+        DoLinkShaders(effect);
 
         shader_stages_dirty_ = false;
         hw_res_ready_ = true;

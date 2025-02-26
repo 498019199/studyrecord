@@ -1,4 +1,5 @@
 #include <core/Context.h>
+#include <core/Hash.h>
 
 #include "D3D11ShaderObject.h"
 #include "D3D11RenderFactory.h"
@@ -8,6 +9,7 @@
 #include "D3D11RenderView.h"
 
 #if ZENGINE_IS_DEV_PLATFORM
+#include <d3dx11.h>
 #include <d3dcompiler.h>
 #endif
 
@@ -94,8 +96,118 @@ void D3D11ShaderStageObject::CompileShader(const RenderEffect& effect, const Ren
         {
             if (reflection != nullptr)
             {
+                // 着色器本身的信息
                 D3D11_SHADER_DESC desc;
                 reflection->GetDesc(&desc);
+
+                for (UINT c = 0; c < desc.ConstantBuffers; ++c)
+                {
+                    ID3D11ShaderReflectionConstantBuffer* reflection_cb = reflection->GetConstantBufferByIndex(c);
+                    // 着色器的常量缓冲区
+                    D3D11_SHADER_BUFFER_DESC d3d_cb_desc;
+                    reflection_cb->GetDesc(&d3d_cb_desc);
+                    if ((D3D_CT_CBUFFER == d3d_cb_desc.Type) || (D3D_CT_TBUFFER == d3d_cb_desc.Type))
+                    {
+                        auto& cb_desc = shader_desc_.cb_desc.emplace_back();
+                        cb_desc.name = d3d_cb_desc.Name;
+                        cb_desc.name_hash = RtHash(d3d_cb_desc.Name);
+                        cb_desc.size = d3d_cb_desc.Size;
+
+                        // 变量的反射
+                        for (UINT v = 0; v < d3d_cb_desc.Variables; ++v)
+                        {
+                            ID3D11ShaderReflectionVariable* reflection_var = reflection_cb->GetVariableByIndex(v);
+
+                            // 着色器的变量
+                            D3D11_SHADER_VARIABLE_DESC var_desc;
+                            reflection_var->GetDesc(&var_desc);
+                            // 描述着色器变量类型
+                            D3D11_SHADER_TYPE_DESC type_desc;
+                            reflection_var->GetType()->GetDesc(&type_desc);
+
+                            auto& vd = cb_desc.var_desc.emplace_back();
+                            vd.name = var_desc.Name;
+                            vd.start_offset = var_desc.StartOffset;
+                            vd.type = static_cast<uint8_t>(type_desc.Type);
+                            vd.rows = static_cast<uint8_t>(type_desc.Rows);
+                            vd.columns = static_cast<uint8_t>(type_desc.Columns);
+                            vd.elements = static_cast<uint16_t>(type_desc.Elements);
+                        }
+
+                        FillCBufferIndices(effect);
+
+                        int max_sampler_bind_pt = -1;
+                        int max_srv_bind_pt = -1;
+                        int max_uav_bind_pt = -1;
+                        // 描述着色器资源如何绑定到着色器输入
+                        for (uint32_t i = 0; i < desc.BoundResources; ++i)
+                        {
+                            D3D11_SHADER_INPUT_BIND_DESC si_desc;
+                            reflection->GetResourceBindingDesc(i, &si_desc);
+
+                            switch (si_desc.Type)
+                            {
+                            case D3D_SIT_SAMPLER:
+                                max_sampler_bind_pt = std::max(max_sampler_bind_pt, static_cast<int>(si_desc.BindPoint));
+                                break;
+    
+                            case D3D_SIT_TEXTURE:
+                            case D3D_SIT_STRUCTURED:
+                            case D3D_SIT_BYTEADDRESS:
+                                max_srv_bind_pt = std::max(max_srv_bind_pt, static_cast<int>(si_desc.BindPoint));
+                                break;
+    
+                            case D3D_SIT_UAV_RWTYPED:
+                            case D3D_SIT_UAV_RWSTRUCTURED:
+                            case D3D_SIT_UAV_RWBYTEADDRESS:
+                            case D3D_SIT_UAV_APPEND_STRUCTURED:
+                            case D3D_SIT_UAV_CONSUME_STRUCTURED:
+                            case D3D_SIT_UAV_RWSTRUCTURED_WITH_COUNTER:
+                                max_uav_bind_pt = std::max(max_uav_bind_pt, static_cast<int>(si_desc.BindPoint));
+                                break;
+    
+                            default:
+                                break;
+                            }
+                        }
+                        shader_desc_.num_samplers = static_cast<uint16_t>(max_sampler_bind_pt + 1);
+                        shader_desc_.num_srvs = static_cast<uint16_t>(max_srv_bind_pt + 1);
+                        shader_desc_.num_uavs = static_cast<uint16_t>(max_uav_bind_pt + 1);
+
+                        for (uint32_t i = 0; i < desc.BoundResources; ++i)
+                        {
+                            D3D11_SHADER_INPUT_BIND_DESC si_desc;
+                            reflection->GetResourceBindingDesc(i, &si_desc);
+
+                            switch (si_desc.Type)
+                            {
+                            case D3D_SIT_TEXTURE:
+                            case D3D_SIT_SAMPLER:
+                            case D3D_SIT_STRUCTURED:
+                            case D3D_SIT_BYTEADDRESS:
+                            case D3D_SIT_UAV_RWTYPED:
+                            case D3D_SIT_UAV_RWSTRUCTURED:
+                            case D3D_SIT_UAV_RWBYTEADDRESS:
+                            case D3D_SIT_UAV_APPEND_STRUCTURED:
+                            case D3D_SIT_UAV_CONSUME_STRUCTURED:
+                            case D3D_SIT_UAV_RWSTRUCTURED_WITH_COUNTER:
+                                if (effect.ParameterByName(si_desc.Name))
+                                {
+                                    auto& brd = shader_desc_.res_desc.emplace_back();
+                                    brd.name = si_desc.Name;
+                                    brd.type = static_cast<uint8_t>(si_desc.Type);
+                                    brd.bind_point = static_cast<uint16_t>(si_desc.BindPoint);
+                                }
+                                break;
+    
+                            default:
+                                break;
+                            }
+                        }
+
+                        StageSpecificReflection(reflection.get());
+                    }
+                }
             }
         }
     }
@@ -108,12 +220,12 @@ void D3D11ShaderStageObject::CreateHwShader(const RenderEffect& effect, const st
     {
         //const ShaderDesc& sd = effect.GetShaderDesc(shader_desc_ids[std::to_underlying(stage_)]);
         is_validate_ = true;
-        this->StageSpecificCreateHwShader(effect, shader_desc_ids);
+        StageSpecificCreateHwShader(effect, shader_desc_ids);
     }
     else
     {
         is_validate_ = false;
-        this->ClearHwShader();
+        ClearHwShader();
     }
 
     hw_res_ready_ = true;
@@ -122,6 +234,27 @@ void D3D11ShaderStageObject::CreateHwShader(const RenderEffect& effect, const st
 std::span<uint8_t const> D3D11ShaderStageObject::ShaderCodeBlob() const
 {
     return MakeSpan(shader_code_);
+}
+
+void D3D11ShaderStageObject::FillCBufferIndices(RenderEffect const& effect)
+{
+    if (!shader_desc_.cb_desc.empty())
+    {
+        cbuff_indices_.resize(shader_desc_.cb_desc.size());
+    }
+    for (size_t c = 0; c < shader_desc_.cb_desc.size(); ++c)
+    {
+        uint32_t i = 0;
+        for (; i < effect.NumCBuffers(); ++i)
+        {
+            if (effect.CBufferByIndex(i)->NameHash() == shader_desc_.cb_desc[c].name_hash)
+            {
+                cbuff_indices_[c] = static_cast<uint8_t>(i);
+                break;
+            }
+        }
+        COMMON_ASSERT(i < effect.NumCBuffers());
+    }
 }
 
 std::string_view D3D11ShaderStageObject::GetShaderProfile(RenderEffect const& effect, uint32_t shader_desc_id) const 
@@ -164,6 +297,34 @@ void D3D11VertexShaderStageObject::StageSpecificCreateHwShader(const RenderEffec
     }
 }
 
+#if ZENGINE_IS_DEV_PLATFORM
+void D3D11VertexShaderStageObject::StageSpecificReflection(ID3D11ShaderReflection* reflection)
+{
+    D3D11_SHADER_DESC desc;
+    reflection->GetDesc(&desc);
+
+    vs_signature_ = 0;
+    D3D11_SIGNATURE_PARAMETER_DESC signature;
+    for (uint32_t i = 0; i < desc.InputParameters; ++i)
+    {
+        //reflection->GetInputParameterDesc(i, &signature);
+
+        //size_t seed = RtHash(signature.SemanticName);
+        //HashCombine(seed, signature.SemanticIndex);
+        //HashCombine(seed, signature.Register);
+        //HashCombine(seed, static_cast<uint32_t>(signature.SystemValueType));
+        //HashCombine(seed, static_cast<uint32_t>(signature.ComponentType));
+        //HashCombine(seed, signature.Mask);
+        //HashCombine(seed, signature.ReadWriteMask);
+        //HashCombine(seed, signature.Stream);
+        //HashCombine(seed, signature.MinPrecision);
+
+        size_t sig = vs_signature_;
+        //HashCombine(sig, seed);
+        vs_signature_ = static_cast<uint32_t>(sig);
+    }
+}
+#endif
 D3D11PixelShaderStageObject::D3D11PixelShaderStageObject()
     : D3D11ShaderStageObject(ShaderStage::Pixel)
 {
@@ -310,6 +471,51 @@ void D3D11ShaderObject::DoLinkShaders(RenderEffect& effect)
             {
                 // 获取着色器资源
                 param_binds_[stage].push_back(GetBindFunc(static_cast<ShaderStage>(stage), offset, *p));
+            }
+        }
+
+        if (!shader_stage->CBufferIndices().empty())
+        {
+            auto const& shader_desc = shader_stage->GetD3D11ShaderDesc();
+            auto const& cbuff_indices = shader_stage->CBufferIndices();
+
+            for (size_t i = 0; i < cbuff_indices.size(); ++i)
+            {
+                auto cbuff = effect.CBufferByIndex(cbuff_indices[i]);
+                cbuff->Resize(shader_desc.cb_desc[i].size);
+                COMMON_ASSERT(cbuff->NumParameters() == shader_desc.cb_desc[i].var_desc.size());
+                for (uint32_t j = 0; j < cbuff->NumParameters(); ++j)
+                {
+                    RenderEffectParameter* param = effect.ParameterByIndex(cbuff->ParameterIndex(j));
+                    uint32_t stride;
+                    if (param->Type() == REDT_struct)
+                    {
+                        stride = 1;
+                    }
+                    else if (shader_desc.cb_desc[i].var_desc[j].elements > 0)
+                    {
+                        if (param->Type() != REDT_float4x4)
+                        {
+                            stride = 16;
+                        }
+                        else
+                        {
+                            stride = 64;
+                        }
+                    }
+                    else
+                    {
+                        if (param->Type() != REDT_float4x4)
+                        {
+                            stride = 4;
+                        }
+                        else
+                        {
+                            stride = 16;
+                        }
+                    }
+                    param->BindToCBuffer(effect, cbuff_indices[i], shader_desc.cb_desc[i].var_desc[j].start_offset, stride);
+                }
             }
         }
     }

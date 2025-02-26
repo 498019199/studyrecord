@@ -8,8 +8,6 @@ include_directories(
     ${PROJECT_SOURCE_DIR}/3rd/imgui)
 
 set(SRC_LIST
-    ${PROJECT_SOURCE_DIR}/Chapter9/main_blending.cpp
-
     ${PROJECT_SOURCE_DIR}/Chapter9/core/src/App/WinApp.cpp
 
     ${PROJECT_SOURCE_DIR}/Chapter9/core/src/Base/DllLoader.cpp
@@ -52,7 +50,10 @@ set(SRC_LIST
     ${PROJECT_SOURCE_DIR}/Chapter9/core/src/ShaderObject.cpp
     ${PROJECT_SOURCE_DIR}/Chapter9/core/src/TexCompression.cpp
     ${PROJECT_SOURCE_DIR}/Chapter9/core/src/Texture.cpp)
-add_executable(Chapter9 ${SRC_LIST})
+    
+add_executable(Chapter9 
+    ${SRC_LIST} 
+    ${PROJECT_SOURCE_DIR}/Chapter9/main_blending.cpp)
 
 target_link_libraries(Chapter9 PRIVATE 
     ${LIB_DIR_PATH}/math${ZENGINE_OUTPUT_SUFFIX}${CMAKE_DEBUG_POSTFIX}.lib

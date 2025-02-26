@@ -6460,6 +6460,7 @@ namespace RenderWorker
 				ShaderStage const stage = static_cast<ShaderStage>(stage_index);
 				if (sd.tech_pass_type == (tech_index << 16) + (pass_index << 8) + stage_index)
 				{
+					// 创建着色器对象
 					shader_obj->Stage(stage)->CreateHwShader(effect, shader_desc_ids_);
 				}
 			}
@@ -6868,7 +6869,7 @@ namespace RenderWorker
 	{
 		if (dirty_)
 		{
-			//hw_buff_->UpdateSubresource(0, static_cast<uint32_t>(buff_.size()), &buff_[0]);
+			hw_buff_->UpdateSubresource(0, static_cast<uint32_t>(buff_.size()), &buff_[0]);
 
 			dirty_ = false;
 		}
@@ -7835,6 +7836,11 @@ RenderEffectPtr SyncLoadRenderEffect(std::string_view effect_name)
 #if ZENGINE_IS_DEV_PLATFORM
 	effect->CompileShaders();
 #endif
+
+	if (!effect || !effect->HWResourceReady())
+	{
+		effect->CreateHwShaders();
+	}
 	return effect;
 }
 }

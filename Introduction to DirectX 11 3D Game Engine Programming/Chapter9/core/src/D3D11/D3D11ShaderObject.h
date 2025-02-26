@@ -3,6 +3,10 @@
 #include "D3D11Util.h"
 #include <functional>
 
+#if ZENGINE_IS_DEV_PLATFORM
+struct ID3D11ShaderReflection;
+#endif
+
 namespace RenderWorker
 {
 class RenderEffectParameter;
@@ -74,9 +78,14 @@ public:
 private:
     
     std::string_view GetShaderProfile(RenderEffect const& effect, uint32_t shader_desc_id) const override;  
-    
+    void FillCBufferIndices(RenderEffect const& effect);
     virtual void ClearHwShader() = 0;
   
+#if ZENGINE_IS_DEV_PLATFORM
+    virtual void StageSpecificReflection([[maybe_unused]] ID3D11ShaderReflection* reflection)
+    {
+    }
+#endif
 protected:
 	bool is_available_;
     std::vector<uint8_t> shader_code_;
@@ -105,6 +114,9 @@ private:
     void ClearHwShader() override;
     void StageSpecificCreateHwShader(const RenderEffect& effect, const std::array<uint32_t, ShaderStageNum>& shader_desc_ids) override;
 
+#if ZENGINE_IS_DEV_PLATFORM
+    void StageSpecificReflection(ID3D11ShaderReflection* reflection) override;
+#endif
 private:
     ID3D11VertexShaderPtr vertex_shader_;
     uint32_t vs_signature_;

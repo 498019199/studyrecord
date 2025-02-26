@@ -21,8 +21,6 @@ private:
     std::vector<std::pair<const RenderEffect*, std::vector<Renderable*>>> render_queue_;
 
 public:
-    bool is_wireframe_mode_{false};
-
     DirectionalLightSource default_directional_light_;					// 默认环境光
     PointLightSource default_point_light_;						// 默认点光
     SpotLightSource default_spot_light_;						    // 默认汇聚光
