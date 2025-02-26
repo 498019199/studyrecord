@@ -49,13 +49,37 @@ D3D11RenderStateObject::D3D11RenderStateObject(RasterizerStateDesc const & rs_de
     d3d_rs_desc.AntialiasedLineEnable = false;                                      // 是否允许反走样线，仅当多重采样为FALSE时才有效
     //d3d_rs_desc.ForcedSampleCount = 0; // TODO: Add support to forced sample count
     TIFHR(d3d_device->CreateRasterizerState(&d3d_rs_desc, rasterizer_state_.put()));
+
+    // 初始化混合状态
+    D3D11_BLEND_DESC d3d_bs_desc;
+    d3d_bs_desc.AlphaToCoverageEnable = bs_desc.alpha_to_coverage_enable;
+    d3d_bs_desc.IndependentBlendEnable = /*caps.independent_blend_support ?*/ bs_desc.independent_blend_enable /*: false*/;
+    for (int i = 0; i < 8; ++ i)
+    {
+        uint32_t const rt_index = /*caps.independent_blend_support ? i :*/ 0;
+
+        d3d_bs_desc.RenderTarget[i].BlendEnable = bs_desc.blend_enable[rt_index];
+        //d3d_bs_desc.RenderTarget[i].LogicOpEnable = bs_desc.logic_op_enable[rt_index];
+        d3d_bs_desc.RenderTarget[i].SrcBlend = D3D11Mapping::Mapping(bs_desc.src_blend[rt_index]);
+        d3d_bs_desc.RenderTarget[i].DestBlend = D3D11Mapping::Mapping(bs_desc.dest_blend[rt_index]);
+        d3d_bs_desc.RenderTarget[i].BlendOp = D3D11Mapping::Mapping(bs_desc.blend_op[rt_index]);
+        d3d_bs_desc.RenderTarget[i].SrcBlendAlpha = D3D11Mapping::Mapping(bs_desc.src_blend_alpha[rt_index]);
+        d3d_bs_desc.RenderTarget[i].DestBlendAlpha = D3D11Mapping::Mapping(bs_desc.dest_blend_alpha[rt_index]);
+        d3d_bs_desc.RenderTarget[i].BlendOpAlpha = D3D11Mapping::Mapping(bs_desc.blend_op_alpha[rt_index]);
+        // d3d_bs_desc.RenderTarget[i].LogicOp
+        //     = caps.logic_op_support ? D3D11Mapping::Mapping(bs_desc.logic_op[rt_index]) : D3D11_LOGIC_OP_NOOP;
+        d3d_bs_desc.RenderTarget[i].RenderTargetWriteMask
+            = static_cast<UINT8>(D3D11Mapping::MappingColorMask(bs_desc.color_write_mask[rt_index]));
+    }
+
+    TIFHR(d3d_device->CreateBlendState(&d3d_bs_desc, blend_state_.put()));
 }
 
 void D3D11RenderStateObject::Active()
 {
     auto& d3d11_re = checked_cast<D3D11RenderEngine&>(Context::Instance().RenderEngineInstance());
     d3d11_re.RSSetState(rasterizer_state_.get());
-    //d3d11_re.OMSetBlendState(blend_state_.get(), bs_desc_.blend_factor, bs_desc_.sample_mask);
+    d3d11_re.OMSetBlendState(blend_state_.get(), bs_desc_.blend_factor, bs_desc_.sample_mask);
 }
 
 

@@ -186,62 +186,66 @@ public:
         effect_ = SyncLoadRenderEffect("box3D.xml");
         technique_ = effect_->TechniqueByName("Basic_3D");
 
-        auto currentPath2 = std::filesystem::current_path().parent_path().parent_path().string();
-        const std::string file_path1 = currentPath2 + "\\Models\\Chapter9\\" + "WireFence.dds";
         auto src1_tex_param = effect_->ParameterByName("src1_tex");
-        *src1_tex_param = SyncLoadTexture(file_path1, EAH_GPU_Read | EAH_Immutable);
-
+        *src1_tex_param = SyncLoadTexture("WireFence.dds", EAH_GPU_Read | EAH_Immutable);
 
         // ******************
         // 初始化默认光照
         // 方向光
-        auto cbuff = (effect_->CBufferByName("PSConstantBuffer")) ;
-        directional_light_offset_ = effect_->ParameterByName("directional_light")->CBufferOffset();
-        point_light_offset_ = effect_->ParameterByName("point_light")->CBufferOffset();
-        spot_light_offset_ = effect_->ParameterByName("spot_light")->CBufferOffset();
-        material_offset_ = effect_->ParameterByName("material")->CBufferOffset();
-        eys_pos_offset_ = effect_->ParameterByName("eyePos")->CBufferOffset();
+        effect_constant_buffer_ps_ = (effect_->CBufferByName("PSConstantBuffer")) ;
+        directional_light_offset_ = effect_->ParameterByName("gDirLight")->CBufferOffset();
+        point_light_offset_ = effect_->ParameterByName("gPointLight")->CBufferOffset();
+        spot_light_offset_ = effect_->ParameterByName("gSpotLight")->CBufferOffset();
+        material_offset_ = effect_->ParameterByName("gMaterial")->CBufferOffset();
+        eys_pos_offset_ = effect_->ParameterByName("gEyePosW")->CBufferOffset();
         
-        DirectionalLight(*cbuff).ambient_ = float4(0.2f, 0.2f, 0.2f, 1.0f);
-        DirectionalLight(*cbuff).diffuse_ = float4(0.8f, 0.8f, 0.8f, 1.0f);
-        DirectionalLight(*cbuff).specular_ = float4(0.5f, 0.5f, 0.5f, 1.0f);
-        DirectionalLight(*cbuff).direction_ = float3(-0.577f, -0.577f, 0.577f);
-        // 点光
-        PointLight(*cbuff).pos_ = float3(0.0f, 0.0f, -10.0f);
-        PointLight(*cbuff).ambient_ = float4(0.3f, 0.3f, 0.3f, 1.0f);
-        PointLight(*cbuff).diffuse_ = float4(0.7f, 0.7f, 0.7f, 1.0f);
-        PointLight(*cbuff).specular_ = float4(0.5f, 0.5f, 0.5f, 1.0f);
-        PointLight(*cbuff).att_ = float3(0.0f, 0.1f, 0.0f);
-        PointLight(*cbuff).range_ = 25.0f;
-        // 聚光灯
-        SpotLight(*cbuff).pos_ = float3(0.0f, 0.0f, -5.0f);
-        SpotLight(*cbuff).direction_ = float3(0.0f, 0.0f, 1.0f);
-        SpotLight(*cbuff).ambient_ = float4(0.0f, 0.0f, 0.0f, 1.0f);
-        SpotLight(*cbuff).diffuse_ = float4(1.0f, 1.0f, 1.0f, 1.0f);
-        SpotLight(*cbuff).specular_ = float4(1.0f, 1.0f, 1.0f, 1.0f);
-        SpotLight(*cbuff).att_ = float3(1.0f, 0.0f, 0.0f);
-        SpotLight(*cbuff).spot_ = 12.0f;
-        SpotLight(*cbuff).range_ = 10000.0f;
+        // 初始化默认光照
+        // 方向光
+        DirectionalLight(*effect_constant_buffer_ps_).ambient_ = float4(0.2f, 0.2f, 0.2f, 1.0f);
+        DirectionalLight(*effect_constant_buffer_ps_).diffuse_ = float4(0.8f, 0.8f, 0.8f, 1.0f);
+        DirectionalLight(*effect_constant_buffer_ps_).specular_ = float4(0.5f, 0.5f, 0.5f, 1.0f);
+        DirectionalLight(*effect_constant_buffer_ps_).direction_ = float3(-0.577f, -0.577f, 0.577f);
+        // // 点光
+        // PointLight(*effect_constant_buffer_ps_).pos_ = float3(0.0f, 0.0f, -10.0f);
+        // PointLight(*effect_constant_buffer_ps_).ambient_ = float4(0.3f, 0.3f, 0.3f, 1.0f);
+        // PointLight(*effect_constant_buffer_ps_).diffuse_ = float4(0.7f, 0.7f, 0.7f, 1.0f);
+        // PointLight(*effect_constant_buffer_ps_).specular_ = float4(0.5f, 0.5f, 0.5f, 1.0f);
+        // PointLight(*effect_constant_buffer_ps_).att_ = float3(0.0f, 0.1f, 0.0f);
+        // PointLight(*effect_constant_buffer_ps_).range_ = 25.0f;
+        // // 聚光灯
+        // SpotLight(*effect_constant_buffer_ps_).pos_ = float3(0.0f, 0.0f, -5.0f);
+        // SpotLight(*effect_constant_buffer_ps_).direction_ = float3(0.0f, 0.0f, 1.0f);
+        // SpotLight(*effect_constant_buffer_ps_).ambient_ = float4(0.0f, 0.0f, 0.0f, 1.0f);
+        // SpotLight(*effect_constant_buffer_ps_).diffuse_ = float4(1.0f, 1.0f, 1.0f, 1.0f);
+        // SpotLight(*effect_constant_buffer_ps_).specular_ = float4(1.0f, 1.0f, 1.0f, 1.0f);
+        // SpotLight(*effect_constant_buffer_ps_).att_ = float3(1.0f, 0.0f, 0.0f);
+        // SpotLight(*effect_constant_buffer_ps_).spot_ = 12.0f;
+        // SpotLight(*effect_constant_buffer_ps_).range_ = 10000.0f;
 
         // 初始化用于PS的常量缓冲区的值
-        SetMaterial(*cbuff).ambient_ = float4(0.5f, 0.5f, 0.5f, 1.0f);
-        SetMaterial(*cbuff).diffuse_ = float4(1.0f, 1.0f, 1.0f, 1.0f);
-        SetMaterial(*cbuff).specular_ = float4(0.5f, 0.5f, 0.5f, 5.0f);
+        SetMaterial(*effect_constant_buffer_ps_).ambient_ = float4(0.5f, 0.5f, 0.5f, 1.0f);
+        SetMaterial(*effect_constant_buffer_ps_).diffuse_ = float4(1.0f, 1.0f, 1.0f, 1.0f);
+        SetMaterial(*effect_constant_buffer_ps_).specular_ = float4(0.5f, 0.5f, 0.5f, 5.0f);
 
-        // // 初始化用于VS的常量缓冲区的值
-        // vs_cb_.world = float4x4::Identity();
-        // vs_cb_.view = Transpose(LookAtLH(
-        //     float3(0.0f, 0.0f, -5.0f),
-        //     float3(0.0f, 0.0f, 0.0f),
-        //     float3(0.0f, 1.0f, 0.0f)));
-        // vs_cb_.proj = MathWorker::Transpose(MathWorker::PerspectiveFovLH(MathWorker::PIdiv2, Context::Instance().AppInstance().AspectRatio(), 1.f, 1000.f));    
-        // vs_cb_.worldInvTranspose = float4x4::Identity();
-
-
-        // // 使用默认平行光
+        // 使用默认平行光
         // ps_cb_.directional_light = default_directional_light_;
         // // 注意不要忘记设置此处的观察位置，否则高亮部分会有问题
-        // ps_cb_.eyePos = float4(0.0f, 0.0f, -5.0f, 0.0f);
+        EysPos(*effect_constant_buffer_ps_) = float4(0.0f, 0.0f, -5.0f, 0.0f);
+
+        // // 初始化用于VS的常量缓冲区的值
+        effect_constant_buffer_vs_ = (effect_->CBufferByName("VSConstantBuffer")) ;
+        world_offset_ = effect_->ParameterByName("gWorld")->CBufferOffset();
+		view_offset_ = effect_->ParameterByName("gView")->CBufferOffset();
+		projection_offset_ = effect_->ParameterByName("gProj")->CBufferOffset();
+        world_inv_transpose_offset_ = effect_->ParameterByName("gWorldInvTranspose")->CBufferOffset();
+        WorldMat(*effect_constant_buffer_vs_)= float4x4::Identity();
+        ViewMat(*effect_constant_buffer_vs_) = Transpose(LookAtLH(
+            float3(0.0f, 0.0f, -5.0f),
+            float3(0.0f, 0.0f, 0.0f),
+            float3(0.0f, 1.0f, 0.0f)));
+        ProjectionMat(*effect_constant_buffer_vs_) = MathWorker::Transpose(
+            MathWorker::PerspectiveFovLH(MathWorker::PIdiv2, Context::Instance().AppInstance().AspectRatio(), 1.f, 1000.f));      
+        WorldInvTransposeMat(*effect_constant_buffer_vs_) = float4x4::Identity();
     }
 
     DirectionalLightSource& DirectionalLight(RenderEffectConstantBuffer& cbuff) const
@@ -269,6 +273,26 @@ public:
 		return *cbuff.template VariableInBuff<float3>(eys_pos_offset_);
 	}
 
+    float4x4& WorldMat(RenderEffectConstantBuffer& cbuff) const
+	{
+		return *cbuff.template VariableInBuff<float4x4>(world_offset_);
+	}
+
+    float4x4& ViewMat(RenderEffectConstantBuffer& cbuff) const
+	{
+		return *cbuff.template VariableInBuff<float4x4>(view_offset_);
+	}
+
+    float4x4& ProjectionMat(RenderEffectConstantBuffer& cbuff) const
+	{
+		return *cbuff.template VariableInBuff<float4x4>(projection_offset_);
+	}
+
+    float4x4& WorldInvTransposeMat(RenderEffectConstantBuffer& cbuff) const
+	{
+		return *cbuff.template VariableInBuff<float4x4>(world_inv_transpose_offset_);
+	}
+
     void Update(float dt) override
     {
         
@@ -279,6 +303,13 @@ private:
     uint32_t spot_light_offset_;
     uint32_t material_offset_;
     uint32_t eys_pos_offset_;
+    RenderEffectConstantBuffer* effect_constant_buffer_ps_;
+
+    uint32_t world_offset_;
+    uint32_t view_offset_;
+    uint32_t projection_offset_;
+    uint32_t world_inv_transpose_offset_;
+    RenderEffectConstantBuffer* effect_constant_buffer_vs_;
 };
 
 struct Vertex7

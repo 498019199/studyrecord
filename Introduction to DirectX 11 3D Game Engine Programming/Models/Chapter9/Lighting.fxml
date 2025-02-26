@@ -2,37 +2,37 @@
 
 <effect>
     <struct name="DirectionalLight">
-        <member type="float4" name="ambient"/>
-        <member type="float4" name="diffuse"/>
-        <member type="float4" name="specular"/>
-        <member type="float3" name="direction"/>
+        <member type="float4" name="Ambient"/>
+        <member type="float4" name="Diffuse"/>
+        <member type="float4" name="Specular"/>
+        <member type="float3" name="Direction"/>
         <member type="float" name="pad"/>
     </struct>
         <struct name="PointLight">
-        <member type="float4" name="ambient"/>
-        <member type="float4" name="diffuse"/>
-        <member type="float4" name="specular"/>
-        <member type="float3" name="pos"/>
-        <member type="float" name="range"/>
-        <member type="float3" name="att"/>
+        <member type="float4" name="Ambient"/>
+        <member type="float4" name="Diffuse"/>
+        <member type="float4" name="Specular"/>
+        <member type="float3" name="Position"/>
+        <member type="float" name="Range"/>
+        <member type="float3" name="Att"/>
         <member type="float" name="pad"/>
     </struct>
         <struct name="SpotLight">
-        <member type="float4" name="ambient"/>
-        <member type="float4" name="diffuse"/>
-        <member type="float4" name="specular"/>
-        <member type="float3" name="pos"/>
-        <member type="float" name="range"/>
-        <member type="float3" name="direction"/>
-        <member type="float" name="spot"/>
-        <member type="float3" name="att"/>
+        <member type="float4" name="Ambient"/>
+        <member type="float4" name="Diffuse"/>
+        <member type="float4" name="Specular"/>
+        <member type="float3" name="Position"/>
+        <member type="float" name="Range"/>
+        <member type="float3" name="Direction"/>
+        <member type="float" name="Spot"/>
+        <member type="float3" name="Att"/>
         <member type="float" name="pad"/>
     </struct>
     <struct name="Material">
-        <member type="float4" name="ambient"/>
-        <member type="float4" name="diffuse"/>
-        <member type="float4" name="specular"/>
-        <member type="float4" name="reflect"/>
+        <member type="float4" name="Ambient"/>
+        <member type="float4" name="Diffuse"/>
+        <member type="float4" name="Specular"/>
+        <member type="float4" name="Reflect"/>
     </struct>
 	<shader>
 		<![CDATA[

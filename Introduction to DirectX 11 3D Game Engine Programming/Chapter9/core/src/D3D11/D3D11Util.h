@@ -30,7 +30,7 @@ namespace RenderWorker
     using ID3D11SamplerStatePtr = com_ptr<ID3D11SamplerState>;
 	using ID3D11ShaderResourceViewPtr = com_ptr<ID3D11ShaderResourceView>;
     using ID3D11RasterizerStatePtr = com_ptr<ID3D11RasterizerState>;
-    using ID3D11BlendStatePtr = com_ptr<ID3D11BlendState1>;
+    using ID3D11BlendStatePtr = com_ptr<ID3D11BlendState>;
     using ID3D11DepthStencilStatePtr = com_ptr<ID3D11DepthStencilState>;
 }
 
@@ -50,6 +50,10 @@ public:
     static D3D11_CULL_MODE Mapping(CullMode mode);
     static D3D11_FILL_MODE Mapping(PolygonMode mode);
     
+    static D3D11_BLEND Mapping(AlphaBlendFactor factor);
+    static D3D11_BLEND_OP Mapping(BlendOperation bo);
+    static uint32_t MappingColorMask(uint32_t mask);
+
     static D3D11_PRIMITIVE_TOPOLOGY Mapping(RenderLayout::topology_type tt);
     static void Mapping(std::vector<D3D11_INPUT_ELEMENT_DESC>& elements, uint32_t stream, std::span<const VertexElement> vet,
         RenderLayout::stream_type type, uint32_t freq);

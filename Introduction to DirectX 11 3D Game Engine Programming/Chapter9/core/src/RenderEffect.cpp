@@ -7829,6 +7829,6 @@ RenderEffectPtr SyncLoadRenderEffect(std::string_view effect_name)
 	{
 		effect->CreateHwShaders();
 	}
-	return effect;
+  	return effect;
 }
 }

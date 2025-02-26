@@ -792,4 +792,110 @@ D3D11_PRIMITIVE_TOPOLOGY D3D11Mapping::Mapping(RenderLayout::topology_type tt)
     }
 }
 
+D3D11_BLEND D3D11Mapping::Mapping(AlphaBlendFactor factor)
+{
+    switch (factor)
+    {
+    case ABF_Zero:
+        return D3D11_BLEND_ZERO;
+
+    case ABF_One:
+        return D3D11_BLEND_ONE;
+
+    case ABF_Src_Alpha:
+        return D3D11_BLEND_SRC_ALPHA;
+
+    case ABF_Dst_Alpha:
+        return D3D11_BLEND_DEST_ALPHA;
+
+    case ABF_Inv_Src_Alpha:
+        return D3D11_BLEND_INV_SRC_ALPHA;
+
+    case ABF_Inv_Dst_Alpha:
+        return D3D11_BLEND_INV_DEST_ALPHA;
+
+    case ABF_Src_Color:
+        return D3D11_BLEND_SRC_COLOR;
+
+    case ABF_Dst_Color:
+        return D3D11_BLEND_DEST_COLOR;
+
+    case ABF_Inv_Src_Color:
+        return D3D11_BLEND_INV_SRC_COLOR;
+
+    case ABF_Inv_Dst_Color:
+        return D3D11_BLEND_INV_DEST_COLOR;
+
+    case ABF_Src_Alpha_Sat:
+        return D3D11_BLEND_SRC_ALPHA_SAT;
+
+    case ABF_Blend_Factor:
+        return D3D11_BLEND_BLEND_FACTOR;
+
+    case ABF_Inv_Blend_Factor:
+        return D3D11_BLEND_INV_BLEND_FACTOR;
+
+    case ABF_Src1_Alpha:
+        return D3D11_BLEND_SRC1_ALPHA;
+
+    case ABF_Inv_Src1_Alpha:
+        return D3D11_BLEND_INV_SRC1_ALPHA;
+
+    case ABF_Src1_Color:
+        return D3D11_BLEND_SRC1_COLOR;
+
+    case ABF_Inv_Src1_Color:
+        return D3D11_BLEND_INV_SRC1_COLOR;
+
+    default:
+        KFL_UNREACHABLE("Invalid alpha blend factor");
+    }
+}
+
+D3D11_BLEND_OP D3D11Mapping::Mapping(BlendOperation bo)
+{
+    switch (bo)
+    {
+    case BOP_Add:
+        return D3D11_BLEND_OP_ADD;
+
+    case BOP_Sub:
+        return D3D11_BLEND_OP_SUBTRACT;
+
+    case BOP_Rev_Sub:
+        return D3D11_BLEND_OP_REV_SUBTRACT;
+
+    case BOP_Min:
+        return D3D11_BLEND_OP_MIN;
+
+    case BOP_Max:
+        return D3D11_BLEND_OP_MAX;
+
+    default:
+        KFL_UNREACHABLE("Invalid blend operation");
+    }
+}
+
+uint32_t D3D11Mapping::MappingColorMask(uint32_t mask)
+{
+    uint32_t ret = 0;
+    if (mask & CMASK_Red)
+    {
+        ret |= D3D11_COLOR_WRITE_ENABLE_RED;
+    }
+    if (mask & CMASK_Green)
+    {
+        ret |= D3D11_COLOR_WRITE_ENABLE_GREEN;
+    }
+    if (mask & CMASK_Blue)
+    {
+        ret |= D3D11_COLOR_WRITE_ENABLE_BLUE;
+    }
+    if (mask & CMASK_Alpha)
+    {
+        ret |= D3D11_COLOR_WRITE_ENABLE_ALPHA;
+    }
+    return ret;
+}
+
 }

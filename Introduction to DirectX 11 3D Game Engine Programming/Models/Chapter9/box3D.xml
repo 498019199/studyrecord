@@ -2,20 +2,21 @@
 <effect>
     <include name="Lighting.fxml"/>
     <cbuffer name="VSConstantBuffer">
-        <parameter type="float4x4" name="world"/>
-        <parameter type="float4x4" name="view"/>
-        <parameter type="float4x4" name="projection"/>
+        <parameter type="float4x4" name="gWorld"/>
+        <parameter type="float4x4" name="gView"/>
+        <parameter type="float4x4" name="gProj"/>
+        <parameter type="float4x4" name="gWorldInvTranspose"/>
     </cbuffer>
     <cbuffer name="PSConstantBuffer">
-        <parameter type="DirectionalLight" name="directional_light"/>
-        <parameter type="PointLight" name="point_light"/>
-        <parameter type="SpotLight" name="spot_light"/>
-        <parameter type="Material" name="material"/>
-        <parameter type="float" name="eyePos"/>
+        <parameter type="DirectionalLight" name="gDirLight"/>
+        <parameter type="PointLight" name="gPointLight"/>
+        <parameter type="SpotLight" name="gSpotLight"/>
+        <parameter type="Material" name="gMaterial"/>
+        <parameter type="float4" name="gEyePosW"/>
     </cbuffer>
 
     <parameter type="texture2D" name="src1_tex"/>
-	<parameter type="sampler" name="point_sampler">
+	<parameter type="sampler" name="gSamLinear">
 		<state name="filtering" value="min_mag_mip_point"/>
 		<state name="address_u" value="clamp"/>
 		<state name="address_v" value="clamp"/>
@@ -23,7 +24,7 @@
 
     <technique name="Basic_3D">
         <pass name="p0">
-            <state name="cull_mode" value="front"/>
+            <state name="cull_mode" value="back"/>
 
             <state name="blend_enable" value="true"/>
 			<state name="blend_op" value="add"/>
@@ -47,6 +48,14 @@ struct VertexIn
     float2 tex : TEXCOORD;
 };
 
+struct VertexOut
+{
+    float4 posH : SV_POSITION;
+    float3 posW : POSITION;     // 在世界中的位置
+    float3 normalW : NORMAL;    // 法向量在世界中的方向
+    float2 tex : TEXCOORD;
+};
+
 VertexOut VS(VertexIn vIn)
 {
     VertexOut vOut;
@@ -58,8 +67,7 @@ VertexOut VS(VertexIn vIn)
     vOut.normalW = mul(vIn.normalL, (float3x3) gWorldInvTranspose);
 
     // 旋转
-    vOut.tex2 = mul(float4(vIn.tex, 0.f, 1.f), gRotateM);
-    vOut.tex1 = vIn.tex;
+    vOut.tex = vIn.tex;
     return vOut;
 }
 
@@ -91,20 +99,11 @@ float4 PS(VertexOut pIn) : SV_Target
     diffuse += D;
     spec += S;
 
-    float4 texColor = gTex1.Sample(gSamLinear1, pIn.tex1);
+    float4 texColor = src1_tex.Sample(gSamLinear, pIn.tex);
     float4 litColor = texColor * (ambient + diffuse) + spec;
     litColor.a = texColor.a * gMaterial.Diffuse.a;
     return litColor;
 }
-
-struct VertexOut
-{
-    float4 posH : SV_POSITION;
-    float3 posW : POSITION;     // 在世界中的位置
-    float3 normalW : NORMAL;    // 法向量在世界中的方向
-    float2 tex1 : TEXCOORD;
-    float2 tex2 : TEXCOORD;
-};
             		]]>
     </shader>
 </effect>

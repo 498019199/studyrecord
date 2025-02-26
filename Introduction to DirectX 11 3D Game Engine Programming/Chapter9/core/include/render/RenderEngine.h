@@ -23,7 +23,7 @@ public:
     }
 private:
     // 强制使用线框模式
-    bool force_line_mode_; 
+    bool force_line_mode_ {false}; 
     RenderStateObjectPtr cur_rs_obj_;
     RenderStateObjectPtr cur_line_rs_obj_;
 };
