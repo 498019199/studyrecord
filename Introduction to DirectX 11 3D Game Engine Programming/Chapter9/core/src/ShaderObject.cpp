@@ -3,6 +3,8 @@
 #include <core/DllLoader.h>
 #include <core/com_ptr.h>
 #include <core/Context.h>
+#include <core/CustomizedStreamBuf.h>
+
 #if ZENGINE_IS_DEV_PLATFORM
 
 #ifdef ZENGINE_PLATFORM_WINDOWS
@@ -257,7 +259,95 @@ void ShaderObject::LinkShaders(RenderEffect& effect)
 			flags, 0, code, err_msg);
         if (!err_msg.empty())
         {
+
             std::cout << "Error when compiling " << func_name << ":" << std::endl;
+
+			std::map<int, std::vector<std::string>> err_lines;
+			{
+				MemInputStreamBuf err_msg_buff(err_msg.data(), err_msg.size());
+				std::istream err_iss(&err_msg_buff);
+
+				std::string err_str;
+				while (err_iss)
+				{
+					std::getline(err_iss, err_str);
+
+					int err_line = -1;
+					std::string::size_type pos = err_str.find("): error X");
+					if (pos == std::string::npos)
+					{
+						pos = err_str.find("): warning X");
+					}
+					if (pos != std::string::npos)
+					{
+						std::string part_err_str = err_str.substr(0, pos);
+						pos = part_err_str.rfind("(");
+						part_err_str = part_err_str.substr(pos + 1);
+						MemInputStreamBuf stream_buff(part_err_str.data(), part_err_str.size());
+						std::istream(&stream_buff) >> err_line;
+					}
+
+					std::vector<std::string>& msgs = err_lines[err_line];
+					bool found = false;
+					for (auto const & msg : msgs)
+					{
+						if (msg == err_str)
+						{
+							found = true;
+							break;
+						}
+					}
+
+					if (!found)
+					{
+						// To make the error message unrecognized by Visual Studio
+						if ((0 == err_str.find("error X")) || (0 == err_str.find("warning X")))
+						{
+							err_str = "(0): " + err_str;
+						}
+
+						msgs.emplace_back(std::move(err_str));
+					}
+				}
+			}
+
+            for (auto iter = err_lines.begin(); iter != err_lines.end(); ++iter)
+			{
+				if (iter->first >= 0)
+				{
+					MemInputStreamBuf hlsl_buff(hlsl_shader_text.data(), hlsl_shader_text.size());
+					std::istream iss(&hlsl_buff);
+
+					std::string s;
+					int line = 1;
+
+					std::cout << "..." << std::endl;
+					while (iss && ((iter->first - line) >= 3))
+					{
+						std::getline(iss, s);
+						++line;
+					}
+					while (iss && (abs(line - iter->first) < 3))
+					{
+						std::getline(iss, s);
+
+						while (!s.empty() && (('\r' == s[s.size() - 1]) || ('\n' == s[s.size() - 1])))
+						{
+							s.resize(s.size() - 1);
+						}
+
+						std::cout << line << ' ' << s << std::endl;
+
+						++line;
+					}
+					std::cout << "..." << std::endl;
+				}
+
+				for (auto const & msg : iter->second)
+				{
+					std::cout << msg << std::endl;
+				}
+			}
         }
 
         if (reflector != nullptr)

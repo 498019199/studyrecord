@@ -1,12 +1,18 @@
 #include <core/Context.h>
 #include <core/Util.h>
 #include "D3D11/D3D11RenderFactory.h"
+#include <Core/ResIdentifier.h>
 
 #include <filesystem>
-
+#include <fstream>
 namespace RenderWorker
 {
 std::unique_ptr<Context> Context::instance_;
+
+Context::Context()
+{
+    work_path_ = std::filesystem::current_path().parent_path().parent_path().string();
+}
 
 Context& Context::Instance()
 {
@@ -63,9 +69,11 @@ void Context::LoadConfig(const char* file_name)
 
     world_ = MakeSharedPtr<World>();
     COMMON_ASSERT(world_);
+}
 
-    work_path_ = std::filesystem::current_path().parent_path().parent_path().string();
-    resource_path_ = work_path_ + "\\Models\\Chapter8\\";
+void Context::AddResource(const std::string& Path)
+{
+    resource_path_ = work_path_ + Path;
 }
 
 const std::string& Context::GetWorkPath() const
@@ -78,4 +86,25 @@ const std::string& Context::GetResourcePath() const
     return resource_path_;
 }
 
+ResIdentifierPtr Context::OpenFile(std::string_view FileName)
+{
+    return OpenFile(std::string(FileName.data()));
+}
+
+ResIdentifierPtr Context::OpenFile(const std::string& FileName)
+{
+    std::string resource_path = Context::Instance().GetResourcePath();
+    std::string ResourcePath = Context::Instance().GetResourcePath() + FileName;
+    uint64_t const timestamp = std::filesystem::last_write_time(resource_path).time_since_epoch().count();
+    return MakeSharedPtr<ResIdentifier>(
+        FileName, 
+        timestamp, 
+        MakeSharedPtr<std::ifstream>(ResourcePath.c_str(), std::ios_base::binary));
+}
+
+std::string Context::Locate(std::string_view name)
+{
+    std::string resource_path = Context::Instance().GetResourcePath();
+    return Context::Instance().GetResourcePath() + std::string(name);
+}
 }

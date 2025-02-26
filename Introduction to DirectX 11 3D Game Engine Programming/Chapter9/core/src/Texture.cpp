@@ -1439,14 +1439,7 @@ TexturePtr SyncLoadTexture(std::string_view tex_name, uint32_t access_hint)
 
 TexturePtr LoadVirtualTexture(std::string_view tex_name)
 {
-    std::string path_file = tex_name.data();
-    size_t lastIndex = path_file.rfind("\\");
-    std::string package_path = path_file.substr(0, lastIndex);
-    std::string name = path_file.substr(lastIndex + 1);
-
-    uint64_t const timestamp = std::filesystem::last_write_time(package_path).time_since_epoch().count();
-    ResIdentifierPtr tex_res = MakeSharedPtr<ResIdentifier>(
-        name, timestamp, MakeSharedPtr<std::ifstream>(path_file.c_str(), std::ios_base::binary));
+    ResIdentifierPtr tex_res = Context::OpenFile(tex_name);
 
     Texture::TextureType type;
     uint32_t width, height, depth;

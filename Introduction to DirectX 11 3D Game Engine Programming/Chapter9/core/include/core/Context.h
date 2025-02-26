@@ -22,7 +22,7 @@ struct RenderSettings
 class Context
 {
 public:
-    Context() = default;
+    Context();
     ~Context() = default;
 
     static Context& Instance();
@@ -39,7 +39,13 @@ public:
     void LoadConfig(const char* file_name);
 
     const std::string& GetWorkPath() const;
+    void AddResource(const std::string& Path);
     const std::string& GetResourcePath() const;
+
+    static ResIdentifierPtr OpenFile(std::string_view FileName);
+    static ResIdentifierPtr OpenFile(const std::string& FileName);
+
+    static std::string Locate(std::string_view name);
 private:
     static std::unique_ptr<Context> instance_;
     WinAPP* app_;
@@ -51,6 +57,16 @@ private:
     std::string work_path_;
     std::string resource_path_;
 };
+
+
+
+
+
+
+
+
+
+
 
 
 }

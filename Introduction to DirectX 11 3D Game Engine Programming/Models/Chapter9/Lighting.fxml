@@ -1,50 +1,41 @@
-struct DirectionalLight
-{
-	float4 Ambient;
-	float4 Diffuse;
-	float4 Specular;
-	float3 Direction;
-	float pad;
-};
+<?xml version='1.0'?>
 
-struct PointLight
-{ 
-	float4 Ambient;
-	float4 Diffuse;
-	float4 Specular;
-
-	float3 Position;
-	float Range;
-
-	float3 Att;
-	float pad;
-};
-
-struct SpotLight
-{
-	float4 Ambient;
-	float4 Diffuse;
-	float4 Specular;
-
-	float3 Position;
-	float Range;
-
-	float3 Direction;
-	float Spot;
-
-	float3 Att;
-	float pad;
-};
-
-// 物体表面材质
-struct Material
-{
-	float4 Ambient;
-	float4 Diffuse;
-	float4 Specular;
-    float4 Reflect;
-};
-
+<effect>
+    <struct name="DirectionalLight">
+        <member type="float4" name="ambient"/>
+        <member type="float4" name="diffuse"/>
+        <member type="float4" name="specular"/>
+        <member type="float3" name="direction"/>
+        <member type="float" name="pad"/>
+    </struct>
+        <struct name="PointLight">
+        <member type="float4" name="ambient"/>
+        <member type="float4" name="diffuse"/>
+        <member type="float4" name="specular"/>
+        <member type="float3" name="pos"/>
+        <member type="float" name="range"/>
+        <member type="float3" name="att"/>
+        <member type="float" name="pad"/>
+    </struct>
+        <struct name="SpotLight">
+        <member type="float4" name="ambient"/>
+        <member type="float4" name="diffuse"/>
+        <member type="float4" name="specular"/>
+        <member type="float3" name="pos"/>
+        <member type="float" name="range"/>
+        <member type="float3" name="direction"/>
+        <member type="float" name="spot"/>
+        <member type="float3" name="att"/>
+        <member type="float" name="pad"/>
+    </struct>
+    <struct name="Material">
+        <member type="float4" name="ambient"/>
+        <member type="float4" name="diffuse"/>
+        <member type="float4" name="specular"/>
+        <member type="float4" name="reflect"/>
+    </struct>
+	<shader>
+		<![CDATA[
 void ComputeDirectionalLight(Material mat, 
 	DirectionalLight L,
     float3 normal, 
@@ -183,3 +174,6 @@ void ComputeSpotLight(Material mat,
 	diffuse *= att;
 	spec    *= att;
 }
+		]]>
+	</shader>
+</effect>

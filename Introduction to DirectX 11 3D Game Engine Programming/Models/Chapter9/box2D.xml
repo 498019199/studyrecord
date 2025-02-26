@@ -19,8 +19,39 @@
 			<state name="src_blend_alpha" value="one"/>
 			<state name="dest_blend_alpha" value="one"/>
 
-            <state name="vertex_shader" value="\\Chapter9\\HLSL\\Basic_2D_VS"/>
-			<state name="pixel_shader" value="\\Chapter9\\HLSL\\Basic_2D_PS"/>
+            <state name="vertex_shader" value="VS()"/>
+			<state name="pixel_shader" value="PS()"/>
         </pass>
-    </technique>
+    </shader>
+	        		<![CDATA[
+struct VertexPosHTex
+{
+    float4 posH : SV_POSITION;
+    float2 tex : TEXCOORD;
+};
+
+struct VertexPosTex
+{
+    float3 posL : POSITION;
+    float2 tex : TEXCOORD;
+};
+
+// 顶点着色器(2D)
+VertexPosHTex VS(VertexPosTex vIn)
+{
+    VertexPosHTex vOut;
+    vOut.posH = float4(vIn.posL, 1.0f);
+    vOut.tex = vIn.tex;
+    return vOut;
+}
+
+// 像素着色器(2D)
+float4 PS(VertexPosHTex pIn) : SV_Target
+{
+    float4 color = gTex1.Sample(gSamLinear1, pIn.tex);
+    clip(color.a - 0.1f);
+    return color;
+}
+					            		]]>
+	</shader>
 </effect>

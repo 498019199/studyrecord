@@ -4137,39 +4137,32 @@ namespace RenderWorker
 
 		//auto& res_loader = Context::Instance().ResLoaderInstance();
 
-		// std::filesystem::path first_fxml_path(res_loader.Locate(*names.begin()));
-		// std::filesystem::path first_fxml_directory = first_fxml_path.parent_path();
+		std::filesystem::path first_fxml_path(Context::Locate(*names.begin()));
+		std::filesystem::path first_fxml_directory = first_fxml_path.parent_path();
 
-		// std::string connected_name;
-		// for (size_t i = 0; i < names.size(); ++i)
-		// {
-		// 	connected_name += std::filesystem::path(names[i]).stem().string();
-		// 	if (i != names.size() - 1)
-		// 	{
-		// 		connected_name += '+';
-		// 	}
-		// }
+		std::string connected_name;
+		for (size_t i = 0; i < names.size(); ++i)
+		{
+			connected_name += std::filesystem::path(names[i]).stem().string();
+			if (i != names.size() - 1)
+			{
+				connected_name += '+';
+			}
+		}
 
-		// std::string kfx_name = res_loader.Locate(connected_name + ".kfx");
-		// if (kfx_name.empty())
-		// {
-		// 	kfx_name = (first_fxml_directory / (connected_name + ".kfx")).string();
-		// }
 		std::string path_file = *names.begin();
     	size_t lastIndex = path_file.rfind("\\");
     	std::string package_path = path_file.substr(0, lastIndex);
     	std::string res_name = path_file.substr(lastIndex + 1);
 
-		immutable_->res_name = res_name;//(first_fxml_directory / (connected_name + ".fxml")).string();
+		immutable_->res_name = *names.begin();//(first_fxml_directory / (connected_name + ".fxml")).string();
 		immutable_->res_name_hash = HashValue(immutable_->res_name);
 #if ZENGINE_IS_DEV_PLATFORM
 		for (auto const& name : names)
 		{
 			immutable_->timestamp = 0;
 			//ResIdentifierPtr source = res_loader.Open(path_file);
-			uint64_t const timestamp = std::filesystem::last_write_time(package_path).time_since_epoch().count();
-    		ResIdentifierPtr source = MakeSharedPtr<ResIdentifier>(
-        		res_name, timestamp, MakeSharedPtr<std::ifstream>(name.c_str(), std::ios_base::binary));
+    		ResIdentifierPtr source = Context::OpenFile(name); 
 			if (source)
 			{
 				immutable_->timestamp = std::max(immutable_->timestamp, source->Timestamp());
@@ -4179,10 +4172,10 @@ namespace RenderWorker
 				std::vector<std::string> include_names;
 				this->RecursiveIncludeNode(root, include_names);
 
-				// for (auto const& include_name : include_names)
-				// {
-				// 	immutable_->timestamp = immutable_->timestamp;//std::max(immutable_->timestamp, source->Timestamp(include_name));
-				// }
+				for (auto const& include_name : include_names)
+				{
+					immutable_->timestamp = immutable_->timestamp;//std::max(immutable_->timestamp, source->Timestamp(include_name));
+				}
 			}
 		}
 #endif
@@ -4190,10 +4183,9 @@ namespace RenderWorker
 #if ZENGINE_IS_DEV_PLATFORM
 		immutable_->need_compile = false;
 #endif
-		uint64_t const timestamp = std::filesystem::last_write_time(package_path).time_since_epoch().count();
+		std::string kfx_name = *names.begin();
 		//ResIdentifierPtr kfx_source = res_loader.Open(kfx_name);
-		ResIdentifierPtr kfx_source = MakeSharedPtr<ResIdentifier>(
-        	res_name, timestamp, MakeSharedPtr<std::ifstream>(path_file.c_str(), std::ios_base::binary));
+		ResIdentifierPtr kfx_source = Context::OpenFile(kfx_name);
 		if (!kfx_source || !this->StreamIn(*kfx_source))
 		{
 #if ZENGINE_IS_DEV_PLATFORM
@@ -4210,22 +4202,18 @@ namespace RenderWorker
 
 			immutable_->shader_descs.resize(1);
 
-			std::string main_path = names[0];
 			std::vector<std::string> include_names;
-			ResIdentifierPtr main_source = MakeSharedPtr<ResIdentifier>(
-        	res_name, timestamp, MakeSharedPtr<std::ifstream>(main_path.c_str(), std::ios_base::binary));
+			ResIdentifierPtr main_source = Context::OpenFile(names[0]);
 			//ResIdentifierPtr main_source = res_loader.Open(names[0]);
 			if (main_source)
 			{
 				XMLNode root = LoadXml(*main_source);
-				this->PreprocessIncludes(root, include_names);
+				PreprocessIncludes(root, include_names);
 
 				for (size_t i = 1; i < names.size(); ++i)
 				{
 					//ResIdentifierPtr source = res_loader.Open(names[i]);
-					std::string include_pash = package_path + names[i];
-					ResIdentifierPtr source = MakeSharedPtr<ResIdentifier>(
-        				res_name, timestamp, MakeSharedPtr<std::ifstream>(include_pash.c_str(), std::ios_base::binary));
+					ResIdentifierPtr source = Context::OpenFile(names[i]);
 					if (source)
 					{
 						XMLNode frag_root = LoadXml(*source);
@@ -4555,63 +4543,63 @@ namespace RenderWorker
 #if ZENGINE_IS_DEV_PLATFORM
 	void RenderEffect::PreprocessIncludes(XMLNode& root, std::vector<std::string>& include_names)
 	{
-		// auto& res_loader = Context::Instance().ResLoaderInstance();
-		// for (XMLNode const* node = root.FirstNode("include"); node; node = root.FirstNode("include"))
-		// {
-		// 	XMLAttribute const* attr = node->Attrib("name");
-		// 	COMMON_ASSERT(attr);
+		//auto& res_loader = Context::Instance().ResLoaderInstance();
+		for (XMLNode const* node = root.FirstNode("include"); node; node = root.FirstNode("include"))
+		{
+			XMLAttribute const* attr = node->Attrib("name");
+			COMMON_ASSERT(attr);
 
-		// 	std::string const include_name = std::string(attr->ValueString());
+			const std::string include_name = std::string(attr->ValueString());
 
-		// 	uint32_t node_index = root.FindChildNodeIndex(*node);
-		// 	root.RemoveNode(*node);
+			uint32_t node_index = root.FindChildNodeIndex(*node);
+			root.RemoveNode(*node);
 
-		// 	auto iter = std::find(include_names.begin(), include_names.end(), include_name);
-		// 	if (iter == include_names.end())
-		// 	{
-		// 		auto const& include_root = LoadXml(*res_loader.Open(include_name));
-		// 		for (XMLNode const* child_node = include_root.FirstNode(); child_node; child_node = child_node->NextSibling())
-		// 		{
-		// 			if (XMLNodeType::Element == child_node->Type())
-		// 			{
-		// 				root.InsertAt(node_index, *child_node);
-		// 				++node_index;
-		// 			}
-		// 		}
+			auto iter = std::find(include_names.begin(), include_names.end(), include_name);
+			if (iter == include_names.end())
+			{
+				auto const& include_root = LoadXml(*Context::OpenFile(include_name));
+				for (XMLNode const* child_node = include_root.FirstNode(); child_node; child_node = child_node->NextSibling())
+				{
+					if (XMLNodeType::Element == child_node->Type())
+					{
+						root.InsertAt(node_index, *child_node);
+						++node_index;
+					}
+				}
 
-		// 		include_names.push_back(include_name);
-		// 	}
-		// }
+				include_names.push_back(include_name);
+			}
+		}
 	}
 
 	void RenderEffect::RecursiveIncludeNode(XMLNode const& root, std::vector<std::string>& include_names) const
 	{
-		// auto& res_loader = Context::Instance().ResLoaderInstance();
-		// for (XMLNode const* node = root.FirstNode("include"); node; node = node->NextSibling("include"))
-		// {
-		// 	XMLAttribute const* attr = node->Attrib("name");
-		// 	COMMON_ASSERT(attr);
+		//auto& res_loader = Context::Instance().ResLoaderInstance();
+		for (XMLNode const* node = root.FirstNode("include"); node; node = node->NextSibling("include"))
+		{
+			XMLAttribute const* attr = node->Attrib("name");
+			COMMON_ASSERT(attr);
 
-		// 	std::string_view const include_name = attr->ValueString();
+			const std::string_view include_name = attr->ValueString();
 
-		// 	XMLNode include_root = LoadXml(*res_loader.Open(include_name));
-		// 	this->RecursiveIncludeNode(include_root, include_names);
+			XMLNode include_root = LoadXml(*Context::OpenFile(include_name));
+			this->RecursiveIncludeNode(include_root, include_names);
 
-		// 	bool found = false;
-		// 	for (size_t i = 0; i < include_names.size(); ++ i)
-		// 	{
-		// 		if (include_name == include_names[i])
-		// 		{
-		// 			found = true;
-		// 			break;
-		// 		}
-		// 	}
+			bool found = false;
+			for (size_t i = 0; i < include_names.size(); ++ i)
+			{
+				if (include_name == include_names[i])
+				{
+					found = true;
+					break;
+				}
+			}
 
-		// 	if (!found)
-		// 	{
-		// 		include_names.emplace_back(include_name);
-		// 	}
-		// }
+			if (!found)
+			{
+				include_names.emplace_back(include_name);
+			}
+		}
 	}
 
 	XMLNode RenderEffect::ResolveInheritTechNode(XMLNode& root, XMLNode const* tech_node)

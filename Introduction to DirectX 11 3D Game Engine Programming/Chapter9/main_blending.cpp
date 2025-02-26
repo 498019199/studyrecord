@@ -82,14 +82,12 @@ public:
         auto floor = RenderablePlane(20.0f, 20.0f, 5.0f, 5.0f, Color(1.0f, 1.0f, 1.0f, 1.0f));
 
         auto currentPath = std::filesystem::current_path().parent_path().parent_path().string();
-        currentPath += "\\Models\\Chapter9\\box2D.xml";
-        effect_ = SyncLoadRenderEffect(currentPath);
+        effect_ = SyncLoadRenderEffect("box2D.xml");
 
 
         auto currentPath2 = std::filesystem::current_path().parent_path().parent_path().string();
-        const std::string file_path1 = currentPath2 + "\\Models\\Chapter9\\" + DDS;
         auto src1_tex_param = effect_->ParameterByName("src1_tex");
-        *src1_tex_param = SyncLoadTexture(file_path1, EAH_GPU_Read | EAH_Immutable);
+        *src1_tex_param = SyncLoadTexture(DDS, EAH_GPU_Read | EAH_Immutable);
     }
 };
 
@@ -185,9 +183,7 @@ public:
         auto ib = rf.MakeIndexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable, sizeof(indices), indices);
         rls_[0]->BindIndexStream(ib, EF_R16UI);
 
-        auto currentPath = std::filesystem::current_path().parent_path().parent_path().string();
-        currentPath += "\\Models\\Chapter9\\box3D.xml";
-        effect_ = SyncLoadRenderEffect(currentPath);
+        effect_ = SyncLoadRenderEffect("box3D.xml");
         technique_ = effect_->TechniqueByName("Basic_3D");
 
         auto currentPath2 = std::filesystem::current_path().parent_path().parent_path().string();
@@ -376,9 +372,7 @@ public:
         auto ib = rf.MakeIndexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable, sizeof(indices), indices);
         rls_[0]->BindIndexStream(ib, EF_R16UI);
 
-        auto currentPath = std::filesystem::current_path().parent_path().parent_path().string();
-        currentPath += "\\Models\\Chapter9\\Cube.xml";
-        effect_ = SyncLoadRenderEffect(currentPath);
+        effect_ = SyncLoadRenderEffect("Cube.xml");
         technique_ = effect_->TechniqueByName("Cube");
         effect_constant_buffer_ = effect_->CBufferByName("VSConstantBuffer");
 
@@ -459,13 +453,15 @@ int main() {
     RenderSettings settings;
     settings.width = 1280;
     settings.height = 720;
+    Context::Instance().AddResource("//Models//Chapter9//");
     Context::Instance().LoadConfig("");
     app.CreateAppWindow(settings);
 	Context::Instance().AppInstance(app);
     app.InitDevice(app.GetHWND(), settings);
     Context::Instance().WorldInstance().BeginWorld();
     
-    Test_chapter7();
+    //Test_chapter7();
+    CreateScene();
 
     app.Run();
     return 0;

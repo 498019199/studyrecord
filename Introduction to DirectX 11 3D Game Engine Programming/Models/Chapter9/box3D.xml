@@ -1,39 +1,6 @@
 <?xml version='1.0'?>
 <effect>
-    <struct name="DirectionalLight">
-        <member type="float4" name="ambient"/>
-        <member type="float4" name="diffuse"/>
-        <member type="float4" name="specular"/>
-        <member type="float3" name="direction"/>
-        <member type="float" name="pad"/>
-    </struct>
-        <struct name="PointLight">
-        <member type="float4" name="ambient"/>
-        <member type="float4" name="diffuse"/>
-        <member type="float4" name="specular"/>
-        <member type="float3" name="pos"/>
-        <member type="float" name="range"/>
-        <member type="float3" name="att"/>
-        <member type="float" name="pad"/>
-    </struct>
-        <struct name="SpotLight">
-        <member type="float4" name="ambient"/>
-        <member type="float4" name="diffuse"/>
-        <member type="float4" name="specular"/>
-        <member type="float3" name="pos"/>
-        <member type="float" name="range"/>
-        <member type="float3" name="direction"/>
-        <member type="float" name="spot"/>
-        <member type="float3" name="att"/>
-        <member type="float" name="pad"/>
-    </struct>
-    <struct name="Material">
-        <member type="float4" name="ambient"/>
-        <member type="float4" name="diffuse"/>
-        <member type="float4" name="specular"/>
-        <member type="float4" name="reflect"/>
-    </struct>
-
+    <include name="Lighting.fxml"/>
     <cbuffer name="VSConstantBuffer">
         <parameter type="float4x4" name="world"/>
         <parameter type="float4x4" name="view"/>
@@ -66,8 +33,78 @@
 			<state name="src_blend_alpha" value="one"/>
 			<state name="dest_blend_alpha" value="one"/>
 
-            <state name="vertex_shader" value="\\Chapter9\\HLSL\\Basic_3D_VS"/>
-			<state name="pixel_shader" value="\\Chapter9\\HLSL\\Basic_3D_PS"/>
+            <state name="vertex_shader" value="VS()"/>
+			<state name="pixel_shader" value="PS()"/>
         </pass>
     </technique>
+    <shader>
+        		<![CDATA[
+
+struct VertexIn
+{
+    float3 posL : POSITION;
+    float3 normalL : NORMAL;
+    float2 tex : TEXCOORD;
+};
+
+VertexOut VS(VertexIn vIn)
+{
+    VertexOut vOut;
+    matrix viewProj = mul(gView, gProj);
+    float4 posW = mul(float4(vIn.posL, 1.0f), gWorld);
+
+    vOut.posH = mul(posW, viewProj);
+    vOut.posW = posW.xyz;
+    vOut.normalW = mul(vIn.normalL, (float3x3) gWorldInvTranspose);
+
+    // 旋转
+    vOut.tex2 = mul(float4(vIn.tex, 0.f, 1.f), gRotateM);
+    vOut.tex1 = vIn.tex;
+    return vOut;
+}
+
+// 像素着色器
+float4 PS(VertexOut pIn) : SV_Target
+{
+    // 标准化法向量
+    pIn.normalW = normalize(pIn.normalW);
+    // 顶点指向眼睛的向量
+    float3 toEyeW = normalize(gEyePosW - pIn.posW);
+
+    // 初始化为0 
+    float4 ambient, diffuse, spec;
+    float4 A, D, S;
+    ambient = diffuse = spec = A = D = S = float4(0.0f, 0.0f, 0.0f, 0.0f);
+
+    ComputeDirectionalLight(gMaterial, gDirLight, pIn.normalW, toEyeW, A, D, S);
+    ambient += A;
+    diffuse += D;
+    spec += S;
+
+    ComputePointLight(gMaterial, gPointLight, pIn.posW, pIn.normalW, toEyeW, A, D, S);
+    ambient += A;
+    diffuse += D;
+    spec += S;
+
+    ComputeSpotLight(gMaterial, gSpotLight, pIn.posW, pIn.normalW, toEyeW, A, D, S);
+    ambient += A;
+    diffuse += D;
+    spec += S;
+
+    float4 texColor = gTex1.Sample(gSamLinear1, pIn.tex1);
+    float4 litColor = texColor * (ambient + diffuse) + spec;
+    litColor.a = texColor.a * gMaterial.Diffuse.a;
+    return litColor;
+}
+
+struct VertexOut
+{
+    float4 posH : SV_POSITION;
+    float3 posW : POSITION;     // 在世界中的位置
+    float3 normalW : NORMAL;    // 法向量在世界中的方向
+    float2 tex1 : TEXCOORD;
+    float2 tex2 : TEXCOORD;
+};
+            		]]>
+    </shader>
 </effect>
