@@ -83,7 +83,7 @@ public:
 
         auto currentPath = std::filesystem::current_path().parent_path().parent_path().string();
         effect_ = SyncLoadRenderEffect("box2D.xml");
-
+        technique_ = effect_->TechniqueByName("Basic_2D");
 
         auto currentPath2 = std::filesystem::current_path().parent_path().parent_path().string();
         auto src1_tex_param = effect_->ParameterByName("src1_tex");
@@ -463,16 +463,16 @@ void Test_chapter7()
 
 void CreateScene()
 {
-    // // 初始化地板
-    // auto floor = new RenderablePlaneTex(20.0f, 20.0f, 5.0f, 5.0f, "floor.dds");
-    // Context::Instance().WorldInstance().AddRenderable(floor);
+    // 初始化地板
+    auto floor = new RenderablePlaneTex(20.0f, 20.0f, 5.0f, 5.0f, "floor.dds");
+    Context::Instance().WorldInstance().AddRenderable(floor);
 
-    // // 初始化墙体
-    // for (int i = 0; i < 4; ++i)
-    // {
-    //     auto wal = new RenderablePlaneTex(20.0f, 8.0f, 5.0f, 1.5f, "brick.dds");
-    //     Context::Instance().WorldInstance().AddRenderable(wal);
-    // }
+    // 初始化墙体
+    for (int i = 0; i < 4; ++i)
+    {
+        auto wal = new RenderablePlaneTex(20.0f, 8.0f, 5.0f, 1.5f, "brick.dds");
+        Context::Instance().WorldInstance().AddRenderable(wal);
+    }
 
     // 初始化篱笆盒
     auto box = new RenderableBoxTex(2.0f, 2.0f, 2.0f, Color(1.f, 1.f, 1.f, 1.f));

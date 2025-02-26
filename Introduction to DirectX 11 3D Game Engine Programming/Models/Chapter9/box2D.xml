@@ -9,7 +9,7 @@
 
     <technique name="Basic_2D">
         <pass name="p0">
-            <state name="cull_mode" value="front"/>
+            <state name="cull_mode" value="back"/>
 
             <state name="blend_enable" value="true"/>
 			<state name="blend_op" value="add"/>
@@ -22,7 +22,9 @@
             <state name="vertex_shader" value="VS()"/>
 			<state name="pixel_shader" value="PS()"/>
         </pass>
-    </shader>
+    </technique>
+    
+    <shader>
 	        		<![CDATA[
 struct VertexPosHTex
 {
@@ -48,7 +50,7 @@ VertexPosHTex VS(VertexPosTex vIn)
 // 像素着色器(2D)
 float4 PS(VertexPosHTex pIn) : SV_Target
 {
-    float4 color = gTex1.Sample(gSamLinear1, pIn.tex);
+    float4 color = src1_tex.Sample(point_sampler, pIn.tex);
     clip(color.a - 0.1f);
     return color;
 }
