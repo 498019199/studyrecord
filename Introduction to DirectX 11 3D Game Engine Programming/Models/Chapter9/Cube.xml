@@ -1,9 +1,9 @@
 <?xml version='1.0'?>
 <effect>
     <cbuffer name="VSConstantBuffer">
-        <parameter type="float4x4" name="world"/>
-        <parameter type="float4x4" name="view"/>
-        <parameter type="float4x4" name="projection"/>
+        <parameter type="float4x4" name="g_World"/>
+        <parameter type="float4x4" name="g_View"/>
+        <parameter type="float4x4" name="g_Proj"/>
     </cbuffer>
     <technique name="Cube">
         <pass name="p0">
@@ -21,4 +21,36 @@
 			<state name="pixel_shader" value="PS()"/>
         </pass>
     </technique>
+    <shader>
+    		<![CDATA[
+struct VertexIn
+{
+    float3 posL : POSITION;
+    float4 color : COLOR;
+};
+
+struct VertexOut
+{
+    float4 posH : SV_POSITION;
+    float4 color : COLOR;
+};
+
+VertexOut VS(VertexIn vIn)
+{
+    VertexOut vOut;
+    vOut.posH = mul(float4(vIn.posL, 1.0f), g_World);  // mul 才是矩阵乘法, 运算符*要求操作对象为
+    vOut.posH = mul(vOut.posH, g_View);               // 行列数相等的两个矩阵，结果为
+    vOut.posH = mul(vOut.posH, g_Proj);               // Cij = Aij * Bij
+    vOut.color = vIn.color;                         // 这里alpha通道的值默认为1.0
+    return vOut;
+}
+
+// 像素着色器
+float4 PS(VertexOut pIn) : SV_Target
+{
+    return pIn.color;
+}
+
+            		]]>
+    </shader>
 </effect>

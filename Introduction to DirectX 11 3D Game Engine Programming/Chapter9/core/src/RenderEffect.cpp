@@ -4203,7 +4203,7 @@ namespace RenderWorker
 
 			immutable_->macros.clear();
 			immutable_->struct_types.clear();
-			//immutable_->shader_frags.clear();
+			immutable_->shader_frags.clear();
 			immutable_->hlsl_shader.clear();
 			immutable_->techniques.clear();
 			//immutable_->shader_graph_nodes.clear();
@@ -4500,11 +4500,11 @@ namespace RenderWorker
 		return &immutable_->techniques[n];
 	}
 
-	// RenderShaderFragment const& RenderEffect::ShaderFragmentByIndex(uint32_t n) const noexcept
-	// {
-	// 	COMMON_ASSERT(n < this->NumShaderFragments());
-	// 	return immutable_->shader_frags[n];
-	// }
+	RenderShaderFragment const& RenderEffect::ShaderFragmentByIndex(uint32_t n) const noexcept
+	{
+		COMMON_ASSERT(n < this->NumShaderFragments());
+		return immutable_->shader_frags[n];
+	}
 
 	uint32_t RenderEffect::AddShaderDesc(ShaderDesc const & sd)
 	{
@@ -4851,11 +4851,11 @@ namespace RenderWorker
 		// 	}
 		// }
 
-		// for (XMLNode const* shader_node = root.FirstNode("shader"); shader_node; shader_node = shader_node->NextSibling("shader"))
-		// {
-		// 	auto& frag = immutable_->shader_frags.emplace_back();
-		// 	frag.Load(*shader_node);
-		// }
+		for (XMLNode const* shader_node = root.FirstNode("shader"); shader_node; shader_node = shader_node->NextSibling("shader"))
+		{
+			auto& frag = immutable_->shader_frags.emplace_back();
+			frag.Load(*shader_node);
+		}
 
 		this->GenHLSLShaderText();
 
@@ -5087,14 +5087,14 @@ namespace RenderWorker
 		// 		node.StreamOut(os);
 		// 	}
 		// }
-		// {
-		// 	uint16_t num_shader_frags = Native2LE(static_cast<uint16_t>(immutable_->shader_frags.size()));
-		// 	os.write(reinterpret_cast<char const *>(&num_shader_frags), sizeof(num_shader_frags));
-		// 	for (auto const& frag : immutable_->shader_frags)
-		// 	{
-		// 		frag.StreamOut(os);
-		// 	}
-		// }
+		{
+			uint16_t num_shader_frags = Native2LE(static_cast<uint16_t>(immutable_->shader_frags.size()));
+			os.write(reinterpret_cast<char const *>(&num_shader_frags), sizeof(num_shader_frags));
+			for (auto const& frag : immutable_->shader_frags)
+			{
+				frag.StreamOut(os);
+			}
+		}
 		// {
 		// 	uint16_t num_shader_descs = Native2LE(static_cast<uint16_t>(immutable_->shader_descs.size() - 1));
 		// 	os.write(reinterpret_cast<char const *>(&num_shader_descs), sizeof(num_shader_descs));
@@ -5137,7 +5137,7 @@ namespace RenderWorker
 		std::string& str = immutable_->hlsl_shader;
 		str.clear();
 
-		str += "#define SHADER_MODEL(major, minor) ((major) * 4 + (minor))\n\n";
+		//str += "#define SHADER_MODEL(major, minor) ((major) * 4 + (minor))\n\n";
 
 		for (auto const& macro : immutable_->macros)
 		{
@@ -5154,6 +5154,7 @@ namespace RenderWorker
 				RenderEffectDataType member_type = struct_type.MemberType(j);
 				if (member_type == REDT_struct)
 				{
+					str += "    ";
 					str += struct_type.MemberTypeName(j);
 				}
 				else
@@ -5471,49 +5472,49 @@ namespace RenderWorker
 		// 	str += '\n';
 		// }
 
-		// for (auto const& frag : immutable_->shader_frags)
-		// {
-		// 	ShaderStage const shader_stage = frag.Stage();
-		// 	switch (shader_stage)
-		// 	{
-		// 	case ShaderStage::Vertex:
-		// 		str += "#if KLAYGE_VERTEX_SHADER\n";
-		// 		break;
+		for (auto const& frag : immutable_->shader_frags)
+		{
+			ShaderStage const shader_stage = frag.Stage();
+			switch (shader_stage)
+			{
+			case ShaderStage::Vertex:
+				str += "#if KLAYGE_VERTEX_SHADER\n";
+				break;
 
-		// 	case ShaderStage::Pixel:
-		// 		str += "#if KLAYGE_PIXEL_SHADER\n";
-		// 		break;
+			case ShaderStage::Pixel:
+				str += "#if KLAYGE_PIXEL_SHADER\n";
+				break;
 
-		// 	case ShaderStage::Geometry:
-		// 		str += "#if KLAYGE_GEOMETRY_SHADER\n";
-		// 		break;
+			case ShaderStage::Geometry:
+				str += "#if KLAYGE_GEOMETRY_SHADER\n";
+				break;
 
-		// 	case ShaderStage::Compute:
-		// 		str += "#if KLAYGE_COMPUTE_SHADER\n";
-		// 		break;
+			case ShaderStage::Compute:
+				str += "#if KLAYGE_COMPUTE_SHADER\n";
+				break;
 
-		// 	case ShaderStage::Hull:
-		// 		str += "#if KLAYGE_HULL_SHADER\n";
-		// 		break;
+			case ShaderStage::Hull:
+				str += "#if KLAYGE_HULL_SHADER\n";
+				break;
 
-		// 	case ShaderStage::Domain:
-		// 		str += "#if KLAYGE_DOMAIN_SHADER\n";
-		// 		break;
+			case ShaderStage::Domain:
+				str += "#if KLAYGE_DOMAIN_SHADER\n";
+				break;
 
-		// 	case ShaderStage::NumStages:
-		// 		break;
+			case ShaderStage::NumStages:
+				break;
 
-		// 	default:
-		// 		KFL_UNREACHABLE("Invalid shader type");
-		// 	}
-		// 	ShaderModel const & ver = frag.Version();
-		// 	if ((ver.major_ver != 0) || (ver.minor_ver != 0))
-		// 	{
-		// 		str += std::format(
-		// 			"#if KLAYGE_SHADER_MODEL >= SHADER_MODEL({}, {})\n", static_cast<int>(ver.major_ver), static_cast<int>(ver.minor_ver));
-		// 	}
+			default:
+				KFL_UNREACHABLE("Invalid shader type");
+			}
+			// ShaderModel const & ver = frag.Version();
+			// if ((ver.major_ver != 0) || (ver.minor_ver != 0))
+			// {
+			// 	str += std::format(
+			// 		"#if KLAYGE_SHADER_MODEL >= SHADER_MODEL({}, {})\n", static_cast<int>(ver.major_ver), static_cast<int>(ver.minor_ver));
+			// }
 
-		// 	str += frag.str() + "\n";
+		str += frag.str() + "\n";
 
 		// 	if ((ver.major_ver != 0) || (ver.minor_ver != 0))
 		// 	{
@@ -5533,7 +5534,7 @@ namespace RenderWorker
 		// 		str += node.GenDefinitionCode();
 		// 	}
 		// 	str += '\n';
-		// }
+		}
 	}
 #endif
 
@@ -7124,7 +7125,7 @@ namespace RenderWorker
 	}
 
 
-/*#if ZENGINE_IS_DEV_PLATFORM
+#if ZENGINE_IS_DEV_PLATFORM
 	void RenderShaderFragment::Load(XMLNode const& node)
 	{
 		stage_ = ShaderStage::NumStages;
@@ -7158,8 +7159,8 @@ namespace RenderWorker
 			}
 		}
 		
-		ver_ = ShaderModel(0, 0);
-		LoadVersion(node, ver_);
+		// ver_ = ShaderModel(0, 0);
+		// LoadVersion(node, ver_);
 
 		for (XMLNode const* shader_text_node = node.FirstNode(); shader_text_node; shader_text_node = shader_text_node->NextSibling())
 		{
@@ -7176,7 +7177,7 @@ namespace RenderWorker
 		uint32_t tmp;
 		res.read(&tmp, sizeof(tmp));
 		stage_ = static_cast<ShaderStage>(LE2Native(tmp));
-		res.read(&ver_, sizeof(ver_));
+		//res.read(&ver_, sizeof(ver_));
 
 		uint32_t len;
 		res.read(&len, sizeof(len));
@@ -7191,7 +7192,7 @@ namespace RenderWorker
 		uint32_t tmp;
 		tmp = Native2LE(std::to_underlying(stage_));
 		os.write(reinterpret_cast<char const *>(&tmp), sizeof(tmp));
-		os.write(reinterpret_cast<char const *>(&ver_), sizeof(ver_));
+		//os.write(reinterpret_cast<char const *>(&ver_), sizeof(ver_));
 
 		uint32_t len = static_cast<uint32_t>(str_.size());
 		tmp = Native2LE(len);
@@ -7200,7 +7201,7 @@ namespace RenderWorker
 	}
 #endif
 
-
+/*
 #if ZENGINE_IS_DEV_PLATFORM
 	void RenderShaderGraphNode::Load(XMLNode const& node)
 	{
@@ -7830,6 +7831,10 @@ RenderEffectPtr SyncLoadRenderEffect(std::string_view effect_name)
 	{
 		return nullptr;
 	}
+
+#if ZENGINE_IS_DEV_PLATFORM
+	effect->CompileShaders();
+#endif
 	return effect;
 }
 }

@@ -37,6 +37,8 @@ public:
     void SetSamplers(ShaderStage stage, std::span<ID3D11SamplerState* const> samplers);
     // 将更新好的常量缓冲区绑定到顶点着色器和像素着色器
     void SetConstantBuffers(ShaderStage stage, std::span<ID3D11Buffer* const> cbs);
+
+    char const * DefaultShaderProfile(ShaderStage stage) const;
 private:
     int weight_{0};
     int height_{0};
@@ -45,8 +47,10 @@ private:
     
     ID3D11DevicePtr d3d_device_;
 	ID3D11DeviceContextPtr d3d_imm_ctx_;
-	IDXGISwapChainPtr swap_chain_;
+    D3D_FEATURE_LEVEL d3d_feature_level_;
 
+    IDXGISwapChainPtr swap_chain_;
+    
     uint32_t num_primitives_just_rendered_{0};
 	uint32_t num_vertices_just_rendered_{0};
 
@@ -67,6 +71,9 @@ private:
     // 当前绑定的着色器
     ID3D11VertexShader* vertex_shader_cache_{nullptr};
     ID3D11PixelShader* pixel_shader_cache_{nullptr};
+    
+    // 默认shader 目标选项
+    char const* shader_profiles_[ShaderStageNum];
 
     std::array<std::vector<ID3D11Buffer*>, ShaderStageNum> shader_cb_ptr_cache_;
     std::array<std::vector<std::tuple<void*, uint32_t, uint32_t>>, ShaderStageNum> shader_srvsrc_cache_;

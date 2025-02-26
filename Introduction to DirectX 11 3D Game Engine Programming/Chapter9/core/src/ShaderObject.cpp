@@ -228,8 +228,8 @@ void ShaderObject::LinkShaders(RenderEffect& effect)
 		RenderPass const& pass, std::vector<std::pair<char const*, char const*>> const& api_special_macros, char const* func_name,
 		char const* shader_profile, uint32_t flags, void** reflector, bool strip)
 	{
-        auto& re = Context::Instance().RenderEngineInstance();
-        std::string const & hlsl_shader_text = effect.HLSLShaderText();
+        //auto& re = Context::Instance().RenderEngineInstance();
+        const std::string& hlsl_shader_text = effect.HLSLShaderText();
         std::vector<uint8_t> code;
         
         std::string err_msg;
@@ -257,7 +257,7 @@ void ShaderObject::LinkShaders(RenderEffect& effect)
 			flags, 0, code, err_msg);
         if (!err_msg.empty())
         {
-
+            std::cout << "Error when compiling " << func_name << ":" << std::endl;
         }
 
         if (reflector != nullptr)

@@ -71,7 +71,7 @@ void D3D11ShaderStageObject::CompileShader(const RenderEffect& effect, const Ren
 {
     shader_code_.clear();
 
-    uint32_t const shader_desc_id = shader_desc_ids[std::to_underlying(stage_)];
+    const uint32_t shader_desc_id = shader_desc_ids[std::to_underlying(stage_)];
     const auto& sd = effect.GetShaderDesc(shader_desc_id);
 
 
@@ -132,7 +132,7 @@ std::string_view D3D11ShaderStageObject::GetShaderProfile(RenderEffect const& ef
         if (shader_profile == "auto")
         {
             auto& re = checked_cast<D3D11RenderEngine&>(Context::Instance().RenderEngineInstance());
-            //shader_profile = re.DefaultShaderProfile(stage_);
+            shader_profile = re.DefaultShaderProfile(stage_);
         }
     }
     else

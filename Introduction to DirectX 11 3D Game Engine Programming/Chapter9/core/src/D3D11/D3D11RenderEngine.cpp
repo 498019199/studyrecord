@@ -52,7 +52,6 @@ D3D11RenderEngine::D3D11RenderEngine(HWND hwnd, const RenderSettings& settings)
     createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
 
-	D3D_FEATURE_LEVEL featureLevel;
 	HRESULT hr = D3D11CreateDevice(
 			0,                 // default adapter
 			dev_type,
@@ -61,7 +60,7 @@ D3D11RenderEngine::D3D11RenderEngine(HWND hwnd, const RenderSettings& settings)
 			0, 0,              // default feature level array
 			D3D11_SDK_VERSION,
 			d3d_device_.put(),
-			&featureLevel,
+			&d3d_feature_level_,
 			d3d_imm_ctx_.put());
 
 	if( FAILED(hr) )
@@ -70,10 +69,28 @@ D3D11RenderEngine::D3D11RenderEngine(HWND hwnd, const RenderSettings& settings)
 		return ;
 	}
 
-	if( featureLevel != D3D_FEATURE_LEVEL_11_0 )
+	if( d3d_feature_level_ != D3D_FEATURE_LEVEL_11_0 )
 	{
 		::MessageBoxW(0, L"Direct3D Feature Level 11 unsupported.", 0, 0);
 		return ;
+	}
+
+	switch (d3d_feature_level_)
+	{
+	case D3D_FEATURE_LEVEL_12_1:
+	case D3D_FEATURE_LEVEL_12_0:
+	case D3D_FEATURE_LEVEL_11_1:
+	case D3D_FEATURE_LEVEL_11_0:
+		shader_profiles_[std::to_underlying(ShaderStage::Vertex)] = "vs_5_0";
+		shader_profiles_[std::to_underlying(ShaderStage::Pixel)] = "ps_5_0";
+		shader_profiles_[std::to_underlying(ShaderStage::Geometry)] = "gs_5_0";
+		shader_profiles_[std::to_underlying(ShaderStage::Compute)] = "cs_5_0";
+		shader_profiles_[std::to_underlying(ShaderStage::Hull)] = "hs_5_0";
+		shader_profiles_[std::to_underlying(ShaderStage::Domain)] = "ds_5_0";
+		break;
+
+	default:
+		KFL_UNREACHABLE("Invalid feature level");
 	}
 
 	// Check 4X MSAA quality support for our back buffer format.
@@ -437,5 +454,10 @@ void D3D11RenderEngine::SetConstantBuffers(ShaderStage stage, std::span<ID3D11Bu
 
 		shader_cb_ptr_cache_[stage_index].assign(cbs.begin(), cbs.end());
 	}
+}
+
+char const * D3D11RenderEngine::DefaultShaderProfile(ShaderStage stage) const
+{
+	return shader_profiles_[std::to_underlying(stage)];
 }
 }

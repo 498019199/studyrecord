@@ -229,6 +229,39 @@ protected:
     };
 };
 
+class RenderShaderFragment final
+{
+public:
+#if ZENGINE_IS_DEV_PLATFORM
+    void Load(XMLNode const& node);
+#endif
+
+    void StreamIn(ResIdentifier& res);
+#if ZENGINE_IS_DEV_PLATFORM
+    void StreamOut(std::ostream& os) const;
+#endif
+
+    ShaderStage Stage() const noexcept
+    {
+        return stage_;
+    }
+
+    // ShaderModel Version() const noexcept
+    // {
+    //     return ver_;
+    // }
+
+    std::string const& str() const noexcept
+    {
+        return str_;
+    }
+
+private:
+    ShaderStage stage_;
+    //ShaderModel ver_;
+    std::string str_;
+};
+
 class RenderEffectStructType final
 {
 public:
@@ -549,11 +582,11 @@ public:
     RenderTechnique* TechniqueByName(std::string_view name) const noexcept;
     RenderTechnique* TechniqueByIndex(uint32_t n) const noexcept;
 
-    // uint32_t NumShaderFragments() const noexcept
-    // {
-    //     return static_cast<uint32_t>(immutable_->shader_frags.size());
-    // }
-    //RenderShaderFragment const& ShaderFragmentByIndex(uint32_t n) const noexcept;
+    uint32_t NumShaderFragments() const noexcept
+    {
+        return static_cast<uint32_t>(immutable_->shader_frags.size());
+    }
+    RenderShaderFragment const& ShaderFragmentByIndex(uint32_t n) const noexcept;
 
     uint32_t AddShaderDesc(ShaderDesc const & sd);
     ShaderDesc& GetShaderDesc(uint32_t id) noexcept;
@@ -570,7 +603,7 @@ public:
 
 #if ZENGINE_IS_DEV_PLATFORM
     void GenHLSLShaderText();
-    std::string const& HLSLShaderText() const noexcept
+    const std::string& HLSLShaderText() const noexcept
     {
         return immutable_->hlsl_shader;
     }
@@ -611,7 +644,7 @@ private:
         std::vector<RenderTechnique> techniques;
 
         std::vector<std::pair<std::string, std::string>> macros;
-        //std::vector<RenderShaderFragment> shader_frags;
+        std::vector<RenderShaderFragment> shader_frags;
 #if ZENGINE_IS_DEV_PLATFORM
         std::string hlsl_shader;
 #endif
