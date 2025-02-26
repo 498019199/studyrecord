@@ -18,7 +18,7 @@ public:
     void AddRenderable(Renderable* obj);
 private:
     SceneNode scene_root_;
-    std::vector<std::pair<const RenderEffect*, std::vector<Renderable*>>> render_queue_;
+    std::vector<std::pair<const RenderTechnique*, std::vector<Renderable*>>> render_queue_;
 
 public:
     DirectionalLightSource default_directional_light_;					// 默认环境光

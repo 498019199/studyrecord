@@ -133,82 +133,84 @@ void D3D11ShaderStageObject::CompileShader(const RenderEffect& effect, const Ren
                             vd.columns = static_cast<uint8_t>(type_desc.Columns);
                             vd.elements = static_cast<uint16_t>(type_desc.Elements);
                         }
-
-                        FillCBufferIndices(effect);
-
-                        int max_sampler_bind_pt = -1;
-                        int max_srv_bind_pt = -1;
-                        int max_uav_bind_pt = -1;
-                        // 描述着色器资源如何绑定到着色器输入
-                        for (uint32_t i = 0; i < desc.BoundResources; ++i)
-                        {
-                            D3D11_SHADER_INPUT_BIND_DESC si_desc;
-                            reflection->GetResourceBindingDesc(i, &si_desc);
-
-                            switch (si_desc.Type)
-                            {
-                            case D3D_SIT_SAMPLER:
-                                max_sampler_bind_pt = std::max(max_sampler_bind_pt, static_cast<int>(si_desc.BindPoint));
-                                break;
-    
-                            case D3D_SIT_TEXTURE:
-                            case D3D_SIT_STRUCTURED:
-                            case D3D_SIT_BYTEADDRESS:
-                                max_srv_bind_pt = std::max(max_srv_bind_pt, static_cast<int>(si_desc.BindPoint));
-                                break;
-    
-                            case D3D_SIT_UAV_RWTYPED:
-                            case D3D_SIT_UAV_RWSTRUCTURED:
-                            case D3D_SIT_UAV_RWBYTEADDRESS:
-                            case D3D_SIT_UAV_APPEND_STRUCTURED:
-                            case D3D_SIT_UAV_CONSUME_STRUCTURED:
-                            case D3D_SIT_UAV_RWSTRUCTURED_WITH_COUNTER:
-                                max_uav_bind_pt = std::max(max_uav_bind_pt, static_cast<int>(si_desc.BindPoint));
-                                break;
-    
-                            default:
-                                break;
-                            }
-                        }
-                        shader_desc_.num_samplers = static_cast<uint16_t>(max_sampler_bind_pt + 1);
-                        shader_desc_.num_srvs = static_cast<uint16_t>(max_srv_bind_pt + 1);
-                        shader_desc_.num_uavs = static_cast<uint16_t>(max_uav_bind_pt + 1);
-
-                        for (uint32_t i = 0; i < desc.BoundResources; ++i)
-                        {
-                            D3D11_SHADER_INPUT_BIND_DESC si_desc;
-                            reflection->GetResourceBindingDesc(i, &si_desc);
-
-                            switch (si_desc.Type)
-                            {
-                            case D3D_SIT_TEXTURE:
-                            case D3D_SIT_SAMPLER:
-                            case D3D_SIT_STRUCTURED:
-                            case D3D_SIT_BYTEADDRESS:
-                            case D3D_SIT_UAV_RWTYPED:
-                            case D3D_SIT_UAV_RWSTRUCTURED:
-                            case D3D_SIT_UAV_RWBYTEADDRESS:
-                            case D3D_SIT_UAV_APPEND_STRUCTURED:
-                            case D3D_SIT_UAV_CONSUME_STRUCTURED:
-                            case D3D_SIT_UAV_RWSTRUCTURED_WITH_COUNTER:
-                                if (effect.ParameterByName(si_desc.Name))
-                                {
-                                    auto& brd = shader_desc_.res_desc.emplace_back();
-                                    brd.name = si_desc.Name;
-                                    brd.type = static_cast<uint8_t>(si_desc.Type);
-                                    brd.bind_point = static_cast<uint16_t>(si_desc.BindPoint);
-                                }
-                                break;
-    
-                            default:
-                                break;
-                            }
-                        }
-
-                        StageSpecificReflection(reflection.get());
                     }
                 }
+                
+                FillCBufferIndices(effect);
+
+                int max_sampler_bind_pt = -1;
+                int max_srv_bind_pt = -1;
+                int max_uav_bind_pt = -1;
+                // 描述着色器资源如何绑定到着色器输入
+                for (uint32_t i = 0; i < desc.BoundResources; ++i)
+                {
+                    D3D11_SHADER_INPUT_BIND_DESC si_desc;
+                    reflection->GetResourceBindingDesc(i, &si_desc);
+
+                    switch (si_desc.Type)
+                    {
+                    case D3D_SIT_SAMPLER:
+                        max_sampler_bind_pt = std::max(max_sampler_bind_pt, static_cast<int>(si_desc.BindPoint));
+                        break;
+
+                    case D3D_SIT_TEXTURE:
+                    case D3D_SIT_STRUCTURED:
+                    case D3D_SIT_BYTEADDRESS:
+                        max_srv_bind_pt = std::max(max_srv_bind_pt, static_cast<int>(si_desc.BindPoint));
+                        break;
+
+                    case D3D_SIT_UAV_RWTYPED:
+                    case D3D_SIT_UAV_RWSTRUCTURED:
+                    case D3D_SIT_UAV_RWBYTEADDRESS:
+                    case D3D_SIT_UAV_APPEND_STRUCTURED:
+                    case D3D_SIT_UAV_CONSUME_STRUCTURED:
+                    case D3D_SIT_UAV_RWSTRUCTURED_WITH_COUNTER:
+                        max_uav_bind_pt = std::max(max_uav_bind_pt, static_cast<int>(si_desc.BindPoint));
+                        break;
+
+                    default:
+                        break;
+                    }
+                }
+                shader_desc_.num_samplers = static_cast<uint16_t>(max_sampler_bind_pt + 1);
+                shader_desc_.num_srvs = static_cast<uint16_t>(max_srv_bind_pt + 1);
+                shader_desc_.num_uavs = static_cast<uint16_t>(max_uav_bind_pt + 1);
+
+                for (uint32_t i = 0; i < desc.BoundResources; ++i)
+                {
+                    D3D11_SHADER_INPUT_BIND_DESC si_desc;
+                    reflection->GetResourceBindingDesc(i, &si_desc);
+
+                    switch (si_desc.Type)
+                    {
+                    case D3D_SIT_TEXTURE:
+                    case D3D_SIT_SAMPLER:
+                    case D3D_SIT_STRUCTURED:
+                    case D3D_SIT_BYTEADDRESS:
+                    case D3D_SIT_UAV_RWTYPED:
+                    case D3D_SIT_UAV_RWSTRUCTURED:
+                    case D3D_SIT_UAV_RWBYTEADDRESS:
+                    case D3D_SIT_UAV_APPEND_STRUCTURED:
+                    case D3D_SIT_UAV_CONSUME_STRUCTURED:
+                    case D3D_SIT_UAV_RWSTRUCTURED_WITH_COUNTER:
+                        if (effect.ParameterByName(si_desc.Name))
+                        {
+                            auto& brd = shader_desc_.res_desc.emplace_back();
+                            brd.name = si_desc.Name;
+                            brd.type = static_cast<uint8_t>(si_desc.Type);
+                            brd.bind_point = static_cast<uint16_t>(si_desc.BindPoint);
+                        }
+                        break;
+
+                    default:
+                        break;
+                    }
+                }
+
+                StageSpecificReflection(reflection.get());
             }
+                
+            
         }
     }
 
@@ -304,27 +306,28 @@ void D3D11VertexShaderStageObject::StageSpecificReflection(ID3D11ShaderReflectio
     reflection->GetDesc(&desc);
 
     vs_signature_ = 0;
-    D3D11_SIGNATURE_PARAMETER_DESC signature;
     for (uint32_t i = 0; i < desc.InputParameters; ++i)
     {
-        //reflection->GetInputParameterDesc(i, &signature);
+        D3D11_SIGNATURE_PARAMETER_DESC signature;
+        reflection->GetInputParameterDesc(i, &signature);
 
-        //size_t seed = RtHash(signature.SemanticName);
-        //HashCombine(seed, signature.SemanticIndex);
-        //HashCombine(seed, signature.Register);
-        //HashCombine(seed, static_cast<uint32_t>(signature.SystemValueType));
-        //HashCombine(seed, static_cast<uint32_t>(signature.ComponentType));
-        //HashCombine(seed, signature.Mask);
-        //HashCombine(seed, signature.ReadWriteMask);
-        //HashCombine(seed, signature.Stream);
-        //HashCombine(seed, signature.MinPrecision);
+        size_t seed = RtHash(signature.SemanticName);
+        HashCombine(seed, signature.SemanticIndex);
+        HashCombine(seed, signature.Register);
+        HashCombine(seed, static_cast<uint32_t>(signature.SystemValueType));
+        HashCombine(seed, static_cast<uint32_t>(signature.ComponentType));
+        HashCombine(seed, signature.Mask);
+        HashCombine(seed, signature.ReadWriteMask);
+        HashCombine(seed, signature.Stream);
+        HashCombine(seed, signature.MinPrecision);
 
         size_t sig = vs_signature_;
-        //HashCombine(sig, seed);
+        HashCombine(sig, seed);
         vs_signature_ = static_cast<uint32_t>(sig);
     }
 }
 #endif
+
 D3D11PixelShaderStageObject::D3D11PixelShaderStageObject()
     : D3D11ShaderStageObject(ShaderStage::Pixel)
 {
@@ -446,7 +449,7 @@ void D3D11ShaderObject::DoLinkShaders(RenderEffect& effect)
             continue;
         }
 
-        auto const& shader_desc = shader_stage->GetD3D11ShaderDesc();
+        const auto& shader_desc = shader_stage->GetD3D11ShaderDesc();
         d3d_immutable_->samplers_[stage].resize(shader_desc.num_samplers);
         srvsrcs_[stage].resize(shader_desc.num_srvs, std::make_tuple(static_cast<void*>(nullptr), 0, 0));
         srvs_[stage].resize(shader_desc.num_srvs);

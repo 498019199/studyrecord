@@ -46,7 +46,7 @@ void Renderable::Render()
     const auto& layout = GetRenderLayout(lod);
     const auto& tech = *GetRenderTechnique();
     auto& d3d11_re = checked_cast<D3D11RenderEngine&>(Context::Instance().RenderEngineInstance());
-        d3d11_re.DoRender(effect, tech, layout);
+    d3d11_re.DoRender(effect, tech, layout);
 }
 
 }

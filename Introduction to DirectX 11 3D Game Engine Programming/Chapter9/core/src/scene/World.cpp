@@ -24,10 +24,11 @@ void World::AddRenderable(Renderable* obj)
     const RenderEffect* obj_eff = obj->GetRenderEffect();
     COMMON_ASSERT(obj_eff);
 
+    const RenderTechnique* obj_tech = obj->GetRenderTechnique();
     bool found = false;
     for (auto& items : render_queue_)
     {
-        if (items.first == obj_eff)
+        if (items.first == obj_tech)
         {
             items.second.push_back(obj);
             found = true;
@@ -36,7 +37,7 @@ void World::AddRenderable(Renderable* obj)
     }
     if (!found)
     {
-        render_queue_.emplace_back(obj_eff, std::vector<Renderable*>(1, obj));
+        render_queue_.emplace_back(obj_tech, std::vector<Renderable*>(1, obj));
     }
 }
 
