@@ -215,12 +215,18 @@ namespace MathWorker
 	template<typename T>
 	Matrix4_T<T> PerspectiveFovRH(T Fov, T Aspect, T Near, T Far);
 
+	// 矩阵分解
+	template<typename T>
+	void Decompose(Vector_T<T, 3>& scale, Quaternion_T<T>& rot, Vector_T<T, 3>& trans, const Matrix4_T<T>& m);
+	
 	//相互转换
 	float4x4 ToMatrix(const quater& quat);
 	float4x4 ToMatrix(const rotator& rot);
 
-	quater ToQuaternion(const float4x4& mat);
-	quater ToQuaternion(const rotator& rot);
+	template<typename T>
+	Quaternion_T<T> ToQuaternion(const Matrix4_T<T>& mat);
+	template<typename T>
+	Quaternion_T<T> ToQuaternion(const Rotator_T<float>& rot);
 
 	//rotator ToRotator(const float4x4& mat);
 	rotator ToRotator(const quater& quat);

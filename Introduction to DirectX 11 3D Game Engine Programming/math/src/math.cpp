@@ -597,6 +597,39 @@ namespace MathWorker
             0,		0,		-(2 * Far * Near) / q,      0); 
     }
 
+    template void Decompose(float3& scale, quater& rot, float3& trans, const float4x4& m);
+    template<typename T>
+    void Decompose(Vector_T<T, 3>& scale, Quaternion_T<T>& rot, Vector_T<T, 3>& trans, const Matrix4_T<T>& m)
+    {
+        // S=> M去掉T得m3x3矩阵，（RS）^T*RT=M3^T*M3=S*S
+        scale.x() = sqrt(rhs(0, 0) * rhs(0, 0) + rhs(0, 1) * rhs(0, 1) + rhs(0, 2) * rhs(0, 2));
+        scale.y() = sqrt(rhs(1, 0) * rhs(1, 0) + rhs(1, 1) * rhs(1, 1) + rhs(1, 2) * rhs(1, 2));
+        scale.z() = sqrt(rhs(2, 0) * rhs(2, 0) + rhs(2, 1) * rhs(2, 1) + rhs(2, 2) * rhs(2, 2));
+
+        // T
+        trans = Vector_T<T, 3>(m(3, 0), m(3, 1), m(3, 2));
+
+        // R=RS*1/S
+        Matrix4_T<T> rot_mat;
+        rot_mat(0, 0) = rhs(0, 0) / scale.x();
+        rot_mat(0, 1) = rhs(0, 1) / scale.x();
+        rot_mat(0, 2) = rhs(0, 2) / scale.x();
+        rot_mat(0, 3) = 0;
+        rot_mat(1, 0) = rhs(1, 0) / scale.y();
+        rot_mat(1, 1) = rhs(1, 1) / scale.y();
+        rot_mat(1, 2) = rhs(1, 2) / scale.y();
+        rot_mat(1, 3) = 0;
+        rot_mat(2, 0) = rhs(2, 0) / scale.z();
+        rot_mat(2, 1) = rhs(2, 1) / scale.z();
+        rot_mat(2, 2) = rhs(2, 2) / scale.z();
+        rot_mat(2, 3) = 0;
+        rot_mat(3, 0) = 0;
+        rot_mat(3, 1) = 0;
+        rot_mat(3, 2) = 0;
+        rot_mat(3, 3) = 1;
+        rot = ToQuaternion(rot_mat);
+    }
+
     template quater Mul(const quater& lhs, const quater& rhs) noexcept;
     template<typename T>
 	Quaternion_T<T> Mul(const Quaternion_T<T>& lhs, const Quaternion_T<T>& rhs) noexcept
@@ -649,7 +682,9 @@ namespace MathWorker
         return rot_x * rot_y * rot_z;
     }
 
-    quater ToQuaternion(const float4x4 &mat)
+    template quater ToQuaternion(const float4x4 &mat);
+    template<typename T>
+	Quaternion_T<T> ToQuaternion(const Matrix4_T<T>& mat)
     {
         quater quat;
         float s;
@@ -730,7 +765,9 @@ namespace MathWorker
         return Normalize(quat);
     }
 
-    quater ToQuaternion(const rotator &rot)
+    template quater ToQuaternion(const rotator &rot);
+    template<typename T>
+	Quaternion_T<T> ToQuaternion(const Rotator_T<float>& rot)
     {
         const float angX(rot.pitch() / 2), angY(rot.yaw() / 2), angZ(rot.roll() / 2);
         float sx, sy, sz;
