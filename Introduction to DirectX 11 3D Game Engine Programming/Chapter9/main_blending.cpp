@@ -35,7 +35,7 @@ struct PSConstantBuffer
 struct VertexPosNormalTex
 {
     float3 pos;
-    float3 normal;
+    //float3 normal;
     float2 tex;
 };
 class RenderablePlaneTex : public Renderable
@@ -52,23 +52,23 @@ public:
         std::vector<uint16_t> indice_vec;
 
         vertex[0].pos = float3(-width / 2, 0.0f, -depth / 2);
-        vertex[0].normal = float3(0.0f, 1.0f, 0.0f);
+        //vertex[0].normal = float3(0.0f, 1.0f, 0.0f);
         vertex[0].tex = float2(0.0f, texV);
 
         vertex[1].pos = float3(-width / 2, 0.0f, depth / 2);
-        vertex[1].normal = float3(0.0f, 1.0f, 0.0f);
+        //vertex[1].normal = float3(0.0f, 1.0f, 0.0f);
         vertex[1].tex = float2(0.0f, 0.0f);
 
         vertex[2].pos = float3(width / 2, 0.0f, depth / 2);
-        vertex[2].normal = float3(0.0f, 1.0f, 0.0f);
+        //vertex[2].normal = float3(0.0f, 1.0f, 0.0f);
         vertex[2].tex = float2(texU, 0.0f);
 
         vertex[3].pos = float3(width / 2, 0.0f, -depth / 2);
-        vertex[3].normal = float3(0.0f, 1.0f, 0.0f);
+        //vertex[3].normal = float3(0.0f, 1.0f, 0.0f);
         vertex[3].tex = float2(texU, texV);
 
         merged_ves.emplace_back(VertexElement(VEU_Position, 0, EF_BGR32F));
-        merged_ves.emplace_back(VertexElement(VEU_Normal, 0, EF_BGR32F));
+        //merged_ves.emplace_back(VertexElement(VEU_Normal, 0, EF_BGR32F));
         merged_ves.emplace_back(VertexElement(VEU_TextureCoord, 0, EF_ABGR32F));
 
         auto vb = rf.MakeVertexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable, static_cast<uint32_t>(4 * sizeof(vertex[0])), &vertex[0]);
@@ -79,13 +79,9 @@ public:
             static_cast<uint32_t>(indice_vec.size() * sizeof(indice_vec[0])), &indice_vec[0]);
         rls_[0]->BindIndexStream(ib, EF_R16UI);
 
-        auto floor = RenderablePlane(20.0f, 20.0f, 5.0f, 5.0f, Color(1.0f, 1.0f, 1.0f, 1.0f));
-
-        auto currentPath = std::filesystem::current_path().parent_path().parent_path().string();
         effect_ = SyncLoadRenderEffect("box2D.xml");
         technique_ = effect_->TechniqueByName("Basic_2D");
 
-        auto currentPath2 = std::filesystem::current_path().parent_path().parent_path().string();
         auto src1_tex_param = effect_->ParameterByName("src1_tex");
         *src1_tex_param = SyncLoadTexture(DDS, EAH_GPU_Read | EAH_Immutable);
     }
@@ -464,8 +460,8 @@ void Test_chapter7()
 void CreateScene()
 {
     // 初始化地板
-    auto floor = new RenderablePlaneTex(20.0f, 20.0f, 5.0f, 5.0f, "floor.dds");
-    Context::Instance().WorldInstance().AddRenderable(floor);
+    //auto floor = new RenderablePlaneTex(20.0f, 20.0f, 5.0f, 5.0f, "floor.dds");
+    //Context::Instance().WorldInstance().AddRenderable(floor);
 
     // // 初始化墙体
     // for (int i = 0; i < 4; ++i)
@@ -474,9 +470,9 @@ void CreateScene()
     //     Context::Instance().WorldInstance().AddRenderable(wal);
     // }
 
-    // // 初始化篱笆盒
-    // auto box = new RenderableBoxTex(2.0f, 2.0f, 2.0f, Color(1.f, 1.f, 1.f, 1.f));
-    // Context::Instance().WorldInstance().AddRenderable(box);
+    // 初始化篱笆盒
+    auto box = new RenderableBoxTex(2.0f, 2.0f, 2.0f, Color(1.f, 1.f, 1.f, 1.f));
+    Context::Instance().WorldInstance().AddRenderable(box);
 }
 
 int main() {

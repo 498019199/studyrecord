@@ -27,12 +27,12 @@
             <state name="cull_mode" value="back"/>
 
             <state name="blend_enable" value="true"/>
-			<state name="blend_op" value="add"/>
-			<state name="src_blend" value="one"/>
-			<state name="dest_blend" value="one"/>
+            <state name="src_blend" value="src_alpha"/>
+            <state name="dest_blend" value="inv_src_alpha"/>
+            <state name="blend_op" value="add"/>
 			<state name="blend_op_alpha" value="add"/>
 			<state name="src_blend_alpha" value="one"/>
-			<state name="dest_blend_alpha" value="one"/>
+			<state name="dest_blend_alpha" value="zero"/>
 
             <state name="vertex_shader" value="VS()"/>
 			<state name="pixel_shader" value="PS()"/>
@@ -102,6 +102,7 @@ float4 PS(VertexOut pIn) : SV_Target
     float4 texColor = src1_tex.Sample(point_sampler, pIn.tex);
     float4 litColor = texColor * (ambient + diffuse) + spec;
     litColor.a = texColor.a * gMaterial.Diffuse.a;
+    clip(texColor.a - 0.1f);
     return litColor;
 }
             		]]>

@@ -2,7 +2,7 @@
 <effect>
     <parameter type="texture2D" name="src1_tex"/>
 	<parameter type="sampler" name="point_sampler">
-		<state name="filtering" value="min_mag_mip_point"/>
+		<state name="filtering" value="min_mag_mip_linear"/>
 		<state name="address_u" value="clamp"/>
 		<state name="address_v" value="clamp"/>
 	</parameter>

@@ -190,19 +190,19 @@ struct BlendStateDesc
     Color blend_factor;
     uint32_t sample_mask;
 
-    bool				alpha_to_coverage_enable;
-    bool				independent_blend_enable;
+    bool				alpha_to_coverage_enable;       // 默认关闭，这里
+    bool				independent_blend_enable;       // 是否每个渲染目标都有独立的混合混合描述，关闭的话都使用索引为0的描述信息
 
-    std::array<bool, 8>				blend_enable;
+    std::array<bool, 8>				blend_enable;       // 是否开启混合
     std::array<bool, 8>				logic_op_enable;
-    std::array<BlendOperation, 8>	blend_op;
-    std::array<AlphaBlendFactor, 8>	src_blend;
-    std::array<AlphaBlendFactor, 8>	dest_blend;
-    std::array<BlendOperation, 8>	blend_op_alpha;
-    std::array<AlphaBlendFactor, 8>	src_blend_alpha;
-    std::array<AlphaBlendFactor, 8>	dest_blend_alpha;
-    std::array<LogicOperation, 8>	logic_op;
-    std::array<uint8_t, 8>			color_write_mask;
+    std::array<BlendOperation, 8>	blend_op;           // 颜色混合运算符
+    std::array<AlphaBlendFactor, 8>	src_blend;          // 源颜色混合因子
+    std::array<AlphaBlendFactor, 8>	dest_blend;         // 目标颜色混合因子
+    std::array<BlendOperation, 8>	blend_op_alpha;     // Alpha混合运算符
+    std::array<AlphaBlendFactor, 8>	src_blend_alpha;    // 源Alpha混合因子
+    std::array<AlphaBlendFactor, 8>	dest_blend_alpha;   // 目标Alpha混合因子
+    std::array<LogicOperation, 8>	logic_op;           
+    std::array<uint8_t, 8>			color_write_mask;   // D3D11_COLOR_WRITE_ENABLE枚举类型来指定可以写入的颜色
 
     BlendStateDesc();
     friend bool operator<(BlendStateDesc const & lhs, BlendStateDesc const & rhs);
