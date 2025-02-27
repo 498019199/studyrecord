@@ -40,7 +40,7 @@ void Camera::ProjParams(float fov, float aspect, float near_plane, float far_pla
     far_plane_	= far_plane;
 
     proj_mat_ = MathWorker::PerspectiveFovLH(fov, aspect, near_plane, far_plane);
-    inv_proj_mat_ = MathWorker::MatrixInverse(proj_mat_);
+    inv_proj_mat_ = MathWorker::Inverse(proj_mat_);
 }
 
 void Camera::ProjOrthoParams(float w, float h, float near_plane, float far_plane)
@@ -51,7 +51,7 @@ void Camera::ProjOrthoParams(float w, float h, float near_plane, float far_plane
     far_plane_	= far_plane;
 
     proj_mat_ = MathWorker::OrthoLH(w, h, near_plane, far_plane);
-    inv_proj_mat_ = MathWorker::MatrixInverse(proj_mat_);
+    inv_proj_mat_ = MathWorker::Inverse(proj_mat_);
 }
 
 }

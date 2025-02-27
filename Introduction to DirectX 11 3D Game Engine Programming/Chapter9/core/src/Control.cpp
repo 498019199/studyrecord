@@ -33,6 +33,16 @@ FirstPersonController::FirstPersonController()
 
 FirstPersonController::~FirstPersonController() noexcept  = default;
 
+void FirstPersonController::AttachCamera(const CameraPtr& camera)
+{
+    Controller::AttachCamera(camera);
+}
+
+void FirstPersonController::DetachCamera()
+{
+    Controller::DetachCamera();
+}
+
 void FirstPersonController::Move(float x, float y, float z)
 {
     if (camera_)

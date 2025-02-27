@@ -15,18 +15,28 @@ public:
     SceneNode* Parent() const;
 	std::vector<SceneNodePtr> const & Children() const;
 
-    //const float4x4& TransformToWorld() const;
-    //rotator GetRotation() const;
-    //float3 GetPosition() const;
-    
-    void SetPosition(const float3& pos);
-    void SetRotation(const rotator& rot);
-
     virtual void Update(float dt);
+
+    void TransformToParent(const float4x4& mat);
+    void TransformToWorld(const float4x4& mat);
+
+    const float4x4& TransformToParent() const;
+    const float4x4& InverseTransformToParent() const;
+    const float4x4& TransformToWorld() const;
+    const float4x4& InverseTransformToWorld() const;
 private:
     SceneNode* parent_ = nullptr;
 	std::vector<SceneNodePtr> children_;
 
-    float4x4 xform_to_parent_; // xform 父节点转换矩阵
+    float4x4 xform_to_parent_ {float4x4::Identity()}; 
+    float4x4 inv_xform_to_parent_ {float4x4::Identity()};
+    mutable float4x4 xform_to_world_ {float4x4::Identity()}; 
+    mutable float4x4 inv_xform_to_world_ {float4x4::Identity()}; 
 };
+
+
+
+
+
+
 }

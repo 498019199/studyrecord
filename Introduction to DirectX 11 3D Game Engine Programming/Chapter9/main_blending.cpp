@@ -296,7 +296,7 @@ public:
         phi += 0.3f * dt, theta += 0.37f * dt;
     
         auto world = MathWorker::Transpose(MathWorker::MatrixRotateX(phi) * MathWorker::MatrixRotateY(theta));
-        auto worldInvTranspose = MathWorker::Transpose(MathWorker::MatrixInverse(world));
+        auto worldInvTranspose = MathWorker::Transpose(MathWorker::Inverse(world));
         WorldMat(*effect_constant_buffer_vs_)= world;
 
         effect_constant_buffer_vs_->Dirty(true);
@@ -447,7 +447,7 @@ public:
         phi += 0.3f * dt, theta += 0.37f * dt;
     
         auto world = MathWorker::Transpose(MathWorker::MatrixRotateX(phi) * MathWorker::MatrixRotateY(theta));
-        auto worldInvTranspose = MathWorker::Transpose(MathWorker::MatrixInverse(world));
+        auto worldInvTranspose = MathWorker::Transpose(MathWorker::Inverse(world));
         WorldMat(*effect_constant_buffer_)= world;
 
         effect_constant_buffer_->Dirty(true);

@@ -375,9 +375,9 @@ namespace MathWorker
     }
 
     // 矩阵的逆
-    template float4x4 MatrixInverse(const float4x4& mat);
+    template float4x4 Inverse(const float4x4& mat);
     template<typename T>
-    Matrix4_T<T> MatrixInverse(const Matrix4_T<T>& mat)
+    Matrix4_T<T> Inverse(const Matrix4_T<T>& mat)
     {
         const float _2132_2231(mat(1, 0) * mat(2, 1) - mat(1, 1) * mat(2, 0));
         const float _2133_2331(mat(1, 0) * mat(2, 2) - mat(1, 2) * mat(2, 0));

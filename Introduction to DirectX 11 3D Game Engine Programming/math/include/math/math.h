@@ -175,7 +175,7 @@ namespace MathWorker
 
 	//矩阵的逆
 	template<typename T>
-	Matrix4_T<T> MatrixInverse(const Matrix4_T<T>& m);
+	Matrix4_T<T> Inverse(const Matrix4_T<T>& m);
 
     template <typename T>
     Matrix4_T<T> LHToRH(Matrix4_T<T> const & rhs) noexcept;
