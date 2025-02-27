@@ -207,10 +207,12 @@ void WinAPP::ImguiUpdate(float dt)
 	static bool animateCube = true, customColor = false;
     static float phi = 0.0f, theta = 0.0f, phi2 = 0.0f;
     phi += 0.3f * dt, theta += 0.37f * dt, phi2 -= 0.01f;
+	float const scaler = dt * 10;
 
+	auto& wd = Context::Instance().WorldInstance();
 	// 获取IO事件
     ImGuiIO& io = ImGui::GetIO();
-
+	
 	if (ImGui::Begin("Texture Box"))
 	{
     	ImGui::SameLine(0.0f, 25.0f);                       // 下一个控件在同一行往右25像素单位
@@ -234,17 +236,29 @@ void WinAPP::ImguiUpdate(float dt)
 			// 鼠标右键拖动旋转
         	else if (ImGui::IsMouseDragging(ImGuiMouseButton_Right))
 			{
-
+				wd.controller_->RotateRel(io.MouseDelta.x * scaler, io.MouseDelta.y * scaler, 0);
 			}
 			// 鼠标滚轮缩放
         	else if (io.MouseWheel != 0.0f)
 			{
-
+				
 			}
-			// 是否刚按下W键
+			// 位移
 			else if(ImGui::IsKeyPressed(ImGuiKey_W))
 			{
-
+				wd.controller_->Move(0, 0, scaler);
+			}
+			else if(ImGui::IsKeyPressed(ImGuiKey_S))
+			{
+				wd.controller_->Move(0, 0, -scaler);
+			}
+			else if(ImGui::IsKeyPressed(ImGuiKey_A))
+			{
+				wd.controller_->Move(-scaler, 0, 0);
+			}
+			else if(ImGui::IsKeyPressed(ImGuiKey_D))
+			{
+				wd.controller_->Move(scaler, 0, 0);
 			}
 		}
 	}

@@ -1,5 +1,7 @@
 #pragma once
 #include <core/SceneNode.h>
+#include <core/Control.h>
+
 #include <render/Renderable.h>
 #include <render/Light.h>
 #include <render/RenderEffect.h>
@@ -11,6 +13,7 @@ class World
 {
 public:
     World();
+    ~World();
     
     void BeginWorld();
     void UpdateScene(float dt);
@@ -21,9 +24,10 @@ private:
     std::vector<std::pair<const RenderTechnique*, std::vector<Renderable*>>> render_queue_;
 
 public:
-    DirectionalLightSource default_directional_light_;					// 默认环境光
-    PointLightSource default_point_light_;						// 默认点光
-    SpotLightSource default_spot_light_;						    // 默认汇聚光
+    ControllerPtr controller_;
+    CameraPtr camera_;
 };
+
+
 using WorldPtr = std::shared_ptr<World>;
 }

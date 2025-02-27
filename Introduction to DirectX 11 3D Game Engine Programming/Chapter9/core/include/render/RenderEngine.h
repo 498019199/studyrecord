@@ -13,6 +13,7 @@ public:
 
     void SetStateObject(RenderStateObjectPtr const & rs_obj);
 
+    virtual void BeginRender() const = 0;
     virtual void EndRender() const = 0;
 
     // For debug only, 设置为绘制线框

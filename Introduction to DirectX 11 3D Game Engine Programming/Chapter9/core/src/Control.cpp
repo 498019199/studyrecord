@@ -2,22 +2,36 @@
 
 namespace RenderWorker
 {
-FirstPersonController::FirstPersonController()
-    : rotationScaler_(0.05f), moveScaler_(1), camera_(nullptr)
+Controller::Controller()
+    :rotationScaler_(0.05f), moveScaler_(1), camera_(nullptr)
 {
+    
 }
 
-FirstPersonController::~FirstPersonController() noexcept  = default;
+void Controller::Scalers(float rotationScaler, float moveScaler)
+{
+    rotationScaler_ = rotationScaler;
+    moveScaler_ = moveScaler;
+}
 
-void FirstPersonController::AttachCamera(const CameraPtr&  camera)
+void Controller::AttachCamera(const CameraPtr&  camera)
 {
     camera_ = camera;
 }
 
-void FirstPersonController::DetachCamera()
+void Controller::DetachCamera()
 {
     camera_ = nullptr;
 }
+
+    
+
+
+FirstPersonController::FirstPersonController()
+{
+}
+
+FirstPersonController::~FirstPersonController() noexcept  = default;
 
 void FirstPersonController::Move(float x, float y, float z)
 {

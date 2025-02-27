@@ -10,15 +10,6 @@
     <technique name="Basic_2D">
         <pass name="p0">
             <state name="cull_mode" value="back"/>
-
-            <state name="blend_enable" value="true"/>
-			<state name="blend_op" value="add"/>
-			<state name="src_blend" value="one"/>
-			<state name="dest_blend" value="one"/>
-			<state name="blend_op_alpha" value="add"/>
-			<state name="src_blend_alpha" value="one"/>
-			<state name="dest_blend_alpha" value="one"/>
-
             <state name="vertex_shader" value="VS()"/>
 			<state name="pixel_shader" value="PS()"/>
         </pass>
@@ -50,9 +41,7 @@ VertexPosHTex VS(VertexPosTex vIn)
 // 像素着色器(2D)
 float4 PS(VertexPosHTex pIn) : SV_Target
 {
-    float4 color = src1_tex.Sample(point_sampler, pIn.tex);
-    clip(color.a - 0.1f);
-    return color;
+    return src1_tex.Sample(point_sampler, pIn.tex);
 }
 					            		]]>
 	</shader>

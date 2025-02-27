@@ -14,8 +14,22 @@ World::World()
 {
 }
 
+World::~World()
+{
+    if(controller_)
+    {
+        controller_->DetachCamera();
+    }
+}
+
 void World::BeginWorld()
 {
+    camera_ = MakeSharedPtr<Camera>();
+    controller_ = MakeSharedPtr<FirstPersonController>();
+    if(controller_)
+    {
+        controller_->AttachCamera(camera_);
+    }
 }
 
 void World::AddRenderable(Renderable* obj)
@@ -44,6 +58,7 @@ void World::AddRenderable(Renderable* obj)
 void World::UpdateScene(float dt)
 {
     auto& re = Context::Instance().RenderEngineInstance();
+    re.BeginRender();
     for (auto& items : render_queue_)
     {
         for (auto const & item : items.second)

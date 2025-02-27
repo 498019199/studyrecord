@@ -20,6 +20,7 @@ public:
     ID3D11DeviceContext* D3DDeviceImmContext() const;
 
     void DoRender(const RenderEffect& effect, const RenderTechnique& tech, const RenderLayout& rl);
+    void BeginRender() const override;
     void EndRender() const override;
     void SwitchChain() const; 
 

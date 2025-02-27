@@ -291,7 +291,15 @@ public:
 
     void Update(float dt) override
     {
-        
+        static bool animateCube = true, customColor = false;
+        static float phi = 0.0f, theta = 0.0f;
+        phi += 0.3f * dt, theta += 0.37f * dt;
+    
+        auto world = MathWorker::Transpose(MathWorker::MatrixRotateX(phi) * MathWorker::MatrixRotateY(theta));
+        auto worldInvTranspose = MathWorker::Transpose(MathWorker::MatrixInverse(world));
+        WorldMat(*effect_constant_buffer_vs_)= world;
+
+        effect_constant_buffer_vs_->Dirty(true);
     }
 private:
     uint32_t directional_light_offset_;
@@ -460,15 +468,15 @@ void Test_chapter7()
 void CreateScene()
 {
     // 初始化地板
-    //auto floor = new RenderablePlaneTex(20.0f, 20.0f, 5.0f, 5.0f, "floor.dds");
-    //Context::Instance().WorldInstance().AddRenderable(floor);
+    auto floor = new RenderablePlaneTex(20.0f, 20.0f, 5.0f, 5.0f, "floor.dds");
+    Context::Instance().WorldInstance().AddRenderable(floor);
 
-    // // 初始化墙体
-    // for (int i = 0; i < 4; ++i)
-    // {
-    //     auto wal = new RenderablePlaneTex(20.0f, 8.0f, 5.0f, 1.5f, "brick.dds");
-    //     Context::Instance().WorldInstance().AddRenderable(wal);
-    // }
+    // 初始化墙体
+    for (int i = 0; i < 4; ++i)
+    {
+        auto wal = new RenderablePlaneTex(20.0f, 8.0f, 5.0f, 1.5f, "brick.dds");
+        Context::Instance().WorldInstance().AddRenderable(wal);
+    }
 
     // 初始化篱笆盒
     auto box = new RenderableBoxTex(2.0f, 2.0f, 2.0f, Color(1.f, 1.f, 1.f, 1.f));

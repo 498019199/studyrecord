@@ -5,7 +5,12 @@
 
 namespace RenderWorker
 {
-
+#ifdef KLAYGE_SHIP
+    #define KLAYGE_TEXTURE_DEBUG_NAME(texture)
+#else
+    #define KLAYGE_TEXTURE_DEBUG_NAME(texture) texture->DebugName(L ## #texture)
+#endif
+    
 enum TextureMapAccess
 {
     TMA_Read_Only,
@@ -38,6 +43,11 @@ public:
     Texture(TextureType type, uint32_t sample_count, uint32_t sample_quality, uint32_t access_hint);
     virtual ~Texture() noexcept;
 
+#ifndef KLAYGE_SHIP
+    virtual void DebugName([[maybe_unused]] std::wstring_view name)
+    {
+    }
+#endif
     // Returns the texture type of the texture.
 	TextureType Type() const;
 

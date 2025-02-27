@@ -22,6 +22,13 @@ D3D11Texture::D3D11Texture(TextureType type, uint32_t sample_count, uint32_t sam
     d3d_imm_ctx_ = d3d11_re.D3DDeviceImmContext();
 }
 
+#ifndef KLAYGE_SHIP
+void D3D11Texture::DebugName(std::wstring_view name)
+{
+    d3d_texture_->SetPrivateData(WKPDID_D3DDebugObjectName, static_cast<uint32_t>(name.size() * sizeof(wchar_t)), name.data());
+}
+#endif 
+
 ID3D11Resource* D3D11Texture::D3DResource() const noexcept
 {
     return d3d_texture_.get();

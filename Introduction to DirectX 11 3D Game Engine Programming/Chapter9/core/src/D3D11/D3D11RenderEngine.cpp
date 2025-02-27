@@ -223,7 +223,7 @@ void D3D11RenderEngine::OnResize()
 	d3d_imm_ctx_->RSSetViewports(1, &screen_viewport_);
 }
 
-void D3D11RenderEngine::EndRender() const
+void D3D11RenderEngine::BeginRender() const 
 {
 	assert(d3d_imm_ctx_);
 	assert(swap_chain_);
@@ -231,8 +231,11 @@ void D3D11RenderEngine::EndRender() const
 	Color blackColor(0.0, 0.0, 0.0f, 1.0f);
 	d3d_imm_ctx_->ClearRenderTargetView(render_target_view_.get(), &blackColor.r());
 	d3d_imm_ctx_->ClearDepthStencilView(depth_stencil_view_.get(), D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.0f, 0);
+}
 
-	d3d_imm_ctx_->DrawIndexed(num_vertices_just_rendered_, 0, 0);
+void D3D11RenderEngine::EndRender() const
+{
+
 }
 
 void D3D11RenderEngine::SwitchChain() const
@@ -372,6 +375,8 @@ void D3D11RenderEngine::DoRender(const RenderEffect& effect, const RenderTechniq
 	{
 		auto& pass = tech.Pass(i);
 		pass.Bind(effect);
+		d3d_imm_ctx_->DrawIndexed(num_vertices_just_rendered_, 0, 0);
+		pass.Unbind(effect);
 	}
 }
 

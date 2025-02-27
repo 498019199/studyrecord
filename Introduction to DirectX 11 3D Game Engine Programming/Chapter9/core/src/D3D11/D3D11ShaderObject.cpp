@@ -84,8 +84,11 @@ void D3D11ShaderStageObject::CompileShader(const RenderEffect& effect, const Ren
     {
         std::vector<std::pair<char const*, char const*>> macros;
         uint32_t flags = D3DCOMPILE_ENABLE_STRICTNESS;
+        
     #if !defined(_DEBUG)
         flags |= D3DCOMPILE_OPTIMIZATION_LEVEL3;
+    #else
+        flags |= D3DCOMPILE_DEBUG;
     #endif
     
         com_ptr<ID3D11ShaderReflection> reflection;

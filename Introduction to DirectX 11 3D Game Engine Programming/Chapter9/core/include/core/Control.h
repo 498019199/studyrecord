@@ -2,24 +2,39 @@
 
 namespace RenderWorker
 {
-class FirstPersonController
+class Controller
 {
 public:
-    FirstPersonController();
-    ~FirstPersonController() noexcept;
+    Controller();
+
+    void Scalers(float rotationScaler, float moveScaler);
     
     void AttachCamera(const CameraPtr& camera);
     void DetachCamera();
 
-    void Move(float x, float y, float z);
-    void RotateRel(float yaw, float pitch, float roll);
-    void RotateAbs(const quater& quat);
-private:
-    CameraPtr   camera_;
-
+    virtual void Move(float x, float y, float z) = 0;
+    virtual void RotateRel(float yaw, float pitch, float roll) = 0;
+    virtual void RotateAbs(const quater& quat) = 0;
+protected:
     float		rotationScaler_;	// Scaler for rotation
     float		moveScaler_;		// Scaler for movement
+    CameraPtr   camera_;
+};
 
+
+
+using ControllerPtr = std::shared_ptr<Controller>;
+
+class FirstPersonController: public Controller
+{
+public:
+    FirstPersonController();
+    ~FirstPersonController() noexcept;
+
+    virtual void Move(float x, float y, float z) override;
+    virtual void RotateRel(float yaw, float pitch, float roll) override;
+    virtual void RotateAbs(const quater& quat) override;
+private:
     float2		rot_x_;
     float2		rot_y_;
     float2		rot_z_;

@@ -12,6 +12,9 @@ class D3D11Texture: public Texture
 public:
     D3D11Texture(TextureType type, uint32_t sample_count, uint32_t sample_quality, uint32_t access_hint);
 
+#ifndef KLAYGE_SHIP
+	void DebugName(std::wstring_view name) override;
+#endif
     ID3D11Resource* D3DResource() const noexcept;
     void DeleteHWResource() override;
     bool HWResourceReady() const override;

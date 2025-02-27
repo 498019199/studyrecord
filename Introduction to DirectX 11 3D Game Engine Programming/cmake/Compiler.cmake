@@ -5,6 +5,7 @@ if(MSVC)
     if(CMAKE_GENERATOR MATCHES "^Visual Studio")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
     endif()
+    # 编译器设置 UTF-8 编码
     add_compile_options("$<$<C_COMPILER_ID:MSVC>:/utf-8>")
     add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
     
@@ -14,8 +15,8 @@ if(MSVC)
         set(ZENGINE_COMPILER_CLANGCL TRUE)
     else()
         message("MSVC compiler")
-        SET(ZENGINE_COMPILER_NAME "vc")
-        SET(ZENGINE_COMPILER_MSVC TRUE)
+        set(ZENGINE_COMPILER_NAME "vc")
+        set(ZENGINE_COMPILER_MSVC TRUE)
 
         if(MSVC_VERSION GREATER_EQUAL 1930)
             set(ZENGINE_COMPILER_VERSION "143")
@@ -38,6 +39,7 @@ if(MSVC)
             set(CMAKE_CXX_STANDARD 17)
             set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++17")
         endif()
+
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Zc:throwingNew /permissive- /Zc:externConstexpr /Zc:__cplusplus")
         if((MSVC_VERSION GREATER_EQUAL 1925) AND WIN11_SDK)
             set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Zc:preprocessor")
@@ -76,31 +78,34 @@ if(MSVC)
 
         # 临时处理
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4100") # 屏蔽不引用
-		SET(CMAKE_C_FLAGS ${CMAKE_CXX_FLAGS})
+		set(CMAKE_C_FLAGS ${CMAKE_CXX_FLAGS})
     endif()
 
-    IF(ZENGINE_ARCH_NAME MATCHES "x86")
-        FOREACH(flag_var
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /DKLAYGE_SHIP")
+    if(ZENGINE_ARCH_NAME MATCHES "x86")
+        foreach(flag_var
             CMAKE_CXX_FLAGS_RELEASE CMAKE_CXX_FLAGS_RELWITHDEBINFO CMAKE_CXX_FLAGS_MINSIZEREL)
-            SET(${flag_var} "${${flag_var}} /arch:SSE")
-        ENDFOREACH()
-        FOREACH(flag_var
+            set(${flag_var} "${${flag_var}} /arch:SSE")
+        endforeach()
+        foreach(flag_var
             CMAKE_EXE_LINKER_FLAGS CMAKE_SHARED_LINKER_FLAGS)
-            SET(${flag_var} "${${flag_var}} /LARGEADDRESSAWARE")
-        ENDFOREACH()
-    ENDIF()
+            set(${flag_var} "${${flag_var}} /LARGEADDRESSAWARE")
+        endforeach()
+    endif()
 
     ADD_DEFINITIONS(-DWIN32 -D_WINDOWS)
-    IF(ZENGINE_ARCH_NAME MATCHES "arm")
+    if(ZENGINE_ARCH_NAME MATCHES "arm")
         ADD_DEFINITIONS(-D_ARM_WINAPI_PARTITION_DESKTOP_SDK_AVAILABLE=1)
 
-        IF(ZENGINE_PLATFORM_WINDOWS_DESKTOP)
-            FOREACH(flag_var
+        if(ZENGINE_PLATFORM_WINDOWS_DESKTOP)
+            foreach(flag_var
                 CMAKE_C_STANDARD_LIBRARIES CMAKE_CXX_STANDARD_LIBRARIES)
-                SET(${flag_var} "${${flag_var}} gdi32.lib ole32.lib oleaut32.lib comdlg32.lib advapi32.lib shell32.lib")
-            ENDFOREACH()
-        ENDIF()
-    ENDIF()
+                set(${flag_var} "${${flag_var}} gdi32.lib ole32.lib oleaut32.lib comdlg32.lib advapi32.lib shell32.lib")
+            endforeach()
+            endif()
+    endif()
+
+
 else()
     if(CMAKE_C_COMPILER_ID MATCHES Clang)
         set(ZENGINE_COMPILER_NAME "clang")
@@ -114,5 +119,5 @@ else()
     endif()
 endif()
 
-SET(ZENGINE_OUTPUT_SUFFIX _${ZENGINE_COMPILER_NAME}${ZENGINE_COMPILER_VERSION})
+set(ZENGINE_OUTPUT_SUFFIX _${ZENGINE_COMPILER_NAME}${ZENGINE_COMPILER_VERSION})
 
