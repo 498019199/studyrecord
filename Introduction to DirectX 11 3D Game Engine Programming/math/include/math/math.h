@@ -63,6 +63,10 @@ namespace MathWorker
 	inline float Deg2Rad(const float x) { return x * DEG2RAD; }
 	inline float Rad2Deg(const float x) {return x * RAD2DEG;}
 	
+	float sin(float x) noexcept;
+	float cos(float x) noexcept;
+	void SinCos(float fAnglel, float& s, float& c) noexcept;
+
 	//浮点相等        
 	template<typename T>
 	bool IsEqual(T X, T Y);
@@ -138,9 +142,9 @@ namespace MathWorker
 
 	//矩形平移
 	template<typename T>
-	Matrix4_T<T> MatrixMove(T X, T Y, T Z);
+	Matrix4_T<T> Translation(T X, T Y, T Z);
 	template<typename T>
-	Matrix4_T<T> MatrixMove(const Vector_T<T, 3>& Move);
+	Matrix4_T<T> Translation(const Vector_T<T, 3>& Move);
 
 	// 矩形缩放
 	template<typename T>
@@ -228,8 +232,10 @@ namespace MathWorker
 	template<typename T>
 	Quaternion_T<T> ToQuaternion(const Rotator_T<float>& rot);
 
-	//rotator ToRotator(const float4x4& mat);
-	rotator ToRotator(const quater& quat);
+	//template<typename T>
+	//Rotator_T<float> ToRotator(const Matrix4_T<T>& mat);
+	template<typename T>
+	Rotator_T<float> ToRotator(const Quaternion_T<T>& quat);
 }
 
 

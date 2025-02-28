@@ -35,6 +35,17 @@ FirstPersonController::~FirstPersonController() noexcept  = default;
 
 void FirstPersonController::AttachCamera(const CameraPtr& camera)
 {
+    float3 scale;
+    float3 translation;
+    quater quat;
+    MathWorker::Decompose(scale, quat, translation, camera->TransformToParent());
+
+    rotator rot = MathWorker::ToRotator(quat);
+
+    MathWorker::SinCos(rot.pitch() / 2, rot_x_.x(), rot_x_.y());
+    MathWorker::SinCos(rot.yaw() / 2, rot_y_.x(), rot_y_.y());
+    MathWorker::SinCos(rot.roll() / 2, rot_z_.x(), rot_z_.y());
+
     Controller::AttachCamera(camera);
 }
 
@@ -49,6 +60,7 @@ void FirstPersonController::Move(float x, float y, float z)
     {
         float3 movement(x, y, z);
         movement *= moveScaler_;
+        camera_->TransformToWorld(MathWorker::Translation(movement) * camera_->TransformToParent());
     }
 }
 

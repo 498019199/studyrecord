@@ -24,12 +24,6 @@ World::~World()
 
 void World::BeginWorld()
 {
-    camera_ = MakeSharedPtr<Camera>();
-    controller_ = MakeSharedPtr<FirstPersonController>();
-    if(controller_)
-    {
-        controller_->AttachCamera(camera_);
-    }
 }
 
 void World::AddRenderable(Renderable* obj)

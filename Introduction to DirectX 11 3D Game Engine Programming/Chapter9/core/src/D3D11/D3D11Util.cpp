@@ -494,16 +494,16 @@ D3D11_TEXTURE_ADDRESS_MODE D3D11Mapping::Mapping(TexAddressingMode mode)
     switch (mode)
     {
     case TAM_Clamp:
-        return D3D11_TEXTURE_ADDRESS_CLAMP;
+        return D3D11_TEXTURE_ADDRESS_CLAMP; // 纹理边界固定
 
     case TAM_Wrap:
-        return D3D11_TEXTURE_ADDRESS_WRAP;
+        return D3D11_TEXTURE_ADDRESS_WRAP; // 无限重复平铺
 
     case TAM_Mirror:
-        return D3D11_TEXTURE_ADDRESS_MIRROR;
+        return D3D11_TEXTURE_ADDRESS_MIRROR; // 进行镜像重复
 
     case TAM_Border:
-        return D3D11_TEXTURE_ADDRESS_BORDER;
+        return D3D11_TEXTURE_ADDRESS_BORDER; // 会采样指定的边界颜色。边界颜色可以在创建采样器状态时进行设置。
 
     default:
         KFL_UNREACHABLE("Invalid texture addressing mode");

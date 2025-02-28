@@ -35,7 +35,7 @@ struct PSConstantBuffer
 struct VertexPosNormalTex
 {
     float3 pos;
-    //float3 normal;
+    float3 normal;
     float2 tex;
 };
 class RenderablePlaneTex : public Renderable
@@ -52,24 +52,24 @@ public:
         std::vector<uint16_t> indice_vec;
 
         vertex[0].pos = float3(-width / 2, 0.0f, -depth / 2);
-        //vertex[0].normal = float3(0.0f, 1.0f, 0.0f);
+        vertex[0].normal = float3(0.0f, 1.0f, 0.0f);
         vertex[0].tex = float2(0.0f, texV);
 
         vertex[1].pos = float3(-width / 2, 0.0f, depth / 2);
-        //vertex[1].normal = float3(0.0f, 1.0f, 0.0f);
+        vertex[1].normal = float3(0.0f, 1.0f, 0.0f);
         vertex[1].tex = float2(0.0f, 0.0f);
 
         vertex[2].pos = float3(width / 2, 0.0f, depth / 2);
-        //vertex[2].normal = float3(0.0f, 1.0f, 0.0f);
+        vertex[2].normal = float3(0.0f, 1.0f, 0.0f);
         vertex[2].tex = float2(texU, 0.0f);
 
         vertex[3].pos = float3(width / 2, 0.0f, -depth / 2);
-        //vertex[3].normal = float3(0.0f, 1.0f, 0.0f);
+        vertex[3].normal = float3(0.0f, 1.0f, 0.0f);
         vertex[3].tex = float2(texU, texV);
 
         merged_ves.emplace_back(VertexElement(VEU_Position, 0, EF_BGR32F));
-        //merged_ves.emplace_back(VertexElement(VEU_Normal, 0, EF_BGR32F));
-        merged_ves.emplace_back(VertexElement(VEU_TextureCoord, 0, EF_ABGR32F));
+        merged_ves.emplace_back(VertexElement(VEU_Normal, 0, EF_BGR32F));
+        merged_ves.emplace_back(VertexElement(VEU_TextureCoord, 0, EF_GR32F));
 
         auto vb = rf.MakeVertexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable, static_cast<uint32_t>(4 * sizeof(vertex[0])), &vertex[0]);
         rls_[0]->BindVertexStream(vb, merged_ves);
@@ -84,7 +84,61 @@ public:
 
         auto src1_tex_param = effect_->ParameterByName("src1_tex");
         *src1_tex_param = SyncLoadTexture(DDS, EAH_GPU_Read | EAH_Immutable);
+
+        effect_constant_buffer_ = effect_->CBufferByName("VSConstantBuffer");
+        world_offset_ = effect_->ParameterByName("gWorld")->CBufferOffset();
+		view_offset_ = effect_->ParameterByName("gView")->CBufferOffset();
+		projection_offset_ = effect_->ParameterByName("gProj")->CBufferOffset();
+        world_inv_transpose_offset_ = effect_->ParameterByName("gWorldInvTranspose")->CBufferOffset();
+
+        WorldMat(*effect_constant_buffer_)= float4x4::Identity();
+        ViewMat(*effect_constant_buffer_) = Transpose(LookAtLH(
+            float3(0.0f, 0.0f, -5.0f),
+            float3(0.0f, 0.0f, 0.0f),
+            float3(0.0f, 1.0f, 0.0f)));
+        ProjectionMat(*effect_constant_buffer_) = MathWorker::Transpose(
+            MathWorker::PerspectiveFovLH(MathWorker::PIdiv2, Context::Instance().AppInstance().AspectRatio(), 1.f, 1000.f));      
+        WorldInvTransposeMat(*effect_constant_buffer_) = float4x4::Identity();
     }
+
+    float4x4& WorldMat(RenderEffectConstantBuffer& cbuff) const
+	{
+		return *cbuff.template VariableInBuff<float4x4>(world_offset_);
+	}
+
+    float4x4& ViewMat(RenderEffectConstantBuffer& cbuff) const
+	{
+		return *cbuff.template VariableInBuff<float4x4>(view_offset_);
+	}
+
+    float4x4& ProjectionMat(RenderEffectConstantBuffer& cbuff) const
+	{
+		return *cbuff.template VariableInBuff<float4x4>(projection_offset_);
+	}
+
+    float4x4& WorldInvTransposeMat(RenderEffectConstantBuffer& cbuff) const
+	{
+		return *cbuff.template VariableInBuff<float4x4>(world_inv_transpose_offset_);
+	}
+
+    void Update(float dt) override
+    {
+        auto world = MathWorker::Transpose(TransformToWorld());
+        auto worldInvTranspose = MathWorker::Transpose(MathWorker::Inverse(world));
+        WorldMat(*effect_constant_buffer_)= world;
+        WorldInvTransposeMat(*effect_constant_buffer_) = worldInvTranspose;
+
+        // auto& camera = Context::Instance().WorldInstance().camera_;
+        // ViewMat(*effect_constant_buffer_) = camera->ViewMatrix();
+        // ProjectionMat(*effect_constant_buffer_) = camera->ProjMatrix();
+        effect_constant_buffer_->Dirty(true);
+    }
+private:
+    uint32_t world_offset_;
+    uint32_t view_offset_;
+    uint32_t projection_offset_;
+    uint32_t world_inv_transpose_offset_;
+    RenderEffectConstantBuffer* effect_constant_buffer_;
 };
 
 struct Vertex8
@@ -291,13 +345,17 @@ public:
 
     void Update(float dt) override
     {
-        static bool animateCube = true, customColor = false;
-        static float phi = 0.0f, theta = 0.0f;
-        phi += 0.3f * dt, theta += 0.37f * dt;
+        // static bool animateCube = true, customColor = false;
+        // static float phi = 0.0f, theta = 0.0f;
+        // phi += 0.3f * dt, theta += 0.37f * dt;
     
-        auto world = MathWorker::Transpose(MathWorker::MatrixRotateX(phi) * MathWorker::MatrixRotateY(theta));
-        auto worldInvTranspose = MathWorker::Transpose(MathWorker::Inverse(world));
-        WorldMat(*effect_constant_buffer_vs_)= world;
+        // auto world = MathWorker::Transpose(MathWorker::MatrixRotateX(phi) * MathWorker::MatrixRotateY(theta));
+        // auto worldInvTranspose = MathWorker::Transpose(MathWorker::Inverse(world));
+        // WorldMat(*effect_constant_buffer_vs_)= world;
+
+        //auto& camera = Context::Instance().WorldInstance().camera_;
+        //ViewMat(*effect_constant_buffer_vs_) = camera->ViewMatrix();
+        //ProjectionMat(*effect_constant_buffer_vs_) = camera->ProjMatrix();
 
         effect_constant_buffer_vs_->Dirty(true);
     }
@@ -470,17 +528,35 @@ void CreateScene()
     // 初始化地板
     auto floor = new RenderablePlaneTex(20.0f, 20.0f, 5.0f, 5.0f, "floor.dds");
     Context::Instance().WorldInstance().AddRenderable(floor);
+    auto movement = MathWorker::Translation(0.0f, -1.0f, 0.0f);
+    floor->TransformToWorld(movement * floor->TransformToParent());
+    floor->Update(0.f);
 
     // 初始化墙体
     for (int i = 0; i < 4; ++i)
     {
         auto wal = new RenderablePlaneTex(20.0f, 8.0f, 5.0f, 1.5f, "brick.dds");
         Context::Instance().WorldInstance().AddRenderable(wal);
+        auto rotM = MathWorker::ToMatrix(rotator(-MathWorker::PIdiv2, MathWorker::PIdiv2 * i, 0.f));
+        auto moveM = MathWorker::Translation(i % 2 ? -10.0f * (i - 2) : 0.0f, 3.0f, i % 2 == 0 ? -10.0f * (i - 1) : 0.0f);
+        wal->TransformToWorld(rotM * moveM * floor->TransformToParent());
+        wal->Update(0.f);
     }
 
     // 初始化篱笆盒
     auto box = new RenderableBoxTex(2.0f, 2.0f, 2.0f, Color(1.f, 1.f, 1.f, 1.f));
     Context::Instance().WorldInstance().AddRenderable(box);
+
+    auto& wd = Context::Instance().WorldInstance();
+    wd.camera_ = MakeSharedPtr<Camera>();
+    wd.controller_ = MakeSharedPtr<FirstPersonController>();
+    wd.camera_->ProjParams(MathWorker::PI / 3, 
+        Context::Instance().AppInstance().AspectRatio(), 
+        0.5f, 1000.0f);
+    if(wd.controller_)
+    {
+        wd.controller_->AttachCamera(wd.camera_);
+    }
 }
 
 int main() {

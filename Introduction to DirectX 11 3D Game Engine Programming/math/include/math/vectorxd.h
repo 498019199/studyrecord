@@ -231,6 +231,12 @@ public:
 
 	// operator *     
 	template <typename U>
+	const Vector_T& operator*=(Vector_T<U, N> const & rhs) noexcept
+	{
+		MathHelper::vector_helper<T, N>::DoMul(vec_.data(), vec_.data(), rhs.data());
+		return *this;
+	}
+	template <typename U>
 	const Vector_T& operator*=(const U& rhs) noexcept
 	{
 		MathHelper::vector_helper<T, N>::DoScale(data(), data(), rhs);

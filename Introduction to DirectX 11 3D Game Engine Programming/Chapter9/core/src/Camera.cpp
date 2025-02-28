@@ -9,27 +9,73 @@ Camera::Camera()
 
 const float3& Camera::EyePos() const
 {
-    return float3(0, 0, 0);
+    const float4x4& inv_view_mat = this->InverseViewMatrix();
+    return *reinterpret_cast<float3 const *>(&inv_view_mat.Row(3));
 }
 
 float3 Camera::LookAt() const
 {
-    return float3(0, 0, 0);
+    return EyePos() + ForwardVec() * LookAtDist();
 }
 
 const float3& Camera::RightVec() const
 {
-    return float3(0, 0, 0);
+    const float4x4& inv_view_mat = this->InverseViewMatrix();
+    return *reinterpret_cast<float3 const *>(&inv_view_mat.Row(0));
 }
 
 const float3& Camera::UpVec() const
 {
-    return float3(0, 0, 0);
+    const float4x4& inv_view_mat = this->InverseViewMatrix();
+    return *reinterpret_cast<float3 const *>(&inv_view_mat.Row(1));
 }
 
 const float3& Camera::ForwardVec() const
 {
-    return float3(0, 0, 0);
+    const float4x4& inv_view_mat = this->InverseViewMatrix();
+    return *reinterpret_cast<float3 const *>(&inv_view_mat.Row(2));
+}
+
+const float4x4& Camera::ViewMatrix() const
+{
+    return InverseTransformToWorld();
+}
+
+const float4x4& Camera::ProjMatrix() const
+{
+    return proj_mat_;
+}
+
+const float4x4& Camera::ViewProjMatrix() const
+{
+    if (view_proj_mat_dirty_)
+    {
+        view_proj_mat_ = ViewMatrix() * ProjMatrix();
+        inv_view_proj_mat_ = InverseProjMatrix() * InverseViewMatrix();
+        view_proj_mat_dirty_ = false;
+    }
+    return view_proj_mat_;
+}
+
+const float4x4& Camera::InverseViewMatrix() const
+{
+    return TransformToWorld();
+}
+
+const float4x4& Camera::InverseProjMatrix() const
+{
+    return inv_proj_mat_;
+}
+
+const float4x4& Camera::InverseViewProjMatrix() const
+{
+    if (view_proj_mat_dirty_)
+    {
+        view_proj_mat_ = ViewMatrix() * ProjMatrix();
+        inv_view_proj_mat_ = InverseProjMatrix() * InverseViewMatrix();
+        view_proj_mat_dirty_ = false;
+    }
+    return inv_view_proj_mat_;
 }
 
 void Camera::ProjParams(float fov, float aspect, float near_plane, float far_plane)
@@ -41,6 +87,7 @@ void Camera::ProjParams(float fov, float aspect, float near_plane, float far_pla
 
     proj_mat_ = MathWorker::PerspectiveFovLH(fov, aspect, near_plane, far_plane);
     inv_proj_mat_ = MathWorker::Inverse(proj_mat_);
+    view_proj_mat_dirty_ = true;
 }
 
 void Camera::ProjOrthoParams(float w, float h, float near_plane, float far_plane)
@@ -52,6 +99,11 @@ void Camera::ProjOrthoParams(float w, float h, float near_plane, float far_plane
 
     proj_mat_ = MathWorker::OrthoLH(w, h, near_plane, far_plane);
     inv_proj_mat_ = MathWorker::Inverse(proj_mat_);
+    view_proj_mat_dirty_ = true;
 }
 
+void Camera::Dirty()
+{
+    view_proj_mat_dirty_ = true;
+}
 }

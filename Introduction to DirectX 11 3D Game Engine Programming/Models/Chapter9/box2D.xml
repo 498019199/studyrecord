@@ -3,10 +3,17 @@
     <parameter type="texture2D" name="src1_tex"/>
 	<parameter type="sampler" name="point_sampler">
 		<state name="filtering" value="min_mag_mip_linear"/>
-		<state name="address_u" value="clamp"/>
-		<state name="address_v" value="clamp"/>
+		<state name="address_u" value="wrap"/>
+		<state name="address_v" value="wrap"/>
+        <state name="address_w" value="wrap"/>
 	</parameter>
-
+    <cbuffer name="VSConstantBuffer">
+        <parameter type="float4x4" name="gWorld"/>
+        <parameter type="float4x4" name="gView"/>
+        <parameter type="float4x4" name="gProj"/>
+        <parameter type="float4x4" name="gWorldInvTranspose"/>
+    </cbuffer>
+    
     <technique name="Basic_2D">
         <pass name="p0">
             <state name="cull_mode" value="back"/>
@@ -20,12 +27,15 @@
 struct VertexPosHTex
 {
     float4 posH : SV_POSITION;
+    float3 posW : POSITION;     // 在世界中的位置
+    float3 normalW : NORMAL;    // 法向量在世界中的方向
     float2 tex : TEXCOORD;
 };
 
 struct VertexPosTex
 {
     float3 posL : POSITION;
+    float3 normalL : NORMAL;
     float2 tex : TEXCOORD;
 };
 
@@ -33,7 +43,12 @@ struct VertexPosTex
 VertexPosHTex VS(VertexPosTex vIn)
 {
     VertexPosHTex vOut;
-    vOut.posH = float4(vIn.posL, 1.0f);
+    matrix viewProj = mul(gView, gProj);
+    float4 posW = mul(float4(vIn.posL, 1.0f), gWorld);
+
+    vOut.posH = mul(posW, viewProj);
+    vOut.posW = posW.xyz;
+    vOut.normalW = mul(vIn.normalL, (float3x3) gWorldInvTranspose);
     vOut.tex = vIn.tex;
     return vOut;
 }

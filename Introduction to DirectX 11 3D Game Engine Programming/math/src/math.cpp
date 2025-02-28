@@ -9,9 +9,16 @@ namespace MathWorker
 
     float cos(float x) noexcept
     {
-        return std::cos(x);
+        return sin(x + PI / 2);
     }
 
+    
+    void SinCos(float fAnglel, float& s, float& c) noexcept
+	{
+        s = sin(fAnglel);
+        c = cos(fAnglel);
+	}
+    
     // 线性颜色值转换为 sRGB 颜色值的操作
     // 线性颜色空间更适合于计算和物理模拟，而 sRGB 空间则是常见的显示设备所使用的颜色空间。
     // 根据线性颜色值的大小，使用不同的公式将其转换为 sRGB 颜色值。
@@ -40,12 +47,6 @@ namespace MathWorker
             return pow((srgb + ALPHA) / (1 + ALPHA), 2.4f);
         }
     }
-
-    void SinCos(float fAnglel, float& X, float&Y)
-	{
-        X = std::sin(fAnglel);
-        Y = std::cos(fAnglel);
-	}
 
     template bool IsEqual(float X, float Y);
     template bool IsEqual(double X, double Y);
@@ -210,9 +211,9 @@ namespace MathWorker
     }
 
 
-    template float4x4 MatrixMove(float X, float Y, float Z);
+    template float4x4 Translation(float X, float Y, float Z);
     template<typename T>
-    Matrix4_T<T> MatrixMove(T X, T Y, T Z)
+    Matrix4_T<T> Translation(T X, T Y, T Z)
     {
         return Matrix4_T<T>(
             1, 0, 0, 0,
@@ -221,11 +222,11 @@ namespace MathWorker
             X, Y, Z, 1);
     }
 
-    template float4x4 MatrixMove(const float3& Move);
+    template float4x4 Translation(const float3& Move);
     template<typename T>
-    Matrix4_T<T> MatrixMove(const Vector_T<T, 3> &Move)
+    Matrix4_T<T> Translation(const Vector_T<T, 3> &Move)
     {
-        return MatrixMove(Move.x(), Move.y(), Move.z());
+        return Translation(Move.x(), Move.y(), Move.z());
     }
 
     template float4x4 MatrixScale(float X, float Y, float Z);
@@ -677,8 +678,8 @@ namespace MathWorker
     float4x4 ToMatrix(const rotator &rot)
     {
         float4x4 rot_x = MatrixRotateX(rot.pitch());
-        float4x4 rot_y = MatrixRotateX(rot.yaw());
-        float4x4 rot_z = MatrixRotateX(rot.roll());
+        float4x4 rot_y = MatrixRotateY(rot.yaw());
+        float4x4 rot_z = MatrixRotateZ(rot.roll());
         return rot_x * rot_y * rot_z;
     }
 
@@ -783,13 +784,17 @@ namespace MathWorker
             sx * sy * sz + cx * cy * cz);
     }
 
-    // rotator ToRotator(const float4x4 &mat)
-    // {
+    //template rotator ToRotator(const float4x4 &mat);
+    //template<typename T>
+	//Rotator_T<float> ToRotator(const Matrix4_T<T>& mat)
+    //{
     //     return rotator();
-    // }
+    //}
 
     // From http://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToEuler/index.htm
-    rotator ToRotator(const quater &quat)
+    template rotator ToRotator(const quater &quat);
+    template<typename T>
+	Rotator_T<float> ToRotator(const Quaternion_T<T>& quat)
     {
         float sqx = quat.x() * quat.x();
         float sqy = quat.y() * quat.y();
