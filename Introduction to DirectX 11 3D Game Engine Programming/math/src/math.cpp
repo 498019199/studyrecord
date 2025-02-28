@@ -602,26 +602,26 @@ namespace MathWorker
     void Decompose(Vector_T<T, 3>& scale, Quaternion_T<T>& rot, Vector_T<T, 3>& trans, const Matrix4_T<T>& m)
     {
         // S=> M去掉T得m3x3矩阵，（RS）^T*RT=M3^T*M3=S*S
-        scale.x() = sqrt(rhs(0, 0) * rhs(0, 0) + rhs(0, 1) * rhs(0, 1) + rhs(0, 2) * rhs(0, 2));
-        scale.y() = sqrt(rhs(1, 0) * rhs(1, 0) + rhs(1, 1) * rhs(1, 1) + rhs(1, 2) * rhs(1, 2));
-        scale.z() = sqrt(rhs(2, 0) * rhs(2, 0) + rhs(2, 1) * rhs(2, 1) + rhs(2, 2) * rhs(2, 2));
+        scale.x() = sqrt(m(0, 0) * m(0, 0) + m(0, 1) * m(0, 1) + m(0, 2) * m(0, 2));
+        scale.y() = sqrt(m(1, 0) * m(1, 0) + m(1, 1) * m(1, 1) + m(1, 2) * m(1, 2));
+        scale.z() = sqrt(m(2, 0) * m(2, 0) + m(2, 1) * m(2, 1) + m(2, 2) * m(2, 2));
 
         // T
         trans = Vector_T<T, 3>(m(3, 0), m(3, 1), m(3, 2));
 
         // R=RS*1/S
         Matrix4_T<T> rot_mat;
-        rot_mat(0, 0) = rhs(0, 0) / scale.x();
-        rot_mat(0, 1) = rhs(0, 1) / scale.x();
-        rot_mat(0, 2) = rhs(0, 2) / scale.x();
+        rot_mat(0, 0) = m(0, 0) / scale.x();
+        rot_mat(0, 1) = m(0, 1) / scale.x();
+        rot_mat(0, 2) = m(0, 2) / scale.x();
         rot_mat(0, 3) = 0;
-        rot_mat(1, 0) = rhs(1, 0) / scale.y();
-        rot_mat(1, 1) = rhs(1, 1) / scale.y();
-        rot_mat(1, 2) = rhs(1, 2) / scale.y();
+        rot_mat(1, 0) = m(1, 0) / scale.y();
+        rot_mat(1, 1) = m(1, 1) / scale.y();
+        rot_mat(1, 2) = m(1, 2) / scale.y();
         rot_mat(1, 3) = 0;
-        rot_mat(2, 0) = rhs(2, 0) / scale.z();
-        rot_mat(2, 1) = rhs(2, 1) / scale.z();
-        rot_mat(2, 2) = rhs(2, 2) / scale.z();
+        rot_mat(2, 0) = m(2, 0) / scale.z();
+        rot_mat(2, 1) = m(2, 1) / scale.z();
+        rot_mat(2, 2) = m(2, 2) / scale.z();
         rot_mat(2, 3) = 0;
         rot_mat(3, 0) = 0;
         rot_mat(3, 1) = 0;
