@@ -6,6 +6,7 @@ Chapter9
 main_firstcamera.cpp 包含第一人称相机 Chapter14
 自己增加 需要相机，effect架构完善(移植KlayGE, 还需要加反射)
 main_blending.cpp 混合 Chapter9
+main_test.cpp 模板/深度测试 Chapter10
 
 大佬git学习
 
