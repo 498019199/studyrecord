@@ -7,7 +7,7 @@
     </cbuffer>
     <technique name="Cube">
         <pass name="p0">
-            <state name="cull_mode" value="front"/>
+            <state name="cull_mode" value="none"/>
 
             <state name="blend_enable" value="true"/>
 			<state name="blend_op" value="add"/>

@@ -13,7 +13,12 @@ class SceneNode
 {
 public:
     SceneNode* Parent() const;
-	std::vector<SceneNodePtr> const & Children() const;
+    void Parent(SceneNode* node);
+	std::vector<SceneNode*> const & Children() const;
+    void AddChild(const SceneNodePtr& node);
+    void RemoveChild(const SceneNodePtr& node);
+
+    void Traverse(const std::function<bool(SceneNode&)>& callback);
 
     virtual void Update(float dt);
 
@@ -33,8 +38,6 @@ private:
     mutable float4x4 xform_to_world_ {float4x4::Identity()}; 
     mutable float4x4 inv_xform_to_world_ {float4x4::Identity()}; 
 };
-
-
 
 
 

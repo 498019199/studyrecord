@@ -458,10 +458,10 @@ D3D11_FILTER D3D11Mapping::Mapping(TexFilterOp filter)
         return D3D11_FILTER_MIN_MAG_LINEAR_MIP_POINT;
 
     case TFO_Min_Mag_Mip_Linear:
-        return D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+        return D3D11_FILTER_MIN_MAG_MIP_LINEAR; // 线性过滤模式
 
     case TFO_Anisotropic:
-        return D3D11_FILTER_ANISOTROPIC;
+        return D3D11_FILTER_ANISOTROPIC; // // 各向异性过滤模式
 
     case TFO_Cmp_Min_Mag_Mip_Point:
         return D3D11_FILTER_COMPARISON_MIN_MAG_MIP_POINT;

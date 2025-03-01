@@ -143,7 +143,7 @@ struct Vertex8
 class RenderableBoxTex : public Renderable
 {
 public:
-    RenderableBoxTex(float width, float height, float depth, const Color & color)
+    RenderableBoxTex(float width, float height, float depth, const Color & color, const std::string& DDS, const std::string& Mode)
     {
         float w2 = width / 2, h2 = height / 2, d2 = depth / 2;
         auto& rf = Context::Instance().RenderFactoryInstance();
@@ -227,10 +227,10 @@ public:
         rls_[0]->BindIndexStream(ib, EF_R16UI);
 
         effect_ = SyncLoadRenderEffect("box3D.xml");
-        technique_ = effect_->TechniqueByName("Basic_3D");
+        technique_ = effect_->TechniqueByName(Mode);
 
         auto src1_tex_param = effect_->ParameterByName("src1_tex");
-        *src1_tex_param = SyncLoadTexture("WireFence.dds", EAH_GPU_Read | EAH_Immutable);
+        *src1_tex_param = SyncLoadTexture(DDS, EAH_GPU_Read | EAH_Immutable);
 
         // ******************
         // 初始化默认光照
@@ -248,13 +248,13 @@ public:
         DirectionalLight(*effect_constant_buffer_ps_).diffuse_ = float4(0.8f, 0.8f, 0.8f, 1.0f);
         DirectionalLight(*effect_constant_buffer_ps_).specular_ = float4(0.5f, 0.5f, 0.5f, 1.0f);
         DirectionalLight(*effect_constant_buffer_ps_).direction_ = float3(-0.577f, -0.577f, 0.577f);
-        // // 点光
-        // PointLight(*effect_constant_buffer_ps_).pos_ = float3(0.0f, 0.0f, -10.0f);
-        // PointLight(*effect_constant_buffer_ps_).ambient_ = float4(0.3f, 0.3f, 0.3f, 1.0f);
-        // PointLight(*effect_constant_buffer_ps_).diffuse_ = float4(0.7f, 0.7f, 0.7f, 1.0f);
-        // PointLight(*effect_constant_buffer_ps_).specular_ = float4(0.5f, 0.5f, 0.5f, 1.0f);
-        // PointLight(*effect_constant_buffer_ps_).att_ = float3(0.0f, 0.1f, 0.0f);
-        // PointLight(*effect_constant_buffer_ps_).range_ = 25.0f;
+        // 点光
+        PointLight(*effect_constant_buffer_ps_).pos_ = float3(0.0f, 15.0f, -0.0f);
+        PointLight(*effect_constant_buffer_ps_).ambient_ = float4(0.5f, 0.5f, 0.5f, 1.0f);
+        PointLight(*effect_constant_buffer_ps_).diffuse_ = float4(0.6f, 0.6f, 0.6f, 1.0f);
+        PointLight(*effect_constant_buffer_ps_).specular_ = float4(0.2f, 0.2f, 0.2f, 1.0f);
+        PointLight(*effect_constant_buffer_ps_).att_ = float3(0.0f, 0.1f, 0.0f);
+        PointLight(*effect_constant_buffer_ps_).range_ = 25.0f;
         // // 聚光灯
         // SpotLight(*effect_constant_buffer_ps_).pos_ = float3(0.0f, 0.0f, -5.0f);
         // SpotLight(*effect_constant_buffer_ps_).direction_ = float3(0.0f, 0.0f, 1.0f);
@@ -404,7 +404,7 @@ public:
             static_cast<uint32_t>(indice_vec.size() * sizeof(indice_vec[0])), &indice_vec[0]);
         rls_[0]->BindIndexStream(ib, EF_R16UI);
 
-        effect_ = SyncLoadRenderEffect("box3D.xml");
+        effect_ = SyncLoadRenderEffect("water.xml");
         technique_ = effect_->TechniqueByName("water");
 
         auto src1_tex_param = effect_->ParameterByName("src1_tex");
@@ -419,6 +419,20 @@ public:
         
 
         // 初始化用于PS的常量缓冲区的值
+        // 初始化默认光照
+        // 方向光
+        DirectionalLight(*effect_constant_buffer_ps_).ambient_ = float4(0.2f, 0.2f, 0.2f, 1.0f);
+        DirectionalLight(*effect_constant_buffer_ps_).diffuse_ = float4(0.8f, 0.8f, 0.8f, 1.0f);
+        DirectionalLight(*effect_constant_buffer_ps_).specular_ = float4(0.5f, 0.5f, 0.5f, 1.0f);
+        DirectionalLight(*effect_constant_buffer_ps_).direction_ = float3(0.0f, -1.0f, 0.0f);
+        // 点光
+        PointLight(*effect_constant_buffer_ps_).pos_ = float3(0.0f, 15.0f, -0.0f);
+        PointLight(*effect_constant_buffer_ps_).ambient_ = float4(0.5f, 0.5f, 0.5f, 1.0f);
+        PointLight(*effect_constant_buffer_ps_).diffuse_ = float4(0.6f, 0.6f, 0.6f, 1.0f);
+        PointLight(*effect_constant_buffer_ps_).specular_ = float4(0.2f, 0.2f, 0.2f, 1.0f);
+        PointLight(*effect_constant_buffer_ps_).att_ = float3(0.0f, 0.1f, 0.0f);
+        PointLight(*effect_constant_buffer_ps_).range_ = 25.0f;
+
         SetMaterial(*effect_constant_buffer_ps_).ambient_ = float4(0.5f, 0.5f, 0.5f, 1.0f);
         SetMaterial(*effect_constant_buffer_ps_).diffuse_ = float4(1.0f, 1.0f, 1.0f, 1.0f);
         SetMaterial(*effect_constant_buffer_ps_).specular_ = float4(0.8f, 0.8f, 0.8f, 32.0f);
@@ -461,6 +475,16 @@ public:
     float3& EysPos(RenderEffectConstantBuffer& cbuff) const
 	{
 		return *cbuff.template VariableInBuff<float3>(eys_pos_offset_);
+	}
+
+    DirectionalLightSource& DirectionalLight(RenderEffectConstantBuffer& cbuff) const
+	{
+		return *cbuff.template VariableInBuff<DirectionalLightSource>(directional_light_offset_);
+	}
+
+    PointLightSource& PointLight(RenderEffectConstantBuffer& cbuff) const
+	{
+		return *cbuff.template VariableInBuff<PointLightSource>(point_light_offset_);
 	}
 
     void Update(float dt) override
@@ -518,6 +542,7 @@ void CreateScene()
     // 初始化水
     auto water = new RenderableWater(20.0f, 20.0f, 10.0f, 10.0f, "water.dds");
     Context::Instance().WorldInstance().AddRenderable(water);
+    movement = MathWorker::Translation(0.0f, 0.0f, 0.0f);
     water->TransformToWorld(movement * water->TransformToParent());
     water->Update(0.f);
 
@@ -533,7 +558,7 @@ void CreateScene()
     }
 
     // 初始化篱笆盒
-    auto box = new RenderableBoxTex(2.0f, 2.0f, 2.0f, Color(1.f, 1.f, 1.f, 1.f));
+    auto box = new RenderableBoxTex(2.0f, 2.0f, 2.0f, Color(1.f, 1.f, 1.f, 1.f), "WireFence.dds", "Basic_3D");
     movement = MathWorker::Translation(0.0f, -1.0f, 0.0f);
     Context::Instance().WorldInstance().AddRenderable(box);
 }

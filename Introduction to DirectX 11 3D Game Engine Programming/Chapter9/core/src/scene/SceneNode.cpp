@@ -8,6 +8,43 @@ SceneNode* SceneNode::Parent() const
     return parent_;    
 }
 
+void SceneNode::Parent(SceneNode* node)
+{
+    parent_ = node;
+}
+
+void SceneNode::AddChild(const SceneNodePtr& node)
+{
+    auto iter = std::find(children_.begin(), children_.end(), node);
+    if (iter == children_.end())
+    {
+        node->Parent(this);
+        children_.push_back(node);
+    }
+}
+
+void SceneNode::Traverse(const std::function<bool(SceneNode&)>& callback)
+{
+    if (callback(*this))
+    {
+        for (auto const& child : children_)
+        {
+            child->Traverse(callback);
+        }
+    }
+}
+
+void SceneNode::RemoveChild(const SceneNodePtr& node)
+{
+    auto iter = std::find_if(children_.begin(), children_.end(), [node](const SceneNodePtr& child) { return child == node; });
+    if (iter != children_.end())
+    {
+        node->Parent(nullptr);
+        children_.erase(iter);
+    }
+}
+
+
 void SceneNode::TransformToParent(const float4x4& mat)
 {
     xform_to_parent_ = mat;

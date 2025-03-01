@@ -18,28 +18,21 @@
     <parameter type="texture2D" name="src1_tex"/>
 	<parameter type="sampler" name="point_sampler">
 		<state name="filtering" value="min_mag_mip_point"/>
-		<state name="address_u" value="clamp"/>
-		<state name="address_v" value="clamp"/>
+		<state name="address_u" value="Wrap"/>
+		<state name="address_v" value="Wrap"/>
+        <state name="address_w" value="Wrap"/>
 	</parameter>
-
-    <technique name="Cube">
-        <pass name="p0">
-            <state name="cull_mode" value="none"/>
-
-            <state name="vertex_shader" value="VS()"/>
-			<state name="pixel_shader" value="PS()"/>
-        </pass>
-    </technique>
-
-    <technique name="Basic_3D">
+    <technique name="water">
         <pass name="p0">
             <state name="cull_mode" value="back"/>
 
+            <state name="alpha_to_coverage_enable" value="true"/>
+            <state name="alpha_to_coverage_enable" value="false"/>
+
             <state name="vertex_shader" value="VS()"/>
 			<state name="pixel_shader" value="PS()"/>
         </pass>
     </technique>
-    
     <shader>
         		<![CDATA[
 
