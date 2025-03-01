@@ -224,18 +224,25 @@ namespace MathWorker
 	void Decompose(Vector_T<T, 3>& scale, Quaternion_T<T>& rot, Vector_T<T, 3>& trans, const Matrix4_T<T>& m);
 	
 	//相互转换
-	float4x4 ToMatrix(const quater& quat);
-	float4x4 ToMatrix(const rotator& rot);
+	template<typename T>
+	Matrix4_T<T> ToMatrix(const Quaternion_T<T>& quat);
+	template<typename T>
+	Matrix4_T<T> ToMatrix(const Rotator_T<T>& rot);
 
 	template<typename T>
 	Quaternion_T<T> ToQuaternion(const Matrix4_T<T>& mat);
 	template<typename T>
-	Quaternion_T<T> ToQuaternion(const Rotator_T<float>& rot);
+	Quaternion_T<T> ToQuaternion(const Rotator_T<T>& rot);
 
 	//template<typename T>
-	//Rotator_T<float> ToRotator(const Matrix4_T<T>& mat);
+	//Rotator_T<T> ToRotator(const Matrix4_T<T>& mat);
 	template<typename T>
-	Rotator_T<float> ToRotator(const Quaternion_T<T>& quat);
+	Rotator_T<T> ToRotator(const Quaternion_T<T>& quat);
+	template<typename T>
+	void ToYawPitchRoll(T& yaw, T& pitch, T& roll, const Quaternion_T<T>& quat);
+
+	template<typename T>
+	Vector_T<T, 3> TransformQuat(const Vector_T<T, 3>& v, const Quaternion_T<T>& quat);
 }
 
 

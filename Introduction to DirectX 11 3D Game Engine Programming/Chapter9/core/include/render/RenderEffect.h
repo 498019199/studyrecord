@@ -1,5 +1,5 @@
 #pragma once
-#include <core/XMLDom.h>
+#include <common/XMLDom.h>
 
 #include <render/GraphicsBuffer.h>
 #include <render/ShaderObject.h>

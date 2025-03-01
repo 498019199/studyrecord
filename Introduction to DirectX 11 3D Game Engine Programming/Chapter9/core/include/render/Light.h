@@ -76,7 +76,7 @@
 // {
 
 // };
-#include <core/common.h>
+#include <base/common.h>
 namespace RenderWorker
 {
 struct DirectionalLightSource

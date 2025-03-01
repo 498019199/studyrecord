@@ -1,6 +1,5 @@
 #pragma once
 #include <render/Texture.h>
-#include <core/common.h>
 
 #include "D3D11Util.h"
 #include <unordered_map>

@@ -1,6 +1,6 @@
 #include "D3D11Util.h"
 
-#include <core/Util.h>
+#include <common/Util.h>
 #include <utility>
 #include <d3dcompiler.h>
 #include <filesystem>

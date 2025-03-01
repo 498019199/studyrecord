@@ -1,7 +1,7 @@
-#include <core/WinApp.h>
-#include <core/Timer.h>
-#include <core/Context.h>
-#include <core/World.h>
+#include <base/WinApp.h>
+#include <common/Timer.h>
+#include <base/Context.h>
+#include <base/World.h>
 
 #include "../D3D11/D3D11RenderEngine.h"
 #include "../D3D11/D3D11Util.h"
@@ -224,6 +224,10 @@ void WinAPP::ImguiUpdate(float dt)
 		{
 			re.ForceLineMode(is_wireframe_mode);
 		}
+
+		auto& wd = Context::Instance().WorldInstance();
+		auto cameraPos = wd.camera_->EyePos();
+        ImGui::Text("Camera Position\n%.2f %.2f %.2f", cameraPos.x(), cameraPos.y(), cameraPos.z());
 
 		// 不允许在操作UI时操作物体
     	if (!ImGui::IsAnyItemActive())

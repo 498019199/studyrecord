@@ -1,5 +1,5 @@
-#include <core/Context.h>
-#include <core/Hash.h>
+#include <base/Context.h>
+#include <common/Hash.h>
 
 #include "D3D11ShaderObject.h"
 #include "D3D11RenderFactory.h"

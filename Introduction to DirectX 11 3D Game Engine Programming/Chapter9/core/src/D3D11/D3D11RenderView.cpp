@@ -1,7 +1,6 @@
 #include "D3D11RenderView.h"
 
-#include <core/Context.h>
-#include <core/Context.h>
+#include <base/Context.h>
 
 #include "D3D11RenderEngine.h"
 #include "D3D11Texture.h"

@@ -1,5 +1,5 @@
-#include <core/Context.h>
-#include <core/Util.h>
+#include <base/Context.h>
+#include <common/Util.h>
 
 #include "D3D11Util.h"
 #include "D3D11GraphicsBuffer.h"

@@ -1,8 +1,6 @@
 #pragma once
 //可渲染对象类 头文件
-
-#include <core/common.h>
-#include <core/SceneNode.h>
+#include <base/SceneNode.h>
 #include <render/RenderEffect.h>
 #include <render/RenderLayout.h>
 

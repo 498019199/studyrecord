@@ -1,7 +1,7 @@
 #include <render/RenderableHelper.h>
 #include <render/RenderEffect.h>
-#include <core/Context.h>
-#include <core/Util.h>
+#include <base/Context.h>
+#include <common/Util.h>
 
 #include "D3D11/D3D11RenderLayout.h"
 #include "D3D11/D3D11RenderFactory.h"

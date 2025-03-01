@@ -1,4 +1,4 @@
-#include <core/SceneNode.h>
+#include <base/SceneNode.h>
 
 namespace RenderWorker
 {

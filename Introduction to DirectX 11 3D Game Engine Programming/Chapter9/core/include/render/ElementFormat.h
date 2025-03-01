@@ -27,8 +27,8 @@
 
 #pragma once
 
-#include <core/common.h>
-#include <core/Util.h>
+#include <base/common.h>
+#include <common/Util.h>
 
 namespace RenderWorker
 {

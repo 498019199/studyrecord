@@ -1,6 +1,6 @@
 #pragma once
-#include <core/Util.h>
-#include <core/common.h>
+#include <common/Util.h>
+#include <common/common.h>
 #include <render/Texture.h>
 #include <render/GraphicsBuffer.h>
 

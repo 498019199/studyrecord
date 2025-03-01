@@ -1,4 +1,4 @@
-#include <core/Util.h>
+#include <common/Util.h>
 #include "D3D11GraphicsBuffer.h"
 #include "D3D11RenderFactory.h"
 #include "D3D11RenderLayout.h"

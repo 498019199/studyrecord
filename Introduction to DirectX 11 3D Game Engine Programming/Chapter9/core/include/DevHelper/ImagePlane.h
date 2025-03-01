@@ -1,5 +1,5 @@
 #pragma once
-#include <core/common.h>
+#include <common/common.h>
 #include <render/Texture.h>
 
 namespace RenderWorker

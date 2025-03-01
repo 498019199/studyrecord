@@ -1,6 +1,6 @@
-#include <core/World.h>
-#include <core/Context.h>
-#include <core/WinApp.h>
+#include <base/World.h>
+#include <base/Context.h>
+#include <base/WinApp.h>
 #include <render/RenderEffect.h>
 #include <render/Renderable.h>
 

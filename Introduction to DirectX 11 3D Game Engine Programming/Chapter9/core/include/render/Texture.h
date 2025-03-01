@@ -1,6 +1,6 @@
 
 #pragma once
-#include <core/common.h>
+#include <base/common.h>
 #include <render/ElementFormat.h>
 
 namespace RenderWorker

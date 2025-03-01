@@ -657,29 +657,33 @@ namespace MathWorker
 		return Quaternion_T<T>(-rhs.x() * var, -rhs.y() * var, -rhs.z() * var, rhs.w() * var);
 	}
 
-    float4x4 ToMatrix(const quater &quat)
+    template float4x4 ToMatrix(const quater &quat);
+    template<typename T>
+	Matrix4_T<T> ToMatrix(const Quaternion_T<T>& quat)
     {
         // calculate coefficients
-        const float x2(quat.x() + quat.x());
-        const float y2(quat.y() + quat.y());
-        const float z2(quat.z() + quat.z());
+        const T x2(quat.x() + quat.x());
+        const T y2(quat.y() + quat.y());
+        const T z2(quat.z() + quat.z());
 
-        const float xx2(quat.x() * x2), xy2(quat.x() * y2), xz2(quat.x() * z2);
-        const float yy2(quat.y() * y2), yz2(quat.y() * z2), zz2(quat.z() * z2);
-        const float wx2(quat.w() * x2), wy2(quat.w() * y2), wz2(quat.w() * z2);
+        const T xx2(quat.x() * x2), xy2(quat.x() * y2), xz2(quat.x() * z2);
+        const T yy2(quat.y() * y2), yz2(quat.y() * z2), zz2(quat.z() * z2);
+        const T wx2(quat.w() * x2), wy2(quat.w() * y2), wz2(quat.w() * z2);
 
-        return float4x4(
+        return Matrix4_T<T>(
             1 - yy2 - zz2,	xy2 + wz2,		xz2 - wy2,		0,
             xy2 - wz2,		1 - xx2 - zz2,	yz2 + wx2,		0,
             xz2 + wy2,		yz2 - wx2,		1 - xx2 - yy2,	0,
             0,				0,				0,				1);
     }
 
-    float4x4 ToMatrix(const rotator &rot)
+    template float4x4 ToMatrix(const rotator &rot);
+    template<typename T>
+	Matrix4_T<T> ToMatrix(const Rotator_T<T>& rot)
     {
-        float4x4 rot_x = MatrixRotateX(rot.pitch());
-        float4x4 rot_y = MatrixRotateY(rot.yaw());
-        float4x4 rot_z = MatrixRotateZ(rot.roll());
+        Matrix4_T<T> rot_x = MatrixRotateX(rot.pitch());
+        Matrix4_T<T> rot_y = MatrixRotateY(rot.yaw());
+        Matrix4_T<T> rot_z = MatrixRotateZ(rot.roll());
         return rot_x * rot_y * rot_z;
     }
 
@@ -768,11 +772,11 @@ namespace MathWorker
 
     template quater ToQuaternion(const rotator &rot);
     template<typename T>
-	Quaternion_T<T> ToQuaternion(const Rotator_T<float>& rot)
+	Quaternion_T<T> ToQuaternion(const Rotator_T<T>& rot)
     {
-        const float angX(rot.pitch() / 2), angY(rot.yaw() / 2), angZ(rot.roll() / 2);
-        float sx, sy, sz;
-        float cx, cy, cz;
+        const T angX(rot.pitch() / 2), angY(rot.yaw() / 2), angZ(rot.roll() / 2);
+        T sx, sy, sz;
+        T cx, cy, cz;
         SinCos(angX, sx, cx);
         SinCos(angY, sy, cy);
         SinCos(angZ, sz, cz);
@@ -794,14 +798,14 @@ namespace MathWorker
     // From http://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToEuler/index.htm
     template rotator ToRotator(const quater &quat);
     template<typename T>
-	Rotator_T<float> ToRotator(const Quaternion_T<T>& quat)
+	Rotator_T<T> ToRotator(const Quaternion_T<T>& quat)
     {
-        float sqx = quat.x() * quat.x();
-        float sqy = quat.y() * quat.y();
-        float sqz = quat.z() * quat.z();
-        float sqw = quat.w() * quat.w();
-        float unit = sqx + sqy + sqz + sqw;
-        float test = quat.w() * quat.x() + quat.y() * quat.z();
+        T sqx = quat.x() * quat.x();
+        T sqy = quat.y() * quat.y();
+        T sqz = quat.z() * quat.z();
+        T sqw = quat.w() * quat.w();
+        T unit = sqx + sqy + sqz + sqw;
+        T test = quat.w() * quat.x() + quat.y() * quat.z();
         rotator rot;
         if (test > 0.499f * unit)
         {
@@ -829,4 +833,46 @@ namespace MathWorker
         return rot;
     }
 
+    template void ToYawPitchRoll(float& yaw, float& pitch, float& roll, const quater& quat);
+    template<typename T>
+	void ToYawPitchRoll(T& yaw, T& pitch, T& roll, const Quaternion_T<T>& quat)
+    {
+        T sqx = quat.x() * quat.x();
+        T sqy = quat.y() * quat.y();
+        T sqz = quat.z() * quat.z();
+        T sqw = quat.w() * quat.w();
+        T unit = sqx + sqy + sqz + sqw;
+        T test = quat.w() * quat.x() + quat.y() * quat.z();
+        rotator rot;
+        if (test > 0.499f * unit)
+        {
+            // singularity at north pole
+            yaw = 2 * atan2(quat.z(), quat.w());
+            pitch = PI / 2;
+            roll = 0;
+        }
+        else
+        {
+            if (test < -(0.499f) * unit)
+            {
+                // singularity at south pole
+                yaw = -2 * atan2(quat.z(), quat.w());
+                pitch = -PI / 2;
+                roll = 0;
+            }
+            else
+            {
+                yaw = atan2(2 * (quat.y() * quat.w() - quat.x() * quat.z()), -sqx - sqy + sqz + sqw);
+                pitch = asin(2 * test / unit);
+                roll = atan2(2 * (quat.z() * quat.w() - quat.x() * quat.y()), -sqx + sqy - sqz + sqw);
+            }
+        }
+    }
+
+    template float3 TransformQuat(const float3& v, const quater& quat);
+	template<typename T>
+	Vector_T<T, 3> TransformQuat(const Vector_T<T, 3>& v, const Quaternion_T<T>& quat)
+    {
+        return v + Cross(quat.GetV(), Cross(quat.GetV(), v) + quat.w() * v) * T(2);
+    }
 }

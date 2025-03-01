@@ -1,7 +1,7 @@
 #include "D3D11Texture.h"
 
-#include <core/Context.h>
-#include <core/Hash.h>
+#include <base/Context.h>
+#include <common/Hash.h>
 #include <render/ElementFormat.h>
 
 #include "D3D11RenderEngine.h"

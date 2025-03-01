@@ -5,6 +5,10 @@
 namespace RenderWorker
 {
 
+class RenderEffect;
+class RenderTechnique;
+class RenderLayout;
+
 class RenderEngine
 {
 public:
@@ -14,6 +18,7 @@ public:
     void SetStateObject(RenderStateObjectPtr const & rs_obj);
 
     virtual void BeginRender() const = 0;
+    virtual void DoRender(const RenderEffect& effect, const RenderTechnique& tech, const RenderLayout& rl) = 0;
     virtual void EndRender() const = 0;
 
     // For debug only, 设置为绘制线框

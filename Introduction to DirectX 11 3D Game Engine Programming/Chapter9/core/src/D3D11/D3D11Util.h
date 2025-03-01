@@ -1,8 +1,8 @@
 #pragma once
 #include <d3d11_1.h>
-#include <core/com_ptr.h>
-#include <core/macro.h>
-#include <core/common.h>
+#include <common/com_ptr.h>
+#include <common/macro.h>
+#include <common/common.h>
 
 #include <render/ElementFormat.h>
 #include <render/RenderLayout.h>

@@ -1,5 +1,4 @@
 #pragma once
-#include <core/common.h>
 #include <render/RenderLayout.h>
 #include <render/RenderEngine.h>
 #include "D3D11Util.h"
@@ -19,8 +18,8 @@ public:
     ID3D11Device* D3DDevice() const;
     ID3D11DeviceContext* D3DDeviceImmContext() const;
 
-    void DoRender(const RenderEffect& effect, const RenderTechnique& tech, const RenderLayout& rl);
     void BeginRender() const override;
+    void DoRender(const RenderEffect& effect, const RenderTechnique& tech, const RenderLayout& rl) override;
     void EndRender() const override;
     void SwitchChain() const; 
 

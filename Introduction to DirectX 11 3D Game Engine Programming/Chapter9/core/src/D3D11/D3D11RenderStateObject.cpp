@@ -1,7 +1,7 @@
 #include "D3D11RenderStateObject.h"
 #include "D3D11RenderEngine.h"
 
-#include <core/Context.h>
+#include <base/Context.h>
 
 namespace RenderWorker
 {

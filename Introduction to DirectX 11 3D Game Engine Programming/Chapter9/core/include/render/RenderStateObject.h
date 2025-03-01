@@ -1,7 +1,7 @@
 #pragma once
-#include <core/Util.h>
-#include <core/macro.h>
-#include <core/common.h>
+#include <common/Util.h>
+#include <common/macro.h>
+#include <base/common.h>
 
 namespace RenderWorker
 {
