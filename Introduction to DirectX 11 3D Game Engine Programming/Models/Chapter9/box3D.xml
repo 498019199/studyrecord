@@ -26,6 +26,16 @@
         <pass name="p0">
             <state name="cull_mode" value="none"/>
 
+            <state name="alpha_to_coverage_enable" value="false"/>
+            <state name="independent_blend_enable" value="false"/>
+            <state name="blend_enable" value="true"/>
+            <state name="src_blend" value="src_alpha"/>
+            <state name="dest_blend" value="inv_dst_alpha"/>
+            <state name="blend_op" value="add"/>
+            <state name="src_blend_alpha" value="one"/>
+            <state name="dest_blend_alpha" value="zero"/>
+            <state name="blend_op_alpha" value="add"/>
+
             <state name="vertex_shader" value="VS()"/>
 			<state name="pixel_shader" value="PS()"/>
         </pass>

@@ -28,9 +28,10 @@ void World::BeginWorld()
 
 void World::AddRenderable(Renderable* obj)
 {
-    COMMON_ASSERT(obj);
-    const RenderEffect* obj_eff = obj->GetRenderEffect();
-    COMMON_ASSERT(obj_eff);
+    if(nullptr == obj)
+    {
+        return;
+    }
 
     const RenderTechnique* obj_tech = obj->GetRenderTechnique();
     bool found = false;
@@ -53,6 +54,16 @@ void World::UpdateScene(float dt)
 {
     auto& re = Context::Instance().RenderEngineInstance();
     re.BeginRender();
+
+    std::sort(render_queue_.begin(), render_queue_.end(),
+    [](std::pair<RenderTechnique const *, std::vector<Renderable*>> const & lhs,
+        std::pair<RenderTechnique const *, std::vector<Renderable*>> const & rhs)
+    {
+        COMMON_ASSERT(lhs.first);
+        COMMON_ASSERT(rhs.first);
+
+        return lhs.first->Weight() < rhs.first->Weight();
+    });
     for (auto& items : render_queue_)
     {
         for (auto const & item : items.second)

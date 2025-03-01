@@ -244,7 +244,7 @@ public:
         
         // 初始化默认光照
         // 方向光
-        DirectionalLight(*effect_constant_buffer_ps_).ambient_ = float4(0.2f, 0.2f, 0.2f, 1.0f);
+        DirectionalLight(*effect_constant_buffer_ps_).ambient_ = float4(0.5f, 0.5f, 0.5f, 1.0f);
         DirectionalLight(*effect_constant_buffer_ps_).diffuse_ = float4(0.8f, 0.8f, 0.8f, 1.0f);
         DirectionalLight(*effect_constant_buffer_ps_).specular_ = float4(0.5f, 0.5f, 0.5f, 1.0f);
         DirectionalLight(*effect_constant_buffer_ps_).direction_ = float3(-0.577f, -0.577f, 0.577f);
@@ -421,7 +421,7 @@ public:
         // 初始化用于PS的常量缓冲区的值
         // 初始化默认光照
         // 方向光
-        DirectionalLight(*effect_constant_buffer_ps_).ambient_ = float4(0.2f, 0.2f, 0.2f, 1.0f);
+        DirectionalLight(*effect_constant_buffer_ps_).ambient_ = float4(0.5f, 0.5f, 0.5f, 1.0f);
         DirectionalLight(*effect_constant_buffer_ps_).diffuse_ = float4(0.8f, 0.8f, 0.8f, 1.0f);
         DirectionalLight(*effect_constant_buffer_ps_).specular_ = float4(0.5f, 0.5f, 0.5f, 1.0f);
         DirectionalLight(*effect_constant_buffer_ps_).direction_ = float3(0.0f, -1.0f, 0.0f);
@@ -434,7 +434,7 @@ public:
         PointLight(*effect_constant_buffer_ps_).range_ = 25.0f;
 
         SetMaterial(*effect_constant_buffer_ps_).ambient_ = float4(0.5f, 0.5f, 0.5f, 1.0f);
-        SetMaterial(*effect_constant_buffer_ps_).diffuse_ = float4(1.0f, 1.0f, 1.0f, 1.0f);
+        SetMaterial(*effect_constant_buffer_ps_).diffuse_ = float4(1.0f, 1.0f, 1.0f, 0.5f);
         SetMaterial(*effect_constant_buffer_ps_).specular_ = float4(0.8f, 0.8f, 0.8f, 32.0f);
 
         // 初始化用于VS的常量缓冲区的值
@@ -540,6 +540,9 @@ void CreateScene()
     floor->Update(0.f);
 
     // 初始化水
+    // 透明混合模式
+    // Color = SrcAlpha * SrcColor + (1 - SrcAlpha) * DestColor 
+    // Alpha = SrcAlpha
     auto water = new RenderableWater(20.0f, 20.0f, 10.0f, 10.0f, "water.dds");
     Context::Instance().WorldInstance().AddRenderable(water);
     movement = MathWorker::Translation(0.0f, 0.0f, 0.0f);

@@ -186,7 +186,7 @@ int WinAPP::Run()
 
 				// 下面这句话会触发ImGui在Direct3D的绘制
     			// 因此需要在此之前将后备缓冲区绑定到渲染管线上
-    			ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+    			//ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
 				const auto& d3d11_re = checked_cast<const D3D11RenderEngine&>(Context::Instance().RenderEngineInstance());
 				d3d11_re.SwitchChain();
