@@ -26,8 +26,9 @@ public:
     // 设置光栅化状态
     void RSSetState(ID3D11RasterizerState* ras);
     // 设置混合状态
-    void OMSetBlendState(ID3D11BlendState* bs, Color const & blend_factor, uint32_t sample_mask);
-
+    void OMSetBlendState(ID3D11BlendState* bs, const Color& blend_factor, uint32_t sample_mask);
+    // 设置模板/深度
+    void OMSetDepthStencilState(ID3D11DepthStencilState* ds, uint16_t stencil_ref);
     // 将着色器绑定到渲染管线
     void VSSetShader(ID3D11VertexShader* shader);
 	void PSSetShader(ID3D11PixelShader* shader);
@@ -61,12 +62,15 @@ private:
     
     D3D11_VIEWPORT screen_viewport_;
 
-    // 渲染状态
+    // 光栅状态
     ID3D11RasterizerState* rasterizer_state_cache_{nullptr};
     // 混合状态
     ID3D11BlendState* blend_state_cache_{nullptr};
     Color blend_factor_cache_{1, 1, 1, 1};
     uint32_t sample_mask_cache_{0xFFFFFFFF};
+    // 模板/深度状态
+    ID3D11DepthStencilState* depth_stencil_state_cache_{nullptr};
+    uint16_t stencil_ref_cache_{0};
     
     // 当前绑定的着色器
     ID3D11VertexShader* vertex_shader_cache_{nullptr};

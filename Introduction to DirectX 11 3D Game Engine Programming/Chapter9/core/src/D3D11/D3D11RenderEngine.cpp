@@ -389,7 +389,7 @@ void D3D11RenderEngine::RSSetState(ID3D11RasterizerState* ras)
 	}
 }
 
-void D3D11RenderEngine::OMSetBlendState(ID3D11BlendState* bs, Color const & blend_factor, uint32_t sample_mask)
+void D3D11RenderEngine::OMSetBlendState(ID3D11BlendState* bs, const Color& blend_factor, uint32_t sample_mask)
 {
 	if ((blend_state_cache_ != bs) || (blend_factor_cache_ != blend_factor) || (sample_mask_cache_ != sample_mask))
 	{
@@ -397,6 +397,16 @@ void D3D11RenderEngine::OMSetBlendState(ID3D11BlendState* bs, Color const & blen
 		blend_state_cache_ = bs;
 		blend_factor_cache_ = blend_factor;
 		sample_mask_cache_ = sample_mask;
+	}
+}
+
+void D3D11RenderEngine::OMSetDepthStencilState(ID3D11DepthStencilState* ds, uint16_t stencil_ref)
+{
+	if ((depth_stencil_state_cache_ != ds) || (stencil_ref_cache_ != stencil_ref))
+	{
+		d3d_imm_ctx_->OMSetDepthStencilState(ds, stencil_ref);
+		depth_stencil_state_cache_ = ds;
+		stencil_ref_cache_ = stencil_ref;
 	}
 }
 

@@ -54,6 +54,9 @@ public:
     static D3D11_BLEND_OP Mapping(BlendOperation bo);
     static uint32_t MappingColorMask(uint32_t mask);
 
+    static D3D11_DEPTH_WRITE_MASK Mapping(bool depth_write_mask);
+    static D3D11_STENCIL_OP Mapping(StencilOperation op);
+    
     static D3D11_PRIMITIVE_TOPOLOGY Mapping(RenderLayout::topology_type tt);
     static void Mapping(std::vector<D3D11_INPUT_ELEMENT_DESC>& elements, uint32_t stream, std::span<const VertexElement> vet,
         RenderLayout::stream_type type, uint32_t freq);

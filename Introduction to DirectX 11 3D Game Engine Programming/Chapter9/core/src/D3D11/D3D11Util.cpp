@@ -898,4 +898,49 @@ uint32_t D3D11Mapping::MappingColorMask(uint32_t mask)
     return ret;
 }
 
+D3D11_DEPTH_WRITE_MASK D3D11Mapping::Mapping(bool depth_write_mask)
+{
+    if (depth_write_mask)
+    {
+        return D3D11_DEPTH_WRITE_MASK_ALL; // 允许写入深度/模板缓冲区
+    }
+    else
+    {
+        return D3D11_DEPTH_WRITE_MASK_ZERO; //不写入深度/模板缓冲区
+    }
+}
+
+D3D11_STENCIL_OP D3D11Mapping::Mapping(StencilOperation op)
+{
+    switch (op)
+    {
+    case SOP_Keep:
+        return D3D11_STENCIL_OP_KEEP;
+
+    case SOP_Zero:
+        return D3D11_STENCIL_OP_ZERO;
+
+    case SOP_Replace:
+        return D3D11_STENCIL_OP_REPLACE;
+
+    case SOP_Incr:
+        return D3D11_STENCIL_OP_INCR_SAT;
+
+    case SOP_Decr:
+        return D3D11_STENCIL_OP_DECR_SAT;
+
+    case SOP_Invert:
+        return D3D11_STENCIL_OP_INVERT;
+
+    case SOP_Incr_Wrap:
+        return D3D11_STENCIL_OP_INCR;
+
+    case SOP_Decr_Wrap:
+        return D3D11_STENCIL_OP_DECR;
+
+    default:
+        KFL_UNREACHABLE("Invalid stencil operation");
+    };
+}
+
 }
