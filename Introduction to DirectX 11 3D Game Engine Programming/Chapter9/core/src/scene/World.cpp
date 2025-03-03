@@ -56,14 +56,15 @@ void World::UpdateScene(float dt)
     re.BeginRender();
 
     std::sort(render_queue_.begin(), render_queue_.end(),
-    [](std::pair<RenderTechnique const *, std::vector<Renderable*>> const & lhs,
-        std::pair<RenderTechnique const *, std::vector<Renderable*>> const & rhs)
+    [](std::pair<const RenderTechnique*, std::vector<Renderable*>> const & lhs,
+        std::pair<const RenderTechnique*, std::vector<Renderable*>> const & rhs)
     {
         COMMON_ASSERT(lhs.first);
         COMMON_ASSERT(rhs.first);
 
         return lhs.first->Weight() < rhs.first->Weight();
     });
+    
     for (auto& items : render_queue_)
     {
         for (auto const & item : items.second)
