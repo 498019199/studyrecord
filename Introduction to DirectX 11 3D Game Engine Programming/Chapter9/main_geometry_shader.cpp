@@ -65,10 +65,10 @@ public:
         auto vb = rf.MakeVertexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable, static_cast<uint32_t>(3 * sizeof(vertex[0])), &vertex[0]);
         rls_[0]->BindVertexStream(vb, merged_ves);
 
-        // indice_vec = { 0, 1, 2 };
-        // auto ib = rf.MakeIndexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable, 
-        //     static_cast<uint32_t>(indice_vec.size() * sizeof(indice_vec[0])), &indice_vec[0]);
-        // rls_[0]->BindIndexStream(ib, EF_R16UI);
+        indice_vec = { 0, 1, 2 };
+        auto ib = rf.MakeIndexBuffer(BU_Static, EAH_GPU_Read | EAH_Immutable, 
+            static_cast<uint32_t>(indice_vec.size() * sizeof(indice_vec[0])), &indice_vec[0]);
+        rls_[0]->BindIndexStream(ib, EF_R16UI);
 
         effect_ = SyncLoadRenderEffect("Triangle.xml");
         technique_ = effect_->TechniqueByName("Basic_2D");
@@ -77,12 +77,13 @@ public:
         mvp_offset_ = effect_->ParameterByName("mvp")->CBufferOffset();
 
         // 初始化用于VS的常量缓冲区的值
+        auto world_mat = float4x4::Identity();
         auto view_mat = LookAtLH(
             float3(0.0f, 0.0f, -5.0f),
             float3(0.0f, 0.0f, 0.0f),
             float3(0.0f, 1.0f, 0.0f));
         auto proj_mat = MathWorker::PerspectiveFovLH(MathWorker::PI / 3.f, Context::Instance().AppInstance().AspectRatio(), 1.f, 1000.f);  
-        MVPdMat(*effect_constant_buffer_) = proj_mat * view_mat;
+        MVPdMat(*effect_constant_buffer_) = world_mat * view_mat * proj_mat;
     }
 
     float4x4& MVPdMat(RenderEffectConstantBuffer& cbuff) const

@@ -234,7 +234,7 @@ void WinAPP::ImguiUpdate(float dt)
 
 
 		// 不允许在操作UI时操作物体
-    	if (!ImGui::IsAnyItemActive())
+    	if (!ImGui::IsAnyItemActive() && wd.controller_)
 		{
 			 // 鼠标左键拖动平移
         	if (ImGui::IsMouseDragging(ImGuiMouseButton_Left))
