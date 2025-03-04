@@ -75,6 +75,10 @@ public:
     {
         return nullptr;
     }
+    virtual ID3D11GeometryShader* HwGeometryShader() const noexcept
+    {
+        return nullptr;
+    }
 private:
     
     std::string_view GetShaderProfile(RenderEffect const& effect, uint32_t shader_desc_id) const override;  
@@ -139,6 +143,24 @@ private:
 private:
     ID3D11PixelShaderPtr pixel_shader_;
     bool has_discard_ = true;
+};
+
+class D3D11GeometryShaderStageObject final : public D3D11ShaderStageObject
+{
+public:
+    D3D11GeometryShaderStageObject();
+
+    ID3D11GeometryShader* HwGeometryShader() const noexcept override
+    {
+        return geometry_shader_.get();
+    }
+
+private:
+    void ClearHwShader() override;
+    void StageSpecificCreateHwShader(const RenderEffect& effect, const std::array<uint32_t, ShaderStageNum>& shader_desc_ids) override;
+
+private:
+    ID3D11GeometryShaderPtr geometry_shader_;
 };
 
 struct D3D11Immutable;

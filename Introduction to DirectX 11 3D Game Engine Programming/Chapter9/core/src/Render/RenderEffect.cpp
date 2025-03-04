@@ -413,7 +413,7 @@ namespace
 	int RetrieveIndex(XMLNode const & node)
 	{
 		int index = 0;
-		if (XMLAttribute const* attr = node.Attrib("index"))
+		if (const XMLAttribute* attr = node.Attrib("index"))
 		{
 			index = attr->ValueInt();
 		}
@@ -422,7 +422,7 @@ namespace
 
 	std::string RetrieveProfile(XMLNode const & node)
 	{
-		if (XMLAttribute const* attr = node.Attrib("profile"))
+		if (const XMLAttribute* attr = node.Attrib("profile"))
 		{
 			return std::string(attr->ValueString());
 		}
@@ -1427,11 +1427,11 @@ namespace
 		void Load([[maybe_unused]] RenderEffect const& effect, XMLNode const& node, [[maybe_unused]] uint32_t array_size) override
 		{
 			SamplerStateDesc desc;
-			for (XMLNode const* state_node = node.FirstNode("state"); state_node; state_node = state_node->NextSibling("state"))
+			for (const XMLNode* state_node = node.FirstNode("state"); state_node; state_node = state_node->NextSibling("state"))
 			{
 				size_t const name_hash = HashValue(state_node->Attrib("name")->ValueString());
 
-				XMLAttribute const* value_attr = state_node->Attrib("value");
+				const XMLAttribute* value_attr = state_node->Attrib("value");
 				std::string_view value_str;
 				if (value_attr)
 				{
@@ -1681,7 +1681,7 @@ namespace
 		{
 			if (this->in_cbuff_)
 			{
-				uint8_t const* src = reinterpret_cast<uint8_t const*>(value.data());
+				const uint8_t* src = reinterpret_cast<const uint8_t*>(value.data());
 
 				auto const& cbuff_desc = this->RetrieveCBufferDesc();
 				uint8_t* dst = this->CBuffer()->template VariableInBuff<uint8_t>(cbuff_desc.offset);
@@ -1689,7 +1689,7 @@ namespace
 				size_ = static_cast<uint32_t>(value.size());
 				for (size_t i = 0; i < value.size(); ++i)
 				{
-					*reinterpret_cast<T*>(dst) = *reinterpret_cast<T const*>(src);
+					*reinterpret_cast<T*>(dst) = *reinterpret_cast<const T*>(src);
 					src += sizeof(T);
 					dst += cbuff_desc.stride;
 				}
@@ -1743,7 +1743,7 @@ namespace
 #if ZENGINE_IS_DEV_PLATFORM
 		void Load([[maybe_unused]] RenderEffect const& effect, XMLNode const& node, uint32_t array_size) override
 		{
-			if (XMLNode const* value_node = node.FirstNode("value"))
+			if (const XMLNode* value_node = node.FirstNode("value"))
 			{
 				value_node = value_node->FirstNode();
 				if (value_node && (XMLNodeType::CData == value_node->Type()))
@@ -1880,7 +1880,7 @@ namespace
 #if ZENGINE_IS_DEV_PLATFORM
 		void Load([[maybe_unused]] RenderEffect const& effect, XMLNode const& node, uint32_t array_size) override
 		{
-			if (XMLNode const* value_node = node.FirstNode("value"))
+			if (const XMLNode* value_node = node.FirstNode("value"))
 			{
 				value_node = value_node->FirstNode();
 				if (value_node && (XMLNodeType::CData == value_node->Type()))
@@ -1959,7 +1959,7 @@ namespace
 #if ZENGINE_IS_DEV_PLATFORM
 		void Load([[maybe_unused]] RenderEffect const& effect, XMLNode const& node, uint32_t array_size) override
 		{
-			if (XMLNode const* value_node = node.FirstNode("value"))
+			if (const XMLNode* value_node = node.FirstNode("value"))
 			{
 				value_node = value_node->FirstNode();
 				if (value_node && (XMLNodeType::CData == value_node->Type()))
@@ -2038,7 +2038,7 @@ namespace
 #if ZENGINE_IS_DEV_PLATFORM
 		void Load([[maybe_unused]] RenderEffect const& effect, XMLNode const& node, uint32_t array_size) override
 		{
-			if (XMLNode const* value_node = node.FirstNode("value"))
+			if (const XMLNode* value_node = node.FirstNode("value"))
 			{
 				value_node = value_node->FirstNode();
 				if (value_node && (XMLNodeType::CData == value_node->Type()))
@@ -2117,7 +2117,7 @@ namespace
 #if ZENGINE_IS_DEV_PLATFORM
 		void Load([[maybe_unused]] RenderEffect const& effect, XMLNode const& node, uint32_t array_size) override
 		{
-			if (XMLNode const* value_node = node.FirstNode("value"))
+			if (const XMLNode* value_node = node.FirstNode("value"))
 			{
 				value_node = value_node->FirstNode();
 				if (value_node && (XMLNodeType::CData == value_node->Type()))
@@ -2208,7 +2208,7 @@ namespace
 #if ZENGINE_IS_DEV_PLATFORM
 		void Load([[maybe_unused]] RenderEffect const& effect, XMLNode const& node, uint32_t array_size) override
 		{
-			if (XMLNode const* value_node = node.FirstNode("value"))
+			if (const XMLNode* value_node = node.FirstNode("value"))
 			{
 				value_node = value_node->FirstNode();
 				if (value_node && (XMLNodeType::CData == value_node->Type()))
@@ -2299,7 +2299,7 @@ namespace
 #if ZENGINE_IS_DEV_PLATFORM
 		void Load([[maybe_unused]] RenderEffect const& effect, XMLNode const& node, uint32_t array_size) override
 		{
-			if (XMLNode const* value_node = node.FirstNode("value"))
+			if (const XMLNode* value_node = node.FirstNode("value"))
 			{
 				value_node = value_node->FirstNode();
 				if (value_node && (XMLNodeType::CData == value_node->Type()))
@@ -2390,7 +2390,7 @@ namespace
 #if ZENGINE_IS_DEV_PLATFORM
 		void Load([[maybe_unused]] RenderEffect const& effect, XMLNode const& node, uint32_t array_size) override
 		{
-			if (XMLNode const* value_node = node.FirstNode("value"))
+			if (const XMLNode* value_node = node.FirstNode("value"))
 			{
 				value_node = value_node->FirstNode();
 				if (value_node && (XMLNodeType::CData == value_node->Type()))
@@ -2481,7 +2481,7 @@ namespace
 #if ZENGINE_IS_DEV_PLATFORM
 		void Load([[maybe_unused]] RenderEffect const& effect, XMLNode const& node, uint32_t array_size) override
 		{
-			if (XMLNode const* value_node = node.FirstNode("value"))
+			if (const XMLNode* value_node = node.FirstNode("value"))
 			{
 				value_node = value_node->FirstNode();
 				if (value_node && (XMLNodeType::CData == value_node->Type()))
@@ -2572,7 +2572,7 @@ namespace
 #if ZENGINE_IS_DEV_PLATFORM
 		void Load([[maybe_unused]] RenderEffect const& effect, XMLNode const& node, uint32_t array_size) override
 		{
-			if (XMLNode const* value_node = node.FirstNode("value"))
+			if (const XMLNode* value_node = node.FirstNode("value"))
 			{
 				value_node = value_node->FirstNode();
 				if (value_node && (XMLNodeType::CData == value_node->Type()))
@@ -2663,7 +2663,7 @@ namespace
 #if ZENGINE_IS_DEV_PLATFORM
 		void Load([[maybe_unused]] RenderEffect const& effect, XMLNode const& node, uint32_t array_size) override
 		{
-			if (XMLNode const* value_node = node.FirstNode("value"))
+			if (const XMLNode* value_node = node.FirstNode("value"))
 			{
 				value_node = value_node->FirstNode();
 				if (value_node && (XMLNodeType::CData == value_node->Type()))
@@ -2754,7 +2754,7 @@ namespace
 #if ZENGINE_IS_DEV_PLATFORM
 		void Load([[maybe_unused]] RenderEffect const& effect, XMLNode const& node, uint32_t array_size) override
 		{
-			if (XMLNode const* value_node = node.FirstNode("value"))
+			if (const XMLNode* value_node = node.FirstNode("value"))
 			{
 				value_node = value_node->FirstNode();
 				if (value_node && (XMLNodeType::CData == value_node->Type()))
@@ -2845,7 +2845,7 @@ namespace
 #if ZENGINE_IS_DEV_PLATFORM
 		void Load([[maybe_unused]] RenderEffect const& effect, XMLNode const& node, uint32_t array_size) override
 		{
-			if (XMLNode const* value_node = node.FirstNode("value"))
+			if (const XMLNode* value_node = node.FirstNode("value"))
 			{
 				value_node = value_node->FirstNode();
 				if (value_node && (XMLNodeType::CData == value_node->Type()))
@@ -2961,7 +2961,7 @@ namespace
 #if ZENGINE_IS_DEV_PLATFORM
 		void Load([[maybe_unused]] RenderEffect const& effect, XMLNode const& node, uint32_t array_size) override
 		{
-			if (XMLNode const* value_node = node.FirstNode("value"))
+			if (const XMLNode* value_node = node.FirstNode("value"))
 			{
 				value_node = value_node->FirstNode();
 				if (value_node && (XMLNodeType::CData == value_node->Type()))
@@ -3939,17 +3939,17 @@ namespace
 	{
 		uint32_t major_ver = 0;
 		uint32_t minor_ver = 0;
-		if (XMLAttribute const* attr = node.Attrib("major_version"))
+		if (const XMLAttribute* attr = node.Attrib("major_version"))
 		{
 			major_ver = attr->ValueUInt();
-			if (XMLAttribute const* minor_attr = node.Attrib("minor_version"))
+			if (const XMLAttribute* minor_attr = node.Attrib("minor_version"))
 			{
 				minor_ver = minor_attr->ValueUInt();
 			}
 		}
 		else
 		{
-			if (XMLAttribute const* version_attr = node.Attrib("version"))
+			if (const XMLAttribute* version_attr = node.Attrib("version"))
 			{
 				const std::string_view version_str = version_attr->ValueString();
 				const size_t dot_pos = version_str.find('.');
@@ -4018,7 +4018,7 @@ namespace RenderWorker
 		name_ = std::string(node.Attrib("name")->ValueString());
 		name_hash_ = HashValue(name_);
 
-		for (XMLNode const* member_node = node.FirstNode("member"); member_node; member_node = member_node->NextSibling("member"))
+		for (const XMLNode* member_node = node.FirstNode("member"); member_node; member_node = member_node->NextSibling("member"))
 		{
 			RenderEffectDataType member_type;
 			auto member_type_name = member_node->Attrib("type")->ValueString();
@@ -4544,9 +4544,9 @@ namespace RenderWorker
 	void RenderEffect::PreprocessIncludes(XMLNode& root, std::vector<std::string>& include_names)
 	{
 		//auto& res_loader = Context::Instance().ResLoaderInstance();
-		for (XMLNode const* node = root.FirstNode("include"); node; node = root.FirstNode("include"))
+		for (const XMLNode* node = root.FirstNode("include"); node; node = root.FirstNode("include"))
 		{
-			XMLAttribute const* attr = node->Attrib("name");
+			const XMLAttribute* attr = node->Attrib("name");
 			COMMON_ASSERT(attr);
 
 			const std::string include_name = std::string(attr->ValueString());
@@ -4558,7 +4558,7 @@ namespace RenderWorker
 			if (iter == include_names.end())
 			{
 				auto const& include_root = LoadXml(*Context::OpenFile(include_name));
-				for (XMLNode const* child_node = include_root.FirstNode(); child_node; child_node = child_node->NextSibling())
+				for (const XMLNode* child_node = include_root.FirstNode(); child_node; child_node = child_node->NextSibling())
 				{
 					if (XMLNodeType::Element == child_node->Type())
 					{
@@ -4575,9 +4575,9 @@ namespace RenderWorker
 	void RenderEffect::RecursiveIncludeNode(XMLNode const& root, std::vector<std::string>& include_names) const
 	{
 		//auto& res_loader = Context::Instance().ResLoaderInstance();
-		for (XMLNode const* node = root.FirstNode("include"); node; node = node->NextSibling("include"))
+		for (const XMLNode* node = root.FirstNode("include"); node; node = node->NextSibling("include"))
 		{
-			XMLAttribute const* attr = node->Attrib("name");
+			const XMLAttribute* attr = node->Attrib("name");
 			COMMON_ASSERT(attr);
 
 			const std::string_view include_name = attr->ValueString();
@@ -4602,7 +4602,7 @@ namespace RenderWorker
 		}
 	}
 
-	XMLNode RenderEffect::ResolveInheritTechNode(XMLNode& root, XMLNode const* tech_node)
+	XMLNode RenderEffect::ResolveInheritTechNode(XMLNode& root, const XMLNode* tech_node)
 	{
 		auto inherit_attr = tech_node->Attrib("inherit");
 		if (!inherit_attr)
@@ -4718,19 +4718,19 @@ namespace RenderWorker
 
 	void RenderEffect::Load(XMLNode const& root)
 	{
-		for (XMLNode const* macro_node = root.FirstNode("macro"); macro_node; macro_node = macro_node->NextSibling("macro"))
+		for (const XMLNode* macro_node = root.FirstNode("macro"); macro_node; macro_node = macro_node->NextSibling("macro"))
 		{
 			immutable_->macros.emplace_back(macro_node->Attrib("name")->ValueString(), macro_node->Attrib("value")->ValueString());
 		}
 
-		for (XMLNode const* node = root.FirstNode("struct"); node; node = node->NextSibling("struct"))
+		for (const XMLNode* node = root.FirstNode("struct"); node; node = node->NextSibling("struct"))
 		{
 			auto& struct_type = immutable_->struct_types.emplace_back();
 			struct_type.Load(*this, *node);
 		}
 
-		std::vector<XMLNode const*> parameter_nodes;
-		for (XMLNode const* node = root.FirstNode(); node; node = node->NextSibling())
+		std::vector<const XMLNode*> parameter_nodes;
+		for (const XMLNode* node = root.FirstNode(); node; node = node->NextSibling())
 		{
 			if ("parameter" == node->Name())
 			{
@@ -4738,7 +4738,7 @@ namespace RenderWorker
 			}
 			else if ("cbuffer" == node->Name())
 			{
-				for (XMLNode const* sub_node = node->FirstNode("parameter"); sub_node; sub_node = sub_node->NextSibling("parameter"))
+				for (const XMLNode* sub_node = node->FirstNode("parameter"); sub_node; sub_node = sub_node->NextSibling("parameter"))
 				{
 					parameter_nodes.push_back(sub_node);
 				}
@@ -4782,7 +4782,7 @@ namespace RenderWorker
 				&& (type != REDT_rasterizer_ordered_texture3D))
 			{
 				RenderEffectConstantBuffer* cbuff = nullptr;
-				XMLNode const* parent_node = node.Parent();
+				const XMLNode* parent_node = node.Parent();
 				std::string const cbuff_name = std::string(parent_node->AttribString("name", "global_cb"));
 				size_t const cbuff_name_hash = RtHash(cbuff_name.c_str());
 
@@ -4810,10 +4810,10 @@ namespace RenderWorker
 			param.Load(*this, node);
 		}
 
-		// for (XMLNode const* shader_graph_nodes_node = root.FirstNode("shader_graph_nodes"); shader_graph_nodes_node;
+		// for (const XMLNode* shader_graph_nodes_node = root.FirstNode("shader_graph_nodes"); shader_graph_nodes_node;
 		// 	 shader_graph_nodes_node = shader_graph_nodes_node->NextSibling("shader_graph_nodes"))
 		// {
-		// 	for (XMLNode const* shader_node = shader_graph_nodes_node->FirstNode("node"); shader_node;
+		// 	for (const XMLNode* shader_node = shader_graph_nodes_node->FirstNode("node"); shader_node;
 		// 		 shader_node = shader_node->NextSibling("node"))
 		// 	{
 		// 		auto name_attr = shader_node->Attrib("name");
@@ -4839,7 +4839,7 @@ namespace RenderWorker
 		// 	}
 		// }
 
-		for (XMLNode const* shader_node = root.FirstNode("shader"); shader_node; shader_node = shader_node->NextSibling("shader"))
+		for (const XMLNode* shader_node = root.FirstNode("shader"); shader_node; shader_node = shader_node->NextSibling("shader"))
 		{
 			auto& frag = immutable_->shader_frags.emplace_back();
 			frag.Load(*shader_node);
@@ -4848,7 +4848,7 @@ namespace RenderWorker
 		this->GenHLSLShaderText();
 
 		uint32_t index = 0;
-		for (XMLNode const* node = root.FirstNode("technique"); node; node = node->NextSibling("technique"), ++index)
+		for (const XMLNode* node = root.FirstNode("technique"); node; node = node->NextSibling("technique"), ++index)
 		{
 			auto& tech = immutable_->techniques.emplace_back();
 			tech.Load(*this, *node, index);
@@ -5538,7 +5538,7 @@ namespace RenderWorker
 		name_hash_ = HashValue(name_);
 
 		RenderTechnique* parent_tech = nullptr;
-		if (XMLAttribute const* inherit_attr = node.Attrib("inherit"))
+		if (const XMLAttribute* inherit_attr = node.Attrib("inherit"))
 		{
 			std::string_view const inherit = inherit_attr->ValueString();
 			COMMON_ASSERT(inherit != name_);
@@ -5558,7 +5558,7 @@ namespace RenderWorker
 		// 	return;
 		// }
 
-		// if (XMLNode const* anno_node = node.FirstNode("annotation"))
+		// if (const XMLNode* anno_node = node.FirstNode("annotation"))
 		// {
 		// 	annotations_ = MakeSharedPtr<std::remove_reference<decltype(*annotations_)>::type>();
 		// 	if (parent_tech && parent_tech->annotations_)
@@ -5578,7 +5578,7 @@ namespace RenderWorker
 		// 	annotations_ = parent_tech->annotations_;
 		// }
 
-		if (XMLNode const* macro_node = node.FirstNode("macro"))
+		if (const XMLNode* macro_node = node.FirstNode("macro"))
 		{
 			macros_ = MakeSharedPtr<std::remove_reference<decltype(*macros_)>::type>();
 			if (parent_tech && parent_tech->macros_)
@@ -5652,7 +5652,7 @@ namespace RenderWorker
 			}
 		
 			uint32_t index = 0;
-			for (XMLNode const* pass_node = node.FirstNode("pass"); pass_node; pass_node = pass_node->NextSibling("pass"), ++ index)
+			for (const XMLNode* pass_node = node.FirstNode("pass"); pass_node; pass_node = pass_node->NextSibling("pass"), ++ index)
 			{
 				auto& pass = *passes_.emplace_back(MakeSharedPtr<RenderPass>());
 
@@ -5666,7 +5666,7 @@ namespace RenderWorker
 
 				is_validate_ &= pass.Validate();
 
-				for (XMLNode const* state_node = pass_node->FirstNode("state"); state_node; state_node = state_node->NextSibling("state"))
+				for (const XMLNode* state_node = pass_node->FirstNode("state"); state_node; state_node = state_node->NextSibling("state"))
 				{
 					++ weight_;
 
@@ -5900,7 +5900,7 @@ namespace RenderWorker
 		name_ = std::string(node.Attrib("name")->ValueString());
 		name_hash_ = HashValue(name_);
 
-		// if (XMLNode const* anno_node = node.FirstNode("annotation"))
+		// if (const XMLNode* anno_node = node.FirstNode("annotation"))
 		// {
 		// 	annotations_ = MakeSharedPtr<std::remove_reference<decltype(*annotations_)>::type>();
 		// 	if (inherit_pass && inherit_pass->annotations_)
@@ -5918,7 +5918,7 @@ namespace RenderWorker
 		// 	annotations_ = inherit_pass->annotations_;
 		// }
 
-		if (XMLNode const* macro_node = node.FirstNode("macro"))
+		if (const XMLNode* macro_node = node.FirstNode("macro"))
 		{
 			macros_ = MakeSharedPtr<std::remove_reference<decltype(*macros_)>::type>();
 			if (inherit_pass && inherit_pass->macros_)
@@ -5985,11 +5985,11 @@ namespace RenderWorker
 			shader_desc_ids_ = inherit_pass->shader_desc_ids_;
 		}
 
-		for (XMLNode const* state_node = node.FirstNode("state"); state_node; state_node = state_node->NextSibling("state"))
+		for (const XMLNode* state_node = node.FirstNode("state"); state_node; state_node = state_node->NextSibling("state"))
 		{
 			size_t const state_name_hash = HashValue(state_node->Attrib("name")->ValueString());
 
-			XMLAttribute const* value_attr = state_node->Attrib("value");
+			const XMLAttribute* value_attr = state_node->Attrib("value");
 			std::string_view value_str;
 			if (value_attr)
 			{
@@ -6092,19 +6092,19 @@ namespace RenderWorker
 			}
 			else if (CtHash("blend_factor") == state_name_hash)
 			{
-				if (XMLAttribute const* attr = state_node->Attrib("r"))
+				if (const XMLAttribute* attr = state_node->Attrib("r"))
 				{
 					bs_desc.blend_factor.r() = attr->ValueFloat();
 				}
-				if (XMLAttribute const* attr = state_node->Attrib("g"))
+				if (const XMLAttribute* attr = state_node->Attrib("g"))
 				{
 					bs_desc.blend_factor.g() = attr->ValueFloat();
 				}
-				if (XMLAttribute const* attr = state_node->Attrib("b"))
+				if (const XMLAttribute* attr = state_node->Attrib("b"))
 				{
 					bs_desc.blend_factor.b() = attr->ValueFloat();
 				}
-				if (XMLAttribute const* attr = state_node->Attrib("a"))
+				if (const XMLAttribute* attr = state_node->Attrib("a"))
 				{
 					bs_desc.blend_factor.a() = attr->ValueFloat();
 				}
@@ -6227,14 +6227,14 @@ namespace RenderWorker
 
 				if ((ShaderStage::Vertex == stage) || (ShaderStage::Geometry == stage))
 				{
-					if (XMLNode const* so_node = state_node->FirstNode("stream_output"))
+					if (const XMLNode* so_node = state_node->FirstNode("stream_output"))
 					{
-						for (XMLNode const* entry_node = so_node->FirstNode("entry"); entry_node; entry_node = entry_node->NextSibling("entry"))
+						for (const XMLNode* entry_node = so_node->FirstNode("entry"); entry_node; entry_node = entry_node->NextSibling("entry"))
 						{
 							auto& decl = sd.so_decl.emplace_back();
 
 							size_t const usage_str_hash = HashValue(entry_node->Attrib("usage")->ValueString());
-							if (XMLAttribute const* attr = entry_node->Attrib("usage_index"))
+							if (const XMLAttribute* attr = entry_node->Attrib("usage_index"))
 							{
 								decl.usage_index = static_cast<uint8_t>(attr->ValueInt());
 							}
@@ -6288,7 +6288,7 @@ namespace RenderWorker
 							}
 
 							std::string component_str;
-							if (XMLAttribute const* attr = entry_node->Attrib("component"))
+							if (const XMLAttribute* attr = entry_node->Attrib("component"))
 							{
 								component_str = std::string(attr->ValueString());
 							}
@@ -6299,7 +6299,7 @@ namespace RenderWorker
 							decl.start_component = static_cast<uint8_t>(component_str[0] - 'x');
 							decl.component_count = static_cast<uint8_t>(std::min(static_cast<size_t>(4), component_str.size()));
 
-							if (XMLAttribute const* attr = entry_node->Attrib("slot"))
+							if (const XMLAttribute* attr = entry_node->Attrib("slot"))
 							{
 								decl.slot = static_cast<uint8_t>(attr->ValueInt());
 							}
@@ -6796,7 +6796,7 @@ namespace RenderWorker
 			for (uint32_t i = 0; i < param_indices_->size(); ++i)
 			{
 				uint32_t param_index = (*param_indices_)[i];
-				RenderEffectParameter const* src_param = effect_.ParameterByIndex(param_index);
+				const RenderEffectParameter* src_param = effect_.ParameterByIndex(param_index);
 				if (src_param->InCBuffer())
 				{
 					if (effect_.ResNameHash() != dst_effect.ResNameHash())
@@ -6898,14 +6898,14 @@ namespace RenderWorker
 		immutable_->name = std::string(node.Attrib("name")->ValueString());
 		immutable_->name_hash = HashValue(immutable_->name);
 
-		if (XMLAttribute const* attr = node.Attrib("semantic"))
+		if (const XMLAttribute* attr = node.Attrib("semantic"))
 		{
 			immutable_->semantic = std::string(attr->ValueString());
 			immutable_->semantic_hash = HashValue(immutable_->semantic);
 		}
 
 		uint32_t as;
-		if (XMLAttribute const* attr = node.Attrib("array_size"))
+		if (const XMLAttribute* attr = node.Attrib("array_size"))
 		{
 			immutable_->array_size = MakeUniquePtr<std::string>(attr->ValueString());
 
@@ -6920,7 +6920,7 @@ namespace RenderWorker
 		}
 		var_ = LoadVariable(effect, node, immutable_->type, as);
 
-		// if (XMLNode const* anno_node = node.FirstNode("annotation"))
+		// if (const XMLNode* anno_node = node.FirstNode("annotation"))
 		// {
 		// 	immutable_->annotations = MakeUniquePtr<std::remove_reference<decltype(*immutable_->annotations)>::type>();
 		// 	for (; anno_node; anno_node = anno_node->NextSibling("annotation"))
@@ -7118,7 +7118,7 @@ namespace RenderWorker
 	void RenderShaderFragment::Load(XMLNode const& node)
 	{
 		stage_ = ShaderStage::NumStages;
-		if (XMLAttribute const* attr = node.Attrib("type"))
+		if (const XMLAttribute* attr = node.Attrib("type"))
 		{
 			size_t const type_str_hash = HashValue(attr->ValueString());
 			if (CtHash("vertex_shader") == type_str_hash)
@@ -7151,7 +7151,7 @@ namespace RenderWorker
 		// ver_ = ShaderModel(0, 0);
 		// LoadVersion(node, ver_);
 
-		for (XMLNode const* shader_text_node = node.FirstNode(); shader_text_node; shader_text_node = shader_text_node->NextSibling())
+		for (const XMLNode* shader_text_node = node.FirstNode(); shader_text_node; shader_text_node = shader_text_node->NextSibling())
 		{
 			if ((XMLNodeType::Comment == shader_text_node->Type()) || (XMLNodeType::CData == shader_text_node->Type()))
 			{
@@ -7194,7 +7194,7 @@ namespace RenderWorker
 #if ZENGINE_IS_DEV_PLATFORM
 	void RenderShaderGraphNode::Load(XMLNode const& node)
 	{
-		XMLAttribute const* attr = node.Attrib("name");
+		const XMLAttribute* attr = node.Attrib("name");
 		COMMON_ASSERT(attr);
 
 		if (!name_.empty())
@@ -7216,10 +7216,10 @@ namespace RenderWorker
 				return_type_ = "void";
 			}
 
-			for (XMLNode const* param_node = node.FirstNode(); param_node; param_node = param_node->NextSibling())
+			for (const XMLNode* param_node = node.FirstNode(); param_node; param_node = param_node->NextSibling())
 			{
-				XMLAttribute const* type_attr = param_node->Attrib("type");
-				XMLAttribute const* name_attr = param_node->Attrib("name");
+				const XMLAttribute* type_attr = param_node->Attrib("type");
+				const XMLAttribute* name_attr = param_node->Attrib("name");
 				COMMON_ASSERT(type_attr);
 				COMMON_ASSERT(name_attr);
 

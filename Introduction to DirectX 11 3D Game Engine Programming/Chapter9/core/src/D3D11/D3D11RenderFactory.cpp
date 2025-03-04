@@ -35,7 +35,7 @@ ShaderStageObjectPtr D3D11RenderFactory::MakeShaderStageObject(ShaderStage stage
         break;
 
     case ShaderStage::Geometry:
-        //ret = MakeSharedPtr<D3D11GeometryShaderStageObject>();
+        ret = MakeSharedPtr<D3D11GeometryShaderStageObject>();
         break;
 
     case ShaderStage::Compute:

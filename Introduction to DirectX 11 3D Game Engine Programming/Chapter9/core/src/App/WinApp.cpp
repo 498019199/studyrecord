@@ -226,8 +226,12 @@ void WinAPP::ImguiUpdate(float dt)
 		}
 
 		auto& wd = Context::Instance().WorldInstance();
-		auto cameraPos = wd.camera_->EyePos();
-        ImGui::Text("Camera Position\n%.2f %.2f %.2f", cameraPos.x(), cameraPos.y(), cameraPos.z());
+		if(wd.camera_)
+		{
+			auto cameraPos = wd.camera_->EyePos();
+			ImGui::Text("Camera Position\n%.2f %.2f %.2f", cameraPos.x(), cameraPos.y(), cameraPos.z());
+		}
+
 
 		// 不允许在操作UI时操作物体
     	if (!ImGui::IsAnyItemActive())

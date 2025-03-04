@@ -88,7 +88,11 @@ void D3D11ShaderStageObject::CompileShader(const RenderEffect& effect, const Ren
     #if !defined(_DEBUG)
         flags |= D3DCOMPILE_OPTIMIZATION_LEVEL3;
     #else
+        // 设置 D3DCOMPILE_DEBUG 标志用于获取着色器调试信息。该标志可以提升调试体验，
+        // 但仍然允许着色器进行优化操作
         flags |= D3DCOMPILE_DEBUG;
+        // 在Debug环境下禁用优化以避免出现一些不合理的情况
+        flags |= D3DCOMPILE_SKIP_OPTIMIZATION;
     #endif
     
         com_ptr<ID3D11ShaderReflection> reflection;
@@ -352,6 +356,27 @@ void D3D11PixelShaderStageObject::StageSpecificCreateHwShader(const RenderEffect
     }
 }
 
+D3D11GeometryShaderStageObject::D3D11GeometryShaderStageObject()
+    : D3D11ShaderStageObject(ShaderStage::Geometry)
+{
+    is_available_ = true;
+}
+
+void D3D11GeometryShaderStageObject::ClearHwShader()
+{
+    geometry_shader_.reset();
+}
+
+void D3D11GeometryShaderStageObject::StageSpecificCreateHwShader(const RenderEffect& effect, const std::array<uint32_t, ShaderStageNum>& shader_desc_ids)
+{
+    const auto& re = checked_cast<D3D11RenderEngine const&>(Context::Instance().RenderEngineInstance());
+    auto d3d_device = re.D3DDevice();
+    if (FAILED(d3d_device->CreateGeometryShader(shader_code_.data(), shader_code_.size(), nullptr, geometry_shader_.put())))
+    {
+        is_validate_ = false;
+    }
+}
+
 
 
 
@@ -375,6 +400,19 @@ void D3D11ShaderObject::Bind(const RenderEffect& effect)
 
     auto const& ps_stage = this->Stage(ShaderStage::Pixel);
 	re.PSSetShader(ps_stage ? checked_cast<D3D11ShaderStageObject&>(*ps_stage).HwPixelShader() : nullptr);
+
+    ShaderStage stream_output_stage = ShaderStage::NumStages;
+    if (Stage(ShaderStage::Geometry))
+    {
+        stream_output_stage = ShaderStage::Geometry;
+    }
+    else if (Stage(ShaderStage::Vertex))
+    {
+        stream_output_stage = ShaderStage::Vertex;
+    }
+    re.GSSetShader((stream_output_stage != ShaderStage::NumStages)
+        ? checked_cast<D3D11ShaderStageObject&>(*this->Stage(stream_output_stage)).HwGeometryShader()
+        : nullptr);
 
     for (auto const & pbs : param_binds_)
     {

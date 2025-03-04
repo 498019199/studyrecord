@@ -375,7 +375,8 @@ void D3D11RenderEngine::DoRender(const RenderEffect& effect, const RenderTechniq
 	{
 		auto& pass = tech.Pass(i);
 		pass.Bind(effect);
-		d3d_imm_ctx_->DrawIndexed(num_vertices_just_rendered_, 0, 0);
+		d3d_imm_ctx_->Draw(num_vertices_just_rendered_, 0);
+		//d3d_imm_ctx_->DrawIndexed(num_vertices_just_rendered_, 0, 0);
 		pass.Unbind(effect);
 	}
 }
@@ -425,6 +426,15 @@ void D3D11RenderEngine::PSSetShader(ID3D11PixelShader* shader)
 	{
 		d3d_imm_ctx_->PSSetShader(shader, nullptr, 0);
 		pixel_shader_cache_ = shader;
+	}
+}
+
+void D3D11RenderEngine::GSSetShader(ID3D11GeometryShader* shader)
+{
+	if (geometry_shader_cache_ != shader)
+	{
+		d3d_imm_ctx_->GSSetShader(shader, nullptr, 0);
+		geometry_shader_cache_ = shader;
 	}
 }
 

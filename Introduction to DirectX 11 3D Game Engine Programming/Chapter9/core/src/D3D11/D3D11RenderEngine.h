@@ -32,6 +32,7 @@ public:
     // 将着色器绑定到渲染管线
     void VSSetShader(ID3D11VertexShader* shader);
 	void PSSetShader(ID3D11PixelShader* shader);
+    void GSSetShader(ID3D11GeometryShader* shader);
     // 绑定资源
     void SetShaderResources(ShaderStage stage, std::span<std::tuple<void*, uint32_t, uint32_t> const> srvsrcs, std::span<ID3D11ShaderResourceView* const> srvs);
     // 绑定取样器
@@ -75,6 +76,7 @@ private:
     // 当前绑定的着色器
     ID3D11VertexShader* vertex_shader_cache_{nullptr};
     ID3D11PixelShader* pixel_shader_cache_{nullptr};
+    ID3D11GeometryShader* geometry_shader_cache_{nullptr};
     
     // 默认shader 目标选项
     char const* shader_profiles_[ShaderStageNum];

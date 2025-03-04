@@ -19,6 +19,7 @@ namespace RenderWorker
 
     using ID3D11VertexShaderPtr = com_ptr<ID3D11VertexShader>;
     using ID3D11PixelShaderPtr = com_ptr<ID3D11PixelShader>;
+    using ID3D11GeometryShaderPtr = com_ptr<ID3D11GeometryShader>;
 	using ID3D11ResourcePtr = com_ptr<ID3D11Resource>;
 	using ID3D11Texture1DPtr = com_ptr<ID3D11Texture1D>;
 	using ID3D11Texture2DPtr = com_ptr<ID3D11Texture2D>;

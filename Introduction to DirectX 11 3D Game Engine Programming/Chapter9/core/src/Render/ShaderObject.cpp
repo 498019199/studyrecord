@@ -368,9 +368,14 @@ void ShaderObject::LinkShaders(RenderEffect& effect)
 			};
 #endif
 
+#if !defined(_DEBUG)
 			const uint32_t strip_flags = D3DCOMPILER_STRIP_REFLECTION_DATA | D3DCOMPILER_STRIP_DEBUG_INFO | D3DCOMPILER_STRIP_TEST_BLOBS |
 										 D3DCOMPILER_STRIP_PRIVATE_DATA | D3DCOMPILER_STRIP_ROOT_SIGNATURE;
+#else
+            const uint32_t strip_flags = D3DCOMPILER_STRIP_REFLECTION_DATA | D3DCOMPILER_STRIP_PRIVATE_DATA | D3DCOMPILER_STRIP_ROOT_SIGNATURE;
+#endif
 			D3DCompilerLoader::Instance().D3DStripShader(code, strip_flags, code);
+
 		}
 
 		return code;
