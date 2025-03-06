@@ -249,6 +249,7 @@ public:
                     case Mode::SplitedTriangle:
                     {
                         auto tri = new RenderableTriangle2("Streamout.xml");
+                        Context::Instance().WorldInstance().AddRenderable(tri);
                     }
                     break;
                 }

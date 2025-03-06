@@ -5,13 +5,13 @@
     </cbuffer>
     <technique name="Basic_2D">
         <pass name="p0">
-            <state name="vertex_shader" value="VS()"/>
-			<state name="pixel_shader" value="PS()"/>
-            <state name="geometry_shader" value="GS()">
+            <state name="vertex_shader" value="VS()">
                 <stream_output>
                     <entry usage="COLOR" usage_index="0" component="xyzw" slot="0"/>
                 </stream_output>
             </state>
+			<state name="pixel_shader" value="PS()"/>
+            <state name="geometry_shader" value="GS()"/>
         </pass>
     </technique>
     <shader>

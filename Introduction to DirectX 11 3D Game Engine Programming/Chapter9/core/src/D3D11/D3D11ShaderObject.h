@@ -79,6 +79,13 @@ public:
     {
         return nullptr;
     }
+    
+protected:
+    ID3D11GeometryShaderPtr CreateGeometryShaderWithStreamOutput(const RenderEffect& effect,
+        std::array<uint32_t, ShaderStageNum> const& shader_desc_ids, 
+        std::span<uint8_t const> code_blob,
+        const std::vector<ShaderDesc::StreamOutputDecl>& so_decl);
+
 private:
     
     std::string_view GetShaderProfile(RenderEffect const& effect, uint32_t shader_desc_id) const override;  
@@ -113,6 +120,10 @@ public:
     {
         return vertex_shader_.get();
     }
+    ID3D11GeometryShader* HwGeometryShader() const noexcept override
+    {
+        return geometry_shader_.get();
+    }
 
 private:
     void ClearHwShader() override;
@@ -123,6 +134,8 @@ private:
 #endif
 private:
     ID3D11VertexShaderPtr vertex_shader_;
+    ID3D11GeometryShaderPtr geometry_shader_;
+
     uint32_t vs_signature_;
 };
 
@@ -154,12 +167,6 @@ public:
     {
         return geometry_shader_.get();
     }
-
-protected:
-    ID3D11GeometryShaderPtr CreateGeometryShaderWithStreamOutput(const RenderEffect& effect,
-        std::array<uint32_t, ShaderStageNum> const& shader_desc_ids, 
-        std::span<uint8_t const> code_blob,
-        const std::vector<ShaderDesc::StreamOutputDecl>& so_decl);
 
 private:
     void ClearHwShader() override;
