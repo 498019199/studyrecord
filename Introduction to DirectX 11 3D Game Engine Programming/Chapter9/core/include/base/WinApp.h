@@ -19,7 +19,8 @@ public:
     bool InitDevice(HWND hwnd, const RenderSettings& settings);
     
     int Run();
-    void ImguiUpdate(float dt);
+
+    virtual void ImguiUpdate(float dt) = 0;
 
     HWND GetHWND() const { return hwnd_; }
 
@@ -28,7 +29,7 @@ private:
     static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) noexcept;
     
     void CalculateFrameStats();
-private:
+protected:
     // Stats
     uint32_t total_num_frames_ = 0;
     float	fps_ = 0.f;

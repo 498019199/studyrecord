@@ -61,5 +61,7 @@ public:
     static D3D11_PRIMITIVE_TOPOLOGY Mapping(RenderLayout::topology_type tt);
     static void Mapping(std::vector<D3D11_INPUT_ELEMENT_DESC>& elements, uint32_t stream, std::span<const VertexElement> vet,
         RenderLayout::stream_type type, uint32_t freq);
+
+    static D3D11_SO_DECLARATION_ENTRY Mapping(const ShaderDesc::StreamOutputDecl& decl);
 };
 }

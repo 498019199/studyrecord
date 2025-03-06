@@ -362,6 +362,41 @@ D3D11GeometryShaderStageObject::D3D11GeometryShaderStageObject()
     is_available_ = true;
 }
 
+// 创建带流输出阶段的几何着色器
+ID3D11GeometryShaderPtr D3D11GeometryShaderStageObject::CreateGeometryShaderWithStreamOutput(const RenderEffect& effect,
+        std::array<uint32_t, ShaderStageNum> const& shader_desc_ids, 
+        std::span<uint8_t const> code_blob,
+        const std::vector<ShaderDesc::StreamOutputDecl>& so_decl)
+{
+    COMMON_ASSERT(!code_blob.empty());
+
+    const auto& re = checked_cast<D3D11RenderEngine const&>(Context::Instance().RenderEngineInstance());
+    auto d3d_device = re.D3DDevice();
+
+    // [In]D3D11_SO_DECLARATION_ENTRY的数组
+    std::vector<D3D11_SO_DECLARATION_ENTRY> d3d11_decl(so_decl.size());
+    for (size_t i = 0; i < so_decl.size(); ++i)
+    {
+        d3d11_decl[i] = D3D11Mapping::Mapping(so_decl[i]);
+    }
+
+    // [In]按索引指定哪个流输出对象用于传递到光栅化阶段
+    UINT rasterized_stream = 0;
+    if ((effect.GetShaderDesc(shader_desc_ids[std::to_underlying(ShaderStage::Pixel)]).func_name.empty()))
+    {
+        rasterized_stream = D3D11_SO_NO_RASTERIZED_STREAM;
+    }
+
+    ID3D11GeometryShaderPtr gs;
+    if (FAILED(d3d_device->CreateGeometryShaderWithStreamOutput(code_blob.data(), code_blob.size(), &d3d11_decl[0],
+            static_cast<UINT>(d3d11_decl.size()), nullptr, 0, rasterized_stream, nullptr, gs.put())))
+    {
+        is_validate_ = false;
+    }
+
+    return gs;
+}
+
 void D3D11GeometryShaderStageObject::ClearHwShader()
 {
     geometry_shader_.reset();
@@ -369,12 +404,29 @@ void D3D11GeometryShaderStageObject::ClearHwShader()
 
 void D3D11GeometryShaderStageObject::StageSpecificCreateHwShader(const RenderEffect& effect, const std::array<uint32_t, ShaderStageNum>& shader_desc_ids)
 {
-    const auto& re = checked_cast<D3D11RenderEngine const&>(Context::Instance().RenderEngineInstance());
-    auto d3d_device = re.D3DDevice();
-    if (FAILED(d3d_device->CreateGeometryShader(shader_code_.data(), shader_code_.size(), nullptr, geometry_shader_.put())))
+    if (is_available_)
+    {
+        const ShaderDesc& sd = effect.GetShaderDesc(shader_desc_ids[std::to_underlying(stage_)]);
+        if (sd.so_decl.empty())
+        {
+            const auto& re = checked_cast<D3D11RenderEngine const&>(Context::Instance().RenderEngineInstance());
+            auto d3d_device = re.D3DDevice();
+
+            if (FAILED(d3d_device->CreateGeometryShader(shader_code_.data(), shader_code_.size(), nullptr, geometry_shader_.put())))
+            {
+                is_validate_ = false;
+            }
+        }
+        else
+        {
+            geometry_shader_ = CreateGeometryShaderWithStreamOutput(effect, shader_desc_ids, shader_code_, sd.so_decl);
+        }
+    }
+    else
     {
         is_validate_ = false;
     }
+
 }
 
 

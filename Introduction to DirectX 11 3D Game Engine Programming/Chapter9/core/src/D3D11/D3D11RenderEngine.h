@@ -33,7 +33,7 @@ public:
     void VSSetShader(ID3D11VertexShader* shader);
 	void PSSetShader(ID3D11PixelShader* shader);
     void GSSetShader(ID3D11GeometryShader* shader);
-    // 绑定资源
+    // 绑定shader资源
     void SetShaderResources(ShaderStage stage, std::span<std::tuple<void*, uint32_t, uint32_t> const> srvsrcs, std::span<ID3D11ShaderResourceView* const> srvs);
     // 绑定取样器
     void SetSamplers(ShaderStage stage, std::span<ID3D11SamplerState* const> samplers);
@@ -41,6 +41,13 @@ public:
     void SetConstantBuffers(ShaderStage stage, std::span<ID3D11Buffer* const> cbs);
 
     char const * DefaultShaderProfile(ShaderStage stage) const;
+
+    // // 删除shader资源
+    void DetachSRV(void* rtv_src, uint32_t rt_first_subres, uint32_t rt_num_subres);
+private:
+    // 设置当前Stream output目标
+    virtual void DoBindSOBuffers(const RenderLayoutPtr& rl) override;
+
 private:
     int weight_{0};
     int height_{0};
@@ -87,6 +94,7 @@ private:
     std::array<std::vector<ID3D11ShaderResourceView*>, ShaderStageNum> shader_srv_ptr_cache_;
     std::array<std::vector<ID3D11SamplerState*>, ShaderStageNum> shader_sampler_ptr_cache_;
 
+    uint32_t num_so_buffs_{0};
     // 顶点索引相关
     ID3D11InputLayout* input_layout_cache_{nullptr};
     std::vector<ID3D11Buffer*> vb_cache_;

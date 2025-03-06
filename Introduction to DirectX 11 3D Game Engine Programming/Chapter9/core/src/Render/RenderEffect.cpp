@@ -5083,30 +5083,30 @@ namespace RenderWorker
 				frag.StreamOut(os);
 			}
 		}
-		// {
-		// 	uint16_t num_shader_descs = Native2LE(static_cast<uint16_t>(immutable_->shader_descs.size() - 1));
-		// 	os.write(reinterpret_cast<char const *>(&num_shader_descs), sizeof(num_shader_descs));
-		// 	for (uint32_t i = 1; i < immutable_->shader_descs.size(); ++i)
-		// 	{
-		// 		WriteShortString(os, immutable_->shader_descs[i].profile);
-		// 		WriteShortString(os, immutable_->shader_descs[i].func_name);
+		{
+			uint16_t num_shader_descs = Native2LE(static_cast<uint16_t>(immutable_->shader_descs.size() - 1));
+			os.write(reinterpret_cast<char const *>(&num_shader_descs), sizeof(num_shader_descs));
+			for (uint32_t i = 1; i < immutable_->shader_descs.size(); ++i)
+			{
+				WriteShortString(os, immutable_->shader_descs[i].profile);
+				WriteShortString(os, immutable_->shader_descs[i].func_name);
 
-		// 		uint64_t tmp64 = Native2LE(immutable_->shader_descs[i].macros_hash);
-		// 		os.write(reinterpret_cast<char const *>(&tmp64), sizeof(tmp64));
+				uint64_t tmp64 = Native2LE(immutable_->shader_descs[i].macros_hash);
+				os.write(reinterpret_cast<char const *>(&tmp64), sizeof(tmp64));
 
-		// 		uint32_t tmp32 = Native2LE(immutable_->shader_descs[i].tech_pass_type);
-		// 		os.write(reinterpret_cast<char const *>(&tmp32), sizeof(tmp32));
+				uint32_t tmp32 = Native2LE(immutable_->shader_descs[i].tech_pass_type);
+				os.write(reinterpret_cast<char const *>(&tmp32), sizeof(tmp32));
 
-		// 		uint8_t len = static_cast<uint8_t>(immutable_->shader_descs[i].so_decl.size());
-		// 		os.write(reinterpret_cast<char const *>(&len), sizeof(len));
-		// 		for (uint32_t j = 0; j < len; ++ j)
-		// 		{
-		// 			ShaderDesc::StreamOutputDecl so_decl = immutable_->shader_descs[i].so_decl[j];
-		// 			so_decl.usage = Native2LE(so_decl.usage);
-		// 			os.write(reinterpret_cast<char const *>(&so_decl), sizeof(so_decl));
-		// 		}
-		// 	}
-		// }
+				uint8_t len = static_cast<uint8_t>(immutable_->shader_descs[i].so_decl.size());
+				os.write(reinterpret_cast<char const *>(&len), sizeof(len));
+				for (uint32_t j = 0; j < len; ++ j)
+				{
+					ShaderDesc::StreamOutputDecl so_decl = immutable_->shader_descs[i].so_decl[j];
+					so_decl.usage = Native2LE(so_decl.usage);
+					os.write(reinterpret_cast<char const *>(&so_decl), sizeof(so_decl));
+				}
+			}
+		}
 
 		{
 			uint16_t num_techs = Native2LE(static_cast<uint16_t>(immutable_->techniques.size()));
@@ -5508,11 +5508,11 @@ namespace RenderWorker
 		// 	{
 		// 		str += "#endif\n";
 		// 	}
-		// 	if (shader_stage != ShaderStage::NumStages)
-		// 	{
-		// 		str += "#endif\n";
-		// 	}
-		// }
+			if (shader_stage != ShaderStage::NumStages)
+			{
+				str += "#endif\n";
+			}
+		}
 
 		// if (!immutable_->shader_graph_nodes.empty())
 		// {
@@ -5522,7 +5522,7 @@ namespace RenderWorker
 		// 		str += node.GenDefinitionCode();
 		// 	}
 		// 	str += '\n';
-		}
+		//}
 	}
 #endif
 

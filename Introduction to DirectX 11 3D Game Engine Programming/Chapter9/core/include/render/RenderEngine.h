@@ -1,13 +1,13 @@
 
 #pragma once
 #include <render/RenderStateObject.h>
+#include <render/RenderLayout.h>
 
 namespace RenderWorker
 {
 
 class RenderEffect;
 class RenderTechnique;
-class RenderLayout;
 
 class RenderEngine
 {
@@ -15,7 +15,10 @@ public:
     RenderEngine();
     virtual ~RenderEngine() noexcept;
 
+    // 设置当前渲染状态对象
     void SetStateObject(RenderStateObjectPtr const & rs_obj);
+    // 设置当前Stream output目标
+    void BindSOBuffers(const RenderLayoutPtr& rl);
 
     virtual void BeginRender() const = 0;
     virtual void DoRender(const RenderEffect& effect, const RenderTechnique& tech, const RenderLayout& rl) = 0;
@@ -28,11 +31,18 @@ public:
         return force_line_mode_;
     }
 private:
+    virtual void DoBindSOBuffers(const RenderLayoutPtr& rl) = 0;
+
+private:
     // 强制使用线框模式
     bool force_line_mode_ {false}; 
     RenderStateObjectPtr cur_rs_obj_;
     RenderStateObjectPtr cur_line_rs_obj_;
+
+    RenderLayoutPtr so_buffers_;
 };
+
+
 
 
 

@@ -480,6 +480,79 @@ void D3D11RenderEngine::SetConstantBuffers(ShaderStage stage, std::span<ID3D11Bu
 	}
 }
 
+void D3D11RenderEngine::DetachSRV(void* rtv_src, uint32_t rt_first_subres, uint32_t rt_num_subres)
+{
+	for (uint32_t stage = 0; stage < ShaderStageNum; ++stage)
+	{
+		bool cleared = false;
+		for (uint32_t i = 0; i < shader_srvsrc_cache_[stage].size(); ++ i)
+		{
+			if (std::get<0>(shader_srvsrc_cache_[stage][i]))
+			{
+				if (std::get<0>(shader_srvsrc_cache_[stage][i]) == rtv_src)
+				{
+					uint32_t const first = std::get<1>(shader_srvsrc_cache_[stage][i]);
+					uint32_t const last = first + std::get<2>(shader_srvsrc_cache_[stage][i]);
+					uint32_t const rt_first = rt_first_subres;
+					uint32_t const rt_last = rt_first_subres + rt_num_subres;
+					if (((first >= rt_first) && (first < rt_last))
+						|| ((last >= rt_first) && (last < rt_last))
+						|| ((rt_first >= first) && (rt_first < last))
+						|| ((rt_last >= first) && (rt_last < last)))
+					{
+						shader_srv_ptr_cache_[stage][i] = nullptr;
+						cleared = true;
+					}
+				}
+			}
+		}
+
+		if (cleared)
+		{
+			ShaderSetShaderResources[stage](
+				d3d_imm_ctx_.get(), 0, static_cast<UINT>(shader_srv_ptr_cache_[stage].size()), &shader_srv_ptr_cache_[stage][0]);
+		}
+	}
+}
+
+void D3D11RenderEngine::DoBindSOBuffers(const RenderLayoutPtr& rl)
+{
+	uint32_t num_buffs = rl ? rl->VertexStreamNum() : 0;
+	if (num_buffs > 0)
+	{
+		std::vector<void*> so_src(num_buffs, nullptr);
+		std::vector<ID3D11Buffer*> d3d11_buffs(num_buffs);
+		std::vector<UINT> d3d11_buff_offsets(num_buffs, 0);
+		for (uint32_t i = 0; i < num_buffs; ++ i)
+		{
+			auto& d3d11_buf = checked_cast<D3D11GraphicsBuffer&>(*rl->GetVertexStream(i));
+
+			so_src[i] = &d3d11_buf;
+			d3d11_buffs[i] = d3d11_buf.D3DBuffer();
+		}
+
+		for (uint32_t i = 0; i < num_buffs; ++ i)
+		{
+			if (so_src[i] != nullptr)
+			{
+				DetachSRV(so_src[i], 0, 1);
+			}
+		}
+
+		d3d_imm_ctx_->SOSetTargets(static_cast<UINT>(num_buffs), &d3d11_buffs[0], &d3d11_buff_offsets[0]);
+
+		num_so_buffs_ = num_buffs;
+	}
+	else if (num_so_buffs_ > 0)
+	{
+		std::vector<ID3D11Buffer*> d3d11_buffs(num_so_buffs_, nullptr);
+		std::vector<UINT> d3d11_buff_offsets(num_so_buffs_, 0);
+		d3d_imm_ctx_->SOSetTargets(static_cast<UINT>(num_so_buffs_), &d3d11_buffs[0], &d3d11_buff_offsets[0]);
+
+		num_so_buffs_ = num_buffs;
+	}
+}
+
 char const * D3D11RenderEngine::DefaultShaderProfile(ShaderStage stage) const
 {
 	return shader_profiles_[std::to_underlying(stage)];

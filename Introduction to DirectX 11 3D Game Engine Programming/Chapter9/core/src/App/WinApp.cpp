@@ -172,21 +172,7 @@ int WinAPP::Run()
 			{
 				CalculateFrameStats();
 
-				// 这里添加
-                ImGui_ImplDX11_NewFrame();     
-                ImGui_ImplWin32_NewFrame();
-                ImGui::NewFrame();
-                // --------
-				
 				ImguiUpdate(frame_time_);
-
-			    // 可以在这之前调用ImGui的UI部分
-				// Direct3D 绘制部分
-				Context::Instance().WorldInstance().UpdateScene(frame_time_);	
-
-				// 下面这句话会触发ImGui在Direct3D的绘制
-    			// 因此需要在此之前将后备缓冲区绑定到渲染管线上
-    			ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
 				const auto& d3d11_re = checked_cast<const D3D11RenderEngine&>(Context::Instance().RenderEngineInstance());
 				d3d11_re.SwitchChain();
@@ -200,78 +186,4 @@ int WinAPP::Run()
 
 	return (int)msg.wParam;
 }
-
-
-void WinAPP::ImguiUpdate(float dt)
-{
-	static bool animateCube = true, customColor = false;
-    static float phi = 0.0f, theta = 0.0f, phi2 = 0.0f;
-    phi += 0.3f * dt, theta += 0.37f * dt, phi2 -= 0.01f;
-	float const scaler = dt * 10;
-
-	auto& wd = Context::Instance().WorldInstance();
-	// 获取IO事件
-    ImGuiIO& io = ImGui::GetIO();
-	
-	if (ImGui::Begin("Texture Box"))
-	{
-    	ImGui::SameLine(0.0f, 25.0f);                       // 下一个控件在同一行往右25像素单位
-
-		auto& re = Context::Instance().RenderEngineInstance();
-		bool is_wireframe_mode = re.ForceLineMode();
-		ImGui::Checkbox("WireFrame Mode", &is_wireframe_mode);
-		if(is_wireframe_mode != re.ForceLineMode())
-		{
-			re.ForceLineMode(is_wireframe_mode);
-		}
-
-		auto& wd = Context::Instance().WorldInstance();
-		if(wd.camera_)
-		{
-			auto cameraPos = wd.camera_->EyePos();
-			ImGui::Text("Camera Position\n%.2f %.2f %.2f", cameraPos.x(), cameraPos.y(), cameraPos.z());
-		}
-
-
-		// 不允许在操作UI时操作物体
-    	if (!ImGui::IsAnyItemActive() && wd.controller_)
-		{
-			 // 鼠标左键拖动平移
-        	if (ImGui::IsMouseDragging(ImGuiMouseButton_Left))
-			{
-
-			}
-			// 鼠标右键拖动旋转
-        	else if (ImGui::IsMouseDragging(ImGuiMouseButton_Right))
-			{
-				wd.controller_->RotateRel(io.MouseDelta.x * scaler, io.MouseDelta.y * scaler, 0);
-			}
-			// 鼠标滚轮缩放
-        	else if (io.MouseWheel != 0.0f)
-			{
-			}
-			// 位移
-			else if(ImGui::IsKeyPressed(ImGuiKey_W))
-			{
-				wd.controller_->Move(0, 0, scaler);
-			}
-			else if(ImGui::IsKeyPressed(ImGuiKey_S))
-			{
-				wd.controller_->Move(0, 0, -scaler);
-			}
-			else if(ImGui::IsKeyPressed(ImGuiKey_A))
-			{
-				wd.controller_->Move(-scaler, 0, 0);
-			}
-			else if(ImGui::IsKeyPressed(ImGuiKey_D))
-			{
-				wd.controller_->Move(scaler, 0, 0);
-			}
-		}
-	}
-
-    ImGui::End();
-    ImGui::Render();
-}
-
 }

@@ -58,4 +58,9 @@ void RenderEngine::SetStateObject(const RenderStateObjectPtr  & rs_obj)
     }
 }
 
+void RenderEngine::BindSOBuffers(const RenderLayoutPtr& rl)
+{
+    so_buffers_ = rl;
+    DoBindSOBuffers(rl);
+}
 }

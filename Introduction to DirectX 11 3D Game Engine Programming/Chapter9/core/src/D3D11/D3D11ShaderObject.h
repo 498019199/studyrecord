@@ -155,6 +155,12 @@ public:
         return geometry_shader_.get();
     }
 
+protected:
+    ID3D11GeometryShaderPtr CreateGeometryShaderWithStreamOutput(const RenderEffect& effect,
+        std::array<uint32_t, ShaderStageNum> const& shader_desc_ids, 
+        std::span<uint8_t const> code_blob,
+        const std::vector<ShaderDesc::StreamOutputDecl>& so_decl);
+
 private:
     void ClearHwShader() override;
     void StageSpecificCreateHwShader(const RenderEffect& effect, const std::array<uint32_t, ShaderStageNum>& shader_desc_ids) override;

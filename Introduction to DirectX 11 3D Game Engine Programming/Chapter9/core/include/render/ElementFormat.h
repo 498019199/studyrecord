@@ -683,7 +683,7 @@ namespace RenderWorker
 		EAH_GPU_Unordered = 1UL << 4,
 		EAH_GPU_Structured = 1UL << 5,
 		EAH_Generate_Mips = 1UL << 6,
-		EAH_Immutable = 1UL << 7,
+		EAH_Immutable = 1UL << 7, // 该资源在创建后其内容将不会被修改
 		EAH_Raw = 1UL << 8,
 		EAH_Append = 1UL << 9,
 		EAH_Counter = 1UL << 10,

@@ -943,4 +943,62 @@ D3D11_STENCIL_OP D3D11Mapping::Mapping(StencilOperation op)
     };
 }
 
+D3D11_SO_DECLARATION_ENTRY D3D11Mapping::Mapping(const ShaderDesc::StreamOutputDecl& decl)
+{
+    D3D11_SO_DECLARATION_ENTRY ret;
+
+    ret.Stream = 0;
+    ret.SemanticIndex = decl.usage_index;
+    ret.StartComponent = decl.start_component;
+    ret.ComponentCount = decl.component_count;
+    ret.OutputSlot = decl.slot;
+    switch (decl.usage)
+    {
+    // Vertex xyzs
+    case VEU_Position:
+        ret.SemanticName = "SV_Position";
+        break;
+
+    // Normal
+    case VEU_Normal:
+        ret.SemanticName = "NORMAL";
+        break;
+
+    // Vertex colors
+    case VEU_Diffuse:
+        ret.SemanticName = "COLOR";
+        break;
+
+    // Vertex speculars
+    case VEU_Specular:
+        ret.SemanticName = "COLOR";
+        break;
+
+    // Blend Weights
+    case VEU_BlendWeight:
+        ret.SemanticName = "BLENDWEIGHT";
+        break;
+
+    // Blend Indices
+    case VEU_BlendIndex:
+        ret.SemanticName = "BLENDINDICES";
+        break;
+
+    // Do texture coords
+    case VEU_TextureCoord:
+        ret.SemanticName = "TEXCOORD";
+        break;
+
+    case VEU_Tangent:
+        ret.SemanticName = "TANGENT";
+        break;
+
+    case VEU_Binormal:
+        ret.SemanticName = "BINORMAL";
+        break;
+    }
+
+    return ret;
+}
+
 }
