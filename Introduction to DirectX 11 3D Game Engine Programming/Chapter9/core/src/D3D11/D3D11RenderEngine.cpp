@@ -99,7 +99,7 @@ D3D11RenderEngine::D3D11RenderEngine(HWND hwnd, const RenderSettings& settings)
 
 	// TIFHR(d3d_device_->CheckMultisampleQualityLevels(
 	// 	DXGI_FORMAT_R8G8B8A8_UNORM, 4, &m4xMsaaQuality));
-	// assert( m4xMsaaQuality > 0 );
+	// COMMON_ASSERT( m4xMsaaQuality > 0 );
 
 	// Fill out a DXGI_SWAP_CHAIN_DESC to describe our swap chain.
 
@@ -154,6 +154,8 @@ D3D11RenderEngine::D3D11RenderEngine(HWND hwnd, const RenderSettings& settings)
     sample_count_ = settings.sample_count;
     sample_quality_ = settings.sample_quality;
 	OnResize();
+
+	FillRenderDeviceCaps();
 	return ;
 }
 
@@ -173,9 +175,9 @@ D3D11RenderEngine::~D3D11RenderEngine()
 
 void D3D11RenderEngine::OnResize()
 {
-	assert(d3d_imm_ctx_);
-	assert(d3d_device_);
-	assert(swap_chain_);
+	COMMON_ASSERT(d3d_imm_ctx_);
+	COMMON_ASSERT(d3d_device_);
+	COMMON_ASSERT(swap_chain_);
 
 	// Release the old views, as they hold references to the buffers we
 	// will be destroying.  Also release the old depth/stencil buffer.
@@ -225,8 +227,8 @@ void D3D11RenderEngine::OnResize()
 
 void D3D11RenderEngine::BeginRender() const 
 {
-	assert(d3d_imm_ctx_);
-	assert(swap_chain_);
+	COMMON_ASSERT(d3d_imm_ctx_);
+	COMMON_ASSERT(swap_chain_);
 
 	Color blackColor(0.0, 0.0, 0.0f, 1.0f);
 	d3d_imm_ctx_->ClearRenderTargetView(render_target_view_.get(), &blackColor.r());
@@ -550,6 +552,29 @@ void D3D11RenderEngine::DoBindSOBuffers(const RenderLayoutPtr& rl)
 		d3d_imm_ctx_->SOSetTargets(static_cast<UINT>(num_so_buffs_), &d3d11_buffs[0], &d3d11_buff_offsets[0]);
 
 		num_so_buffs_ = num_buffs;
+	}
+}
+
+void D3D11RenderEngine::FillRenderDeviceCaps()
+{
+	COMMON_ASSERT(d3d_device_);
+
+	switch (d3d_feature_level_)
+	{
+	case D3D_FEATURE_LEVEL_12_1:
+	case D3D_FEATURE_LEVEL_12_0:
+	case D3D_FEATURE_LEVEL_11_1:
+	case D3D_FEATURE_LEVEL_11_0:
+		// D3D11 feature level 12.1+ supports objects in shader model 5.1, although it doesn't support shader model 5.1 bytecode
+		caps_.cs_support = true;
+	default:
+		KFL_UNREACHABLE("Invalid feature level");
+	}
+
+	{
+		caps_.gs_support = true;
+		caps_.hs_support = true;
+		caps_.ds_support = true;
 	}
 }
 

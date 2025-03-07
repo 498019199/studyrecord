@@ -48,6 +48,8 @@ private:
     // 设置当前Stream output目标
     virtual void DoBindSOBuffers(const RenderLayoutPtr& rl) override;
 
+    // 填充设备能力
+    void FillRenderDeviceCaps();
 private:
     int weight_{0};
     int height_{0};

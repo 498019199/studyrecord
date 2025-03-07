@@ -2,6 +2,7 @@
 #pragma once
 #include <render/RenderStateObject.h>
 #include <render/RenderLayout.h>
+#include <render/RenderDeviceCaps.h>
 
 namespace RenderWorker
 {
@@ -30,16 +31,21 @@ public:
     {
         return force_line_mode_;
     }
+
+    // 获取渲染设备能力
+    const RenderDeviceCaps& DeviceCaps() const;
 private:
     virtual void DoBindSOBuffers(const RenderLayoutPtr& rl) = 0;
 
-private:
+protected:
     // 强制使用线框模式
     bool force_line_mode_ {false}; 
     RenderStateObjectPtr cur_rs_obj_;
     RenderStateObjectPtr cur_line_rs_obj_;
 
     RenderLayoutPtr so_buffers_;
+
+    RenderDeviceCaps caps_;
 };
 
 

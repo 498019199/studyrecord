@@ -343,9 +343,10 @@ void D3D11VertexShaderStageObject::StageSpecificCreateHwShader(const RenderEffec
     else
     {
 		const ShaderDesc& sd = effect.GetShaderDesc(shader_desc_ids[std::to_underlying(stage_)]);
+        const auto& caps = re.DeviceCaps();
         if (!sd.so_decl.empty())
         {
-            if (1)
+            if (caps.gs_support)
             {
                 geometry_shader_ = CreateGeometryShaderWithStreamOutput(effect, shader_desc_ids, shader_code_, sd.so_decl);
             }

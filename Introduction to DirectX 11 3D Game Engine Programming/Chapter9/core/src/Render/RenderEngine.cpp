@@ -58,6 +58,11 @@ void RenderEngine::SetStateObject(const RenderStateObjectPtr  & rs_obj)
     }
 }
 
+const RenderDeviceCaps& RenderEngine::DeviceCaps() const
+{
+	return caps_;
+}
+
 void RenderEngine::BindSOBuffers(const RenderLayoutPtr& rl)
 {
     so_buffers_ = rl;

@@ -186,9 +186,9 @@ public:
 
 
         auto& re = Context::Instance().RenderEngineInstance();
-        re.BindSOBuffers(rls_[0]);
-        re.DoRender(*effect_, *technique_, *rls_[0]);
-        re.BindSOBuffers(RenderLayoutPtr());
+        //re.BindSOBuffers(rls_[0]);
+        //re.DoRender(*effect_, *technique_, *rls_[0]);
+        //re.BindSOBuffers(RenderLayoutPtr());
     }
 
     float4x4& MVPdMat(RenderEffectConstantBuffer& cbuff) const
@@ -240,6 +240,7 @@ public:
                 "Splited Sphere"
             };
     
+            ImGui::SliderInt("Level", &m_CurrIndex, 0, 6);
             if (ImGui::Combo("Mode", &curr_item, modes, ARRAYSIZE(modes)))
             {
                 m_ShowMode = static_cast<Mode>(curr_item);
@@ -263,6 +264,7 @@ public:
 private:
     enum class Mode { SplitedTriangle, SplitedSnow, SplitedSphere };
     Mode m_ShowMode;											// 当前显示模式
+    int m_CurrIndex {0};
 };
 
 int main() {
