@@ -35,6 +35,34 @@ RenderTechnique* Renderable::GetRenderTechnique() const
     return technique_;
 }
 
+void Renderable::LodsNum(uint32_t lods)
+{
+    rls_.resize(lods);
+}
+
+uint32_t Renderable::LodsNum() const
+{
+    return static_cast<uint32_t>(rls_.size());
+}
+
+void Renderable::ActiveLod(int32_t lod)
+{
+    if (lod >= 0)
+    {
+        active_lod_ = std::min(lod, static_cast<int32_t>(LodsNum() - 1));
+    }
+    else
+    {
+        // -1 means automatic choose lod
+        active_lod_ = -1;
+    }
+}
+
+int32_t Renderable::ActiveLod() const
+{
+    return active_lod_;
+}
+
 void Renderable::Render()
 {
     int32_t lod = 0;

@@ -26,6 +26,11 @@ public:
 	virtual RenderEffect* GetRenderEffect() const;
     virtual RenderTechnique* GetRenderTechnique() const;
 
+    virtual void LodsNum(uint32_t lods);
+    virtual uint32_t LodsNum() const;
+    virtual void ActiveLod(int32_t lod);
+    virtual int32_t ActiveLod() const;
+
     void Render();
 protected:
     int32_t active_lod_ = 0;

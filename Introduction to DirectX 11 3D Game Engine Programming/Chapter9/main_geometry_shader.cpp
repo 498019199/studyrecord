@@ -141,6 +141,7 @@ class RenderableTriangle2 : public Renderable
 public:
     RenderableTriangle2(const std::string& EffectMode)
     {
+        LodsNum(7);
         auto& rf = Context::Instance().RenderFactoryInstance();
         rls_[0] = rf.MakeRenderLayout();
         rls_[0]->TopologyType(RenderLayout::TT_TriangleList);
@@ -161,7 +162,7 @@ public:
         merged_ves.emplace_back(VertexElement(VEU_Position, 0, EF_BGR32F));
         merged_ves.emplace_back(VertexElement(VEU_Diffuse, 0, EF_ABGR32F));
 
-        auto vb = rf.MakeVertexBuffer(BU_Static, EAH_GPU_Write, static_cast<uint32_t>(3 * sizeof(vertex[0])), &vertex[0]);
+        auto vb = rf.MakeVertexBuffer(BU_Dynamic, EAH_GPU_Read | EAH_CPU_Write, static_cast<uint32_t>(3 * sizeof(vertex[0])), &vertex[0]);
         rls_[0]->BindVertexStream(vb, merged_ves);
 
         indice_vec = { 0, 1, 2 };
@@ -184,11 +185,19 @@ public:
         auto proj_mat = MathWorker::PerspectiveFovLH(MathWorker::PI / 3.f, Context::Instance().AppInstance().AspectRatio(), 1.f, 1000.f);  
         MVPdMat(*effect_constant_buffer_) = world_mat * view_mat * proj_mat;
 
-
         auto& re = Context::Instance().RenderEngineInstance();
-        //re.BindSOBuffers(rls_[0]);
-        //re.DoRender(*effect_, *technique_, *rls_[0]);
-        //re.BindSOBuffers(RenderLayoutPtr());
+        for(int i = 1; i < 7; ++i)
+        {
+            rls_[i] = rf.MakeRenderLayout();
+            rls_[i]->TopologyType(RenderLayout::TT_TriangleList);
+            auto vb_out = rf.MakeVertexBuffer(BU_Dynamic, EAH_GPU_Write, vb->Size() * 3, nullptr);
+            rls_[i]->BindVertexStream(vb, merged_ves);
+
+            re.BindSOBuffers(rls_[i - 1]);
+            re.DoRender(*effect_, *technique_, *rls_[i - 1]);
+            re.BindSOBuffers(rls_[i]);
+            re.BindSOBuffers(RenderLayoutPtr());
+        }
     }
 
     float4x4& MVPdMat(RenderEffectConstantBuffer& cbuff) const
@@ -240,7 +249,14 @@ public:
                 "Splited Sphere"
             };
     
-            ImGui::SliderInt("Level", &m_CurrIndex, 0, 6);
+            if(ImGui::SliderInt("Level", &m_CurrIndex, 0, 6))
+            {
+                if(able_)
+                {
+                    able_->ActiveLod(m_CurrIndex);
+                }
+            }
+
             if (ImGui::Combo("Mode", &curr_item, modes, ARRAYSIZE(modes)))
             {
                 m_ShowMode = static_cast<Mode>(curr_item);
@@ -249,8 +265,8 @@ public:
                 {
                     case Mode::SplitedTriangle:
                     {
-                        auto tri = new RenderableTriangle2("Streamout.xml");
-                        Context::Instance().WorldInstance().AddRenderable(tri);
+                        able_ = new RenderableTriangle2("Streamout.xml");
+                        Context::Instance().WorldInstance().AddRenderable(able_);
                     }
                     break;
                 }
@@ -265,6 +281,7 @@ private:
     enum class Mode { SplitedTriangle, SplitedSnow, SplitedSphere };
     Mode m_ShowMode;											// 当前显示模式
     int m_CurrIndex {0};
+    Renderable* able_;
 };
 
 int main() {
