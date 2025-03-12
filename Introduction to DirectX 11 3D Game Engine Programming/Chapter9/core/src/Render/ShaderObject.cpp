@@ -236,6 +236,40 @@ void ShaderObject::LinkShaders(RenderEffect& effect)
         
         std::string err_msg;
 		std::vector<D3D_SHADER_MACRO> macros;
+
+        {
+			char const* type_name;
+			switch (stage)
+			{
+			case ShaderStage::Vertex:
+				type_name = "KLAYGE_VERTEX_SHADER";
+				break;
+
+			case ShaderStage::Pixel:
+				type_name = "KLAYGE_PIXEL_SHADER";
+				break;
+
+			case ShaderStage::Geometry:
+				type_name = "KLAYGE_GEOMETRY_SHADER";
+				break;
+
+			case ShaderStage::Compute:
+				type_name = "KLAYGE_COMPUTE_SHADER";
+				break;
+
+			case ShaderStage::Hull:
+				type_name = "KLAYGE_HULL_SHADER";
+				break;
+
+			case ShaderStage::Domain:
+				type_name = "KLAYGE_DOMAIN_SHADER";
+				break;
+
+			default:
+				KFL_UNREACHABLE("Invalid shader stage");
+			}
+			macros.emplace_back(D3D_SHADER_MACRO{type_name, "1"});
+		}
         for (uint32_t i = 0; i < api_special_macros.size(); ++i)
 		{
 			macros.emplace_back(D3D_SHADER_MACRO{api_special_macros[i].first, api_special_macros[i].second});

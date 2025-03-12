@@ -171,7 +171,7 @@ public:
         rls_[0]->BindIndexStream(ib, EF_R16UI);
 
         effect_ = SyncLoadRenderEffect(EffectMode);
-        technique_ = effect_->TechniqueByName("Basic_2D");
+        technique_ = effect_->TechniqueByName("Copy");
 
         effect_constant_buffer_ = effect_->CBufferByName("VSConstantBuffer");
         mvp_offset_ = effect_->ParameterByName("mvp")->CBufferOffset();
@@ -193,11 +193,13 @@ public:
             auto vb_out = rf.MakeVertexBuffer(BU_Dynamic, EAH_GPU_Write, vb->Size() * 3, nullptr);
             rls_[i]->BindVertexStream(vb, merged_ves);
 
-            re.BindSOBuffers(rls_[i - 1]);
+            re.BindSOBuffers(RenderLayoutPtr());
             re.DoRender(*effect_, *technique_, *rls_[i - 1]);
             re.BindSOBuffers(rls_[i]);
-            re.BindSOBuffers(RenderLayoutPtr());
         }
+
+            
+            
     }
 
     float4x4& MVPdMat(RenderEffectConstantBuffer& cbuff) const
