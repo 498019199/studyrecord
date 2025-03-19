@@ -65,8 +65,16 @@ int32_t Renderable::ActiveLod() const
 
 void Renderable::Render()
 {
-    int32_t lod = 0;
-    
+    int32_t lod;
+    if (active_lod_ < 0)
+    {
+        lod = 0;
+    }
+    else
+    {
+        lod = active_lod_;
+    }
+
     const auto& effect = *GetRenderEffect();
     const auto& layout = GetRenderLayout(lod);
     const auto& tech = *GetRenderTechnique();

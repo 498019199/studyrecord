@@ -6,8 +6,15 @@
 
     <technique name="Copy">
         <pass name="p0">
-            <state name="vertex_shader" value="VS()"/>
+        	<state name="depth_enable" value="false"/>
+			<state name="depth_write_mask" value="0"/>
+
+            <state name="vertex_shader" value="VS1()"/>
 			<state name="geometry_shader" value="GS()"/>
+            	<stream_output>
+					<entry usage="SV_Position" component="xyzw" slot="0"/>
+					<entry usage="COLOR" usage_index="0" component="xyzw" slot="1"/>
+				</stream_output>
         </pass>
     </technique>
     <shader>
@@ -21,7 +28,7 @@ struct VertexPosColor
 	</shader>
     <shader type="vertex_shader">
         <![CDATA[
-VertexPosColor VS(VertexPosColor vIn)
+VertexPosColor VS1(VertexPosColor vIn)
 {
     return vIn;
 }
@@ -64,5 +71,35 @@ void GS(triangle VertexPosColor input[3], inout TriangleStream<VertexPosColor> o
     }
 }
             		]]>
+    </shader>
+
+
+    <technique name="Basic_2D">
+        <pass name="p0">
+            <state name="vertex_shader" value="VS2()"/>
+			<state name="pixel_shader" value="PS2()"/>
+        </pass>
+    </technique>
+    <shader>
+    		<![CDATA[
+struct VertexPosHColor
+{
+    float4 posH : SV_POSITION;
+    float4 color : COLOR;
+};
+
+VertexPosHColor VS2(VertexPosColor vIn)
+{
+    VertexPosHColor vOut;
+    vOut.color = vIn.color;
+    vOut.posH = mul(float4(vIn.posL, 1.0f), mvp);
+    return vOut;
+}
+
+float4 PS2(VertexPosHColor pIn) : SV_Target
+{
+    return pIn.color;
+}
+                    ]]>
     </shader>
 </effect>

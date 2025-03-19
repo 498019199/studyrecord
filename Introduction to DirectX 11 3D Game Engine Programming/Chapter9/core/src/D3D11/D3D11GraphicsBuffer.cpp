@@ -105,7 +105,7 @@ void D3D11GraphicsBuffer::CreateHWResource(void const * init_data)
     }
 
     D3D11_BUFFER_DESC desc = {};
-    this->GetD3DFlags(desc.Usage, desc.CPUAccessFlags, desc.BindFlags, desc.MiscFlags);
+    GetD3DFlags(desc.Usage, desc.CPUAccessFlags, desc.BindFlags, desc.MiscFlags);
     desc.ByteWidth = size_in_byte_;
     desc.StructureByteStride = structure_byte_stride_;
 

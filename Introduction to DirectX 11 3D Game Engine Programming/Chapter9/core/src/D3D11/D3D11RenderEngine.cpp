@@ -377,7 +377,10 @@ void D3D11RenderEngine::DoRender(const RenderEffect& effect, const RenderTechniq
 	{
 		auto& pass = tech.Pass(i);
 		pass.Bind(effect);
-		d3d_imm_ctx_->DrawIndexed(num_vertices_just_rendered_, 0, 0);
+		if(3 == num_vertices_just_rendered_)
+			d3d_imm_ctx_->DrawIndexed(num_vertices_just_rendered_, 0, 0);
+		else
+			d3d_imm_ctx_->DrawAuto();
 		pass.Unbind(effect);
 	}
 }

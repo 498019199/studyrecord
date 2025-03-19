@@ -23,13 +23,14 @@ struct ShaderDesc
     {
     }
 
+    // 定义D3D11_SO_DECLARATION_ENTRY，用于流输出（Stream Output）声明的结构体
     struct StreamOutputDecl
     {
-        VertexElementUsage usage;
-        uint8_t usage_index;
-        uint8_t start_component;
-        uint8_t component_count;
-        uint8_t slot;
+        VertexElementUsage usage;   // 语义名
+        uint8_t usage_index;        // 语义索引
+        uint8_t start_component;    // 从第几个分量(xyzw)开始,只能取0-3
+        uint8_t component_count;    // 分量的输出数目，只能取1-4
+        uint8_t slot;               // 输出槽索引，只能取0-3
 
         friend bool operator==(const StreamOutputDecl& lhs, const StreamOutputDecl& rhs) noexcept;
         friend bool operator!=(const StreamOutputDecl& lhs, const StreamOutputDecl& rhs) noexcept;
