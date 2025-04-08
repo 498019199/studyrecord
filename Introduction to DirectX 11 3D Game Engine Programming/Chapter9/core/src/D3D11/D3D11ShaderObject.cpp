@@ -464,10 +464,10 @@ void D3D11ShaderObject::Bind(const RenderEffect& effect)
 {
     auto& re = checked_cast<D3D11RenderEngine&>(Context::Instance().RenderEngineInstance());
 
-    auto const& vs_stage = this->Stage(ShaderStage::Vertex);
+    auto const& vs_stage = Stage(ShaderStage::Vertex);
     re.VSSetShader(vs_stage ? checked_cast<D3D11ShaderStageObject&>(*vs_stage).HwVertexShader() : nullptr);
 
-    auto const& ps_stage = this->Stage(ShaderStage::Pixel);
+    auto const& ps_stage = Stage(ShaderStage::Pixel);
 	re.PSSetShader(ps_stage ? checked_cast<D3D11ShaderStageObject&>(*ps_stage).HwPixelShader() : nullptr);
 
     ShaderStage stream_output_stage = ShaderStage::NumStages;
@@ -480,7 +480,7 @@ void D3D11ShaderObject::Bind(const RenderEffect& effect)
         stream_output_stage = ShaderStage::Vertex;
     }
     re.GSSetShader((stream_output_stage != ShaderStage::NumStages)
-        ? checked_cast<D3D11ShaderStageObject&>(*this->Stage(stream_output_stage)).HwGeometryShader()
+        ? checked_cast<D3D11ShaderStageObject&>(*Stage(stream_output_stage)).HwGeometryShader()
         : nullptr);
 
     for (auto const & pbs : param_binds_)
@@ -494,7 +494,7 @@ void D3D11ShaderObject::Bind(const RenderEffect& effect)
     for (size_t stage_index = 0; stage_index < ShaderStageNum; ++stage_index)
     {
         const ShaderStage stage = static_cast<ShaderStage>(stage_index);
-        const auto* shader_stage = checked_cast<D3D11ShaderStageObject*>(this->Stage(static_cast<ShaderStage>(stage)).get());
+        const auto* shader_stage = checked_cast<D3D11ShaderStageObject*>(Stage(static_cast<ShaderStage>(stage)).get());
         if (!shader_stage)
         {
             continue;
@@ -537,19 +537,19 @@ void D3D11ShaderObject::Unbind()
 
 std::span<uint8_t const> D3D11ShaderObject::VsCode() const
 {
-    return checked_cast<D3D11ShaderStageObject&>(*this->Stage(ShaderStage::Vertex)).ShaderCodeBlob();
+    return checked_cast<D3D11ShaderStageObject&>(*Stage(ShaderStage::Vertex)).ShaderCodeBlob();
 }
 
 uint32_t D3D11ShaderObject::VsSignature() const noexcept
 {
-    return checked_cast<D3D11VertexShaderStageObject&>(*this->Stage(ShaderStage::Vertex)).VsSignature();
+    return checked_cast<D3D11VertexShaderStageObject&>(*Stage(ShaderStage::Vertex)).VsSignature();
 }
 
 void D3D11ShaderObject::DoLinkShaders(RenderEffect& effect)
 {
     for (size_t stage = 0; stage < ShaderStageNum; ++stage)
     {
-        const auto* shader_stage = checked_cast<D3D11ShaderStageObject*>(this->Stage(static_cast<ShaderStage>(stage)).get());
+        const auto* shader_stage = checked_cast<D3D11ShaderStageObject*>(Stage(static_cast<ShaderStage>(stage)).get());
         if (nullptr == shader_stage)
         {
             continue;

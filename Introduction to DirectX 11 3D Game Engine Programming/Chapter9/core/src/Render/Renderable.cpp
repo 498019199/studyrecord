@@ -17,7 +17,7 @@ Renderable::~Renderable()
 
 RenderLayout& Renderable::GetRenderLayout() const
 {
-	return this->GetRenderLayout(active_lod_);
+	return GetRenderLayout(active_lod_);
 }
 
 RenderLayout& Renderable::GetRenderLayout(uint32_t lod) const

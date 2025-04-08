@@ -9,7 +9,7 @@ Camera::Camera()
 
 const float3& Camera::EyePos() const
 {
-    const float4x4& inv_view_mat = this->InverseViewMatrix();
+    const float4x4& inv_view_mat = InverseViewMatrix();
     return *reinterpret_cast<float3 const *>(&inv_view_mat.Row(3));
 }
 
@@ -20,19 +20,19 @@ float3 Camera::LookAt() const
 
 const float3& Camera::RightVec() const
 {
-    const float4x4& inv_view_mat = this->InverseViewMatrix();
+    const float4x4& inv_view_mat = InverseViewMatrix();
     return *reinterpret_cast<float3 const *>(&inv_view_mat.Row(0));
 }
 
 const float3& Camera::UpVec() const
 {
-    const float4x4& inv_view_mat = this->InverseViewMatrix();
+    const float4x4& inv_view_mat = InverseViewMatrix();
     return *reinterpret_cast<float3 const *>(&inv_view_mat.Row(1));
 }
 
 const float3& Camera::ForwardVec() const
 {
-    const float4x4& inv_view_mat = this->InverseViewMatrix();
+    const float4x4& inv_view_mat = InverseViewMatrix();
     return *reinterpret_cast<float3 const *>(&inv_view_mat.Row(2));
 }
 
