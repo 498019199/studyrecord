@@ -271,6 +271,50 @@ public:
             }
         }
     
+        if(0)
+        {        
+            std::vector<VertexElement> merged_ves;
+            merged_ves.emplace_back(VertexElement(VEU_Position, 0, EF_BGR32F));
+            merged_ves.emplace_back(VertexElement(VEU_Diffuse, 0, EF_ABGR32F));
+
+            auto& re = Context::Instance().RenderEngineInstance();
+            auto& rf = Context::Instance().RenderFactoryInstance();
+            
+            {
+                auto rl_out = rf.MakeRenderLayout();
+                rl_out->TopologyType(RenderLayout::TT_TriangleList);
+                auto vb_out = rf.MakeVertexBuffer(BU_Dynamic, EAH_GPU_Write, 84 * 1 * 3, nullptr);
+                rl_out->BindVertexStream(vb_out, merged_ves);
+                
+                re.BindSOBuffers(rl_out);
+                re.DoRender(*able_->effect_, *able_->technique_, *able_->rls_[0]);
+                re.BindSOBuffers(RenderLayoutPtr()); 
+                
+
+                GraphicsBufferPtr buff_cpu;
+                GraphicsBuffer* buff_cpu_ptr;
+                if (vb_out->AccessHint() & EAH_CPU_Read)
+                {
+                    buff_cpu_ptr = vb_out.get();
+                }
+                else
+                {
+                    buff_cpu = rf.MakeVertexBuffer(BU_Static, EAH_CPU_Read, vb_out->Size(), nullptr);
+                    buff_cpu_ptr = buff_cpu.get();
+                    vb_out->CopyToBuffer(*buff_cpu_ptr);
+                }
+
+                GraphicsBuffer::Mapper buff_mapper(*buff_cpu_ptr, BA_Read_Only);
+                const VertexPosColor* buff = reinterpret_cast<const VertexPosColor*>(buff_mapper.Pointer<VertexPosColor>());
+                uint32_t num_elems = 84 * 1 * 3 / sizeof(VertexPosColor);
+                std::cout << "begin " << std::endl;
+                for (uint32_t i = 0; i < num_elems; ++ i)
+                {
+                    std::cout << "position: " << i << " " << buff[i].pos.x() << "," << buff[i].pos.y() << "," << buff[i].pos.z() << "," << buff[i].pos.z() << "," 
+                                << "color:" << buff[i].color.r() << "," << buff[i].color.g() << "," << buff[i].color.b() << "," << buff[i].color.a() << "," << std::endl;
+                }
+            }
+        }
         ImGui::End();
         ImGui::Render();
     }

@@ -32,7 +32,7 @@ public:
     virtual int32_t ActiveLod() const;
 
     void Render();
-protected:
+public:
     int32_t active_lod_ = 0;
 
     // 布局顶点索引

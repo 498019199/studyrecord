@@ -57,6 +57,15 @@ winerror.h  dxgitype.h
 https://stackoverflow.com/questions/47980068/errors-compiling-shader-directx11
 
 
+## 3.gs 有输出，但是SOSetTargets获取不到
+没有执行ID3D11Device::CreateGeometryShaderWithStreamOutput方法--创建带流输出阶段的几何着色器，使用CreateGeometryShader创建
+
+1.CreateGeometryShaderWithStreamOutput创建geometry shader
+2.创建的buffer descrip包含D3D11_BIND_STREAM_OUTPUT， 需要额外添加流输出标签
+3.SOSetTargets方法--绑定流输出对应用于接收数据的顶点缓冲区
+**特别注意：创建buff 633为descrip包含D3D11_BIND_STREAM_OUTPUT成功，绑定也成功，shader执行输出到该buff。也没有报错，那有可能流输出的入口描述错误。**
+const UINT                       *pBufferStrides,     // [In]一个数组包含了每个绑定到流输出的缓冲区中顶点字节大小
+
 # 隐藏目录
 vscode hide folder
 .vscode/settings.json/

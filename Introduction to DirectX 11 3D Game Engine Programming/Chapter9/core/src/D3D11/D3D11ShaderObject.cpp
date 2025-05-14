@@ -554,36 +554,34 @@ void D3D11ShaderObject::DoLinkShaders(RenderEffect& effect)
         {
             continue;
         }
-        if (shader_stage->ShaderCodeBlob().empty())
+        if (!shader_stage->ShaderCodeBlob().empty())
         {
-            continue;
-        }
+            const auto& shader_desc = shader_stage->GetD3D11ShaderDesc();
+            d3d_immutable_->samplers_[stage].resize(shader_desc.num_samplers);
+            srvsrcs_[stage].resize(shader_desc.num_srvs, std::make_tuple(static_cast<void*>(nullptr), 0, 0));
+            srvs_[stage].resize(shader_desc.num_srvs);
 
-        const auto& shader_desc = shader_stage->GetD3D11ShaderDesc();
-        d3d_immutable_->samplers_[stage].resize(shader_desc.num_samplers);
-        srvsrcs_[stage].resize(shader_desc.num_srvs, std::make_tuple(static_cast<void*>(nullptr), 0, 0));
-        srvs_[stage].resize(shader_desc.num_srvs);
-
-        for (size_t i = 0; i < shader_desc.res_desc.size(); ++i)
-        {
-            RenderEffectParameter* p = effect.ParameterByName(shader_desc.res_desc[i].name);
-            COMMON_ASSERT(p);
-
-            uint32_t offset = shader_desc.res_desc[i].bind_point;
-            if (D3D_SIT_SAMPLER == shader_desc.res_desc[i].type)
+            for (size_t i = 0; i < shader_desc.res_desc.size(); ++i)
             {
-                SamplerStateObjectPtr sampler;
-                p->Value(sampler);
-                if (sampler)
+                RenderEffectParameter* p = effect.ParameterByName(shader_desc.res_desc[i].name);
+                COMMON_ASSERT(p);
+    
+                uint32_t offset = shader_desc.res_desc[i].bind_point;
+                if (D3D_SIT_SAMPLER == shader_desc.res_desc[i].type)
                 {
-                    // 获取取样器
-                    d3d_immutable_->samplers_[stage][offset] = checked_cast<D3D11SamplerStateObject&>(*sampler).D3DSamplerState();
+                    SamplerStateObjectPtr sampler;
+                    p->Value(sampler);
+                    if (sampler)
+                    {
+                        // 获取取样器
+                        d3d_immutable_->samplers_[stage][offset] = checked_cast<D3D11SamplerStateObject&>(*sampler).D3DSamplerState();
+                    }
                 }
-            }
-            else
-            {
-                // 获取着色器资源
-                param_binds_[stage].push_back(GetBindFunc(static_cast<ShaderStage>(stage), offset, *p));
+                else
+                {
+                    // 获取着色器资源
+                    param_binds_[stage].push_back(GetBindFunc(static_cast<ShaderStage>(stage), offset, *p));
+                }
             }
         }
 
