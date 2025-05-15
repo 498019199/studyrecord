@@ -210,6 +210,27 @@ private:
     RenderEffectConstantBuffer* effect_constant_buffer_;
 };
 
+class RenderableSplitedSnow : public Renderable
+{
+public:
+    RenderableSplitedSnow()
+    {
+        // 设置三角形顶点
+        float sqrt3 = sqrtf(3.0f);
+        VertexPosColor vertex[] = 
+        {
+            { float3(-3.0f / 4, -sqrt3 / 4, 0.0f),  Color(1.0f, 1.0f, 1.0f, 1.0f) },
+            { float3(0.0f, sqrt3 / 2, 0.0f),        Color(1.0f, 1.0f, 1.0f, 1.0f) },
+            { float3(0.0f, sqrt3 / 2, 0.0f),        Color(1.0f, 1.0f, 1.0f, 1.0f) },
+            { float3(3.0f / 4, -sqrt3 / 4, 0.0f),   Color(1.0f, 1.0f, 1.0f, 1.0f) },
+            { float3(3.0f / 4, -sqrt3 / 4, 0.0f),   Color(1.0f, 1.0f, 1.0f, 1.0f) },
+            { float3(-3.0f / 4, -sqrt3 / 4, 0.0f),  Color(1.0f, 1.0f, 1.0f, 1.0f) }
+        };
+
+        
+    }
+};
+
 void CreateScene1()
 {
     auto tri = new RenderableTriangle2("Triangle.xml");
@@ -267,6 +288,12 @@ public:
                     {
                         able_ = new RenderableTriangle2("Streamout.xml");
                         Context::Instance().WorldInstance().AddRenderable(able_);
+                    }
+                    break;
+
+                    case Mode::SplitedSnow:
+                    {
+
                     }
                     break;
                 }

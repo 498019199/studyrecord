@@ -47,7 +47,7 @@ set(SRC_LIST
     
 add_executable(Chapter9
     ${SRC_LIST} 
-    ${PROJECT_SOURCE_DIR}/Chapter9/main_geometry_shader.cpp)
+    ${PROJECT_SOURCE_DIR}/Chapter9/main_tree_billboard.cpp)
 
 target_link_libraries(Chapter9 PRIVATE 
     ${LIB_DIR_PATH}/math${ZENGINE_OUTPUT_SUFFIX}${CMAKE_DEBUG_POSTFIX}.lib
