@@ -173,11 +173,13 @@ public:
         effect_ = SyncLoadRenderEffect(EffectMode);
         technique_ = effect_->TechniqueByName("Copy");
         auto& re = Context::Instance().RenderEngineInstance();
+        int ByteWidth = vb->Size();
         for(int i = 1; i < 7; ++i)
         {
+            ByteWidth *= 3;
             rls_[i] = rf.MakeRenderLayout();
             rls_[i]->TopologyType(RenderLayout::TT_TriangleList);
-            auto vb_out = rf.MakeVertexBuffer(BU_Dynamic, EAH_GPU_Write, vb->Size() * i * 3, nullptr);
+            auto vb_out = rf.MakeVertexBuffer(BU_Dynamic, EAH_GPU_Write, ByteWidth, nullptr);
             rls_[i]->BindVertexStream(vb_out, merged_ves);
 
             re.BindSOBuffers(rls_[i]);
